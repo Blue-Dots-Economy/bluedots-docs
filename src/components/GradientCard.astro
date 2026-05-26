@@ -1,0 +1,95 @@
+---
+import { withBase } from '../utils/withBase';
+
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  gradient: string;
+  icon: 'book' | 'layers' | 'graph' | 'terminal' | 'browser' | 'server';
+}
+
+const { title, description, href, gradient, icon } = Astro.props;
+const fullHref = withBase(href);
+
+const icons: Record<string, string> = {
+  book: `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/></svg>`,
+  layers: `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3"/></svg>`,
+  graph: `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"/></svg>`,
+  terminal: `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>`,
+  browser: `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0H3"/></svg>`,
+  server: `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.75 17.25v.75a2.25 2.25 0 0 1-2.25 2.25H4.5a2.25 2.25 0 0 1-2.25-2.25v-.75m19.5 0a2.25 2.25 0 0 0-2.25-2.25H4.5a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.75m-19.5-.75v.75m0-10.5a2.25 2.25 0 0 1 2.25-2.25h15a2.25 2.25 0 0 1 2.25 2.25v.75M2.25 6.75v.75m19.5-.75v.75M2.25 6.75a2.25 2.25 0 0 0-2.25 2.25v4.5a2.25 2.25 0 0 0 2.25 2.25h19.5a2.25 2.25 0 0 0 2.25-2.25v-4.5a2.25 2.25 0 0 0-2.25-2.25H2.25Z"/></svg>`,
+};
+---
+
+<a href={fullHref} class="gradient-card">
+  <div class="gradient-card__visual" style={`background: ${gradient}`}>
+    <span class="gradient-card__icon" set:html={icons[icon]} />
+  </div>
+  <div class="gradient-card__body">
+    <p class="gradient-card__title">{title}</p>
+    <p class="gradient-card__desc">{description}</p>
+  </div>
+</a>
+
+<style>
+  .gradient-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 14px;
+    overflow: hidden;
+    text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: var(--sl-color-bg, #fff);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  :global([data-theme='dark']) .gradient-card {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(30, 41, 59, 0.60);
+  }
+
+  .gradient-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10), 0 12px 32px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+  }
+
+  .gradient-card__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    padding: 1.5rem;
+  }
+
+  .gradient-card__icon {
+    display: flex;
+    color: rgba(255, 255, 255, 0.92);
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.18));
+  }
+
+  .gradient-card__body {
+    padding: 1rem 1.1rem 1.2rem;
+  }
+
+  .gradient-card__title {
+    margin: 0 0 0.3rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sl-color-text);
+    line-height: 1.3;
+  }
+
+  .gradient-card__desc {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--sl-color-gray-3, #6b7280);
+    line-height: 1.5;
+  }
+
+  :global([data-theme='dark']) .gradient-card__desc {
+    color: var(--sl-color-gray-3, #94a3b8);
+  }
+</style>

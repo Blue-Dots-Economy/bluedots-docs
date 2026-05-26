@@ -1,0 +1,58 @@
+---
+interface Props {
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  path: string;
+  auth: 'apikey' | 'session' | 'admin' | 'public';
+  description?: string;
+}
+
+const { method, path, auth, description } = Astro.props;
+---
+
+<div class="api-endpoint">
+  <code class="method" data-method={method}>{method}</code>
+  <code class="path">{path}</code>
+  <span class="auth-badge" data-auth={auth}>{auth}</span>
+  {description && <p class="description">{description}</p>}
+</div>
+
+<style>
+  .api-endpoint {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--sl-color-hairline-light);
+    border-radius: 8px;
+    margin: 0.5rem 0;
+    flex-wrap: wrap;
+  }
+  .method {
+    font-weight: bold;
+    font-size: 0.8rem;
+    min-width: 4.5rem;
+    text-align: center;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    background: var(--sl-color-accent-low);
+  }
+  .method[data-method="GET"]    { color: #22c55e; }
+  .method[data-method="POST"]   { color: #3b82f6; }
+  .method[data-method="PUT"]    { color: #f97316; }
+  .method[data-method="DELETE"] { color: #ef4444; }
+  .method[data-method="PATCH"]  { color: #a855f7; }
+  .path { flex: 1; font-size: 0.85rem; color: var(--sl-color-text); }
+  .auth-badge {
+    font-size: 0.72rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-text-accent);
+  }
+  .description {
+    width: 100%;
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-2);
+  }
+</style>

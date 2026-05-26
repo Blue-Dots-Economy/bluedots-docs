@@ -1,0 +1,376 @@
+:root {
+  --sl-font: 'Source Sans 3', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sl-color-accent-low: #dbeafe;
+  --sl-color-accent: #3b82f6;
+  --sl-color-accent-high: #1d4ed8;
+  --sl-color-text-accent: #1e40af;
+  --dpg-brand-accent: #3b82f6;
+  --dpg-brand-accent-hover: #1d4ed8;
+  /* Extra breathing room between sidebar and content */
+  --sl-content-pad-x: 3rem;
+  /* Widen content area to fill the space between sidebars */
+  --sl-content-width: 60rem;
+}
+
+[data-theme='light'] {
+  --sl-color-bg: #ffffff;
+  --sl-color-bg-nav: rgba(255, 255, 255, 0.92);
+  --sl-color-bg-sidebar: transparent;
+  --sl-color-hairline-light: rgba(0, 0, 0, 0.08);
+  --sl-color-text: #111827;
+  --sl-color-text-accent: #1e40af;
+  --dpg-sidebar-border: rgba(0, 0, 0, 0.10);
+  --dpg-active-bg: #eff6ff;
+  --dpg-active-border: #bfdbfe;
+  --dpg-active-text: #1d4ed8;
+  --dpg-title-color: #111827;
+}
+
+[data-theme='dark'] {
+  --sl-color-bg: #0f172a;
+  --sl-color-bg-nav: rgba(15, 23, 42, 0.92);
+  --sl-color-bg-sidebar: transparent;
+  --sl-color-accent-low: #1e3a5f;
+  --sl-color-accent: #60a5fa;
+  --sl-color-accent-high: #93c5fd;
+  --sl-color-hairline-light: rgba(255, 255, 255, 0.09);
+  --dpg-sidebar-border: rgba(255, 255, 255, 0.10);
+  --dpg-active-bg: rgba(59, 130, 246, 0.12);
+  --dpg-active-border: rgba(59, 130, 246, 0.30);
+  --dpg-active-text: #93c5fd;
+  --dpg-title-color: #f1f5f9;
+}
+
+body {
+  background: var(--sl-color-bg);
+}
+
+[data-theme='light'] body {
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(219, 234, 254, 0.55) 0%, transparent 55%),
+    radial-gradient(ellipse at 100% 0%, rgba(224, 242, 254, 0.40) 0%, transparent 45%),
+    #ffffff;
+}
+
+[data-theme='dark'] body {
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(30, 58, 95, 0.40) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 0%, rgba(15, 23, 42, 0.60) 0%, transparent 45%),
+    #0f172a;
+}
+
+.header {
+  background: var(--sl-color-bg-nav);
+  border-bottom: none;
+  backdrop-filter: none;
+}
+
+[data-theme='dark'] .header {
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* Inner header div: relative so we can absolutely center the search */
+header.header > div.header {
+  position: relative;
+}
+
+/* Remove the padding-bottom Starlight adds below the right section */
+.header > .sl-flex.print\:hidden {
+  padding-bottom: 0;
+}
+
+.site-title {
+  color: var(--dpg-title-color);
+  font-size: 1.2rem;
+  margin: auto 0;
+  gap: 0;
+}
+
+.site-title:hover,
+.site-title:focus-visible {
+  color: var(--dpg-title-color);
+}
+
+.site-title span {
+  letter-spacing: 0;
+}
+
+/* Logo image sizing — original is 714×225, scale to header height */
+.site-title img {
+  height: 1.75rem;
+  width: auto;
+  object-fit: contain;
+  object-position: left center;
+  /* Cap width to prevent logo whitespace from inflating the title area */
+  max-width: 10rem;
+}
+
+/* "Documentation" text sits beside the logo at the same visual height */
+.site-title span:not(.sr-only) {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+  color: var(--dpg-title-color);
+  letter-spacing: 0;
+  padding-left: 0.6rem;
+  border-left: 1px solid var(--sl-color-hairline-light);
+  margin-left: 0.6rem;
+  white-space: nowrap;
+}
+
+/* Invert logo on dark backgrounds so white wordmark stays readable */
+[data-theme='dark'] .site-title img {
+  filter: brightness(0) invert(1);
+}
+
+/* ── Search bar — centered in header, expanded pill style ───────────────── */
+.header site-search {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.header site-search button[data-open-modal] {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 22rem;
+  padding: 0.55rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--sl-color-hairline-light);
+  background: var(--sl-color-bg);
+  color: var(--sl-color-gray-3, #6b7280);
+  font-size: 0.9rem;
+  font-family: var(--sl-font);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.header site-search button[data-open-modal]:hover {
+  border-color: var(--sl-color-accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.header site-search button[data-open-modal] svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* "Search" label text — make visible and push to fill space */
+.header site-search button[data-open-modal] > span {
+  flex: 1;
+  text-align: left;
+  display: block !important;
+}
+
+/* Keyboard shortcut badge */
+.header site-search button[data-open-modal] > kbd {
+  display: flex !important;
+  align-items: center;
+  gap: 0.2rem;
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+.header site-search button[data-open-modal] > kbd > kbd {
+  background: var(--sl-color-hairline-light);
+  border: 1px solid var(--sl-color-hairline-light);
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.7rem;
+  font-family: inherit;
+  color: inherit;
+}
+
+/* ── Sidebar — transparent, blends into page background gradient ─────────── */
+.sidebar-pane {
+  margin: 0.75rem;
+  border: none;
+  border-right: 1px solid var(--dpg-sidebar-border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+@media (max-width: 50rem) {
+  /* On mobile the sidebar is a sheet; give it a solid bg so it's readable */
+  .sidebar-pane {
+    margin: 0;
+    border-radius: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--dpg-sidebar-border);
+    background: var(--sl-color-bg);
+  }
+}
+
+.sidebar-content {
+  padding: 0.85rem 1rem 0.85rem 0.85rem;
+}
+
+.sidebar-content a,
+.sidebar-content summary {
+  border-radius: 8px;
+}
+
+.sidebar-content a[aria-current='page'] {
+  border: 1px solid var(--dpg-active-border);
+  background: var(--dpg-active-bg);
+  color: var(--dpg-active-text);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.main-frame {
+  min-height: 100vh;
+}
+
+.content-panel {
+  max-width: 100%;
+}
+
+.sl-markdown-content :is(h2, h3) {
+  scroll-margin-top: 6rem;
+}
+
+.sl-markdown-content code:not(pre code) {
+  border: 1px solid var(--sl-color-hairline-light);
+  border-radius: 6px;
+  padding: 0.08rem 0.34rem;
+}
+
+/* ── Home page inline hero ───────────────────────────────────────────────── */
+.home-hero {
+  padding: 1.5rem 0 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.home-hero__tagline {
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--sl-color-text);
+  margin: 0 0 1.1rem;
+}
+
+.home-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.home-hero__btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid var(--sl-color-hairline-light);
+  background: var(--sl-color-bg);
+  color: var(--sl-color-text);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.home-hero__btn:hover {
+  background: var(--dpg-active-bg);
+  border-color: var(--dpg-active-border);
+  color: var(--dpg-active-text);
+  text-decoration: none;
+}
+
+.home-hero__btn--primary {
+  background: var(--sl-color-accent);
+  border-color: var(--sl-color-accent);
+  color: #ffffff;
+}
+
+.home-hero__btn--primary:hover {
+  background: var(--sl-color-accent-high);
+  border-color: var(--sl-color-accent-high);
+  color: #ffffff;
+}
+
+/* ── Sidebar group label icons ───────────────────────────────────────────────
+   nth-child order: 1=Start Here, 2=Hosting, 3=Network Schema, 4=API, 5=UI,
+   6=Internals, 7=Services.
+   Uses CSS mask-image so the icon shape is cut from currentColor, making icons
+   monochrome and theme-aware with no coloured background. */
+.top-level > li > details > summary > .group-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+.top-level > li > details > summary > .group-label::before {
+  content: '';
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  opacity: 0.55;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+/* Start Here — rocket */
+.top-level > li:nth-child(1) > details > summary > .group-label::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2C12 2 7 6.5 7 12a5 5 0 0 0 10 0c0-5.5-5-10-5-10z'/%3E%3Ccircle cx='12' cy='12' r='1.5' fill='black' stroke='none'/%3E%3Cpath d='M9.5 17.5 8 21M14.5 17.5 16 21'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2C12 2 7 6.5 7 12a5 5 0 0 0 10 0c0-5.5-5-10-5-10z'/%3E%3Ccircle cx='12' cy='12' r='1.5' fill='black' stroke='none'/%3E%3Cpath d='M9.5 17.5 8 21M14.5 17.5 16 21'/%3E%3C/svg%3E");
+}
+
+/* Hosting — server */
+.top-level > li:nth-child(2) > details > summary > .group-label::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='8' rx='2'/%3E%3Crect x='3' y='14' width='18' height='6' rx='2'/%3E%3Ccircle cx='7' cy='8' r='1' fill='black' stroke='none'/%3E%3Ccircle cx='7' cy='17' r='1' fill='black' stroke='none'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='8' rx='2'/%3E%3Crect x='3' y='14' width='18' height='6' rx='2'/%3E%3Ccircle cx='7' cy='8' r='1' fill='black' stroke='none'/%3E%3Ccircle cx='7' cy='17' r='1' fill='black' stroke='none'/%3E%3C/svg%3E");
+}
+
+/* Network Schema — document */
+.top-level > li:nth-child(3) > details > summary > .group-label::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 12h6M9 16h4M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 12h6M9 16h4M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5'/%3E%3C/svg%3E");
+}
+
+/* API — code brackets */
+.top-level > li:nth-child(4) > details > summary > .group-label::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 9l-4 3 4 3M16 9l4 3-4 3M14 5l-4 14'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 9l-4 3 4 3M16 9l4 3-4 3M14 5l-4 14'/%3E%3C/svg%3E");
+}
+
+/* UI — monitor */
+.top-level > li:nth-child(5) > details > summary > .group-label::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='14' rx='2'/%3E%3Cpath d='M8 20h8M12 18v2M2 8h20'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='14' rx='2'/%3E%3Cpath d='M8 20h8M12 18v2M2 8h20'/%3E%3C/svg%3E");
+}
+
+/* Internals — cog */
+.top-level > li:nth-child(6) > details > summary > .group-label::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.07 4.93l-1.42 1.42M4.93 4.93l1.42 1.42M4.93 19.07l1.42-1.42M19.07 19.07l-1.42-1.42M12 2v2M12 20v2M2 12h2M20 12h2'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.07 4.93l-1.42 1.42M4.93 4.93l1.42 1.42M4.93 19.07l1.42-1.42M19.07 19.07l-1.42-1.42M12 2v2M12 20v2M2 12h2M20 12h2'/%3E%3C/svg%3E");
+}
+
+/* Services — globe */
+.top-level > li:nth-child(7) > details > summary > .group-label::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3C9.5 7.5 9.5 16.5 12 21M12 3c2.5 4.5 2.5 13.5 0 18'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3C9.5 7.5 9.5 16.5 12 21M12 3c2.5 4.5 2.5 13.5 0 18'/%3E%3C/svg%3E");
+}
+
+@media print {
+  .sidebar-pane,
+  .header,
+  nav[aria-label="breadcrumb"],
+  .right-sidebar {
+    display: none !important;
+  }
+  .content-panel {
+    max-width: 100%;
+  }
+}

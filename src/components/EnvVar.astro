@@ -1,0 +1,52 @@
+---
+interface Props {
+  name: string;
+  required?: boolean;
+  default?: string;
+  description?: string;
+}
+
+const { name, required = false, default: defaultVal, description } = Astro.props;
+---
+
+<div class="env-var">
+  <code class="env-name">{name}</code>
+  {required
+    ? <span class="badge required">required</span>
+    : <span class="badge optional">optional</span>
+  }
+  {defaultVal !== undefined && (
+    <span class="default">default: <code>{defaultVal}</code></span>
+  )}
+  {description && <p class="env-desc">{description}</p>}
+</div>
+
+<style>
+  .env-var {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    border-left: 3px solid var(--sl-color-accent);
+    background: var(--sl-color-accent-low);
+    border-radius: 0 6px 6px 0;
+    margin: 0.4rem 0;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+  }
+  .env-name { font-weight: 600; }
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+  }
+  .badge.required { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .badge.optional { background: var(--sl-color-hairline-light); color: var(--sl-color-gray-2); }
+  .default { color: var(--sl-color-gray-2); }
+  .env-desc {
+    width: 100%;
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-2);
+  }
+</style>

@@ -1,0 +1,31 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="dpg-footer">
+  <p>© {year} Blue Dots Economy · Seeded by EkStep Foundation · All rights reserved</p>
+  <nav aria-label="Footer navigation">
+    <a href="mailto:hello@bluedotseconomy.org">hello@bluedotseconomy.org</a>
+    <a href="https://github.com/Blue-Dots-Economy" rel="noopener noreferrer" target="_blank">GitHub</a>
+  </nav>
+</footer>
+
+<style>
+  .dpg-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-top: 1px solid var(--sl-color-hairline-light);
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .dpg-footer p { margin: 0; }
+  .dpg-footer nav { display: flex; gap: 1rem; }
+  .dpg-footer a {
+    color: var(--sl-color-gray-3);
+    text-decoration: none;
+  }
+  .dpg-footer a:hover { color: var(--sl-color-text); }
+</style>
