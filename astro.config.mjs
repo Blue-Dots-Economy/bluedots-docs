@@ -31,9 +31,10 @@ export default defineConfig({
         baseUrl: 'https://github.com/Blue-Dots-Economy/bluedots-docs/edit/main/',
       },
       head: [
+        { tag: 'link', attrs: { rel: 'icon', type: 'image/png', href: '/favicon.png' } },
         { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
         { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true } },
-        { tag: 'link', attrs: { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap' } },
+        { tag: 'link', attrs: { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap' } },
         {
           tag: 'meta',
           attrs: {
