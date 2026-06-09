@@ -129,71 +129,85 @@ header.header > div.header {
   white-space: nowrap;
 }
 
+/* On mobile, drop the "Documentation" wordmark beside the logo — the logo image
+   already carries the brand, and this keeps the narrow header from crowding. */
+@media (max-width: 50rem) {
+  .site-title span:not(.sr-only) {
+    display: none;
+  }
+}
+
 /* Invert logo on dark backgrounds so white wordmark stays readable */
 [data-theme='dark'] .site-title img {
   filter: brightness(0) invert(1);
 }
 
-/* ── Search bar — centered in header, expanded pill style ───────────────── */
-.header site-search {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
+/* ── Search bar ───────────────────────────────────────────────────────────
+   On mobile we keep Starlight's default compact magnifier icon (label + ⌘K
+   hidden), so the header stays uncrowded (logo · search icon · menu toggle).
+   All of the expanded-pill styling below is desktop-only and also lifts the
+   box out of flow to center it in the header. */
+@media (min-width: 50rem) {
+  .header site-search {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
-.header site-search button[data-open-modal] {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  width: 22rem;
-  padding: 0.55rem 1rem;
-  border-radius: 10px;
-  border: 1px solid var(--sl-color-hairline-light);
-  background: var(--sl-color-bg);
-  color: var(--sl-color-gray-3, #6b7280);
-  font-size: 0.9rem;
-  font-family: var(--sl-font);
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
+  .header site-search button[data-open-modal] {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 22rem;
+    padding: 0.55rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--sl-color-hairline-light);
+    background: var(--sl-color-bg);
+    color: var(--sl-color-gray-3, #6b7280);
+    font-size: 0.9rem;
+    font-family: var(--sl-font);
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
 
-.header site-search button[data-open-modal]:hover {
-  border-color: var(--sl-color-accent);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
-}
+  .header site-search button[data-open-modal]:hover {
+    border-color: var(--sl-color-accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+  }
 
-.header site-search button[data-open-modal] svg {
-  width: 1rem;
-  height: 1rem;
-  flex-shrink: 0;
-  opacity: 0.6;
-}
+  .header site-search button[data-open-modal] svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
 
-/* "Search" label text — make visible and push to fill space */
-.header site-search button[data-open-modal] > span {
-  flex: 1;
-  text-align: left;
-  display: block !important;
-}
+  /* "Search" label text — visible and filling the space */
+  .header site-search button[data-open-modal] > span {
+    flex: 1;
+    text-align: left;
+    display: block !important;
+  }
 
-/* Keyboard shortcut badge */
-.header site-search button[data-open-modal] > kbd {
-  display: flex !important;
-  align-items: center;
-  gap: 0.2rem;
-  margin-left: auto;
-  opacity: 0.7;
-}
+  /* Keyboard shortcut badge */
+  .header site-search button[data-open-modal] > kbd {
+    display: flex !important;
+    align-items: center;
+    gap: 0.2rem;
+    margin-left: auto;
+    opacity: 0.7;
+  }
 
-.header site-search button[data-open-modal] > kbd > kbd {
-  background: var(--sl-color-hairline-light);
-  border: 1px solid var(--sl-color-hairline-light);
-  border-radius: 4px;
-  padding: 0.1rem 0.35rem;
-  font-size: 0.7rem;
-  font-family: inherit;
-  color: inherit;
+  .header site-search button[data-open-modal] > kbd > kbd {
+    background: var(--sl-color-hairline-light);
+    border: 1px solid var(--sl-color-hairline-light);
+    border-radius: 4px;
+    padding: 0.1rem 0.35rem;
+    font-size: 0.7rem;
+    font-family: inherit;
+    color: inherit;
+  }
 }
 
 /* ── Sidebar — rounded card, transparent so the page gradient shows through ── */
