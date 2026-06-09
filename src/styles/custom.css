@@ -1,5 +1,16 @@
+/* Self-hosted Google Sans (variable, latin subset) — bundled via Vite so the
+   base path is handled and there's no runtime request to fonts.gstatic.com. */
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/google-sans-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
-  --sl-font: 'Open Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sl-font: 'Google Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --sl-color-accent-low: #dbeafe;
   --sl-color-accent: #3b82f6;
   --sl-color-accent-high: #1d4ed8;
@@ -185,12 +196,11 @@ header.header > div.header {
   color: inherit;
 }
 
-/* ── Sidebar — transparent, blends into page background gradient ─────────── */
+/* ── Sidebar — rounded card, transparent so the page gradient shows through ── */
 .sidebar-pane {
   margin: 0.75rem;
-  border: none;
-  border-right: 1px solid var(--dpg-sidebar-border);
-  border-radius: 0;
+  border: 1px solid var(--dpg-sidebar-border);
+  border-radius: 14px;
   background: transparent;
   box-shadow: none;
   backdrop-filter: none;
@@ -200,8 +210,8 @@ header.header > div.header {
   /* On mobile the sidebar is a sheet; give it a solid bg so it's readable */
   .sidebar-pane {
     margin: 0;
+    border: none;
     border-radius: 0;
-    border-right: none;
     border-bottom: 1px solid var(--dpg-sidebar-border);
     background: var(--sl-color-bg);
   }
@@ -224,8 +234,110 @@ header.header > div.header {
   backdrop-filter: none;
 }
 
+/* Drop Starlight's vertical connector line beside nested items; indent sub-items
+   under the group label text instead. */
+.sidebar-content ul ul li {
+  border-inline-start: 0;
+  margin-inline-start: 0;
+  padding-inline-start: 1.9em;
+}
+
+/* Roomier vertical rhythm between sections and sub-items (reference look). */
+.sidebar-content .top-level > li + li {
+  margin-top: 0.7rem;
+}
+
+.sidebar-content summary {
+  padding-block: 0.45em;
+}
+
+.sidebar-content details > ul {
+  margin-top: 0.3rem;
+}
+
+.sidebar-content ul ul a {
+  padding-block: 0.4em;
+}
+
+.sidebar-content ul ul li + li {
+  margin-top: 0.1rem;
+}
+
+/* Grow to fill the page-height flex column so the full-width footer is pushed
+   to the bottom on short pages (sticky-footer pattern). `.page` supplies the
+   min-height: 100vh. */
 .main-frame {
-  min-height: 100vh;
+  flex: 1 0 auto;
+}
+
+/* ── Footer — full-width, sits at the bottom of the page ──────────────────────
+   Rendered as a direct child of `.page` from CustomPageFrame.astro so it spans
+   the full viewport width. Opaque background + navbar z-index let it paint over
+   the fixed sidebar (z 5) and TOC (z 4) where they overlap at the page end. */
+.dpg-footer {
+  position: relative;
+  z-index: var(--sl-z-index-navbar);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;   /* logo | centered copyright | links */
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem var(--sl-content-pad-x);
+  background: var(--sl-color-bg);
+  border-top: 1px solid var(--sl-color-hairline-light);
+  font-size: 0.8rem;
+  color: var(--sl-color-gray-3);
+}
+
+.dpg-footer__brand {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+}
+
+.dpg-footer__brand img {
+  height: 1.9rem;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Invert the wordmark on dark backgrounds, same as the header logo */
+[data-theme='dark'] .dpg-footer__brand img {
+  filter: brightness(0) invert(1);
+}
+
+.dpg-footer p {
+  justify-self: center;
+  text-align: center;
+  margin: 0;
+}
+
+.dpg-footer nav {
+  justify-self: end;
+  display: flex;
+  gap: 1rem;
+}
+
+.dpg-footer a {
+  color: var(--sl-color-gray-3);
+  text-decoration: none;
+}
+
+.dpg-footer a:hover {
+  color: var(--sl-color-text);
+}
+
+/* Stack and center the three footer parts on narrow viewports */
+@media (max-width: 50rem) {
+  .dpg-footer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0.65rem;
+    text-align: center;
+  }
+  .dpg-footer__brand,
+  .dpg-footer nav {
+    justify-self: center;
+  }
 }
 
 .content-panel {
@@ -234,6 +346,20 @@ header.header > div.header {
 
 .sl-markdown-content :is(h2, h3) {
   scroll-margin-top: 6rem;
+}
+
+/* Lucide marker before each in-page section heading (H2 only; the right-sidebar
+   "On this page" title lives outside .sl-markdown-content, so it's unaffected). */
+.sl-markdown-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-inline-end: 0.5em;
+  vertical-align: -0.05em;
+  background-color: var(--sl-color-text-accent);
+  -webkit-mask: var(--dpg-icon-heading) no-repeat center / contain;
+  mask: var(--dpg-icon-heading) no-repeat center / contain;
 }
 
 .sl-markdown-content code:not(pre code) {
@@ -295,11 +421,27 @@ header.header > div.header {
   color: #ffffff;
 }
 
+/* ── Icon set (Lucide — https://lucide.dev) ──────────────────────────────────
+   Every title icon is defined once here as a CSS variable, then referenced via
+   mask-image below. To swap an icon, replace the SVG in the matching variable
+   with another Lucide icon (set its stroke to 'black' so the mask is opaque). */
+:root {
+  --dpg-icon-start-here: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44'/%3E%3Cpath d='m13.56 11.747 4.332-.924'/%3E%3Cpath d='m16 21-3.105-6.21'/%3E%3Cpath d='M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z'/%3E%3Cpath d='m6.158 8.633 1.114 4.456'/%3E%3Cpath d='m8 21 3.105-6.21'/%3E%3Ccircle cx='12' cy='13' r='2'/%3E%3C/svg%3E");
+  --dpg-icon-hosting: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='20' height='8' x='2' y='2' rx='2' ry='2'/%3E%3Crect width='20' height='8' x='2' y='14' rx='2' ry='2'/%3E%3Cline x1='6' x2='6.01' y1='6' y2='6'/%3E%3Cline x1='6' x2='6.01' y1='18' y2='18'/%3E%3C/svg%3E");
+  --dpg-icon-schema: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='16' y='16' width='6' height='6' rx='1'/%3E%3Crect x='2' y='16' width='6' height='6' rx='1'/%3E%3Crect x='9' y='2' width='6' height='6' rx='1'/%3E%3Cpath d='M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3'/%3E%3Cpath d='M12 12V8'/%3E%3C/svg%3E");
+  --dpg-icon-api: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1'/%3E%3Cpath d='M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1'/%3E%3C/svg%3E");
+  --dpg-icon-ui: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='7' height='9' x='3' y='3' rx='1'/%3E%3Crect width='7' height='5' x='14' y='3' rx='1'/%3E%3Crect width='7' height='9' x='14' y='12' rx='1'/%3E%3Crect width='7' height='5' x='3' y='16' rx='1'/%3E%3C/svg%3E");
+  --dpg-icon-internals: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+  --dpg-icon-services: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z'/%3E%3Cpath d='m7 16.5-4.74-2.85'/%3E%3Cpath d='m7 16.5 5-3'/%3E%3Cpath d='M7 16.5v5.17'/%3E%3Cpath d='M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z'/%3E%3Cpath d='m17 16.5-5-3'/%3E%3Cpath d='m17 16.5 4.74-2.85'/%3E%3Cpath d='M17 16.5v5.17'/%3E%3Cpath d='M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z'/%3E%3Cpath d='M12 8 7.26 5.15'/%3E%3Cpath d='m12 8 4.74-2.85'/%3E%3Cpath d='M12 13.5V8'/%3E%3C/svg%3E");
+  --dpg-icon-heading: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
+}
+
 /* ── Sidebar group label icons ───────────────────────────────────────────────
    nth-child order: 1=Start Here, 2=Hosting, 3=Network Schema, 4=API, 5=UI,
    6=Internals, 7=Services.
    Uses CSS mask-image so the icon shape is cut from currentColor, making icons
-   monochrome and theme-aware with no coloured background. */
+   monochrome and theme-aware with no coloured background. Icon shapes come from
+   the --dpg-icon-* variables above (Lucide). */
 .top-level > li > details > summary > .group-label {
   display: flex;
   align-items: center;
@@ -321,51 +463,52 @@ header.header > div.header {
   mask-size: contain;
 }
 
-/* Start Here — rocket */
+/* Start Here — Lucide telescope */
 .top-level > li:nth-child(1) > details > summary > .group-label::before {
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2C12 2 7 6.5 7 12a5 5 0 0 0 10 0c0-5.5-5-10-5-10z'/%3E%3Ccircle cx='12' cy='12' r='1.5' fill='black' stroke='none'/%3E%3Cpath d='M9.5 17.5 8 21M14.5 17.5 16 21'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2C12 2 7 6.5 7 12a5 5 0 0 0 10 0c0-5.5-5-10-5-10z'/%3E%3Ccircle cx='12' cy='12' r='1.5' fill='black' stroke='none'/%3E%3Cpath d='M9.5 17.5 8 21M14.5 17.5 16 21'/%3E%3C/svg%3E");
+  -webkit-mask-image: var(--dpg-icon-start-here);
+  mask-image: var(--dpg-icon-start-here);
 }
 
-/* Hosting — server */
+/* Hosting — Lucide server */
 .top-level > li:nth-child(2) > details > summary > .group-label::before {
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='8' rx='2'/%3E%3Crect x='3' y='14' width='18' height='6' rx='2'/%3E%3Ccircle cx='7' cy='8' r='1' fill='black' stroke='none'/%3E%3Ccircle cx='7' cy='17' r='1' fill='black' stroke='none'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='8' rx='2'/%3E%3Crect x='3' y='14' width='18' height='6' rx='2'/%3E%3Ccircle cx='7' cy='8' r='1' fill='black' stroke='none'/%3E%3Ccircle cx='7' cy='17' r='1' fill='black' stroke='none'/%3E%3C/svg%3E");
+  -webkit-mask-image: var(--dpg-icon-hosting);
+  mask-image: var(--dpg-icon-hosting);
 }
 
-/* Network Schema — document */
+/* Network Schema — Lucide network */
 .top-level > li:nth-child(3) > details > summary > .group-label::before {
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 12h6M9 16h4M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 12h6M9 16h4M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5'/%3E%3C/svg%3E");
+  -webkit-mask-image: var(--dpg-icon-schema);
+  mask-image: var(--dpg-icon-schema);
 }
 
-/* API — code brackets */
+/* API — Lucide braces */
 .top-level > li:nth-child(4) > details > summary > .group-label::before {
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 9l-4 3 4 3M16 9l4 3-4 3M14 5l-4 14'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 9l-4 3 4 3M16 9l4 3-4 3M14 5l-4 14'/%3E%3C/svg%3E");
+  -webkit-mask-image: var(--dpg-icon-api);
+  mask-image: var(--dpg-icon-api);
 }
 
-/* UI — monitor */
+/* UI — Lucide layout-dashboard */
 .top-level > li:nth-child(5) > details > summary > .group-label::before {
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='14' rx='2'/%3E%3Cpath d='M8 20h8M12 18v2M2 8h20'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='14' rx='2'/%3E%3Cpath d='M8 20h8M12 18v2M2 8h20'/%3E%3C/svg%3E");
+  -webkit-mask-image: var(--dpg-icon-ui);
+  mask-image: var(--dpg-icon-ui);
 }
 
-/* Internals — cog */
+/* Internals — Lucide settings */
 .top-level > li:nth-child(6) > details > summary > .group-label::before {
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.07 4.93l-1.42 1.42M4.93 4.93l1.42 1.42M4.93 19.07l1.42-1.42M19.07 19.07l-1.42-1.42M12 2v2M12 20v2M2 12h2M20 12h2'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.07 4.93l-1.42 1.42M4.93 4.93l1.42 1.42M4.93 19.07l1.42-1.42M19.07 19.07l-1.42-1.42M12 2v2M12 20v2M2 12h2M20 12h2'/%3E%3C/svg%3E");
+  -webkit-mask-image: var(--dpg-icon-internals);
+  mask-image: var(--dpg-icon-internals);
 }
 
-/* Services — globe */
+/* Services — Lucide boxes */
 .top-level > li:nth-child(7) > details > summary > .group-label::before {
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3C9.5 7.5 9.5 16.5 12 21M12 3c2.5 4.5 2.5 13.5 0 18'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3C9.5 7.5 9.5 16.5 12 21M12 3c2.5 4.5 2.5 13.5 0 18'/%3E%3C/svg%3E");
+  -webkit-mask-image: var(--dpg-icon-services);
+  mask-image: var(--dpg-icon-services);
 }
 
 @media print {
   .sidebar-pane,
   .header,
+  .dpg-footer,
   nav[aria-label="breadcrumb"],
   .right-sidebar {
     display: none !important;

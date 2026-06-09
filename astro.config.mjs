@@ -19,7 +19,10 @@ export default defineConfig({
       pagination: true,
       tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 3 },
       logo: { src: './src/assets/logo.png', alt: 'Blue Dots Economy', replacesTitle: false },
-      components: { Footer: './src/components/CustomFooter.astro' },
+      components: {
+        Footer: './src/components/CustomFooter.astro',
+        PageFrame: './src/components/CustomPageFrame.astro',
+      },
       social: [
         {
           icon: 'github',
@@ -32,9 +35,6 @@ export default defineConfig({
       },
       head: [
         { tag: 'link', attrs: { rel: 'icon', type: 'image/png', href: '/favicon.png' } },
-        { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
-        { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true } },
-        { tag: 'link', attrs: { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap' } },
         {
           tag: 'meta',
           attrs: {
