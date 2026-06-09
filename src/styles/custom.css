@@ -248,6 +248,24 @@ header.header > div.header {
   backdrop-filter: none;
 }
 
+/* Highlight the top-level section (title + icon) that contains the current page.
+   All sections render `open`, so [open] can't identify the active one — :has()
+   matches the section whose subtree holds the aria-current link. */
+.sidebar-content .top-level > li > details:has(a[aria-current='page']) > summary {
+  border: 1px solid var(--dpg-active-border);
+  background: var(--dpg-active-bg);
+  border-radius: 8px;
+  color: var(--dpg-active-text);
+}
+
+.sidebar-content .top-level > li > details:has(a[aria-current='page']) > summary .large {
+  color: var(--dpg-active-text);
+}
+
+.sidebar-content .top-level > li > details:has(a[aria-current='page']) > summary .group-label::before {
+  opacity: 1;
+}
+
 /* Drop Starlight's vertical connector line beside nested items; indent sub-items
    under the group label text instead. */
 .sidebar-content ul ul li {
