@@ -146,7 +146,7 @@ This site is **Astro + Starlight**, deployed to **GitHub Pages** via GitHub Acti
 2. In **Settings → Pages**, set **Source = GitHub Actions**.
 3. Confirm `astro.config.mjs` has the right `site` (no `base` needed for a custom domain):
    ```js
-   site: 'https://docs.bluedotseconomy.org',
+   site: 'https://docs-signals-dpg.bluedotseconomy.org',
    ```
    A `public/CNAME` file pins the custom domain across deploys. If instead deploying to a GitHub Pages project URL (`<org>.github.io/<repo>`), set `site` to that origin and add `base: '/<repo>'`.
 

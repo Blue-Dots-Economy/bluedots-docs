@@ -5,7 +5,7 @@ import starlightLinksValidator from 'starlight-links-validator';
 import starlightImageZoom from 'starlight-image-zoom';
 
 export default defineConfig({
-  site: 'https://docs.bluedotseconomy.org',
+  site: 'https://docs-signals-dpg.bluedotseconomy.org',
 
   integrations: [
     starlight({
