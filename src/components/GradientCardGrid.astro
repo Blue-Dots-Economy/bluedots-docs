@@ -1,0 +1,26 @@
+---
+---
+<div class="gradient-grid">
+  <slot />
+</div>
+
+<style>
+  .gradient-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-block: 2rem;
+  }
+
+  @media (max-width: 60rem) {
+    .gradient-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 36rem) {
+    .gradient-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,4 @@
+Contact: mailto:security@sanketika.in
+Expires: 2026-12-31T23:59:59Z
+Preferred-Languages: en
+Canonical: /.well-known/security.txt
