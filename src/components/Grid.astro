@@ -1,0 +1,35 @@
+---
+interface Props {
+  minWidth?: string;
+  cols?: number;
+}
+const { minWidth = '180px', cols } = Astro.props;
+const gridStyle = cols
+  ? `grid-template-columns: repeat(${cols}, 1fr)`
+  : `--min: ${minWidth}`;
+---
+
+<div class="bd-grid not-content" style={gridStyle}>
+  <slot />
+</div>
+
+<style>
+  .bd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--min, 180px), 1fr));
+    align-items: stretch;
+    gap: 1rem;
+    margin-block: 1.5rem;
+  }
+
+  /* On narrow screens a fixed `cols` count (inline style) would squeeze
+     cards illegibly — override it and let cards wrap. */
+  @media (max-width: 640px) {
+    .bd-grid {
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(var(--min, 180px), 100%), 1fr)
+      ) !important;
+    }
+  }
+</style>

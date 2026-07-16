@@ -1,0 +1,100 @@
+---
+interface Props {
+  color: 'blue' | 'pink' | 'purple' | 'orange' | 'green' | 'brown';
+  sector: string;
+  problem: string;
+  stat: string;
+}
+const { color, sector, problem, stat } = Astro.props;
+const colorName = color.charAt(0).toUpperCase() + color.slice(1);
+---
+
+<div class:list={['dot-card', `dot-card--${color}`]}>
+  <div class="dot-card-header">
+    <img
+      class="dot-card-icon"
+      src={`/bluedots-docs/dots/dot-${color}.svg`}
+      alt={`${colorName} dot`}
+      width="36"
+      height="36"
+    />
+    <span class="dot-card-name">{colorName} Dots</span>
+  </div>
+  <div class="dot-card-sector">{sector}</div>
+  <p class="dot-card-problem">{problem}</p>
+  <div class="dot-card-stat">{stat}</div>
+</div>
+
+<style>
+  .dot-card {
+    --dot-c: var(--dot-blue);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem;
+    border-radius: var(--bd-radius-lg);
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-hairline);
+    border-inline-start: 4px solid var(--dot-c);
+    box-shadow: var(--bd-shadow-rest);
+    transition: transform 0.2s var(--bd-spring), box-shadow 0.2s ease;
+  }
+  .dot-card:hover {
+    transform: translateY(var(--bd-lift));
+    box-shadow:
+      0 12px 28px color-mix(in oklab, var(--dot-c) 22%, transparent),
+      0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dot-card,
+    .dot-card:hover {
+      transition: none;
+      transform: none;
+    }
+  }
+  .dot-card--blue   { --dot-c: var(--dot-blue); }
+  .dot-card--pink   { --dot-c: var(--dot-pink); }
+  .dot-card--purple { --dot-c: var(--dot-purple); }
+  .dot-card--orange { --dot-c: var(--dot-orange); }
+  .dot-card--green  { --dot-c: var(--dot-green); }
+  .dot-card--brown  { --dot-c: var(--dot-brown); }
+
+  .dot-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+  .dot-card-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+  .dot-card-name {
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: var(--dot-c);
+  }
+  .dot-card-sector {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--sl-color-text);
+    margin-top: 0.125rem;
+  }
+  .dot-card-problem {
+    font-size: 0.875rem;
+    color: var(--sl-color-gray-2);
+    line-height: 1.55;
+    margin: 0;
+    flex: 1;
+  }
+  .dot-card-stat {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--dot-c);
+    background: var(--sl-color-bg);
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.375rem;
+    padding: 0.375rem 0.625rem;
+    margin-top: 0.25rem;
+  }
+</style>

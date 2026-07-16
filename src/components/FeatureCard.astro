@@ -1,0 +1,122 @@
+---
+import { MapPin, Globe, Mic, Layers } from '@lucide/astro';
+
+type LucideIcon = 'map-pin' | 'globe' | 'mic' | 'layers';
+type CardColor = 'blue' | 'green' | 'purple' | 'orange';
+
+interface Props {
+  title: string;
+  icon: LucideIcon;
+  color: CardColor;
+}
+const { title, icon, color } = Astro.props;
+
+const icons = {
+  'map-pin': MapPin,
+  'globe': Globe,
+  'mic': Mic,
+  'layers': Layers,
+} as const;
+const Icon = icons[icon];
+---
+
+<div class:list={['fc', `fc--${color}`]}>
+  <div class="fc-icon">
+    <Icon size={22} stroke-width={2} aria-hidden="true" />
+  </div>
+  <h3 class="fc-title">{title}</h3>
+  <div class="fc-body"><slot /></div>
+</div>
+
+<style>
+  /* ── base card ── */
+  .fc {
+    /* per-variant brand color; everything else derives from it */
+    --c: var(--dot-blue);
+    --from: color-mix(in oklab, var(--c) 10%, var(--sl-color-bg));
+    --to:   color-mix(in oklab, var(--c) 22%, var(--sl-color-bg));
+    --ic:   var(--c);
+    --ibg:  color-mix(in oklab, var(--c) 14%, transparent);
+    --bd:   color-mix(in oklab, var(--c) 25%, transparent);
+    --glow: color-mix(in oklab, var(--c) 22%, transparent);
+
+    background: linear-gradient(145deg, var(--from) 0%, var(--to) 100%);
+    border: 1px solid var(--bd);
+    border-radius: var(--bd-radius-lg);
+    padding: 1.625rem;
+    box-shadow: var(--bd-shadow-rest);
+    transition:
+      transform 0.22s var(--bd-spring),
+      box-shadow 0.22s ease,
+      border-color 0.18s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+  }
+
+  .fc:hover {
+    transform: translateY(var(--bd-lift));
+    box-shadow:
+      0 20px 40px var(--glow),
+      0 4px 8px rgba(0, 0, 0, 0.06);
+    border-color: var(--ic);
+  }
+
+  /* ── colour variants (light + dark handled by --dot-* tokens) ── */
+  .fc--blue   { --c: var(--dot-blue); }
+  .fc--green  { --c: var(--dot-green); }
+  .fc--purple { --c: var(--dot-purple); }
+  .fc--orange { --c: var(--dot-orange); }
+
+  /* ── icon badge ── */
+  .fc-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.625rem;
+    background: var(--ibg);
+    color: var(--ic);
+    flex-shrink: 0;
+    transition: transform 0.22s var(--bd-spring);
+  }
+
+  .fc:hover .fc-icon {
+    transform: scale(1.12) rotate(-4deg);
+  }
+
+  /* ── title ── */
+  .fc-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--sl-color-text);
+    margin: 0;
+    padding: 0;
+    border: none;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── body ── */
+  .fc-body {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--sl-color-gray-2);
+    margin: 0;
+    flex: 1;
+  }
+  .fc-body :global(p)      { margin: 0; }
+  .fc-body :global(strong) { color: var(--sl-color-text); font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fc,
+    .fc:hover,
+    .fc-icon,
+    .fc:hover .fc-icon {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>

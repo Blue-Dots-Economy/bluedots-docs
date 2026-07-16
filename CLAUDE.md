@@ -2,62 +2,52 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview
-
-This is the public documentation site for the **Blue Dots Economy** project — a network-aware backend system for federated trust networks. Built with [Astro Starlight](https://starlight.astro.build/). Deployed automatically to GitHub Pages at https://blue-dots-economy.github.io/bluedots-docs/.
-
 ## Commands
 
-Use **pnpm** (v11.1.2, node ≥ 20 required):
-
 ```bash
-pnpm dev        # Start dev server at http://localhost:4321
-pnpm build      # Production build → dist/
-pnpm preview    # Preview production build
-pnpm typecheck  # Run astro check (TypeScript + component validation)
+pnpm install      # install dependencies (Node ≥ 20 required)
+pnpm dev          # dev server at http://localhost:4321
+pnpm build        # production build to ./dist
+pnpm preview      # serve the production build locally
+pnpm check        # TypeScript / Astro type-check (astro check)
 ```
-
-No test suite exists — `typecheck` is the primary validation step.
 
 ## Architecture
 
-### Configuration
+This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.build) documentation site, deployed to GitHub Pages via `.github/workflows/deploy.yml` (uses `withastro/action`), served at the custom domain `docs-signals-dpg.bluedotseconomy.org`.
 
-- **`astro.config.mjs`** — Central config: sidebar structure, Starlight options, integrations (sitemap, mermaid). The sidebar in this file is the source of truth for navigation order.
-- **`src/content.config.ts`** — Extends Starlight's doc schema with custom frontmatter fields: `tags`, `audience` (developer | operator | integrator), `status` (stable | draft | deprecated), `lastReviewed`.
-- **Site URL / base path** are set via env vars `DOCS_SITE_URL` and `DOCS_BASE` (see `.github/workflows/deploy.yml` for production values). `src/utils/withBase.ts` provides a helper to resolve links against the base path.
+**Key files:**
 
-### Content (`src/content/docs/`)
+- `astro.config.mjs` — single source of truth for the sidebar navigation (information architecture). Every page must have a matching `slug` entry here before it becomes reachable from the nav.
+- `src/content.config.ts` — registers the `docs` collection using Starlight's loader/schema; no custom fields added yet.
+- `src/styles/custom.css` — theme accent overrides only.
+- `src/content/docs/` — all documentation as `.md` or `.mdx` with Starlight frontmatter (`title`, `description`, `sidebar.order`).
 
-All documentation lives here as `.md` or `.mdx` files. Sections map to sidebar groups defined in `astro.config.mjs`:
+**Deployment config (`astro.config.mjs`):**
 
-| Directory | Topic |
-|-----------|-------|
-| `concepts/` | Architecture overviews (includes Mermaid diagrams) |
-| `hosting/` | Deployment guides (Docker, single/multi-domain, Dokploy) |
-| `schemas/` | Network schema / contract authoring |
-| `apps/api/` | Backend API routes and internals |
-| `apps/ui/` | Frontend app documentation |
-| `packages/` | Shared internal packages (auto-generated sidebar) |
-| `services/` | Microservices (auto-generated sidebar) |
+```js
+site: 'https://docs-signals-dpg.bluedotseconomy.org',
+```
 
-### Custom Components (`src/components/`)
+No `base` — the site is served from the domain root, so internal links are root-relative (`/guides/...`, not `/bluedots-docs/guides/...`). `public/CNAME` pins the custom domain across Pages deploys.
 
-Reusable Astro components for use in `.mdx` files:
+## Adding / editing content
 
-- **`ApiEndpoint.astro`** — Documents an HTTP route; accepts `method`, `path`, `auth` (apikey | session | admin | public), and optional `description`.
-- **`EnvVar.astro`** — Documents an environment variable; accepts `name`, `status` (required | optional), `default`, and `description`.
-- **`GradientCard.astro`** / **`GradientCardGrid.astro`** — Feature cards for landing pages; card accepts `title`, `description`, `icon`, and `href`.
+- Drop `.md` or `.mdx` files under `src/content/docs/<section>/`.
+- Add a matching `{ label, slug }` entry to the sidebar array in `astro.config.mjs`.
+- MDX pages can import Starlight components: `Card`, `CardGrid`, `LinkCard`, `Tabs`, etc.
+- The landing page (`src/content/docs/index.mdx`) uses `template: splash` — it is MDX, not plain Markdown.
 
-### Styling (`src/styles/custom.css`)
+## Information architecture
 
-Overrides Starlight CSS variables for Blue Dots branding (Open Sans font, blue accent, dark navy background). Also defines sidebar icon masks (one SVG mask per sidebar section) and responsive card grid breakpoints. Avoid adding inline styles to components — extend `custom.css` instead.
+| Section | Sub-sections |
+|---|---|
+| **Overview** | introduction · paradox-of-proximity · the-blue-dots-approach · blue-dots-as-a-dpg · who-is-this-for |
+| **Core Concepts** | signals · aggregators · networks-domains-instances · items-actions-events · glossary |
+| **— Architecture** | high-level-architecture · signals-dpg · aggregator-dpg · data-model · identity-and-auth |
+| **— Technical** | overview · schema-driven-model · read-write-paths · tech-stack |
+| **Guides** | Installation (prerequisites · local-stack · signals-dpg · aggregator-dpg) · adaptor-onboarding · configuration · api-reference · deployment |
+| **Explore** | use-cases · pilots · beyond-livelihoods |
+| **Community** | contributing · roadmap · release-notes |
 
-## Deployment
-
-GitHub Actions (`.github/workflows/deploy.yml`) builds and deploys on every push to `main`. The production build sets:
-- `DOCS_SITE_URL=https://blue-dots-economy.github.io`
-- `DOCS_BASE=/bluedots-docs/`
-- `DOCS_ROBOTS_INDEXABLE=true`
-
-Any link within documentation should use `withBase()` from `src/utils/withBase.ts` rather than hard-coding `/bluedots-docs/` paths.
+Many sidebar slugs (especially in `overview/`, `core-concepts/architecture/`, `core-concepts/technical/`, `guides/installation/`) reference pages that do not yet exist as files — they need to be created before the site will build without 404s.

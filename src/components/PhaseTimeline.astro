@@ -1,0 +1,150 @@
+---
+interface Phase {
+  number: number | string;
+  title: string;
+  href?: string;
+  weeks?: string;
+  focus: string;
+  actions?: string[];
+}
+interface Props {
+  phases: Phase[];
+}
+const { phases } = Astro.props;
+---
+
+<div class="pt-timeline not-content">
+  {phases.map((phase, i) => (
+    <div class="pt-phase">
+      <div class="pt-left">
+        <div class="pt-num">{phase.number}</div>
+        {i < phases.length - 1 && <div class="pt-line"></div>}
+      </div>
+      <div class="pt-body">
+        <div class="pt-header">
+          {phase.href ? (
+            <a class="pt-title pt-title--link" href={phase.href}>{phase.title}</a>
+          ) : (
+            <span class="pt-title">{phase.title}</span>
+          )}
+          {phase.weeks && <span class="pt-weeks">{phase.weeks}</span>}
+        </div>
+        <p class="pt-focus">{phase.focus}</p>
+        {phase.actions && phase.actions.length > 0 && (
+          <ul class="pt-actions">
+            {phase.actions.map((a) => <li>{a}</li>)}
+          </ul>
+        )}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .pt-timeline {
+    display: flex;
+    flex-direction: column;
+    margin-block: 1.5rem;
+  }
+  .pt-phase {
+    display: flex;
+    gap: 1.25rem;
+  }
+  .pt-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .pt-num {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: var(--dot-blue);
+    color: var(--sl-color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .pt-line {
+    width: 2px;
+    flex: 1;
+    min-height: 1.5rem;
+    background: color-mix(in oklab, var(--dot-blue) 35%, var(--sl-color-hairline));
+    margin-block: 0.25rem;
+  }
+  .pt-body {
+    padding-bottom: 2rem;
+    flex: 1;
+  }
+  .pt-phase:last-child .pt-body {
+    padding-bottom: 0;
+  }
+  .pt-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.4rem;
+  }
+  .pt-title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--sl-color-text);
+  }
+  .pt-title--link {
+    color: var(--sl-color-text-accent);
+    text-decoration: none;
+  }
+  .pt-title--link:hover {
+    text-decoration: underline;
+  }
+  .pt-title--link:focus-visible {
+    outline: 2px solid var(--dot-blue);
+    outline-offset: 2px;
+  }
+  .pt-weeks {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--sl-color-accent);
+    border: 1px solid var(--sl-color-accent);
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    opacity: 0.85;
+  }
+  .pt-focus {
+    font-size: 0.9375rem;
+    color: var(--sl-color-gray-2);
+    line-height: 1.55;
+    margin: 0 0 0.625rem;
+  }
+  .pt-actions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .pt-actions li {
+    font-size: 0.875rem;
+    color: var(--sl-color-gray-2);
+    padding-inline-start: 1.25rem;
+    position: relative;
+    line-height: 1.5;
+  }
+  .pt-actions li::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0.15rem;
+    top: 0.5em;
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: 50%;
+    background: var(--dot-blue);
+  }
+</style>

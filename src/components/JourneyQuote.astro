@@ -1,0 +1,90 @@
+---
+interface Props {
+  before: string;
+  after: string;
+  persona?: string;
+}
+const { before, after, persona } = Astro.props;
+---
+
+<div class="jq not-content">
+  {persona && <div class="jq-persona">{persona}</div>}
+  <div class="jq-bubbles">
+    <div class="jq-bubble jq-before">
+      <span class="jq-tag">Before</span>
+      <p class="jq-text">"{before}"</p>
+    </div>
+    <div class="jq-arrow" aria-hidden="true">→</div>
+    <div class="jq-bubble jq-after">
+      <span class="jq-tag">After</span>
+      <p class="jq-text">"{after}"</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .jq {
+    margin-block: 1.5rem;
+  }
+  .jq-persona {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--sl-color-gray-2);
+    margin-bottom: 0.625rem;
+  }
+  .jq-bubbles {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+  @media (max-width: 600px) {
+    .jq-bubbles {
+      grid-template-columns: 1fr;
+    }
+    .jq-arrow {
+      padding-top: 0 !important;
+      transform: rotate(90deg);
+    }
+  }
+  .jq-bubble {
+    padding: 1rem 1.125rem;
+    border-radius: var(--bd-radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .jq-before {
+    background: var(--bd-before-bg);
+    border: 1px solid color-mix(in oklab, var(--bd-before-text) 25%, transparent);
+  }
+  .jq-after {
+    background: var(--bd-after-bg);
+    border: 1px solid color-mix(in oklab, var(--bd-after-text) 25%, transparent);
+  }
+  .jq-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .jq-before .jq-tag { color: var(--bd-before-text); }
+  .jq-after  .jq-tag { color: var(--bd-after-text); }
+
+  .jq-text {
+    font-size: 0.9375rem;
+    font-style: italic;
+    line-height: 1.5;
+    margin: 0;
+    color: var(--sl-color-text);
+  }
+  .jq-arrow {
+    font-size: 1.5rem;
+    color: var(--sl-color-gray-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

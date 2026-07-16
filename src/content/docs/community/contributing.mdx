@@ -1,0 +1,42 @@
+---
+title: Contributing
+description: How to contribute to the Blue Dots DPGs and to this documentation.
+sidebar:
+  order: 1
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+Blue Dots is built as open Digital Public Goods, and contributions are welcome — to the DPGs and to this documentation.
+
+## Contributing to the DPGs
+
+Both DPGs share a baseline of engineering discipline. Before opening a PR:
+
+- **Conventional Commits** are required. Do not bypass hooks with `--no-verify`.
+- Run the full gate locally: `pnpm -w lint`, `pnpm -w typecheck`, `pnpm -w test`, and (Aggregator) `pnpm dep-check`.
+- Keep to the conventions: ESM-only, strict TypeScript, no `any`; snake_case files; routes return typed `{ error, message }` rather than throwing.
+- Respect the boundary rules — cross-package imports go through `./interface` or `./testing` only.
+- Add tests; target ≥ 70% line coverage. Use the in-memory fake from each package's `./testing` export.
+
+CI must pass (lint, typecheck, test, build, dep-check) before merge; branch protection enforces it.
+
+## Contributing to these docs
+
+This site is **Astro + Starlight**. Content lives in `src/content/docs/` as Markdown/MDX.
+
+<Steps>
+
+1. Fork and clone the docs repository.
+
+2. `pnpm install` then `pnpm dev` to preview locally.
+
+3. Edit or add a `.md`/`.mdx` page; register new pages in the sidebar in `astro.config.mjs`.
+
+4. Run `pnpm build` to confirm it compiles, then open a PR.
+
+</Steps>
+
+## Where to ask
+
+- File issues and PRs on the relevant repository under the [Blue Dots Economy GitHub org](https://github.com/Blue-Dots-Economy).
