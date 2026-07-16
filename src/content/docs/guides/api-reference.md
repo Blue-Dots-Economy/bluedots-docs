@@ -4,7 +4,7 @@ description: Reference for the Signals and Aggregator endpoints, auth headers an
 sidebar:
   order: 7
 prev:
-  link: /bluedots-docs/guides/installation/signals-dpg/
+  link: /guides/installation/signals-dpg/
   label: "Path 8 of 9: Signals DPG Setup"
 ---
 

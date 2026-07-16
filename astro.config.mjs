@@ -4,12 +4,8 @@ import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightImageZoom from 'starlight-image-zoom';
 
-// NOTE: `site` and `base` are tuned for GitHub Pages project pages.
-// If you deploy to a custom domain (e.g. docs.bluedotseconomy.org), set
-// `site` to that domain and remove `base` (or set it to '/').
 export default defineConfig({
-  site: 'https://blue-dots-economy.github.io',
-  base: '/bluedots-docs',
+  site: 'https://docs.bluedotseconomy.org',
 
   integrations: [
     starlight({

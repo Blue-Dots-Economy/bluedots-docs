@@ -11,37 +11,37 @@ This documentation serves everyone building on or operating Blue Dots. Find your
 
 You want to deploy Blue Dots for a district, state or domain.
 
-- Start with [Blue Dots as a DPG](/bluedots-docs/overview/blue-dots-as-a-dpg/) for the model.
-- Then follow [Adaptor Onboarding](/bluedots-docs/guides/adaptor-onboarding/) and the [Installation](/bluedots-docs/guides/installation/prerequisites/) guides.
+- Start with [Blue Dots as a DPG](/overview/blue-dots-as-a-dpg/) for the model.
+- Then follow [Adaptor Onboarding](/guides/adaptor-onboarding/) and the [Installation](/guides/installation/prerequisites/) guides.
 
-**Follow the full path →** [Deploy for a district](/bluedots-docs/start/deploy/)
+**Follow the full path →** [Deploy for a district](/start/deploy/)
 
 ## Backend & platform engineers
 
 You will run, extend or integrate the Signals and Aggregator DPGs.
 
-- Read [Architecture](/bluedots-docs/core-concepts/architecture/high-level-architecture/) and [Technical Documentation](/bluedots-docs/core-concepts/technical/overview/).
-- Use the [API Reference](/bluedots-docs/guides/api-reference/) and [Configuration](/bluedots-docs/guides/configuration/) guides.
+- Read [Architecture](/core-concepts/architecture/high-level-architecture/) and [Technical Documentation](/core-concepts/technical/overview/).
+- Use the [API Reference](/guides/api-reference/) and [Configuration](/guides/configuration/) guides.
 
-**Follow the full path →** [Build & integrate](/bluedots-docs/start/build/)
+**Follow the full path →** [Build & integrate](/start/build/)
 
 ## Aggregator organisations
 
 You are an institute, employer, NGO or government department onboarding participants.
 
-- See [Core Concepts → Aggregators](/bluedots-docs/core-concepts/aggregators/).
-- Follow the [Aggregator DPG Setup](/bluedots-docs/guides/installation/aggregator-dpg/) guide.
+- See [Core Concepts → Aggregators](/core-concepts/aggregators/).
+- Follow the [Aggregator DPG Setup](/guides/installation/aggregator-dpg/) guide.
 
-**Follow the full path →** [Onboard participants](/bluedots-docs/start/onboard/)
+**Follow the full path →** [Onboard participants](/start/onboard/)
 
 ## Program & policy stakeholders
 
 You care about outcomes and impact at district scale.
 
-- Read the [Overview](/bluedots-docs/overview/introduction/) and [Explore → Use Cases](/bluedots-docs/explore/use-cases/) and [Pilots](/bluedots-docs/explore/pilots/).
+- Read the [Overview](/overview/introduction/) and [Explore → Use Cases](/explore/use-cases/) and [Pilots](/explore/pilots/).
 
-**Follow the full path →** [Evaluate impact](/bluedots-docs/start/evaluate/)
+**Follow the full path →** [Evaluate impact](/start/evaluate/)
 
 :::tip
-New to the vocabulary? Keep the [Glossary](/bluedots-docs/core-concepts/glossary/) open in a second tab — the terms *network*, *domain*, *instance*, *item*, *action* and *event* recur everywhere.
+New to the vocabulary? Keep the [Glossary](/core-concepts/glossary/) open in a second tab — the terms *network*, *domain*, *instance*, *item*, *action* and *event* recur everywhere.
 :::

@@ -49,7 +49,7 @@ Shared secrets (e.g. the Redis password used by all charts) are templated into e
 Alongside these, three checked-in config files feed every deploy:
 
 - `global-values.yaml` — non-secret config (hosts, network, served domains).
-- `global-images.yaml` — per-environment image pins (see [CI/CD & Build Pipeline](/bluedots-docs/guides/cicd-and-builds/)).
+- `global-images.yaml` — per-environment image pins (see [CI/CD & Build Pipeline](/guides/cicd-and-builds/)).
 - `helm/global-resources.yaml` — replica counts, HPA, PDB and container resources, shared across environments.
 
 ## Application stack: Helm umbrella charts
@@ -87,10 +87,10 @@ Kong's CRDs ship inside the vendored subchart, but Helm only installs subchart C
 
 ## Identity at runtime
 
-Keycloak (Aggregator) and Better-Auth + API keys (Signals) are covered in [Identity & Auth](/bluedots-docs/core-concepts/architecture/identity-and-auth/). One deployment-time detail: the aggregator's `global.signalstack.actingOrgId` must be set **after** Signals is deployed (it is read from the seeded `organization` table via `get-signalstack-org-id.sh`), or aggregator login fails with `SIGNALSTACK_ORG_NOT_REGISTERED`.
+Keycloak (Aggregator) and Better-Auth + API keys (Signals) are covered in [Identity & Auth](/core-concepts/architecture/identity-and-auth/). One deployment-time detail: the aggregator's `global.signalstack.actingOrgId` must be set **after** Signals is deployed (it is read from the seeded `organization` table via `get-signalstack-org-id.sh`), or aggregator login fails with `SIGNALSTACK_ORG_NOT_REGISTERED`.
 
 ## Where to go next
 
-- Run it: [Deployment guide](/bluedots-docs/guides/deployment/).
-- Ship to it: [CI/CD & Build Pipeline](/bluedots-docs/guides/cicd-and-builds/).
-- Configure it: [Configuration](/bluedots-docs/guides/configuration/).
+- Run it: [Deployment guide](/guides/deployment/).
+- Ship to it: [CI/CD & Build Pipeline](/guides/cicd-and-builds/).
+- Configure it: [Configuration](/guides/configuration/).

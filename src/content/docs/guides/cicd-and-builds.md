@@ -81,7 +81,7 @@ bash install.sh deploy_all_services
 
 ![deploy_all_services runs in strict order: 1 preflight, 2 create_namespaces_and_secrets (3 namespaces + ghcr-pull secret), 3 deploy_monitoring, 4 deploy_common_services (gp3 default SC + Kong CRDs + platform), 5 deploy_signals, 6 deploy_aggregator, 7 fix_acme_issuer_uri](../../../assets/diagrams/cicd-deploy-chain.png)
 
-See the [Deployment guide](/bluedots-docs/guides/deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/bluedots-docs/core-concepts/architecture/infrastructure/) for what each layer is.
+See the [Deployment guide](/guides/deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) for what each layer is.
 
 ### Scripted / non-interactive runs
 
@@ -121,6 +121,6 @@ Never deploy a customer environment from `main` — use that environment's branc
 2. Merge → the Docker matrix publishes `ghcr.io/blue-dots-economy/<service>:sha-<short>` to GHCR.
 3. In `bluedots-automation`, on the target environment's branch, update the relevant tag(s) in `opentofu/aws/<env>/global-images.yaml`.
 4. Run `bash install.sh deploy_<service>` (or `deploy_all_services`) — Helm rolls out the new image with `--wait`.
-5. Validate (`helm list -A`, pod health, ingress, TLS) — see the [Deployment guide](/bluedots-docs/guides/deployment/).
+5. Validate (`helm list -A`, pod health, ingress, TLS) — see the [Deployment guide](/guides/deployment/).
 
 Rollback is the inverse: set the tag back to the previous known-good SHA and re-run the deploy.

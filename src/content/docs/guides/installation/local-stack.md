@@ -4,7 +4,7 @@ description: Choose your local setup — Signals alone, or the full Aggregator +
 sidebar:
   order: 2
 next:
-  link: /bluedots-docs/guides/installation/signals-dpg/
+  link: /guides/installation/signals-dpg/
   label: "Path 8 of 9: Signals DPG Setup"
 ---
 
@@ -22,8 +22,8 @@ Both offer the same two tracks:
 
 | I want to…                                    | Use                                                                 | Guide                                                                     |
 | --------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Run **Signals only** (backend + UI)           | `signals-dpg/local-setup/`                                          | [Signals DPG Setup](/bluedots-docs/guides/installation/signals-dpg/)      |
-| Run the **full ecosystem** (Aggregator + Signals) | `aggregator-dpg/local-setup/`                                   | [Aggregator DPG Setup](/bluedots-docs/guides/installation/aggregator-dpg/) |
+| Run **Signals only** (backend + UI)           | `signals-dpg/local-setup/`                                          | [Signals DPG Setup](/guides/installation/signals-dpg/)      |
+| Run the **full ecosystem** (Aggregator + Signals) | `aggregator-dpg/local-setup/`                                   | [Aggregator DPG Setup](/guides/installation/aggregator-dpg/) |
 
 The Aggregator's `local-setup/` builds **both** repos, so clone them as
 **siblings** under one parent directory:
@@ -54,4 +54,4 @@ Short on memory? Prefer **Track B** — Docker then runs only the small backing
 containers (no app-image builds) and the Node apps run on the host.
 :::
 
-Next: set up each DPG — [Signals](/bluedots-docs/guides/installation/signals-dpg/) or the [Aggregator](/bluedots-docs/guides/installation/aggregator-dpg/).
+Next: set up each DPG — [Signals](/guides/installation/signals-dpg/) or the [Aggregator](/guides/installation/aggregator-dpg/).

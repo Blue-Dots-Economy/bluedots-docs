@@ -24,7 +24,7 @@ The Aggregator DPG is aggregator-facing and provides:
 
 The Aggregator DPG reads from the upstream Signals stack and, in the MVP, has **no write access to Signals except through the controlled bulk-create paths**. Every request is scoped to a verified `aggregator_id`, which is **never trusted from the client** — it is asserted from the authenticated session. This keeps one aggregator from ever reading or writing another's data.
 
-Integrating DPGs (such as the Aggregator app, or a voice DPG) authenticate to Signals with a **two-header service-auth model** (`x-api-key` plus an acting-org header). See [Identity & Auth](/bluedots-docs/core-concepts/architecture/identity-and-auth/) for the full model.
+Integrating DPGs (such as the Aggregator app, or a voice DPG) authenticate to Signals with a **two-header service-auth model** (`x-api-key` plus an acting-org header). See [Identity & Auth](/core-concepts/architecture/identity-and-auth/) for the full model.
 
 ## Relationship to Signals
 

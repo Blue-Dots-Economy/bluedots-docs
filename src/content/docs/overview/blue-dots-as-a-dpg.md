@@ -36,13 +36,13 @@ The Blue Dots stack is anchored by two DPGs that work together:
 
 The **network-aware backend** that stores Blue Dots and matches them across instances. Its core vocabulary — *network*, *domain*, *instance*, *item*, *action*, *event* — is used consistently in both the product and the code. Signals exposes the read/write APIs that everything else builds on. Most adaptors **start here**.
 
-See [Core Concepts → Signals](/bluedots-docs/core-concepts/signals/) and [Architecture → Signals DPG](/bluedots-docs/core-concepts/architecture/signals-dpg/).
+See [Core Concepts → Signals](/core-concepts/signals/) and [Architecture → Signals DPG](/core-concepts/architecture/signals-dpg/).
 
 ### Aggregator DPG
 
 The **aggregator-facing application** that lets organisations onboard participants and bring their signals into the network at scale — through registration flows, approval, bulk upload and profile management. The Aggregator app reads from the upstream Signals stack and writes participant signals into it.
 
-See [Core Concepts → Aggregators](/bluedots-docs/core-concepts/aggregators/) and [Architecture → Aggregator DPG](/bluedots-docs/core-concepts/architecture/aggregator-dpg/).
+See [Core Concepts → Aggregators](/core-concepts/aggregators/) and [Architecture → Aggregator DPG](/core-concepts/architecture/aggregator-dpg/).
 
 ## How adaptors start
 
@@ -53,11 +53,11 @@ A typical adoption path:
 3. Add the **Aggregator DPG** to onboard partner organisations and bulk-load participants.
 4. Layer in capture channels (web, voice) and integrations (SMS, email).
 
-The [Adaptor Onboarding guide](/bluedots-docs/guides/adaptor-onboarding/) walks through this end to end.
+The [Adaptor Onboarding guide](/guides/adaptor-onboarding/) walks through this end to end.
 
 ## A model that can travel
 
-The discovery failure is not unique to India. In any economy where livelihoods and services are informal, vernacular and hyperlocal — where national platforms serve only the digitally fluent — the same [paradox of proximity](/bluedots-docs/overview/paradox-of-proximity/) applies.
+The discovery failure is not unique to India. In any economy where livelihoods and services are informal, vernacular and hyperlocal — where national platforms serve only the digitally fluent — the same [paradox of proximity](/overview/paradox-of-proximity/) applies.
 
 Blue Dots is designed to be replicable anywhere:
 

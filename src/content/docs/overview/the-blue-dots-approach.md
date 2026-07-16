@@ -33,8 +33,8 @@ At a high level, the lifecycle of a Blue Dot is:
 4. An **action** between two items produces a structured **event** (e.g. an interest, a connection, a placement).
 5. Outcomes feed back as data — improving match quality and measuring district-level impact.
 
-These terms (*item*, *action*, *event*, *instance*, *network*, *domain*) are part of a precise, shared vocabulary used throughout the system. See [Core Concepts](/bluedots-docs/core-concepts/) and the [Glossary](/bluedots-docs/core-concepts/glossary/) for definitions.
+These terms (*item*, *action*, *event*, *instance*, *network*, *domain*) are part of a precise, shared vocabulary used throughout the system. See [Core Concepts](/core-concepts/) and the [Glossary](/core-concepts/glossary/) for definitions.
 
 ## Why DPGs
 
-Rather than a single closed product, Blue Dots is built as **Digital Public Goods** so any adaptor can run their own instances, serve their own domains, and still interoperate on a shared contract. The next page explains what that means in practice — see [Blue Dots as a DPG](/bluedots-docs/overview/blue-dots-as-a-dpg/).
+Rather than a single closed product, Blue Dots is built as **Digital Public Goods** so any adaptor can run their own instances, serve their own domains, and still interoperate on a shared contract. The next page explains what that means in practice — see [Blue Dots as a DPG](/overview/blue-dots-as-a-dpg/).

@@ -4,10 +4,10 @@ description: Run the Signals backend and UI locally, standalone, in one command.
 sidebar:
   order: 3
 prev:
-  link: /bluedots-docs/guides/installation/local-stack/
+  link: /guides/installation/local-stack/
   label: "Path 7 of 9: Local Stack"
 next:
-  link: /bluedots-docs/guides/api-reference/
+  link: /guides/api-reference/
   label: "Path 9 of 9: API Reference"
 ---
 
@@ -62,7 +62,7 @@ to the API logs, so no SMS/email provider is needed. `AUTH_MIDDLEWARE_ENABLED=fa
 disables auth entirely for seed/migration scripts.
 :::
 
-Because the model is [schema-driven](/bluedots-docs/core-concepts/technical/schema-driven-model/),
+Because the model is [schema-driven](/core-concepts/technical/schema-driven-model/),
 you add item types and forms through `network.json` schemas rather than code.
 
-Next: set up the [Aggregator DPG](/bluedots-docs/guides/installation/aggregator-dpg/), or wire an integration via the [API Reference](/bluedots-docs/guides/api-reference/).
+Next: set up the [Aggregator DPG](/guides/installation/aggregator-dpg/), or wire an integration via the [API Reference](/guides/api-reference/).

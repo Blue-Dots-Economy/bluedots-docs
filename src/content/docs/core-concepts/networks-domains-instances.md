@@ -27,4 +27,4 @@ An **instance** is *one deployment* of the Signals API serving its configured do
 
 ![The blue_dot network (the shared contract/schema) contains domains — roles like student, employer, service — and instances — independent deployments like ghaziabad-livelihoods, dharwad-livelihoods and state-skilling, each serving one or more domains via SERVED_DOMAINS](../../../assets/diagrams/networks-domains-instances.png)
 
-When you add a feature or a read endpoint, decide **which network and domain** it belongs to, and **which instance layer** it reads from, before writing code. The two read layers (instance-local vs. inter-instance) are covered in [Read & Write Paths](/bluedots-docs/core-concepts/technical/read-write-paths/).
+When you add a feature or a read endpoint, decide **which network and domain** it belongs to, and **which instance layer** it reads from, before writing code. The two read layers (instance-local vs. inter-instance) are covered in [Read & Write Paths](/core-concepts/technical/read-write-paths/).

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 pnpm install      # install dependencies (Node ≥ 20 required)
-pnpm dev          # dev server at http://localhost:4321/bluedots-docs
+pnpm dev          # dev server at http://localhost:4321
 pnpm build        # production build to ./dist
 pnpm preview      # serve the production build locally
 pnpm check        # TypeScript / Astro type-check (astro check)
@@ -14,7 +14,7 @@ pnpm check        # TypeScript / Astro type-check (astro check)
 
 ## Architecture
 
-This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.build) documentation site, deployed to GitHub Pages via `.github/workflows/deploy.yml` (uses `withastro/action`).
+This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.build) documentation site, deployed to GitHub Pages via `.github/workflows/deploy.yml` (uses `withastro/action`), served at the custom domain `docs.bluedotseconomy.org`.
 
 **Key files:**
 
@@ -26,11 +26,10 @@ This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.bu
 **Deployment config (`astro.config.mjs`):**
 
 ```js
-site: 'https://blue-dots-economy.github.io',
-base: '/bluedots-docs',
+site: 'https://docs.bluedotseconomy.org',
 ```
 
-All internal links must include the `/bluedots-docs` prefix to work on GitHub Pages. For a custom domain (`docs.bluedotseconomy.org`), set `site` to that URL, remove `base` (or set `'/'`), and add `public/CNAME`.
+No `base` — the site is served from the domain root, so internal links are root-relative (`/guides/...`, not `/bluedots-docs/guides/...`). `public/CNAME` pins the custom domain across Pages deploys.
 
 ## Adding / editing content
 

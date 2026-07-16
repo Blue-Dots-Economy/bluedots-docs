@@ -24,7 +24,7 @@ The cost of invisibility is concrete and measurable. Across Indian districts tod
 - Scheme budget utilisation runs below 70%.
 - Service uptake is under 50% of its potential.
 
-Enabling local discovery in India's top 100 districts represents a conservatively estimated **₹87,500 crore** livelihood-enhancement opportunity — and livelihoods are only one of many sectors Blue Dots can serve. For a fuller breakdown, see [The Economics of Local Discovery](/bluedots-docs/explore/economics/).
+Enabling local discovery in India's top 100 districts represents a conservatively estimated **₹87,500 crore** livelihood-enhancement opportunity — and livelihoods are only one of many sectors Blue Dots can serve. For a fuller breakdown, see [The Economics of Local Discovery](/explore/economics/).
 
 ## How Blue Dots is built
 
@@ -39,11 +39,11 @@ Adaptors typically *start with Signals*, then add the Aggregator app as they onb
 
 | Section | What you'll find |
 | --- | --- |
-| [Overview](/bluedots-docs/overview/introduction/) | The vision, the problem, the approach, and the DPG model. |
-| [Core Concepts](/bluedots-docs/core-concepts/) | Signals, aggregators, the domain vocabulary, architecture and technical docs. |
-| [Guides](/bluedots-docs/guides/) | Installation, adaptor onboarding, configuration, API reference and deployment. |
-| [Explore](/bluedots-docs/explore/use-cases/) | Pilots, use cases and the road beyond livelihoods. |
-| [Community](/bluedots-docs/community/contributing/) | How to contribute, the roadmap and release notes. |
+| [Overview](/overview/introduction/) | The vision, the problem, the approach, and the DPG model. |
+| [Core Concepts](/core-concepts/) | Signals, aggregators, the domain vocabulary, architecture and technical docs. |
+| [Guides](/guides/) | Installation, adaptor onboarding, configuration, API reference and deployment. |
+| [Explore](/explore/use-cases/) | Pilots, use cases and the road beyond livelihoods. |
+| [Community](/community/contributing/) | How to contribute, the roadmap and release notes. |
 
 :::note
 This is a living document. Pages are seeded with real material from the initiative and its reference architecture; refine them as the DPGs evolve.

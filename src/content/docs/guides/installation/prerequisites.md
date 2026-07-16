@@ -37,4 +37,4 @@ docker compose version
 corepack enable pnpm
 ```
 
-Once these are in place, continue to [Local Stack (Docker)](/bluedots-docs/guides/installation/local-stack/).
+Once these are in place, continue to [Local Stack (Docker)](/guides/installation/local-stack/).

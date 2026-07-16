@@ -36,4 +36,4 @@ A signal lifecycle, in these terms:
 3. An **action** connects two items.
 4. An **event** records the outcome — feeding match-quality improvements and district-level impact metrics.
 
-For how items are read locally vs. across the network, and how they are written, see [Read & Write Paths](/bluedots-docs/core-concepts/technical/read-write-paths/). For the full term list, see the [Glossary](/bluedots-docs/core-concepts/glossary/).
+For how items are read locally vs. across the network, and how they are written, see [Read & Write Paths](/core-concepts/technical/read-write-paths/). For the full term list, see the [Glossary](/core-concepts/glossary/).

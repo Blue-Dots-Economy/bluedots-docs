@@ -34,4 +34,4 @@ Other non-negotiable rules: every cross-package contract is an **abstract class*
 
 ![An organisation registers and is approved, then bulk-uploads a file to S3; the worker processes it (file to rows to finalise) and hands rows to signalstack-writer, which writes to the Signals API](../../../../assets/diagrams/aggregator-dpg-data-flow.png)
 
-See [Identity & Auth](/bluedots-docs/core-concepts/architecture/identity-and-auth/) for the Keycloak setup and the service-auth handshake with Signals.
+See [Identity & Auth](/core-concepts/architecture/identity-and-auth/) for the Keycloak setup and the service-auth handshake with Signals.

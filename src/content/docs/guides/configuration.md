@@ -29,7 +29,7 @@ Add it to the config loader's schema. Remember `NEXT_PUBLIC_*` values are **bake
 
 ## Evolving forms without code
 
-Registration and profile forms are **schema-driven** (RJSF in the Aggregator; item schemas in the Signals UI). Product and program teams can add or change fields by editing the JSON schemas — no application code change required. See [Schema-Driven Model](/bluedots-docs/core-concepts/technical/schema-driven-model/).
+Registration and profile forms are **schema-driven** (RJSF in the Aggregator; item schemas in the Signals UI). Product and program teams can add or change fields by editing the JSON schemas — no application code change required. See [Schema-Driven Model](/core-concepts/technical/schema-driven-model/).
 
 ## Secrets
 

@@ -17,7 +17,7 @@ The Blue Dots stack is organised into clear horizontal layers, with two parallel
 
 **Apps.** Two web front-ends. The **Aggregator App** is the organisation-facing portal for onboarding and bulk upload. The **Signals App** is the schema-driven UI that renders forms and cards directly from network and item schemas.
 
-**Auth.** The two verticals use different identity systems by design: the Aggregator stack uses **Keycloak** (OIDC, realm `aggregator`), while the Signals stack uses **Better-Auth** with an additional API-key path for integrating DPGs. See [Identity & Auth](/bluedots-docs/core-concepts/architecture/identity-and-auth/).
+**Auth.** The two verticals use different identity systems by design: the Aggregator stack uses **Keycloak** (OIDC, realm `aggregator`), while the Signals stack uses **Better-Auth** with an additional API-key path for integrating DPGs. See [Identity & Auth](/core-concepts/architecture/identity-and-auth/).
 
 **API.** The **Aggregator API** is a Fastify backend-for-frontend that owns the aggregator database and the registration/approval/bulk-upload flows. The **Signals API** is the network-aware Fastify backend that owns items, actions, events and cross-instance discovery.
 
@@ -28,7 +28,7 @@ The Blue Dots stack is organised into clear horizontal layers, with two parallel
 
 **Integrations.** **SMTP** for email (Mailpit locally) and **SMS** for notifications and OTP delivery.
 
-**Ingress & platform (cloud).** In a cloud deployment, a shared `common-services` layer fronts both verticals with a **Kong** ingress controller and provisions cert-manager (TLS) and the shared Postgres + Redis. How this is provisioned and deployed is covered in [Infrastructure & Deployment Architecture](/bluedots-docs/core-concepts/architecture/infrastructure/).
+**Ingress & platform (cloud).** In a cloud deployment, a shared `common-services` layer fronts both verticals with a **Kong** ingress controller and provisions cert-manager (TLS) and the shared Postgres + Redis. How this is provisioned and deployed is covered in [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/).
 
 ## Two verticals, one network
 
@@ -38,4 +38,4 @@ The Aggregator vertical is an **on-ramp**: it feeds participant signals into the
 
 ![The Aggregator vertical (Keycloak → Aggregator App → Aggregator API) bulk-creates into and reads from the Signals vertical (Better-Auth → Signals App → Signals API → Network discovery); both verticals share PostgreSQL, Redis and Object Storage. Better-Auth will be replaced with Keycloak.](../../../../assets/diagrams/two-verticals-one-network.png)
 
-Dive deeper into each vertical in [Signals DPG](/bluedots-docs/core-concepts/architecture/signals-dpg/) and [Aggregator DPG](/bluedots-docs/core-concepts/architecture/aggregator-dpg/).
+Dive deeper into each vertical in [Signals DPG](/core-concepts/architecture/signals-dpg/) and [Aggregator DPG](/core-concepts/architecture/aggregator-dpg/).

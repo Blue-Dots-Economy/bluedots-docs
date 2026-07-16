@@ -53,8 +53,8 @@ The cloud deployment is its own codebase (`bluedots-automation`) with a distinct
 | Shared datastores | PostgreSQL + Redis (deployed by `common-services`) |
 | Observability | Prometheus, Alertmanager, Loki, Alloy, Grafana (monitoring chart) |
 
-See [Infrastructure & Deployment Architecture](/bluedots-docs/core-concepts/architecture/infrastructure/) and the [CI/CD & Build Pipeline](/bluedots-docs/guides/cicd-and-builds/) guide.
+See [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) and the [CI/CD & Build Pipeline](/guides/cicd-and-builds/) guide.
 
 ## Documentation site
 
-This documentation site itself is built with **Astro + Starlight** and deployed to **GitHub Pages** — see the [Guides](/bluedots-docs/guides/) and the repository `README` for how to run and deploy it.
+This documentation site itself is built with **Astro + Starlight** and deployed to **GitHub Pages** — see the [Guides](/guides/) and the repository `README` for how to run and deploy it.

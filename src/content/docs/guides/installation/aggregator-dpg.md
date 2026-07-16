@@ -68,4 +68,4 @@ Commits run husky/lint-staged and require **Conventional Commits** — do not by
 with `--no-verify`.
 :::
 
-Continue to [Configuration](/bluedots-docs/guides/configuration/) or the [Adaptor Onboarding](/bluedots-docs/guides/adaptor-onboarding/) walkthrough.
+Continue to [Configuration](/guides/configuration/) or the [Adaptor Onboarding](/guides/adaptor-onboarding/) walkthrough.

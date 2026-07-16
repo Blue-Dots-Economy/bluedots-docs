@@ -5,13 +5,13 @@ sidebar:
   order: 1
 ---
 
-This sub-section is the implementation-level reference for engineers. Where [Architecture](/bluedots-docs/core-concepts/architecture/high-level-architecture/) explains *what the system is*, these pages explain *how it behaves in code*.
+This sub-section is the implementation-level reference for engineers. Where [Architecture](/core-concepts/architecture/high-level-architecture/) explains *what the system is*, these pages explain *how it behaves in code*.
 
 ## What's here
 
-- **[Schema-Driven Model](/bluedots-docs/core-concepts/technical/schema-driven-model/)** — how networks, domains and items are defined by schemas, and why nothing domain-specific is hardcoded.
-- **[Read & Write Paths](/bluedots-docs/core-concepts/technical/read-write-paths/)** — the two fetch layers (instance-local vs. inter-instance), discovery, caching, and how signals are written.
-- **[Tech Stack](/bluedots-docs/core-concepts/technical/tech-stack/)** — the full toolchain, runtimes and conventions across both DPGs.
+- **[Schema-Driven Model](/core-concepts/technical/schema-driven-model/)** — how networks, domains and items are defined by schemas, and why nothing domain-specific is hardcoded.
+- **[Read & Write Paths](/core-concepts/technical/read-write-paths/)** — the two fetch layers (instance-local vs. inter-instance), discovery, caching, and how signals are written.
+- **[Tech Stack](/core-concepts/technical/tech-stack/)** — the full toolchain, runtimes and conventions across both DPGs.
 
 ## Cross-cutting principles
 

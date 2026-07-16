@@ -7,10 +7,10 @@ sidebar:
 
 Deployment has two scopes that should not be confused:
 
-- **Local app development** — running an app repo (Signals or Aggregator) on your machine for development. Covered in the [Installation](/bluedots-docs/guides/installation/local-stack/) guides.
+- **Local app development** — running an app repo (Signals or Aggregator) on your machine for development. Covered in the [Installation](/guides/installation/local-stack/) guides.
 - **Cloud deployment** — standing up the full stack on **AWS EKS** from the `bluedots-automation` repository. That is what this page covers.
 
-For the architecture behind this flow, see [Infrastructure & Deployment Architecture](/bluedots-docs/core-concepts/architecture/infrastructure/); for how images get built and pinned, see [CI/CD & Build Pipeline](/bluedots-docs/guides/cicd-and-builds/).
+For the architecture behind this flow, see [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/); for how images get built and pinned, see [CI/CD & Build Pipeline](/guides/cicd-and-builds/).
 
 ## Prerequisites
 
@@ -144,12 +144,11 @@ This site is **Astro + Starlight**, deployed to **GitHub Pages** via GitHub Acti
 
 1. Push the `bluedots-docs` project to a repository.
 2. In **Settings → Pages**, set **Source = GitHub Actions**.
-3. Confirm `astro.config.mjs` has the right `site` and `base`:
+3. Confirm `astro.config.mjs` has the right `site` (no `base` needed for a custom domain):
    ```js
-   site: 'https://blue-dots-economy.github.io',
-   base: '/bluedots-docs',
+   site: 'https://docs.bluedotseconomy.org',
    ```
-   For a custom domain (e.g. `docs.bluedotseconomy.org`), set `site` to that domain, remove `base`, and add a `CNAME` file in `public/`.
+   A `public/CNAME` file pins the custom domain across deploys. If instead deploying to a GitHub Pages project URL (`<org>.github.io/<repo>`), set `site` to that origin and add `base: '/<repo>'`.
 
 ### The workflow
 
@@ -159,7 +158,7 @@ The bundled workflow at `.github/workflows/deploy.yml` builds with the official 
 
 ```bash
 pnpm install
-pnpm dev        # local dev server (under /bluedots-docs/)
+pnpm dev        # local dev server (under /)
 pnpm build      # production build to dist/
 pnpm preview    # preview the production build
 ```

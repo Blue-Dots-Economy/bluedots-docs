@@ -42,4 +42,4 @@ This lets Signals authenticate the *caller* (API key) and authorise the *action*
 
 ## Deployment note
 
-When moving off `localhost`, update the `aggregator-portal` client's **Valid Redirect URIs** and **Web Origins** in the Keycloak admin console, and replace `localhost`/`keycloak` hostnames throughout the environment config. See [Deployment](/bluedots-docs/guides/deployment/).
+When moving off `localhost`, update the `aggregator-portal` client's **Valid Redirect URIs** and **Web Origins** in the Keycloak admin console, and replace `localhost`/`keycloak` hostnames throughout the environment config. See [Deployment](/guides/deployment/).

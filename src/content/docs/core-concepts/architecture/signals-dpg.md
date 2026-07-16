@@ -25,7 +25,7 @@ An instance serves one or more domains on a network. The two read layers are kep
 - **Instance-local** (`GET /api/v1/item/fetch`) — reads an instance's own items with a brief Redis cache.
 - **Inter-instance** (`GET /api/v1/network/item/fetch`) — *count-first* discovery: ask peers how many relevant items they hold, select only relevant peers, fetch slices, merge and cache. Schema fetching and caching live in this layer.
 
-This separation is the key scaling decision — see [Read & Write Paths](/bluedots-docs/core-concepts/technical/read-write-paths/).
+This separation is the key scaling decision — see [Read & Write Paths](/core-concepts/technical/read-write-paths/).
 
 ## Data partitioning
 
@@ -38,4 +38,4 @@ Item tables are **partitioned** in PostgreSQL. Always use the partition-aware qu
 - **Routes never throw** — they return `reply.code(N).send({ error, message })` with a machine-readable `error` code, and handle Postgres `23505` (unique) / `23503` (FK) explicitly.
 - DB schema lives in `apps/api/db/postgres/schema/`; **migrations are generated, never hand-edited** (`pnpm db:generate:api`).
 
-See [Tech Stack](/bluedots-docs/core-concepts/technical/tech-stack/) for the full toolchain and [Data Model](/bluedots-docs/core-concepts/architecture/data-model/) for the schema.
+See [Tech Stack](/core-concepts/technical/tech-stack/) for the full toolchain and [Data Model](/core-concepts/architecture/data-model/) for the schema.
