@@ -20,7 +20,8 @@
     "@lucide/astro": "^1.23.0",
     "astro": "^5.14.0",
     "sharp": "^0.34.0",
-    "starlight-image-zoom": "0.13.2"
+    "starlight-image-zoom": "0.13.2",
+    "starlight-openapi": "0.22.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",

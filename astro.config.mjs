@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightImageZoom from 'starlight-image-zoom';
+import starlightOpenAPI, { openAPISidebarGroups } from 'starlight-openapi';
 
 export default defineConfig({
   site: 'https://docs-signals-dpg.bluedotseconomy.org',
@@ -11,7 +12,15 @@ export default defineConfig({
     starlight({
       // errorOnLocalLinks off: installation guides legitimately link to
       // http://localhost:<port> for locally running services.
-      plugins: [starlightLinksValidator({ errorOnLocalLinks: false }), starlightImageZoom()],
+      plugins: [
+        starlightLinksValidator({ errorOnLocalLinks: false }),
+        starlightImageZoom(),
+        starlightOpenAPI([
+          { base: 'api/signals-dpg', schema: './src/openapi/signals-dpg.json', label: 'Signals-DPG API' },
+          { base: 'api/aggregator-dpg', schema: './src/openapi/aggregator-dpg.json', label: 'Aggregator-DPG API' },
+          { base: 'api/signals-search', schema: './src/openapi/signals-search.json', label: 'Signals-Search API' },
+        ]),
+      ],
       expressiveCode: {
         styleOverrides: {
           borderRadius: '0.75rem',
@@ -147,6 +156,10 @@ export default defineConfig({
             { label: 'CI/CD & Build Pipeline', slug: 'guides/cicd-and-builds' },
             { label: 'Deployment', slug: 'guides/deployment' },
           ],
+        },
+        {
+          label: 'API Reference',
+          items: [{ label: 'Overview', slug: 'api' }, ...openAPISidebarGroups],
         },
         {
           label: 'Explore',
