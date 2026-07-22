@@ -21,7 +21,7 @@
 ## Inputs required from the user (before merging, not before starting)
 
 1. Public API base URL for **Signals-DPG** (goes into `apps/api/scripts/dump_openapi.env` as `API_DOMAIN`).
-2. Public API base URL for **aggregator-dpg** (`PUBLIC_API_BASE_URL` in its dump script env).
+2. Public API base URL for **aggregator-dpg** (`PUBLIC_API_URL` in its dump script env — reuses the repo's existing public-origin env per Task 4 review decision).
 3. Public API base URL for **signals-search** (`PUBLIC_API_BASE_URL` in its dump script env).
 4. Creation of the `DOCS_SYNC_TOKEN` PAT + adding it as an Actions secret in all three service repos (Task 12).
 
@@ -440,7 +440,9 @@ import { writeFile } from 'node:fs/promises';
 
 process.env.API_REFERENCE_ENABLED = 'true';
 process.env.API_REFERENCE_FORCE = 'true';
-process.env.PUBLIC_API_BASE_URL ??= 'http://localhost:4000';
+// Reuses the repo's existing public-origin env (decision during Task 4 review:
+// no separate PUBLIC_API_BASE_URL — one source of truth).
+process.env.PUBLIC_API_URL ??= 'http://localhost:4000';
 
 const { buildApp } = await import('../src/app.js');
 const app = await buildApp();
