@@ -13,7 +13,13 @@ export default defineConfig({
       // errorOnLocalLinks off: installation guides legitimately link to
       // http://localhost:<port> for locally running services.
       plugins: [
-        starlightLinksValidator({ errorOnLocalLinks: false }),
+        starlightLinksValidator({
+          errorOnLocalLinks: false,
+          // starlight-openapi injects its pages via a separate integration
+          // (not the content collection), so starlight-links-validator can't
+          // see them as valid targets — exclude the generated reference roots.
+          exclude: ['/api/signals-dpg/', '/api/aggregator-dpg/', '/api/signals-search/'],
+        }),
         starlightImageZoom(),
         starlightOpenAPI([
           { base: 'api/signals-dpg', schema: './src/openapi/signals-dpg.json', label: 'Signals-DPG API' },
@@ -152,7 +158,7 @@ export default defineConfig({
             { label: 'Activating in a District', slug: 'guides/district-activation' },
             { label: 'Adaptor Onboarding', slug: 'guides/adaptor-onboarding' },
             { label: 'Configuration', slug: 'guides/configuration' },
-            { label: 'API Reference', slug: 'guides/api-reference' },
+            { label: 'API Guide', slug: 'guides/api-reference' },
             { label: 'CI/CD & Build Pipeline', slug: 'guides/cicd-and-builds' },
             { label: 'Deployment', slug: 'guides/deployment' },
           ],
