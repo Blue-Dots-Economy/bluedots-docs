@@ -1,164 +1,170 @@
+// @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-import mermaid from 'astro-mermaid';
-import sitemap from '@astrojs/sitemap';
+import starlightLinksValidator from 'starlight-links-validator';
+import starlightImageZoom from 'starlight-image-zoom';
 
 export default defineConfig({
-  site: process.env.DOCS_SITE_URL ?? 'http://localhost:4321',
-  base: process.env.DOCS_BASE ?? '/',
+  site: 'https://docs-signals-dpg.bluedotseconomy.org',
+
   integrations: [
-    sitemap(),
-    mermaid({
-      autoTheme: true,
-    }),
     starlight({
+      // errorOnLocalLinks off: installation guides legitimately link to
+      // http://localhost:<port> for locally running services.
+      plugins: [starlightLinksValidator({ errorOnLocalLinks: false }), starlightImageZoom()],
+      expressiveCode: {
+        styleOverrides: {
+          borderRadius: '0.75rem',
+          codeFontFamily: "'DM Mono', ui-monospace, monospace",
+          uiFontFamily: "'DM Sans', system-ui, sans-serif",
+        },
+      },
       title: 'Documentation',
       description:
-        'Architecture, setup, and package documentation for the DPG backend monorepo.',
-      lastUpdated: true,
-      pagination: true,
-      tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 3 },
-      logo: { src: './src/assets/logo.png', alt: 'Blue Dots Economy', replacesTitle: false },
-      components: {
-        Footer: './src/components/CustomFooter.astro',
-        PageFrame: './src/components/CustomPageFrame.astro',
+        'Open documentation for the Blue Dots Economy — the Signals and Aggregator Digital Public Goods (DPGs) that power local discovery.',
+      tagline: 'Discovery infrastructure for India’s districts',
+      // Header uses the PNG wordmark; the square SVG dot-mark (logo-*.svg)
+      // is the hero image on the landing page.
+      logo: {
+        light: './src/assets/logo-light.png',
+        dark: './src/assets/logo-dark.png',
+        replacesTitle: false,
+        alt: 'Blue Dots Economy',
       },
       social: [
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/Blue-Dots-Economy/bluedots-docs',
+          href: 'https://github.com/Blue-Dots-Economy',
+        },
+        {
+          icon: 'external',
+          label: 'bluedotseconomy.org',
+          href: 'https://bluedotseconomy.org',
         },
       ],
-      editLink: {
-        baseUrl: 'https://github.com/Blue-Dots-Economy/bluedots-docs/edit/main/',
-      },
+      lastUpdated: true,
+      pagination: true,
+      customCss: [
+        // Self-hosted DM superfamily (display / body / code).
+        '@fontsource/dm-serif-display/400.css',
+        '@fontsource/dm-serif-display/400-italic.css',
+        '@fontsource/dm-sans/400.css',
+        '@fontsource/dm-sans/500.css',
+        '@fontsource/dm-sans/700.css',
+        '@fontsource/dm-mono/400.css',
+        '@fontsource/dm-mono/500.css',
+        './src/styles/custom.css',
+      ],
+      // Client-side Mermaid rendering (no build-time dependency). Diagrams are
+      // authored as <pre class="mermaid"> blocks in Markdown; this script loads
+      // Mermaid from a CDN and (re-)renders on every Astro page load, matching
+      // the active light/dark theme.
       head: [
-        { tag: 'link', attrs: { rel: 'icon', type: 'image/png', href: '/favicon.png' } },
         {
-          tag: 'meta',
-          attrs: {
-            name: 'theme-color',
-            content: '#ffffff',
-            media: '(prefers-color-scheme: light)',
-          },
-        },
-        {
-          tag: 'meta',
-          attrs: {
-            name: 'theme-color',
-            content: '#0f172a',
-            media: '(prefers-color-scheme: dark)',
-          },
-        },
-        {
-          tag: 'meta',
-          attrs: {
-            property: 'og:image',
-            content: '/og-default.png',
-          },
+          tag: 'script',
+          attrs: { type: 'module' },
+          content: [
+            "import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';",
+            'function renderMermaid() {',
+            "  const theme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'default';",
+            "  mermaid.initialize({ startOnLoad: false, theme, themeVariables: theme === 'default' ? { primaryColor: '#d6e4ff', primaryBorderColor: '#1335b5', primaryTextColor: '#0a2540' } : {} });",
+            "  const nodes = document.querySelectorAll('pre.mermaid:not([data-processed])');",
+            '  if (nodes.length) mermaid.run({ nodes });',
+            '}',
+            "document.addEventListener('astro:page-load', renderMermaid);",
+          ].join('\n'),
         },
       ],
-      customCss: ['./src/styles/custom.css'],
       sidebar: [
         {
           label: 'Start Here',
           items: [
-            { label: 'What Is DPG?', slug: 'index' },
-            { label: 'Vocabulary', slug: 'concepts/vocabulary' },
-            { label: 'Architecture', slug: 'concepts/architecture' },
-            {
-              label: 'Architecture Diagrams',
-              slug: 'concepts/architecture-diagrams',
-            },
-            { label: 'Getting Started', slug: 'getting-started' },
-            { label: 'Environment', slug: 'environment' },
+            { label: 'Build & integrate', slug: 'start/build' },
+            { label: 'Deploy for a district', slug: 'start/deploy' },
+            { label: 'Onboard participants', slug: 'start/onboard' },
+            { label: 'Evaluate impact', slug: 'start/evaluate' },
           ],
         },
         {
-          label: 'Hosting',
+          label: 'Overview',
           items: [
-            { label: 'Local And Docker', slug: 'hosting/local-docker' },
-            { label: 'Single Instance', slug: 'hosting/single-domain' },
-            {
-              label: 'Multi-Instance Hosting',
-              slug: 'hosting/multi-domain-instance',
-            },
-            {
-              label: 'Dokploy',
-              slug: 'hosting/dokploy',
-            },
+            { label: 'Introduction', slug: 'overview/introduction' },
+            { label: 'The Paradox of Proximity', slug: 'overview/paradox-of-proximity' },
+            { label: 'The Blue Dots Approach', slug: 'overview/the-blue-dots-approach' },
+            { label: 'Blue Dots as a DPG', slug: 'overview/blue-dots-as-a-dpg' },
+            { label: 'Who Is This For', slug: 'overview/who-is-this-for' },
           ],
         },
         {
-          label: 'Network Schema',
+          label: 'Core Concepts',
           items: [
+            { label: 'Overview', slug: 'core-concepts' },
+            { label: 'Signals (Blue Dots)', slug: 'core-concepts/signals' },
+            { label: 'Aggregators', slug: 'core-concepts/aggregators' },
+            { label: 'Networks, Domains & Instances', slug: 'core-concepts/networks-domains-instances' },
+            { label: 'Items, Actions & Events', slug: 'core-concepts/items-actions-events' },
+            { label: 'Glossary', slug: 'core-concepts/glossary' },
             {
-              label: 'Overview',
-              slug: 'schemas/overview',
+              label: 'Architecture',
+              items: [
+                { label: 'High-Level Architecture', slug: 'core-concepts/architecture/high-level-architecture' },
+                { label: 'Signals DPG', slug: 'core-concepts/architecture/signals-dpg' },
+                { label: 'Aggregator DPG', slug: 'core-concepts/architecture/aggregator-dpg' },
+                { label: 'Data Model', slug: 'core-concepts/architecture/data-model' },
+                { label: 'Identity & Auth', slug: 'core-concepts/architecture/identity-and-auth' },
+                { label: 'Infrastructure & Deployment', slug: 'core-concepts/architecture/infrastructure' },
+              ],
             },
             {
-              label: 'Authoring Guide',
-              slug: 'schemas/authoring',
-            },
-            {
-              label: 'Action Flow Guide',
-              slug: 'schemas/action-flow',
-            },
-            {
-              label: 'Use Case Examples',
-              slug: 'schemas/examples',
-            },
-            {
-              label: 'Reference',
-              slug: 'schemas/network-actions-domain',
-            },
-            {
-              label: 'Existing Example Networks',
-              slug: 'schemas/dot-examples',
+              label: 'Technical Documentation',
+              items: [
+                { label: 'Overview', slug: 'core-concepts/technical/overview' },
+                { label: 'Schema-Driven Model', slug: 'core-concepts/technical/schema-driven-model' },
+                { label: 'Read & Write Paths', slug: 'core-concepts/technical/read-write-paths' },
+                { label: 'Tech Stack', slug: 'core-concepts/technical/tech-stack' },
+              ],
             },
           ],
         },
         {
-          label: 'API',
+          label: 'Guides',
           items: [
-            { label: 'API Overview', slug: 'apps/api' },
-            { label: 'Running And Docker', slug: 'apps/api/running' },
-            { label: 'Auth', slug: 'apps/api/auth' },
-            { label: 'Items', slug: 'apps/api/items' },
-            { label: 'Network Fetch', slug: 'apps/api/network-fetch' },
-            { label: 'Actions And Events', slug: 'apps/api/actions-events' },
-            { label: 'Schemas And Cache', slug: 'apps/api/schemas-cache' },
-            { label: 'Route Reference', slug: 'apps/api/route-reference' },
+            { label: 'Overview', slug: 'guides' },
             {
-              label: 'Better Auth And OTP',
-              slug: 'auth/better-auth-unified-otp',
+              label: 'Installation',
+              items: [
+                { label: 'Prerequisites', slug: 'guides/installation/prerequisites' },
+                { label: 'Local Stack (Docker)', slug: 'guides/installation/local-stack' },
+                { label: 'Signals DPG Setup', slug: 'guides/installation/signals-dpg' },
+                { label: 'Aggregator DPG Setup', slug: 'guides/installation/aggregator-dpg' },
+              ],
             },
-            { label: 'DB Access', slug: 'database/access' },
+            { label: 'Activating in a District', slug: 'guides/district-activation' },
+            { label: 'Adaptor Onboarding', slug: 'guides/adaptor-onboarding' },
+            { label: 'Configuration', slug: 'guides/configuration' },
+            { label: 'API Reference', slug: 'guides/api-reference' },
+            { label: 'CI/CD & Build Pipeline', slug: 'guides/cicd-and-builds' },
+            { label: 'Deployment', slug: 'guides/deployment' },
           ],
         },
         {
-          label: 'UI',
+          label: 'Explore',
           items: [
-            { label: 'UI Overview', slug: 'apps/ui' },
-            { label: 'Running The UI', slug: 'apps/ui/running' },
-            {
-              label: 'Credential Import And Wallets',
-              slug: 'apps/ui/credential-import-and-wallets',
-            },
-            { label: 'Hardcoded Parts', slug: 'apps/ui/hardcoded-parts' },
-            {
-              label: 'Schema-Generated Parts',
-              slug: 'apps/ui/schema-generated-parts',
-            },
-            { label: 'Components', slug: 'apps/ui/components' },
-            { label: 'Utils And Packages', slug: 'apps/ui/utils-and-packages' },
-            { label: 'Custom UI Guide', slug: 'apps/ui/custom-ui-guide' },
-            { label: 'Maps', slug: 'apps/ui/maps' },
+            { label: 'Use Cases', slug: 'explore/use-cases' },
+            { label: 'Pilots: Ghaziabad & Dharwad', slug: 'explore/pilots' },
+            { label: 'The Economics of Local Discovery', slug: 'explore/economics' },
+            { label: 'The Dots Family', slug: 'explore/beyond-livelihoods' },
           ],
         },
-        { label: 'Internals', items: [{ autogenerate: { directory: 'packages' } }] },
-        { label: 'Services', items: [{ autogenerate: { directory: 'services' } }] },
+        {
+          label: 'Community',
+          items: [
+            { label: 'Contributing', slug: 'community/contributing' },
+            { label: 'Roadmap', slug: 'community/roadmap' },
+            { label: 'Release Notes', slug: 'community/release-notes' },
+          ],
+        },
       ],
     }),
   ],

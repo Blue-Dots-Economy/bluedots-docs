@@ -1,0 +1,92 @@
+---
+interface Row {
+  dimension: string;
+  before: string;
+  after: string;
+}
+interface Props {
+  rows: Row[];
+  beforeLabel?: string;
+  afterLabel?: string;
+}
+const { rows, beforeLabel = 'Before', afterLabel = 'With Blue Dots' } = Astro.props;
+---
+
+<div class="ba-wrap not-content" role="region">
+  <table class="ba-table">
+    <thead>
+      <tr>
+        <th class="ba-th ba-th-dim" scope="col"></th>
+        <th class="ba-th ba-th-before" scope="col">{beforeLabel}</th>
+        <th class="ba-th ba-th-after" scope="col">{afterLabel}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr class="ba-row">
+          <td class="ba-td ba-td-dim">{row.dimension}</td>
+          <td class="ba-td ba-td-before">{row.before}</td>
+          <td class="ba-td ba-td-after">{row.after}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .ba-wrap {
+    overflow-x: auto;
+    margin-block: 1.5rem;
+    border-radius: var(--bd-radius-md);
+    border: 1px solid var(--sl-color-hairline);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+  .ba-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  .ba-th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .ba-th-dim {
+    background: var(--sl-color-bg-nav);
+    color: var(--sl-color-gray-2);
+    width: 26%;
+  }
+  .ba-th-before {
+    background: var(--bd-before-bg);
+    color: var(--bd-before-text);
+    width: 37%;
+  }
+  .ba-th-after {
+    background: var(--bd-after-bg);
+    color: var(--bd-after-text);
+    width: 37%;
+  }
+  .ba-row:not(:last-child) td {
+    border-bottom: 1px solid var(--sl-color-hairline);
+  }
+  .ba-td {
+    padding: 0.75rem 1rem;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .ba-td-dim {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--sl-color-gray-2);
+    background: var(--sl-color-bg-nav);
+  }
+  .ba-td-before {
+    background: color-mix(in oklab, var(--bd-before-bg) 35%, var(--sl-color-bg));
+  }
+  .ba-td-after {
+    background: color-mix(in oklab, var(--bd-after-bg) 35%, var(--sl-color-bg));
+  }
+</style>

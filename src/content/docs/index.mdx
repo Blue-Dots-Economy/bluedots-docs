@@ -1,85 +1,83 @@
 ---
-title: What Is DPG?
-description: A practical introduction to the DPG model, runtime, and documentation path.
+title: Blue Dots Economy
+description: Open documentation for the Signals and Aggregator Digital Public Goods (DPGs) that solve India's local discovery crisis.
+template: splash
+hero:
+  tagline: Individuals, jobs, services and schemes exist in close proximity — but can't digitally discover each other. Blue Dots is the discovery infrastructure that closes the gap.
+  image:
+    html: |
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="320" height="320" role="img" aria-label="Blue Dots" class="bd-hero-dots">
+        <circle class="bd-dot bd-dot-1" cx="11" cy="11" r="6"/>
+        <circle class="bd-dot bd-dot-2" cx="29" cy="13" r="4"/>
+        <circle class="bd-dot bd-dot-3" cx="14" cy="29" r="4"/>
+        <circle class="bd-dot bd-dot-4" cx="30" cy="30" r="6"/>
+      </svg>
+  actions:
+    - text: Read the Overview
+      link: /overview/introduction/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/Blue-Dots-Economy
+      icon: external
+      variant: minimal
 ---
 
-import GradientCardGrid from '../../components/GradientCardGrid.astro';
-import GradientCard from '../../components/GradientCard.astro';
-import { withBase } from '../../utils/withBase';
+import { CardGrid } from '@astrojs/starlight/components';
+import FeatureCard from '../../components/FeatureCard.astro';
+import NavCard from '../../components/NavCard.astro';
+import StatGrid from '../../components/StatGrid.astro';
+import StatCard from '../../components/StatCard.astro';
 
-<div class="home-hero">
-  <p class="home-hero__tagline">Network-aware backend for federated trust networks</p>
-  <div class="home-hero__actions">
-    <a href={withBase('/getting-started/')} class="home-hero__btn home-hero__btn--primary">Get Started →</a>
-    <a href={withBase('/concepts/architecture/')} class="home-hero__btn">Architecture</a>
-    <a href={withBase('/schemas/overview/')} class="home-hero__btn">Schemas</a>
-  </div>
-</div>
+## Solving the paradox of proximity
 
-<GradientCardGrid>
-  <GradientCard title="Vocabulary" description="Core terms: network, domain, instance, item, action, event." href="/concepts/vocabulary/" gradient="linear-gradient(135deg, #f59e0b, #ef4444)" icon="book" />
-  <GradientCard title="Architecture" description="Four-layer runtime: contract, instance, storage, APIs." href="/concepts/architecture/" gradient="linear-gradient(135deg, #8b5cf6, #3b82f6)" icon="layers" />
-  <GradientCard title="Network Schema" description="Authoring guide for network.json contracts." href="/schemas/overview/" gradient="linear-gradient(135deg, #10b981, #0ea5e9)" icon="graph" />
-  <GradientCard title="API Reference" description="Routes, auth paths, items, actions, network fetch." href="/apps/api/" gradient="linear-gradient(135deg, #f97316, #ec4899)" icon="terminal" />
-  <GradientCard title="UI" description="Schema-driven React frontend, components and customization." href="/apps/ui/" gradient="linear-gradient(135deg, #3b82f6, #8b5cf6)" icon="browser" />
-  <GradientCard title="Hosting" description="Local, single-instance, and multi-instance deployment." href="/hosting/local-docker/" gradient="linear-gradient(135deg, #14b8a6, #6366f1)" icon="server" />
-</GradientCardGrid>
+Cabs and riders find each other in minutes. Livelihoods and talent, just bus stops
+apart, cannot. The difference is not distance — it is **digital discoverability**.
 
-DPG is a network-aware backend model for publishing, validating, discovering, and interacting with items across many instances.
+A **Blue Dot** is a local signal of intent from a citizen or enterprise around
+livelihoods and services. It is created in about two minutes — as fast as making an
+instant coffee — and made discoverable to relevant peers across a district.
 
-The core model is:
+<CardGrid>
+  <FeatureCard title="Local discovery, solved" icon="map-pin" color="blue">
+    Pilots in Ghaziabad and Dharwad surfaced **10,000+ jobs** from under 10% of local
+    SMBs, cutting discovery time from weeks to under a day.
+  </FeatureCard>
+  <FeatureCard title="Built as Digital Public Goods" icon="globe" color="green">
+    Two open DPGs — **Signals** and **Aggregator** — give any adaptor a network-aware,
+    schema-driven foundation to build on.
+  </FeatureCard>
+  <FeatureCard title="Voice-AI native" icon="mic" color="purple">
+    Surface local intelligence at **₹10/interaction** instead of ₹500/survey, in the
+    languages people actually speak.
+  </FeatureCard>
+  <FeatureCard title="Cross-sector by design" icon="layers" color="orange">
+    Livelihoods first — then services, schemes, skilling and beyond, on the same
+    discovery rails.
+  </FeatureCard>
+</CardGrid>
 
-- a **network** defines the shared contract
-- a **domain** defines a business role inside that network
-- an **instance** serves one or more domains
-- an **item** is a schema-typed record
-- an **action** is an interaction between items
-- an **event** is the structured result of that action
+<StatGrid cols={4}>
+  <StatCard value="10,000+" label="jobs surfaced from under 10% of local SMBs" color="blue" icon="briefcase" />
+  <StatCard value="< 1 day" label="discovery time, down from weeks" color="green" icon="zap" />
+  <StatCard value="₹10" label="per Voice-AI interaction vs ₹500/survey" color="purple" icon="mic" />
+  <StatCard value="2" label="open DPGs powering the network" color="orange" icon="building-2" />
+</StatGrid>
 
-## Why DPG Exists
+## Find your path
 
-DPG is useful when:
+<CardGrid>
+  <NavCard title="Build & integrate" description="Architecture, data model and APIs for engineers building on the DPGs." href="/start/build/" icon="code" color="blue" />
+  <NavCard title="Deploy for a district" description="From the DPG model to a running district deployment." href="/start/deploy/" icon="rocket" color="green" />
+  <NavCard title="Onboard participants" description="For institutes, employers, NGOs and departments bulk-creating signals." href="/start/onboard/" icon="users" color="purple" />
+  <NavCard title="Evaluate impact" description="Use cases, pilot evidence and the economics of local discovery." href="/start/evaluate/" icon="trending-up" color="orange" />
+</CardGrid>
 
-- one domain can have many independent instances
-- clients should not need to hardcode every peer instance
-- schemas need to be explicit and versioned
-- actions between domains must be validated consistently
-- networks need a portable onboarding path for new actors
+## Browse by topic
 
-## What This Repository Contains
-
-- `apps/api`: the Fastify runtime that serves items, actions, events, and network-aware fetches
-- `apps/docs`: this documentation site
-- `examples/schemas`: complete example network schemas such as `yellow_dot` and `blue_dot`
-- `examples/api`: example request payloads
-- `packages/config`: environment and runtime config helpers
-- `packages/database`: database schema helpers and partition utilities
-- `packages/schemas`: request schemas, network schema parsing, and schema registry helpers
-- `packages/auth`: auth integration
-
-## Read This In Order
-
-1. [Vocabulary](/concepts/vocabulary)
-2. [Architecture](/concepts/architecture)
-3. [Getting Started](/getting-started)
-4. [Environment](/environment)
-5. [Network Schema Authoring Guide](/schemas/authoring)
-6. [API Overview](/apps/api)
-7. the hosting guide that matches your deployment model
-
-## Documentation Goals
-
-This documentation is meant to help:
-
-- network authors creating a new schema contract
-- instance operators deploying one or more DPG backends
-- product teams building UI and workflows on top of DPG
-
-The structure is intentional:
-
-- concepts first
-- runnable setup second
-- schema design third
-- API behavior fourth
-- internals fifth
-- service integrations last
+<CardGrid>
+  <NavCard title="Overview" description="What Blue Dots is, the problem it solves, and the DPG model." href="/overview/introduction/" icon="book-open" color="blue" />
+  <NavCard title="Core Concepts" description="Signals, aggregators, networks, items — and the architecture." href="/core-concepts/" icon="grid-2x2" color="purple" />
+  <NavCard title="Guides" description="Install the stack, onboard as an adaptor, and call the APIs." href="/guides/" icon="terminal" color="green" />
+  <NavCard title="Explore" description="Pilots, use cases, and the road beyond livelihoods." href="/explore/use-cases/" icon="compass" color="orange" />
+</CardGrid>

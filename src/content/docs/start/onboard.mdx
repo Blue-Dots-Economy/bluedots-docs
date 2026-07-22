@@ -1,0 +1,70 @@
+---
+title: Onboard participants
+description: A guided path for aggregator organisations — institutes, employers, NGOs and government departments — bringing participants onto the network.
+prev: false
+next:
+  link: /overview/introduction/
+  label: 'Start the path: Introduction'
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import PhaseTimeline from '../../../components/PhaseTimeline.astro';
+import NavCard from '../../../components/NavCard.astro';
+
+Follow this path if you are onboarding participants onto the network as an institute, employer, NGO or government department. It explains what aggregators do, how the Aggregator DPG is built, and how to install and configure it.
+
+<PhaseTimeline
+  phases={[
+    {
+      number: 1,
+      title: 'Introduction',
+      href: '/overview/introduction/',
+      focus: 'The minimum shared context — what the Blue Dots Economy is and why it exists.',
+    },
+    {
+      number: 2,
+      title: 'Aggregators',
+      href: '/core-concepts/aggregators/',
+      focus: 'What aggregators do, and how the Aggregator DPG brings participants and their signals onto the network.',
+    },
+    {
+      number: 3,
+      title: 'Aggregator DPG Architecture',
+      href: '/core-concepts/architecture/aggregator-dpg/',
+      focus: 'Internals of the aggregator-facing app — API, portal and background worker.',
+    },
+    {
+      number: 4,
+      title: 'Aggregator DPG Setup',
+      href: '/guides/installation/aggregator-dpg/',
+      focus: 'Install, migrate and run the Aggregator API, web portal and worker.',
+    },
+    {
+      number: 5,
+      title: 'Configuration',
+      href: '/guides/configuration/',
+      focus: 'How configuration-as-code works across the Blue Dots DPGs, and where each value lives.',
+    },
+  ]}
+/>
+
+## Go deeper
+
+<CardGrid>
+  <NavCard
+    title="API Reference"
+    description="Reference for the Signals and Aggregator endpoints, auth headers and error conventions."
+    href="/guides/api-reference/"
+    icon="code"
+    color="purple"
+  />
+  <NavCard
+    title="Glossary"
+    description="Precise definitions of the Blue Dots vocabulary, used identically in product, docs and code."
+    href="/core-concepts/glossary/"
+    icon="book-open"
+    color="purple"
+  />
+</CardGrid>
+
+*Prefer browsing? The [full documentation map](/overview/who-is-this-for/) covers every page.*

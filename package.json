@@ -1,28 +1,40 @@
 {
   "name": "bluedots-docs",
-  "version": "1.0.0",
-  "description": "Documentation site for Blue Dots Economy",
+  "version": "0.1.0",
   "type": "module",
   "private": true,
+  "description": "Documentation site for the Blue Dots Economy initiative (Signals + Aggregator DPGs).",
   "scripts": {
-    "dev": "astro dev --host 0.0.0.0 --port 4321",
+    "dev": "astro dev",
+    "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview --host 0.0.0.0 --port 4321",
-    "typecheck": "astro check"
-  },
-  "packageManager": "pnpm@11.5.2",
-  "engines": {
-    "node": ">=20"
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.2",
-    "@astrojs/starlight": "^0.39.2",
-    "astro": "^6.3.3",
-    "astro-mermaid": "^2.0.1",
-    "mermaid": "^11.15.0"
+    "@astrojs/starlight": "^0.36.0",
+    "@fontsource/dm-mono": "^5.2.7",
+    "@fontsource/dm-sans": "^5.2.8",
+    "@fontsource/dm-serif-display": "^5.2.8",
+    "@lucide/astro": "^1.23.0",
+    "astro": "^5.14.0",
+    "sharp": "^0.34.0",
+    "starlight-image-zoom": "0.13.2"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
-    "typescript": "^5.6.0"
+    "@astrojs/check": "^0.9.4",
+    "starlight-links-validator": "^0.19.2",
+    "typescript": "^5.9.0"
+  },
+  "packageManager": "pnpm@11.2.2",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   }
 }

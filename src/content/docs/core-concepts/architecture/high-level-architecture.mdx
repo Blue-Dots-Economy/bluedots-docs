@@ -1,0 +1,41 @@
+---
+title: High-Level Architecture
+description: The layered architecture of the Blue Dots stack — apps, auth, APIs, datastores and integrations.
+sidebar:
+  order: 1
+---
+
+The Blue Dots stack is organised into clear horizontal layers, with two parallel verticals — **Aggregator** and **Signals** — that share datastores and integrations.
+
+## The layered view
+
+{/* Editable source: src/assets/diagrams/high-level-architecture.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. */}
+
+![The Blue Dots layered architecture: Apps (Aggregator App, Signals App), Auth (Keycloak, Better-Auth), API (Aggregator API, Signals API), shared datastores (Redis, PostgreSQL, Object Storage) and integrations (SMTP, SMS)](../../../../assets/diagrams/high-level-architecture.png)
+
+## Layer by layer
+
+**Apps.** Two web front-ends. The **Aggregator App** is the organisation-facing portal for onboarding and bulk upload. The **Signals App** is the schema-driven UI that renders forms and cards directly from network and item schemas.
+
+**Auth.** The two verticals use different identity systems by design: the Aggregator stack uses **Keycloak** (OIDC, realm `aggregator`), while the Signals stack uses **Better-Auth** with an additional API-key path for integrating DPGs. See [Identity & Auth](/core-concepts/architecture/identity-and-auth/).
+
+**API.** The **Aggregator API** is a Fastify backend-for-frontend that owns the aggregator database and the registration/approval/bulk-upload flows. The **Signals API** is the network-aware Fastify backend that owns items, actions, events and cross-instance discovery.
+
+**Datastores.** Shared across both verticals:
+- **PostgreSQL** — system of record (Drizzle ORM; item tables are partitioned in Signals).
+- **Redis** — sessions, caches and the background-job queue.
+- **Object Storage (S3)** — bulk-upload files and assets. S3 is a real cloud dependency, not part of the local Docker stack.
+
+**Integrations.** **SMTP** for email (Mailpit locally) and **SMS** for notifications and OTP delivery.
+
+**Ingress & platform (cloud).** In a cloud deployment, a shared `common-services` layer fronts both verticals with a **Kong** ingress controller and provisions cert-manager (TLS) and the shared Postgres + Redis. How this is provisioned and deployed is covered in [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/).
+
+## Two verticals, one network
+
+The Aggregator vertical is an **on-ramp**: it feeds participant signals into the Signals vertical, which is the **network**. In the MVP the Aggregator writes to Signals only through controlled bulk-create paths and otherwise reads from it.
+
+{/* Editable source: src/assets/diagrams/two-verticals-one-network.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. */}
+
+![The Aggregator vertical (Keycloak → Aggregator App → Aggregator API) bulk-creates into and reads from the Signals vertical (Better-Auth → Signals App → Signals API → Network discovery); both verticals share PostgreSQL, Redis and Object Storage. Better-Auth will be replaced with Keycloak.](../../../../assets/diagrams/two-verticals-one-network.png)
+
+Dive deeper into each vertical in [Signals DPG](/core-concepts/architecture/signals-dpg/) and [Aggregator DPG](/core-concepts/architecture/aggregator-dpg/).

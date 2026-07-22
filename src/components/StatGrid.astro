@@ -1,0 +1,13 @@
+---
+import Grid from './Grid.astro';
+
+interface Props {
+  minWidth?: string;
+  cols?: number;
+}
+const { minWidth = '180px', cols } = Astro.props;
+---
+
+<Grid minWidth={minWidth} cols={cols}>
+  <slot />
+</Grid>

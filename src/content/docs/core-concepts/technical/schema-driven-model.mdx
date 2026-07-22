@@ -1,0 +1,67 @@
+---
+title: Schema-Driven Model
+description: How schemas define networks, domains and items so domains evolve without code changes.
+sidebar:
+  order: 2
+next:
+  link: /core-concepts/architecture/data-model/
+  label: "Path 5 of 9: Data Model"
+---
+
+import BeforeAfter from '../../../../components/BeforeAfter.astro';
+
+Blue Dots is **schema-driven** end to end. The structure of what an instance stores, exchanges and renders is defined by schemas — not hardcoded — so a new domain or form can ship without touching application code.
+
+## Three kinds of schema
+
+- **Network schema (`network.json`)** — defines a network (e.g. `blue_dot`): which item types, actions and events participants agree to speak.
+- **Item schemas (`item_type`)** — versioned types such as `profile_1.0`. An item's `item_type` always points at one of these; freeform records are not allowed.
+- **Form schemas** — JSON schemas that drive the UI. The Signals UI renders forms and cards from item schemas; the Aggregator portal uses **RJSF** (React JSON Schema Form) so non-engineers can evolve registration and profile forms.
+
+## Why schema-first
+
+1. **Interoperability.** Two instances on the same network agree on structure by construction, which is what makes inter-instance discovery possible.
+2. **Evolvability.** Versioned `item_type`s (e.g. `profile_1.0` → `profile_1.1`) let the model change without breaking peers.
+3. **No-code domain changes.** Product and program teams can add fields or new forms by editing schemas/config, not code.
+
+<BeforeAfter
+  beforeLabel="Freeform"
+  afterLabel="Schema-typed"
+  rows={[
+    {
+      dimension: 'Record structure',
+      before: 'Freeform records with no agreed structure',
+      after: 'Every item’s item_type points at a versioned schema (e.g. profile_1.0)',
+    },
+    {
+      dimension: 'Interoperability',
+      before: 'Instances have no shared structure, so inter-instance discovery is not possible',
+      after: 'Instances on the same network agree on structure by construction, enabling discovery',
+    },
+    {
+      dimension: 'Evolvability',
+      before: 'Changing the model risks breaking peers',
+      after: 'Versioned item_types (profile_1.0 → profile_1.1) evolve without breaking peers',
+    },
+    {
+      dimension: 'Domain changes',
+      before: 'A new domain or form means touching application code',
+      after: 'Teams ship fields and forms by editing schemas/config — no code changes',
+    },
+  ]}
+/>
+
+## Backend-owned fields
+
+Some fields are authoritative and server-generated; clients must never set them:
+
+- `item_instance_url` — where an item lives.
+- `item_schema_url` — the schema it conforms to.
+
+## Configuration discipline
+
+Schema-driven design is paired with strict configuration discipline:
+
+- **All env vars are declared in one place** (the Signals `packages/config` Zod schema; the Aggregator config loader). Ad-hoc `process.env` reads are not allowed.
+- In Signals, adding an env var means changing **two places together**: the Zod schema *and* `turbo.json`'s `globalPassThroughEnv`, or the value won't reach filtered tasks.
+- Per-environment values live in `config/env/{dev,staging,prod}.yaml`.

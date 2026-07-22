@@ -1,0 +1,54 @@
+---
+title: Data Model
+description: How items, schemas and partitions are modelled across the Signals and Aggregator datastores.
+sidebar:
+  order: 4
+prev:
+  link: /core-concepts/technical/schema-driven-model/
+  label: "Path 4 of 9: Schema-Driven Model"
+next:
+  link: /core-concepts/technical/read-write-paths/
+  label: "Path 6 of 9: Read & Write Paths"
+---
+
+Both DPGs use **PostgreSQL** as their system of record (via **Drizzle ORM**) and **Redis** for caching, sessions and queues. Each DPG owns its own database; they do not share tables.
+
+## Signals data model
+
+The Signals database is organised around the item/action/event primitives:
+
+| Entity | What it holds |
+| --- | --- |
+| **Items** | Versioned, schema-typed records keyed by `item_type` (e.g. `profile_1.0`). Item tables are **partitioned** so that high-volume reads can prune to relevant partitions. |
+| **Schema registry** | The schemas that define networks and item types. Schemas are fetched and cached at the inter-instance read layer. |
+| **Actions & events** | Interactions between items and their structured results. |
+| **Organisations** | Carries a `type` column (`network_service` \| `aggregator` \| `voice`) that gates what each org may do (for example, only `network_service` orgs may upsert aggregators). |
+
+How the item/action/event primitives relate:
+
+{/* Editable source: src/assets/diagrams/data-model-er.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. */}
+
+![An item-type schema types many items (1—n); items interact via actions (1—n); each action produces events as structured results (1—n)](../../../../assets/diagrams/data-model-er.png)
+
+Always query through the partition-aware helpers in `@dpg/database`; a query against the parent table without a partition key scans all partitions.
+
+Schema files live in `apps/api/db/postgres/schema/`. **Migrations are generated, never hand-edited** — regenerate with `pnpm db:generate:api`. A bundled `schema.sql` is produced and verified with `pnpm schema:bundle` / `pnpm schema:bundle:check`.
+
+## Aggregator data model
+
+The Aggregator database (Drizzle, owned by `apps/api`) holds:
+
+| Entity | What it holds |
+| --- | --- |
+| **Aggregators** | Registration state, approval status, profile data. |
+| **Participants** | Onboarded individuals/enterprises destined to become Signals items. |
+| **Bulk jobs** | Upload batches and per-row processing state for the worker. |
+| **Registration links & metrics** | Shareable links and their roll-ups. |
+
+`db-schema` is the single source of truth; apps import table definitions from it. Migrations are generated with `pnpm --filter @aggregator-dpg/api db:generate` and applied with `db:migrate`.
+
+## Design principles
+
+- **Schema-typed, never freeform.** An item's structure is governed by its `item_type` schema; clients cannot invent fields.
+- **Backend-owned identity fields.** `item_instance_url` and `item_schema_url` are generated server-side.
+- **Configuration as code.** No domain/env-specific value is hardcoded — values load once at startup from config loaders or env. Per-env overrides live in `config/env/{dev,staging,prod}.yaml`.

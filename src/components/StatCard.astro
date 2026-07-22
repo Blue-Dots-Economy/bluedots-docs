@@ -1,0 +1,120 @@
+---
+import { Briefcase, Zap, Mic, Building2 } from '@lucide/astro';
+
+type LucideIcon = 'briefcase' | 'zap' | 'mic' | 'building-2';
+type CardColor = 'blue' | 'green' | 'purple' | 'orange' | 'pink' | 'brown' | 'accent';
+
+interface Props {
+  value: string;
+  label: string;
+  color?: CardColor;
+  icon?: LucideIcon;
+}
+const { value, label, color = 'accent', icon } = Astro.props;
+
+/* `accent` is a legacy alias of `blue` (kept for backward compat) */
+const variant = color === 'accent' ? 'blue' : color;
+
+const icons = {
+  'briefcase': Briefcase,
+  'zap': Zap,
+  'mic': Mic,
+  'building-2': Building2,
+} as const;
+const Icon = icon ? icons[icon] : null;
+---
+
+<div class:list={['sc', `sc--${variant}`]}>
+  {Icon && (
+    <div class="sc-icon">
+      <Icon size={18} stroke-width={2} aria-hidden="true" />
+    </div>
+  )}
+  <div class="sc-value">{value}</div>
+  <div class="sc-label">{label}</div>
+</div>
+
+<style>
+  .sc {
+    /* per-variant brand color; everything else derives from it */
+    --c: var(--dot-blue);
+    --from: color-mix(in oklab, var(--c) 10%, var(--sl-color-bg));
+    --to:   color-mix(in oklab, var(--c) 22%, var(--sl-color-bg));
+    --ic:   var(--c);
+    --ibg:  color-mix(in oklab, var(--c) 14%, transparent);
+    --bd:   color-mix(in oklab, var(--c) 25%, transparent);
+    --glow: color-mix(in oklab, var(--c) 22%, transparent);
+
+    background: linear-gradient(145deg, var(--from) 0%, var(--to) 100%);
+    border: 1px solid var(--bd);
+    border-radius: var(--bd-radius-lg);
+    padding: 1.375rem 1.5rem 1.625rem;
+    box-shadow: var(--bd-shadow-rest);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    height: 100%;
+    transition:
+      transform 0.22s var(--bd-spring),
+      box-shadow 0.22s ease,
+      border-color 0.18s ease;
+  }
+
+  .sc:hover {
+    transform: translateY(var(--bd-lift));
+    box-shadow: 0 16px 32px var(--glow), 0 4px 8px rgba(0, 0, 0, 0.06);
+    border-color: var(--ic);
+  }
+
+  /* ── colour variants (light + dark handled by --dot-* tokens) ── */
+  .sc--blue   { --c: var(--dot-blue); }
+  .sc--green  { --c: var(--dot-green); }
+  .sc--purple { --c: var(--dot-purple); }
+  .sc--orange { --c: var(--dot-orange); }
+  .sc--pink   { --c: var(--dot-pink); }
+  .sc--brown  { --c: var(--dot-brown); }
+
+  /* ── icon badge ── */
+  .sc-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.5rem;
+    background: var(--ibg);
+    color: var(--ic);
+    margin-bottom: 0.25rem;
+    transition: transform 0.22s var(--bd-spring);
+  }
+
+  .sc:hover .sc-icon {
+    transform: scale(1.12) rotate(-4deg);
+  }
+
+  /* ── value ── */
+  .sc-value {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: var(--ic);
+  }
+
+  /* ── label ── */
+  .sc-label {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--sl-color-gray-2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sc,
+    .sc:hover,
+    .sc-icon,
+    .sc:hover .sc-icon {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>

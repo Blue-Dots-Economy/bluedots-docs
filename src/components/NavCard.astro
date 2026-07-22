@@ -1,0 +1,174 @@
+---
+import {
+  BookOpen,
+  Grid2x2,
+  Terminal,
+  Compass,
+  Code,
+  Rocket,
+  Users,
+  TrendingUp,
+  ChevronRight,
+} from '@lucide/astro';
+
+type LucideIcon =
+  | 'book-open'
+  | 'grid-2x2'
+  | 'terminal'
+  | 'compass'
+  | 'code'
+  | 'rocket'
+  | 'users'
+  | 'trending-up';
+type CardColor = 'blue' | 'green' | 'purple' | 'orange';
+
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  icon: LucideIcon;
+  color: CardColor;
+}
+const { title, description, href, icon, color } = Astro.props;
+
+const icons = {
+  'book-open': BookOpen,
+  'grid-2x2': Grid2x2,
+  'terminal': Terminal,
+  'compass': Compass,
+  'code': Code,
+  'rocket': Rocket,
+  'users': Users,
+  'trending-up': TrendingUp,
+} as const;
+const Icon = icons[icon];
+---
+
+<a href={href} class:list={['nc', `nc--${color}`]}>
+  <div class="nc-icon">
+    <Icon size={18} stroke-width={2} aria-hidden="true" />
+  </div>
+  <div class="nc-body">
+    <span class="nc-title">{title}</span>
+    <span class="nc-desc">{description}</span>
+  </div>
+  <ChevronRight class="nc-chevron" size={18} stroke-width={2} aria-hidden="true" />
+</a>
+
+<style>
+  .nc {
+    /* per-variant brand color; everything else derives from it */
+    --c:     var(--dot-blue);
+    --ic:    var(--c);
+    --ibg:   color-mix(in oklab, var(--c) 12%, transparent);
+    --hover: color-mix(in oklab, var(--c) 6%, var(--sl-color-bg-nav));
+    --bd:    color-mix(in oklab, var(--c) 30%, transparent);
+    --glow:  color-mix(in oklab, var(--c) 15%, transparent);
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.125rem 1.25rem;
+    border-radius: var(--bd-radius-lg);
+    border: 1px solid var(--sl-color-hairline);
+    background: var(--sl-color-bg-nav);
+    text-decoration: none;
+    box-shadow: var(--bd-shadow-rest);
+    transition:
+      transform 0.2s var(--bd-spring),
+      box-shadow 0.2s ease,
+      background 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  .nc:hover {
+    background: var(--hover);
+    border-color: var(--bd);
+    transform: translateY(var(--bd-lift));
+    box-shadow: 0 8px 20px var(--glow), 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .nc:focus-visible {
+    outline: 2px solid var(--dot-blue);
+    outline-offset: 3px;
+  }
+
+  /* ── colour variants (light + dark handled by --dot-* tokens) ── */
+  .nc--blue   { --c: var(--dot-blue); }
+  .nc--green  { --c: var(--dot-green); }
+  .nc--purple { --c: var(--dot-purple); }
+  .nc--orange { --c: var(--dot-orange); }
+
+  /* ── icon badge ── */
+  .nc-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background: var(--ibg);
+    color: var(--ic);
+    flex-shrink: 0;
+    transition:
+      background 0.18s ease,
+      transform 0.22s var(--bd-spring);
+  }
+
+  .nc:hover .nc-icon {
+    background: var(--ic);
+    color: #fff;
+    transform: scale(1.08);
+  }
+
+  :root[data-theme='dark'] .nc:hover .nc-icon {
+    color: #1a1a2e;
+  }
+
+  /* ── body ── */
+  .nc-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .nc-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--sl-color-text);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .nc-desc {
+    font-size: 0.8125rem;
+    color: var(--sl-color-gray-2);
+    line-height: 1.5;
+  }
+
+  /* ── chevron ── */
+  .nc :global(.nc-chevron) {
+    color: var(--sl-color-gray-4);
+    flex-shrink: 0;
+    transition: transform 0.2s ease, color 0.18s ease;
+  }
+
+  .nc:hover :global(.nc-chevron) {
+    transform: translateX(4px);
+    color: var(--ic);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nc,
+    .nc:hover,
+    .nc-icon,
+    .nc:hover .nc-icon,
+    .nc :global(.nc-chevron),
+    .nc:hover :global(.nc-chevron) {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>
