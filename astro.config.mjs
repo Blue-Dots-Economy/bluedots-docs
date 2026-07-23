@@ -4,9 +4,15 @@ import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightImageZoom from 'starlight-image-zoom';
 import starlightOpenAPI, { openAPISidebarGroups } from 'starlight-openapi';
+import { unified } from '@astrojs/markdown-remark';
 
 export default defineConfig({
   site: 'https://docs-signals-dpg.bluedotseconomy.org',
+
+  // Astro 7 defaults to the new Sätteri Markdown processor, which
+  // starlight-image-zoom doesn't support yet (HiDeoo/starlight-image-zoom#63).
+  // Pin the classic unified/remark processor until it does.
+  markdown: { processor: unified() },
 
   integrations: [
     starlight({
