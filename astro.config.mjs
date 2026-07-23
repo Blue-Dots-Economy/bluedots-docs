@@ -97,6 +97,23 @@ export default defineConfig({
       // Mermaid from a CDN and (re-)renders on every Astro page load, matching
       // the active light/dark theme.
       head: [
+        // Starlight's sidebar state persistence restores each group's previous
+        // open/closed state on navigation, which can override the
+        // server-rendered `open` on the group that contains the CURRENT page
+        // (e.g. landing on a tag Overview via next/prev links leaves its group
+        // collapsed). Re-open the ancestors of the active link after restore.
+        {
+          tag: 'script',
+          content: [
+            "document.addEventListener('DOMContentLoaded', () => {",
+            "  let el = document.querySelector('#starlight__sidebar a[aria-current=\"page\"]');",
+            '  while (el) {',
+            "    el = el.parentElement && el.parentElement.closest('details');",
+            '    if (el) el.open = true;',
+            '  }',
+            '});',
+          ].join('\n'),
+        },
         {
           tag: 'script',
           attrs: { type: 'module' },
