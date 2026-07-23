@@ -45,7 +45,7 @@
 - [ ] **Step 1: Create the branch**
 
 ```bash
-cd /Users/srivastha/KKB/Github/signals-search
+cd <workspace>/signals-search
 git fetch origin && git checkout -b feat/api-docs-standardize origin/feature
 ```
 
@@ -361,7 +361,7 @@ gh pr create --base feature --title "API docs: standardize Scalar/spec:dump/sync
 - [ ] **Step 1: Create the branch**
 
 ```bash
-cd /Users/srivastha/KKB/Github/aggregator-dpg
+cd <workspace>/aggregator-dpg
 git fetch origin && git checkout -b feat/api-docs-standardize origin/feature
 ```
 
@@ -514,7 +514,7 @@ gh pr create --base feature --title "feat: API docs standardization — spec dum
 - [ ] **Step 1: Create the branch**
 
 ```bash
-cd /Users/srivastha/KKB/Github/Signals-DPG
+cd <workspace>/Signals-DPG
 git fetch origin && git checkout -b feat/api-docs-standardize origin/feature
 ```
 
@@ -793,7 +793,7 @@ gh pr create --base feature --title "API docs: buildApp extraction, spec dump + 
 - [ ] **Step 1: Bootstrap the specs**
 
 ```bash
-cd /Users/srivastha/KKB/Github/bluedots-docs
+cd <workspace>/bluedots-docs
 mkdir -p src/openapi
 cp ../Signals-DPG/openapi.json src/openapi/signals-dpg.json
 cp ../aggregator-dpg/openapi.json src/openapi/aggregator-dpg.json
