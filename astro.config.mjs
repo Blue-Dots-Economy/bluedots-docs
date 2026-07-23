@@ -22,9 +22,24 @@ export default defineConfig({
         }),
         starlightImageZoom(),
         starlightOpenAPI([
-          { base: 'api/signals-dpg', schema: './src/openapi/signals-dpg.json', label: 'Signals-DPG API' },
-          { base: 'api/aggregator-dpg', schema: './src/openapi/aggregator-dpg.json', label: 'Aggregator-DPG API' },
-          { base: 'api/signals-search', schema: './src/openapi/signals-search.json', label: 'Signals-Search API' },
+          // sidebar.label replaces the deprecated top-level `label`; badges add
+          // the HTTP-method chip next to each operation link (disambiguates
+          // same-path operations like PATCH vs DELETE /item/{itemId}).
+          {
+            base: 'api/signals-dpg',
+            schema: './src/openapi/signals-dpg.json',
+            sidebar: { label: 'Signals-DPG API', operations: { badges: true } },
+          },
+          {
+            base: 'api/aggregator-dpg',
+            schema: './src/openapi/aggregator-dpg.json',
+            sidebar: { label: 'Aggregator-DPG API', operations: { badges: true } },
+          },
+          {
+            base: 'api/signals-search',
+            schema: './src/openapi/signals-search.json',
+            sidebar: { label: 'Signals-Search API', operations: { badges: true } },
+          },
         ]),
       ],
       expressiveCode: {
