@@ -1,0 +1,31 @@
+---
+title: API Reference
+description: Generated OpenAPI references for the Signals-DPG, Aggregator-DPG, and Signals-Search APIs — readable without any service running.
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+These references are generated from each service's code (Zod route schemas → OpenAPI)
+and synced here automatically whenever a service's API contract changes on its `main`
+branch — no running service is needed to read them.
+
+<CardGrid>
+  <LinkCard
+    title="Signals-DPG API"
+    description="Items, actions, events, consent, network fetch, admin — the network-aware Signals backend."
+    href="/api/signals-dpg/"
+  />
+  <LinkCard
+    title="Aggregator-DPG API"
+    description="Aggregator registration & approval, profile, bulk uploads, registration links, dashboard."
+    href="/api/aggregator-dpg/"
+  />
+  <LinkCard
+    title="Signals-Search API"
+    description="Semantic + geo + structured search over the shared Signals database."
+    href="/api/signals-search/"
+  />
+</CardGrid>
+
+Looking for the narrative guide (auth model, request conventions, walkthroughs)?
+See the [API guide](/guides/api-reference/).

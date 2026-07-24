@@ -1,0 +1,72 @@
+---
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+import { slug } from 'github-slugger';
+import signalsDpg from '../openapi/signals-dpg.json';
+import aggregatorDpg from '../openapi/aggregator-dpg.json';
+import signalsSearch from '../openapi/signals-search.json';
+
+/**
+ * starlight-openapi operation pages are injected routes that the sidebar
+ * deliberately doesn't list (it links each group's Overview page only, so it
+ * stays clean regardless of endpoint count). Give operation pages a way back:
+ * resolve the operation's tag from the committed spec and link its overview.
+ */
+const SPECS = {
+  'signals-dpg': signalsDpg,
+  'aggregator-dpg': aggregatorDpg,
+  'signals-search': signalsSearch,
+};
+
+const METHODS = ['get', 'post', 'put', 'patch', 'delete'];
+
+// Operation URLs look like /api/<service>/operations/<slug(path)>[/<method>]/;
+// tag overview pages live under /api/<service>/operations/tags/ and are skipped.
+const match = Astro.url.pathname.match(/^\/api\/([a-z-]+)\/operations\/(?!tags\/)([^/]+)/);
+
+let backLink;
+if (match) {
+  const service = match[1];
+  const operationSlug = match[2];
+  const spec = SPECS[service];
+  const paths = spec ? spec.paths ?? {} : {};
+  outer: for (const [path, pathItem] of Object.entries(paths)) {
+    if (slug(path) !== operationSlug) continue;
+    for (const method of METHODS) {
+      const operation = pathItem[method];
+      const tag = operation && operation.tags ? operation.tags[0] : undefined;
+      if (tag) {
+        backLink = { label: tag, href: `/api/${service}/operations/tags/${slug(tag)}/` };
+        break outer;
+      }
+    }
+  }
+}
+---
+
+{
+  backLink && (
+    <a class="api-back-link" href={backLink.href}>
+      <span aria-hidden="true">&larr;</span> {backLink.label}
+    </a>
+  )
+}
+<Default><slot /></Default>
+
+<style>
+  .api-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--sl-color-accent);
+  }
+  .api-back-link:hover {
+    color: var(--sl-color-accent-high);
+    text-decoration: underline;
+  }
+</style>

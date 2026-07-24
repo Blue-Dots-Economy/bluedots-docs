@@ -1,3 +1,6 @@
 allowBuilds:
   esbuild: false
   sharp: false
+minimumReleaseAgeExclude:
+  - '@astrojs/starlight@0.41.4'
+  - '@lucide/astro@1.26.0'

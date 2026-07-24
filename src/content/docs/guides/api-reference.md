@@ -53,6 +53,4 @@ The Aggregator API (Fastify BFF on `:4000`) exposes registration/approval, profi
 
 Common error codes include `403 MISSING_AGGREGATOR_ID` (Keycloak protocol mappers not configured) and `403 INVALID_API_KEY` (Signals service-auth).
 
-:::tip[Generating live docs]
-Wire each service's OpenAPI output into this site (for example with a Starlight OpenAPI plugin) so the reference stays in lock-step with the code.
-:::
+The complete, always-current operation-by-operation reference for all three services is generated from code — see the [API Reference](/api/) section.
