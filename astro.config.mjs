@@ -29,7 +29,7 @@ function apiReferenceSidebarGroup(label, service) {
 }
 
 export default defineConfig({
-  site: 'https://docs-signals-dpg.bluedotseconomy.org',
+  site: 'https://docs.bluedotseconomy.org',
 
   // Astro 7 defaults to the new Sätteri Markdown processor, which
   // starlight-image-zoom doesn't support yet (HiDeoo/starlight-image-zoom#63).
