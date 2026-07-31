@@ -1,20 +1,8 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## Commands
-
-```bash
-pnpm install      # install dependencies (Node ≥ 20 required)
-pnpm dev          # dev server at http://localhost:4321
-pnpm build        # production build to ./dist
-pnpm preview      # serve the production build locally
-pnpm check        # TypeScript / Astro type-check (astro check)
-```
-
 ## Architecture
 
-This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.build) documentation site, deployed to GitHub Pages via `.github/workflows/deploy.yml` (uses `withastro/action`), served at the custom domain `docs-signals-dpg.bluedotseconomy.org`.
+This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.build) documentation site, deployed to GitHub Pages via `.github/workflows/deploy.yml` (uses `withastro/action`), served at the custom domain `docs.bluedotseconomy.org`.
 
 **Key files:**
 
@@ -26,10 +14,17 @@ This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.bu
 **Deployment config (`astro.config.mjs`):**
 
 ```js
-site: 'https://docs-signals-dpg.bluedotseconomy.org',
+site: 'https://docs.bluedotseconomy.org',
 ```
 
 No `base` — the site is served from the domain root, so internal links are root-relative (`/guides/...`, not `/bluedots-docs/guides/...`). `public/CNAME` pins the custom domain across Pages deploys.
+
+## Domains
+
+- **Canonical host:** `docs.bluedotseconomy.org` — set in both `public/CNAME` and `site` (above). Keep the two in sync; `site` drives canonical tags and the sitemap.
+- **Legacy host:** `docs-signals-dpg.bluedotseconomy.org` redirects here. It is served by a separate redirect-only Pages repo, because GitHub Pages allows one custom domain per repository. Do **not** re-add the legacy host to this repo's `CNAME` — that would break the redirect and steal the domain claim.
+- DNS for both hosts lives at GoDaddy (`ns55/ns56.domaincontrol.com`), each a CNAME to `blue-dots-economy.github.io`.
+- Full switchover procedure and rollback: `docs/superpowers/plans/2026-07-30-dual-domain-docs-redirect.md`.
 
 ## Adding / editing content
 
@@ -40,14 +35,6 @@ No `base` — the site is served from the domain root, so internal links are roo
 
 ## Information architecture
 
-| Section | Sub-sections |
-|---|---|
-| **Overview** | introduction · paradox-of-proximity · the-blue-dots-approach · blue-dots-as-a-dpg · who-is-this-for |
-| **Core Concepts** | signals · aggregators · networks-domains-instances · items-actions-events · glossary |
-| **— Architecture** | high-level-architecture · signals-dpg · aggregator-dpg · data-model · identity-and-auth |
-| **— Technical** | overview · schema-driven-model · read-write-paths · tech-stack |
-| **Guides** | Installation (prerequisites · local-stack · signals-dpg · aggregator-dpg) · adaptor-onboarding · configuration · api-reference · deployment |
-| **Explore** | use-cases · pilots · beyond-livelihoods |
-| **Community** | contributing · roadmap · release-notes |
+The sidebar in `astro.config.mjs` is the authoritative list of sections and slugs.
 
 Many sidebar slugs (especially in `overview/`, `core-concepts/architecture/`, `core-concepts/technical/`, `guides/installation/`) reference pages that do not yet exist as files — they need to be created before the site will build without 404s.

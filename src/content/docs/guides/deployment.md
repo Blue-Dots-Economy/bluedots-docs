@@ -146,9 +146,15 @@ This site is **Astro + Starlight**, deployed to **GitHub Pages** via GitHub Acti
 2. In **Settings → Pages**, set **Source = GitHub Actions**.
 3. Confirm `astro.config.mjs` has the right `site` (no `base` needed for a custom domain):
    ```js
-   site: 'https://docs-signals-dpg.bluedotseconomy.org',
+   site: 'https://docs.bluedotseconomy.org',
    ```
    A `public/CNAME` file pins the custom domain across deploys. If instead deploying to a GitHub Pages project URL (`<org>.github.io/<repo>`), set `site` to that origin and add `base: '/<repo>'`.
+
+### Domains and the legacy redirect
+
+The canonical host is **`docs.bluedotseconomy.org`**. The earlier host `docs-signals-dpg.bluedotseconomy.org` still resolves and redirects to the same path on the canonical host, so old links keep working.
+
+GitHub Pages allows only one custom domain per repository and cannot issue redirects for extra hostnames, so the legacy host is served by a small separate Pages repository containing nothing but a path-preserving redirect page. Both hostnames are GoDaddy `CNAME` records pointing at `blue-dots-economy.github.io`; Pages routes each one to the repository that claims it.
 
 ### The workflow
 

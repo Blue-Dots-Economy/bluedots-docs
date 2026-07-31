@@ -9,7 +9,8 @@
 
 > **Changes from the 2026-07-15 revision.** (1) Environment facts refreshed after the
 > org-repo migration: `bluedots-docs` `main` is Astro **5** + Starlight **0.36**, deployed to
-> `https://docs-signals-dpg.bluedotseconomy.org` — the compatibility check in §8 must run
+> `https://docs-signals-dpg.bluedotseconomy.org` (host since renamed to
+> `https://docs.bluedotseconomy.org`; the old host redirects) — the compatibility check in §8 must run
 > against these versions. (2) The signals-search static spec `local_docs/signals-search-openapi.yaml`
 > cited in issue #1 **does not exist** (never tracked in git); the "retire the static spec"
 > step is dropped. (3) New scope, at the user's request: **runtime docs standardization**
@@ -27,7 +28,8 @@ Two coupled outcomes, in order:
    consistent metadata shape, one runtime docs experience, one sync mechanism.
 2. **Host** the resulting OpenAPI references as searchable, themed pages inside the existing
    Blue Dots Economy Starlight docs site (`bluedots-docs`, GitHub Pages at
-   `https://docs-signals-dpg.bluedotseconomy.org`), readable **without any service running**.
+   `https://docs-signals-dpg.bluedotseconomy.org`, since renamed to
+   `https://docs.bluedotseconomy.org`), readable **without any service running**.
 
 The specs must stay current automatically: when an API's contract changes on its default
 branch, the hosted reference updates without a human hand-copying JSON.
