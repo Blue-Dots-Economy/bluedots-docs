@@ -2,7 +2,7 @@
 
 ## Architecture
 
-This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.build) documentation site, deployed to GitHub Pages via `.github/workflows/deploy.yml` (uses `withastro/action`), served at the custom domain `docs-signals-dpg.bluedotseconomy.org`.
+This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.build) documentation site, deployed to GitHub Pages via `.github/workflows/deploy.yml` (uses `withastro/action`), served at the custom domain `docs.bluedotseconomy.org`.
 
 **Key files:**
 
@@ -14,10 +14,17 @@ This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.bu
 **Deployment config (`astro.config.mjs`):**
 
 ```js
-site: 'https://docs-signals-dpg.bluedotseconomy.org',
+site: 'https://docs.bluedotseconomy.org',
 ```
 
 No `base` — the site is served from the domain root, so internal links are root-relative (`/guides/...`, not `/bluedots-docs/guides/...`). `public/CNAME` pins the custom domain across Pages deploys.
+
+## Domains
+
+- **Canonical host:** `docs.bluedotseconomy.org` — set in both `public/CNAME` and `site` (above). Keep the two in sync; `site` drives canonical tags and the sitemap.
+- **Legacy host:** `docs-signals-dpg.bluedotseconomy.org` redirects here. It is served by a separate redirect-only Pages repo, because GitHub Pages allows one custom domain per repository. Do **not** re-add the legacy host to this repo's `CNAME` — that would break the redirect and steal the domain claim.
+- DNS for both hosts lives at GoDaddy (`ns55/ns56.domaincontrol.com`), each a CNAME to `blue-dots-economy.github.io`.
+- Full switchover procedure and rollback: `docs/superpowers/plans/2026-07-30-dual-domain-docs-redirect.md`.
 
 ## Adding / editing content
 
