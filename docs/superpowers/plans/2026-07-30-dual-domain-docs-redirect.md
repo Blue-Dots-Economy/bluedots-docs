@@ -1,5 +1,16 @@
 # Dual-Domain Docs + Legacy Redirect Implementation Plan
 
+> **Status: completed 2026-07-31.** `docs.bluedotseconomy.org` serves the site; `docs-signals-dpg.bluedotseconomy.org` redirects path-for-path from
+> [`Blue-Dots-Economy/docs-signals-dpg-redirect`](https://github.com/Blue-Dots-Economy/docs-signals-dpg-redirect). Both hosts have Let's Encrypt certs with Enforce HTTPS on.
+>
+> **Correction found during execution:** Task 2's assumption that `public/CNAME` sets the Pages custom domain is wrong for this repo. Pages here uses the GitHub Actions
+> source (`build_type: workflow`), which ignores the artifact's `CNAME` file; the domain had to be set explicitly
+> (`gh api -X PUT repos/Blue-Dots-Economy/bluedots-docs/pages -f cname=docs.bluedotseconomy.org`). The committed file still matters as documentation and as insurance
+> against a switch to a branch source.
+>
+> **Outage was smaller than predicted:** the legacy host never went down — its certificate survived the claim moving between repos, so it kept serving throughout. The only
+> gap was ~20 s on the new host while its certificate was issued.
+
 **Goal:** The docs site is served at `https://docs.bluedotseconomy.org` (new canonical host), and every existing URL under `https://docs-signals-dpg.bluedotseconomy.org` keeps working by redirecting to the same path on the new host.
 
 **Architecture:** GitHub Pages allows exactly **one** custom domain per repository (the `CNAME` file / Settings → Pages field), and it cannot emit HTTP 3xx redirects for extra hostnames. So one hostname must be served by a *second* Pages site whose only job is to redirect. This repo (`Blue-Dots-Economy/bluedots-docs`) moves its custom domain to `docs.bluedotseconomy.org`; a new tiny repo (`Blue-Dots-Economy/docs-signals-dpg-redirect`) claims `docs-signals-dpg.bluedotseconomy.org` and serves a path-preserving redirect page (`index.html` + `404.html`). Both hostnames stay on GitHub-issued Let's Encrypt certs, and DNS stays at GoDaddy — no nameserver migration.

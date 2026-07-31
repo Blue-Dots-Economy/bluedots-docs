@@ -22,6 +22,7 @@ No `base` — the site is served from the domain root, so internal links are roo
 ## Domains
 
 - **Canonical host:** `docs.bluedotseconomy.org` — set in both `public/CNAME` and `site` (above). Keep the two in sync; `site` drives canonical tags and the sitemap.
+- **`public/CNAME` does not change the domain here.** Pages on this repo uses the *GitHub Actions* source (`build_type: workflow`), and that source ignores the `CNAME` file in the artifact — the custom domain lives only in Settings → Pages (`gh api -X PUT repos/:owner/:repo/pages -f cname=…`). The committed file is documentation plus insurance if the repo is ever switched to a branch source. Changing a domain means changing **both**.
 - **Legacy host:** `docs-signals-dpg.bluedotseconomy.org` redirects here. It is served by a separate redirect-only Pages repo, because GitHub Pages allows one custom domain per repository. Do **not** re-add the legacy host to this repo's `CNAME` — that would break the redirect and steal the domain claim.
 - DNS for both hosts lives at GoDaddy (`ns55/ns56.domaincontrol.com`), each a CNAME to `blue-dots-economy.github.io`.
 - Full switchover procedure and rollback: `docs/superpowers/plans/2026-07-30-dual-domain-docs-redirect.md`.
