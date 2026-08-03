@@ -39,6 +39,109 @@
         }
       }
     },
+    "/health/live": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "ok"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "ready"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "not_ready"
+                      ]
+                    },
+                    "checks": {
+                      "type": "object",
+                      "properties": {
+                        "postgres": {
+                          "type": "string"
+                        },
+                        "redis": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "postgres",
+                        "redis"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "checks"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/item/create": {
       "post": {
         "tags": [
@@ -283,6 +386,46 @@
           },
           {
             "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "in": "query",
+            "name": "min_lat",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "in": "query",
+            "name": "min_lng",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "in": "query",
+            "name": "max_lat",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "in": "query",
+            "name": "max_lng",
+            "required": false
+          },
+          {
+            "schema": {
               "default": 20,
               "type": "integer",
               "minimum": 1,
@@ -442,7 +585,8 @@
                             "enum": [
                               "draft",
                               "live",
-                              "paused"
+                              "paused",
+                              "retired"
                             ]
                           }
                         },
@@ -673,7 +817,8 @@
                           "enum": [
                             "draft",
                             "live",
-                            "paused"
+                            "paused",
+                            "retired"
                           ]
                         }
                       },
@@ -758,7 +903,8 @@
                     "type": "string",
                     "enum": [
                       "pause",
-                      "unpause"
+                      "unpause",
+                      "retire"
                     ]
                   }
                 },
@@ -788,7 +934,8 @@
                       "enum": [
                         "draft",
                         "live",
-                        "paused"
+                        "paused",
+                        "retired"
                       ]
                     }
                   },
@@ -1180,6 +1327,7 @@
                     ]
                   },
                   "requirements_snapshot": {
+                    "default": {},
                     "type": "object",
                     "additionalProperties": {}
                   },
@@ -1222,8 +1370,7 @@
                 "required": [
                   "action_type",
                   "source_item",
-                  "target_item",
-                  "requirements_snapshot"
+                  "target_item"
                 ]
               }
             }
@@ -2387,6 +2534,17 @@
                       "type": "string",
                       "minLength": 1
                     },
+                    "revealed": {
+                      "type": "boolean"
+                    },
+                    "reveal_blocked_reason": {
+                      "type": "string",
+                      "enum": [
+                        "self",
+                        "other",
+                        "retired"
+                      ]
+                    },
                     "other_actor": {
                       "type": "object",
                       "properties": {
@@ -2487,7 +2645,8 @@
                               "enum": [
                                 "draft",
                                 "live",
-                                "paused"
+                                "paused",
+                                "retired"
                               ]
                             }
                           },
@@ -2516,6 +2675,7 @@
                   "required": [
                     "action_id",
                     "action_status",
+                    "revealed",
                     "other_actor"
                   ],
                   "additionalProperties": false
@@ -3175,7 +3335,8 @@
                         "enum": [
                           "draft",
                           "live",
-                          "paused"
+                          "paused",
+                          "retired"
                         ]
                       },
                       "item_latitude": {
@@ -3261,7 +3422,8 @@
                         "enum": [
                           "draft",
                           "live",
-                          "paused"
+                          "paused",
+                          "retired"
                         ]
                       },
                       "item_latitude": {
@@ -3617,6 +3779,46 @@
           },
           {
             "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "in": "query",
+            "name": "min_lat",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "in": "query",
+            "name": "min_lng",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "in": "query",
+            "name": "max_lat",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "in": "query",
+            "name": "max_lng",
+            "required": false
+          },
+          {
+            "schema": {
               "default": 20,
               "type": "integer",
               "minimum": 1,
@@ -3788,7 +3990,8 @@
                             "enum": [
                               "draft",
                               "live",
-                              "paused"
+                              "paused",
+                              "retired"
                             ]
                           }
                         },
@@ -3874,6 +4077,26 @@
                     "type": "number",
                     "minimum": 0,
                     "exclusiveMinimum": true
+                  },
+                  "min_lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "min_lng": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  },
+                  "max_lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "max_lng": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
                   }
                 },
                 "required": [
@@ -3965,6 +4188,26 @@
                     "type": "number",
                     "minimum": 0,
                     "exclusiveMinimum": true
+                  },
+                  "min_lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "min_lng": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  },
+                  "max_lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "max_lng": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
                   },
                   "limit": {
                     "type": "integer",
@@ -4125,8 +4368,778 @@
                             "enum": [
                               "draft",
                               "live",
-                              "paused"
+                              "paused",
+                              "retired"
                             ]
+                          }
+                        },
+                        "required": [
+                          "item_network",
+                          "item_domain",
+                          "item_type",
+                          "item_id",
+                          "item_instance_url",
+                          "item_schema_url",
+                          "item_state",
+                          "item_locations",
+                          "created_by",
+                          "created_at",
+                          "updated_at"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "meta",
+                    "items"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/network/item/markers": {
+      "get": {
+        "tags": [
+          "network"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "in": "query",
+            "name": "item_id",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "in": "query",
+            "name": "item_network",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "in": "query",
+            "name": "item_domain",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "in": "query",
+            "name": "item_type",
+            "required": false
+          },
+          {
+            "schema": {
+              "nullable": true,
+              "type": "string",
+              "format": "uri"
+            },
+            "in": "query",
+            "name": "item_instance_url",
+            "required": false
+          },
+          {
+            "schema": {
+              "nullable": true,
+              "type": "string",
+              "format": "uri"
+            },
+            "in": "query",
+            "name": "item_schema_url",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "in": "query",
+            "name": "item_state",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "query",
+            "name": "item_latitude",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "query",
+            "name": "item_longitude",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMinimum": true
+            },
+            "in": "query",
+            "name": "radius_meters",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "in": "query",
+            "name": "min_lat",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "in": "query",
+            "name": "min_lng",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "in": "query",
+            "name": "max_lat",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "in": "query",
+            "name": "max_lng",
+            "required": false
+          },
+          {
+            "schema": {
+              "default": 200,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 25000
+            },
+            "in": "query",
+            "name": "limit",
+            "required": false
+          },
+          {
+            "schema": {
+              "default": 0,
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "in": "query",
+            "name": "offset",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "exclusiveMinimum": true,
+              "maximum": 9007199254740991
+            },
+            "in": "query",
+            "name": "cache_ttl_seconds",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "in": "query",
+            "name": "q",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "offset": {
+                          "type": "number"
+                        },
+                        "partial": {
+                          "type": "boolean"
+                        },
+                        "unavailable_instances": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "total",
+                        "limit",
+                        "offset",
+                        "partial",
+                        "unavailable_instances"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "markers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "item_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                          },
+                          "item_domain": {
+                            "type": "string"
+                          },
+                          "item_instance_url": {
+                            "nullable": true,
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "item_locations": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "lat": {
+                                  "type": "number",
+                                  "minimum": -90,
+                                  "maximum": 90
+                                },
+                                "lng": {
+                                  "type": "number",
+                                  "minimum": -180,
+                                  "maximum": 180
+                                },
+                                "label": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "lat",
+                                "lng"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "item_id",
+                          "item_domain",
+                          "item_instance_url",
+                          "item_locations"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "meta",
+                    "markers"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/network/item/markers_local": {
+      "post": {
+        "tags": [
+          "network"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "item_id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "item_network": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "item_domain": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "item_type": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "item_instance_url": {
+                    "nullable": true,
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "item_schema_url": {
+                    "nullable": true,
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "item_state": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  },
+                  "item_latitude": {
+                    "type": "number"
+                  },
+                  "item_longitude": {
+                    "type": "number"
+                  },
+                  "radius_meters": {
+                    "type": "number",
+                    "minimum": 0,
+                    "exclusiveMinimum": true
+                  },
+                  "min_lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "min_lng": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  },
+                  "max_lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "max_lng": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 25000
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "cache_ttl_seconds": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
+                    "maximum": 9007199254740991
+                  },
+                  "q": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "item_network",
+                  "item_domain",
+                  "limit",
+                  "offset"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "offset": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "total",
+                        "limit",
+                        "offset"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "markers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "item_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                          },
+                          "item_domain": {
+                            "type": "string"
+                          },
+                          "item_instance_url": {
+                            "nullable": true,
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "item_locations": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "lat": {
+                                  "type": "number",
+                                  "minimum": -90,
+                                  "maximum": 90
+                                },
+                                "lng": {
+                                  "type": "number",
+                                  "minimum": -180,
+                                  "maximum": 180
+                                },
+                                "label": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "lat",
+                                "lng"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "item_id",
+                          "item_domain",
+                          "item_instance_url",
+                          "item_locations"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "meta",
+                    "markers"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/network/item/discover": {
+      "post": {
+        "tags": [
+          "network"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "item_network": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "item_domain": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "item_type": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "q": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "filters": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "field": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "values": {
+                          "minItems": 1,
+                          "type": "array",
+                          "items": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "field",
+                        "values"
+                      ]
+                    }
+                  },
+                  "item_latitude": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "item_longitude": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  },
+                  "distance_meters": {
+                    "type": "number",
+                    "minimum": 0,
+                    "exclusiveMinimum": true
+                  },
+                  "anchor_item_id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "limit": {
+                    "default": 20,
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100
+                  },
+                  "offset": {
+                    "default": 0,
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "item_network",
+                  "item_domain",
+                  "item_type"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "offset": {
+                          "type": "number"
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "signals_search",
+                            "native_fallback"
+                          ]
+                        },
+                        "degraded": {
+                          "type": "boolean"
+                        },
+                        "distance_meters": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "total",
+                        "limit",
+                        "offset",
+                        "source",
+                        "degraded"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "item_network": {
+                            "type": "string"
+                          },
+                          "item_domain": {
+                            "type": "string"
+                          },
+                          "item_type": {
+                            "type": "string"
+                          },
+                          "item_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                          },
+                          "item_instance_url": {
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "item_schema_url": {
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "item_state": {
+                            "anyOf": [
+                              {
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  },
+                                  {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "enum": [
+                                      null
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": {}
+                              },
+                              {
+                                "type": "array",
+                                "items": {}
+                              }
+                            ]
+                          },
+                          "item_locations": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "lat": {
+                                  "type": "number",
+                                  "minimum": -90,
+                                  "maximum": 90
+                                },
+                                "lng": {
+                                  "type": "number",
+                                  "minimum": -180,
+                                  "maximum": 180
+                                },
+                                "label": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "lat",
+                                "lng"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "created_by": {
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "lifecycle_status": {
+                            "type": "string"
+                          },
+                          "score": {
+                            "type": "number"
+                          },
+                          "distanceMeters": {
+                            "type": "number"
                           }
                         },
                         "required": [
@@ -4245,6 +5258,7 @@
                     "minLength": 1
                   },
                   "requirements_snapshot": {
+                    "default": {},
                     "type": "object",
                     "additionalProperties": {}
                   },
@@ -4294,8 +5308,7 @@
                   "action_type",
                   "source_item",
                   "target_item",
-                  "source_item_owner",
-                  "requirements_snapshot"
+                  "source_item_owner"
                 ]
               }
             }
@@ -4546,25 +5559,35 @@
                     "type": "string",
                     "minLength": 1
                   },
-                  "date_of_birth": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "format": "date",
-                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
-                      },
-                      {
-                        "type": "string",
-                        "format": "date-time",
-                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                      }
-                    ]
+                  "age": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 120
                   },
                   "terms_accepted": {
                     "type": "boolean"
                   },
                   "privacy_accepted": {
                     "type": "boolean"
+                  },
+                  "compliance": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "value": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "key",
+                        "value"
+                      ]
+                    }
                   },
                   "channel": {
                     "type": "string",
@@ -4580,12 +5603,12 @@
                     "minLength": 1
                   },
                   "item_state": {
-                    "description": "payload written to the items table; if absent OR an empty object {}, the route enters account_only mode (only the user is created/looked up, no item is written).",
+                    "description": "payload written to the items table. If absent OR an empty object {} with NO item_id, the route enters account_only mode (only the user is created/looked up, no item is written). If absent/empty WITH an item_id, that profile is targeted for a consent/DOB update without changing its fields.",
                     "type": "object",
                     "additionalProperties": {}
                   },
                   "item_id": {
-                    "description": "UUID. Only meaningful when acting_org is network_service AND user already exists. Targets that specific item for a PATCH-style update. Ignored otherwise.",
+                    "description": "UUID. Meaningful when the user already exists AND the caller owns them — network_service, or the aggregator that onboarded the user (#309 activation). Targets that specific item for a PATCH-style update. Ignored otherwise.",
                     "type": "string",
                     "format": "uuid",
                     "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -4608,8 +5631,6 @@
                 },
                 "required": [
                   "name",
-                  "terms_accepted",
-                  "privacy_accepted",
                   "channel"
                 ]
               }
@@ -4669,6 +5690,12 @@
                           "item_type": {
                             "type": "string"
                           },
+                          "lifecycle_status": {
+                            "type": "string"
+                          },
+                          "profile_consent_accepted": {
+                            "type": "boolean"
+                          },
                           "item_state": {
                             "type": "object",
                             "additionalProperties": {}
@@ -4722,6 +5749,11 @@
                         ],
                         "additionalProperties": false
                       }
+                    },
+                    "consent_recorded": {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
                     }
                   },
                   "required": [
@@ -4784,6 +5816,26 @@
                       "nullable": true,
                       "type": "string"
                     },
+                    "user_consent": {
+                      "type": "object",
+                      "properties": {
+                        "terms_accepted": {
+                          "type": "boolean"
+                        },
+                        "privacy_accepted": {
+                          "type": "boolean"
+                        },
+                        "has_age": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "terms_accepted",
+                        "privacy_accepted",
+                        "has_age"
+                      ],
+                      "additionalProperties": false
+                    },
                     "items": {
                       "type": "array",
                       "items": {
@@ -4802,6 +5854,12 @@
                           },
                           "item_type": {
                             "type": "string"
+                          },
+                          "lifecycle_status": {
+                            "type": "string"
+                          },
+                          "profile_consent_accepted": {
+                            "type": "boolean"
                           },
                           "item_state": {
                             "type": "object",
@@ -4860,6 +5918,7 @@
                   },
                   "required": [
                     "user_id",
+                    "user_consent",
                     "items"
                   ],
                   "additionalProperties": false
@@ -5038,6 +6097,16 @@
           {
             "schema": {
               "type": "string",
+              "minLength": 1
+            },
+            "in": "query",
+            "name": "lifecycle",
+            "required": false,
+            "description": "Comma-separated lifecycle_status values, e.g. 'live,draft'. Default: live,draft."
+          },
+          {
+            "schema": {
+              "type": "string",
               "minLength": 1,
               "maxLength": 200
             },
@@ -5194,6 +6263,15 @@
                                     "active",
                                     "at_risk",
                                     "inactive"
+                                  ]
+                                },
+                                "lifecycle_status": {
+                                  "type": "string",
+                                  "enum": [
+                                    "draft",
+                                    "live",
+                                    "paused",
+                                    "retired"
                                   ]
                                 },
                                 "profile_completion_pct": {
@@ -5759,11 +6837,15 @@
                     "type": "string",
                     "minLength": 1
                   },
-                  "dateOfBirth": {}
+                  "age": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 120
+                  }
                 },
                 "required": [
                   "network",
-                  "dateOfBirth"
+                  "age"
                 ]
               }
             }
@@ -6335,7 +7417,11 @@
                     "type": "string",
                     "minLength": 1
                   },
-                  "dateOfBirth": {},
+                  "age": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 120
+                  },
                   "guardianName": {
                     "type": "string",
                     "minLength": 1
@@ -6361,7 +7447,7 @@
                 "required": [
                   "network",
                   "domain",
-                  "dateOfBirth",
+                  "age",
                   "guardianName",
                   "guardianDeclarationAccepted"
                 ]
@@ -6717,6 +7803,10 @@
     }
   ],
   "tags": [
+    {
+      "name": "health",
+      "description": "Liveness and readiness probes for orchestrators (unauthenticated)."
+    },
     {
       "name": "item",
       "description": "Create, fetch, update and delete items, and manage their lifecycle status."
