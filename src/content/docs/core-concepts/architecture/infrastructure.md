@@ -28,7 +28,10 @@ Infrastructure is defined as code under `opentofu/aws/`. Each environment is a d
 | `iam` | IAM roles incl. **IRSA** (service-account → role) |
 | `storage` | storage resources; `gp3` is made the default StorageClass |
 | `random_passwords` | generated Postgres/Redis credentials |
+| `rds` | *(opt-in)* managed Postgres (AWS RDS); when enabled, its address is auto-wired into the generated Helm values files in place of the in-cluster database |
 | `output-file` | **generates the per-chart Helm values files** (see below) |
+
+Two further modules are optional and not applied by default: `pritunl` (VPN gateway) and `bastion` (bastion host) — both give operators direct network access into the VPC for environments that need it.
 
 The only file you normally edit per environment is **`global-values.yaml`** — region, EKS sizing, public hostnames, network/domains, SMTP/SMS, and alert recipients. A `tf.sh` file carries the AWS region and the remote-state S3 bucket name and is sourced before any `terragrunt` run.
 
@@ -65,19 +68,29 @@ Three umbrella charts (plus a monitoring chart) deploy in **strict dependency or
 
 `common-services` must be healthy (Postgres + Redis Ready, PVCs bound) before `signals` and `aggregator`, which connect to the shared datastores at `…svc.cluster.local`. The aggregator's Keycloak init job runs after Postgres is Ready, making it the slowest release.
 
+The `search` component listed above is itself a subchart at `helm/signals/charts/search/`, with a sibling `search-embeddings` subchart running the TEI (Text Embeddings Inference) server it calls to generate embeddings during ingestion. Unlike the other Signals components, signals-search has no in-process rate limiter of its own — it relies entirely on the Kong ingress layer for rate limiting (see [Ingress & rate limiting: Kong](#ingress--rate-limiting-kong) below).
+
 ### Deployment topology
 
 <!-- Editable source: src/assets/diagrams/infra-topology.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. -->
 
-![Traffic flows from the Internet via DNS to the Kong proxy LoadBalancer and the Kong ingress controller (ns: common-services), which routes to Signals (ns: signals — api, ui, notification, match-score, search) and Aggregator (ns: aggregator — web BFF, api, worker, keycloak); both connect to shared PostgreSQL and Redis in common-services, where cert-manager with Let's Encrypt issues TLS certificates for Kong](../../../../assets/diagrams/infra-topology.png)
+![Traffic flows from the Internet via DNS to the Kong proxy LoadBalancer and the Kong ingress controller (ns: common-services), which routes to Signals (ns: signals — api, ui, notification, match-score, search, search-embeddings) and Aggregator (ns: aggregator — web BFF, api, worker, keycloak); both connect to shared PostgreSQL and Redis in common-services, where cert-manager with Let's Encrypt issues TLS certificates for Kong](../../../../assets/diagrams/infra-topology.png)
 
 :::note[Names don't match directories]
 A chart's directory, chart name, release name and namespace can all differ. The Signals stack lives in `helm/signals/`. Treat `install.sh` and `DEPLOYMENT.md` as the source of truth for what deploys where.
 :::
 
+:::note[In progress: Keycloak becomes a shared common-service]
+Keycloak is moving out of the `aggregator` chart into its own top-level chart, `helm/keycloak/`, deployed into the **`common-services`** namespace — deliberately not a namespace of its own, so Postgres initialisation ordering relative to `common-services` stays correct. This changes the deploy order to `common-services → keycloak → signals → aggregator`. This is **merged but not yet promoted to production**; see [Identity & Auth](/core-concepts/architecture/identity-and-auth/) for the full picture.
+
+<!-- Editable source: src/assets/diagrams/unified-keycloak-target.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. -->
+
+![In progress: a single shared Keycloak realm will serve both DPGs plus future integrating DPGs, replacing the standalone aggregator realm](../../../../assets/diagrams/unified-keycloak-target.png)
+:::
+
 ## Ingress & rate limiting: Kong
 
-`common-services` runs the **Kong** ingress controller (DB-less) as the sole controller; `kong` is the cluster-default IngressClass and every app Ingress sets `ingressClassName: kong`. Rate limiting is enforced by `KongClusterPlugin` tiers (`rl-auth`, `rl-api`, `rl-public`) attached per route via the `konghq.com/plugins` annotation, with counters backed by the shared Redis (`policy: redis`) so limits hold across Kong replicas.
+`common-services` runs the **Kong** ingress controller (DB-less) as the sole controller; `kong` is the cluster-default IngressClass and every app Ingress sets `ingressClassName: kong`. Rate limiting is enforced by per-service `KongClusterPlugin` tiers — `rl-agg-web`, `rl-agg-api`, `rl-agg-auth`, `rl-signals-api`, `rl-signals-ui`, and `rl-monitoring` — attached per route via the `konghq.com/plugins` annotation, with counters backed by the shared Redis (`policy: redis`) so limits hold across Kong replicas.
 
 Kong's CRDs ship inside the vendored subchart, but Helm only installs subchart CRDs on first install and never updates them on upgrade — so `deploy_common_services` applies the CRDs explicitly (`kubectl apply --server-side`) before every Helm run.
 

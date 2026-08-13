@@ -36,6 +36,4 @@ No `base` — the site is served from the domain root, so internal links are roo
 
 ## Information architecture
 
-The sidebar in `astro.config.mjs` is the authoritative list of sections and slugs.
-
-Many sidebar slugs (especially in `overview/`, `core-concepts/architecture/`, `core-concepts/technical/`, `guides/installation/`) reference pages that do not yet exist as files — they need to be created before the site will build without 404s.
+The sidebar in `astro.config.mjs` is the authoritative list of sections and slugs. Every current sidebar slug has a matching file under `src/content/docs/`.

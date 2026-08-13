@@ -195,6 +195,7 @@ export default defineConfig({
               items: [
                 { label: 'High-Level Architecture', slug: 'core-concepts/architecture/high-level-architecture' },
                 { label: 'Signals DPG', slug: 'core-concepts/architecture/signals-dpg' },
+                { label: 'Signals Search', slug: 'core-concepts/architecture/signals-search' },
                 { label: 'Aggregator DPG', slug: 'core-concepts/architecture/aggregator-dpg' },
                 { label: 'Data Model', slug: 'core-concepts/architecture/data-model' },
                 { label: 'Identity & Auth', slug: 'core-concepts/architecture/identity-and-auth' },

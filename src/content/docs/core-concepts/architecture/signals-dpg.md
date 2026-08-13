@@ -31,6 +31,14 @@ This separation is the key scaling decision — see [Read & Write Paths](/core-c
 
 Item tables are **partitioned** in PostgreSQL. Always use the partition-aware query helpers in `@dpg/database` so the planner can prune; an ad-hoc query across the parent table without a partition key will scan everything.
 
+## Participant metrics (`item_metrics`)
+
+`item_metrics` is a **lazily-recomputed derived cache** of per-item interaction counts and status, read by the aggregator dashboard/export routes. It is a **read-time cache, not a source of truth** — ownership and authorization are never keyed off it. There is no separate "Signal Processing Service" and no materialized view anywhere in the system; an earlier design described one, but it never shipped.
+
+- **Recompute trigger.** A route checks a TTL (`DASHBOARD_CACHE_TTL_SECONDS`) against the metrics row's last-computed timestamp. On a miss, it recomputes under a Postgres advisory lock keyed per `(aggregator_id, domain)`, so multi-domain orgs recompute in parallel without domains blocking each other. There is no background job — recompute is triggered synchronously by whichever request first finds the cache stale.
+- **Lock semantics.** The default path takes a **non-blocking try-lock**: if another request already holds the lock for that `(aggregator_id, domain)`, the request skips recompute rather than waiting. A `force=true` path instead takes a **blocking** lock, so a caller that needs a guaranteed-fresh result waits for any in-flight recompute to finish.
+- **Directionality.** An action event (e.g. a seeker connecting to a provider) has a source item domain and a target item domain. Metrics are counted from each item's own point of view: the item is `initiated` when its domain is the action's source, and `received` when its domain is the action's target. A same-domain interaction (source domain equals target domain) emits **both** an `initiated` row and a `received` row, since the same item plays both roles at once. Per-item status is evaluated against the combined (`initiated` + `received`) counts, not either direction alone.
+
 ## Engineering conventions
 
 - **ESM only**, strict TypeScript, no `any`; `import type` for type-only imports.
