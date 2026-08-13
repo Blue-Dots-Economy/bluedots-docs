@@ -120,7 +120,7 @@ Diagrams *not* touched (existing ones remain accurate per research): `aggregator
 
 ## Open questions for the user
 
-1. Confirm the Today/In-progress two-part framing for auth + infra topology (vs. some alternative, e.g. only documenting `main` and leaving the Keycloak-everywhere work for a follow-up PR once it actually promotes).
-2. Confirm the redaction policy above is the right bar — anything else that should stay out of public docs.
-3. Want a new `guides/installation/signals-search.md` in this same PR, or defer it?
-4. Final call on each new/changed diagram, once shareable links are produced.
+1. ~~Confirm the Today/In-progress two-part framing~~ — **Resolved 2026-08-14: keep it.** Shipped as-is in PR #13.
+2. Confirm the redaction policy above is the right bar — anything else that should stay out of public docs. **Partially resolved:** final review found `guides/cicd-and-builds.md` (untouched by this PR) already violates this bar by publishing brand/deployment-specific branch names (`blue-dots-prod`, `orange-dot-prod`, etc.). **User decision 2026-08-14: fix in a separate follow-up PR, not this one.**
+3. ~~Want a new `guides/installation/signals-search.md`~~ — **Resolved 2026-08-14: defer.** Not in PR #13.
+4. Final call on each new/changed diagram, once shareable links are produced — **still open**, pending the user's review of the 4 excalidraw.com links posted in PR #13's description. Apply any requested changes as a follow-up commit to `docs/architecture-refresh` before merge.
