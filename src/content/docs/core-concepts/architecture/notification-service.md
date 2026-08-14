@@ -5,6 +5,8 @@ sidebar:
   order: 2.7
 ---
 
+<span class="sprint-badge">New page — sprint 2026-08-14</span>
+
 **notification-service** is a small, standalone Fastify service that gives every DPG in the ecosystem one HTTP endpoint — `POST /notify` — for sending email, SMS, and WhatsApp messages without knowing which underlying provider handles a given channel. It is a separate deployable service, not a package inside Signals-DPG's monorepo, and is already live in production today.
 
 ## Components

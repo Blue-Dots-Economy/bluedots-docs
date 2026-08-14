@@ -5,7 +5,7 @@ sidebar:
   order: 5
 ---
 
-The stack currently runs **three** identity paths, joined by service-auth handshakes. A shared-realm Keycloak architecture is fully built and merged, but not yet promoted to production — see [In progress: unified Keycloak](#in-progress-unified-keycloak) below.
+The stack currently runs **three** identity paths, joined by service-auth handshakes. A shared-realm Keycloak architecture is fully built and merged, but not yet promoted to production — see [In progress: unified Keycloak](#in-progress-unified-keycloak-new) below.
 
 ## Today
 
@@ -34,11 +34,11 @@ Admin endpoints (`/api/v1/admin/*`) additionally require an **`x-acting-org-id`*
 
 `AUTH_MIDDLEWARE_ENABLED` (default `true`) gates running migrations or seed scripts that must not hit the auth path — but setting it to `false` **only takes effect when `INSTANCE_ENV=development`**. In production it is forced back to `true` regardless of this setting, so it is not a switch an operator can use to disable auth in a deployed environment.
 
-### signals-search: `x-api-key` only
+### signals-search: `x-api-key` only <span class="sprint-badge">New</span>
 
 signals-search authenticates purely via **`x-api-key`** — it does not send or check `x-acting-org-id` at all. This is a **permanent, known divergence** from the two-header model the other integrating DPGs use (below), not a gap awaiting a fix.
 
-### notification-service: HMAC request signing
+### notification-service: HMAC request signing <span class="sprint-badge">New</span>
 
 notification-service is a **fourth participant** in the ecosystem's auth landscape, using a **third, distinct service-auth pattern** alongside Keycloak, Better-Auth, and the `x-api-key` models above: every route requires a signed request — HMAC-SHA256 over the method/path/timestamp/nonce — with nonce-based replay protection. It shares no session or key store with the other paths. See [Notification Service Architecture](/core-concepts/architecture/notification-service/) for the full mechanism.
 
@@ -57,7 +57,7 @@ This lets Signals authenticate the *caller* (API key) and authorise the *action*
 
 When moving off `localhost`, update the `aggregator-portal` client's **Valid Redirect URIs** and **Web Origins** in the Keycloak admin console, and replace `localhost`/`keycloak` hostnames throughout the environment config. See [Deployment](/guides/deployment/).
 
-## In progress: unified Keycloak
+## In progress: unified Keycloak <span class="sprint-badge">New</span>
 
 :::note[Not yet in production]
 Everything in this section is built and merged, but **not yet promoted to `main`/production**. It is documented here so the target architecture is visible, not because it's live today.

@@ -82,7 +82,7 @@ bash install.sh deploy_all_services
 
 ![deploy_all_services runs in strict order: 1 preflight, 2 create_namespaces_and_secrets (3 namespaces + ghcr-pull secret if IMAGES_PUBLIC=false), 3 deploy_monitoring, 4 deploy_common_services (gp3 default SC + Kong CRDs + platform), 5 deploy_signals, 6 deploy_aggregator, 7 fix_acme_issuer_uri](../../../assets/diagrams/cicd-deploy-chain.png)
 
-`create_namespaces_and_secrets` always creates the three namespaces; it also creates a `ghcr-pull` image-pull secret from `GHCR_PAT`, but only when `IMAGES_PUBLIC=false`. Images are public by default (`IMAGES_PUBLIC=true`), so by default no pull secret is created and no PAT is required.
+<span class="sprint-badge sprint-badge-fixed">Fixed</span> `create_namespaces_and_secrets` always creates the three namespaces; it also creates a `ghcr-pull` image-pull secret from `GHCR_PAT`, but only when `IMAGES_PUBLIC=false`. Images are public by default (`IMAGES_PUBLIC=true`), so by default no pull secret is created and no PAT is required.
 
 See the [Deployment guide](/guides/deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) for what each layer is.
 
@@ -128,7 +128,7 @@ Never deploy a customer environment from `main` — use that environment's branc
 
 Rollback is the inverse: set the tag back to the previous known-good SHA and re-run the deploy.
 
-## 6. Security scanning in CI
+## 6. Security scanning in CI <span class="sprint-badge">New</span>
 
 :::note[Not yet on `main`]
 Everything in this section is built and merged, but **not yet promoted to `main`**. The reusable workflow and its per-repo callers exist on `develop`/`feature` across all four repos, still pinned `@feature`. It is documented here so the target setup is visible, not because it's live in production today.

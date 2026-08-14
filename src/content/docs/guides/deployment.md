@@ -23,7 +23,7 @@ For the architecture behind this flow, see [Infrastructure & Deployment Architec
 | `helm` | ≥ 3.12 | install the charts |
 | `bash`, `git` | 4.x / 2.x | run `install.sh`, clone |
 
-Also required: an **AWS account** that can create VPC/EKS/IAM/S3 (plus an S3 bucket for OpenTofu remote state) and **DNS control** for the public hostnames. Images are public by default (`IMAGES_PUBLIC=true`, the default), so no GHCR pull secret is created and no PAT is needed out of the box; set `IMAGES_PUBLIC=false` to restore PAT-gated pulls for private images, in which case you'll also need a **GitHub PAT** with `read:packages` (`GHCR_PAT`).
+Also required: an **AWS account** that can create VPC/EKS/IAM/S3 (plus an S3 bucket for OpenTofu remote state) and **DNS control** for the public hostnames. <span class="sprint-badge sprint-badge-fixed">Fixed</span> Images are public by default (`IMAGES_PUBLIC=true`, the default), so no GHCR pull secret is created and no PAT is needed out of the box; set `IMAGES_PUBLIC=false` to restore PAT-gated pulls for private images, in which case you'll also need a **GitHub PAT** with `read:packages` (`GHCR_PAT`).
 
 `yq` and a Makefile are **not** used — `opentofu/aws/<env>/install.sh` is the single entrypoint for both infrastructure and Helm.
 

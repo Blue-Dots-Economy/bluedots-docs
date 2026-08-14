@@ -38,7 +38,7 @@ A signal lifecycle, in these terms:
 
 For how items are read locally vs. across the network, and how they are written, see [Read & Write Paths](/core-concepts/technical/read-write-paths/). For the full term list, see the [Glossary](/core-concepts/glossary/).
 
-## In progress: per-pair action cap
+## In progress: per-pair action cap <span class="sprint-badge">New</span>
 
 :::note[Not yet in production]
 Everything in this section is built and merged, but **not yet promoted to `main`/production**. It is documented here so the target architecture is visible, not because it's live today.

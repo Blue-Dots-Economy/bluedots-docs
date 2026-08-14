@@ -8,6 +8,8 @@ sidebar:
   order: 2.5
 ---
 
+<span class="sprint-badge">New page — sprint 2026-08-14</span>
+
 **Signals Search** (`signals-search`) is the search & discovery service for Signals-DPG — a Postgres-native replacement for an earlier Elasticsearch-based design, and a deliberate stepping stone toward a future Beckn/NFH discovery service. It is **V1**: single-instance, no cross-instance federation. It reads and writes only the shared Signals-DPG Postgres database, adding one read-model table (`item_search`) that stores a vector embedding and a geography per item.
 
 ## Components

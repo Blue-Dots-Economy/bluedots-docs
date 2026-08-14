@@ -9,6 +9,8 @@ Blue Dots follows strict **configuration discipline**: no domain- or environment
 
 ## Where configuration lives
 
+<span class="sprint-badge">New</span> Signals Search column added below.
+
 | Concern | Signals DPG | Aggregator DPG | Signals Search |
 | --- | --- | --- | --- |
 | Env var declarations | `packages/config` (Zod `secrets.ts`) | config loader package | `src/config.ts` (Zod-validated `loadConfig`) |
@@ -29,11 +31,11 @@ Two places must change **together**, or you'll hit the classic "works locally, f
 
 Add it to the config loader's schema. Remember `NEXT_PUBLIC_*` values are **baked at compile time** in the web app — after changing one, rebuild the web image (`make rebuild-web`) rather than just restarting.
 
-## Adding an environment variable (Signals Search)
+## Adding an environment variable (Signals Search) <span class="sprint-badge">New</span>
 
 Add it to the `EnvSchema` in `src/config.ts` — that single Zod schema is read by both the `api` and `worker` entrypoints, so there is no second place to keep in sync.
 
-## Notable environment variables
+## Notable environment variables <span class="sprint-badge">New</span>
 
 A few knobs worth knowing about, beyond the obvious connection strings — names and effect only, see each repo's own configuration docs for full lists and defaults:
 

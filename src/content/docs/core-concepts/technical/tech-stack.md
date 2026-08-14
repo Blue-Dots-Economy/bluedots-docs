@@ -23,7 +23,7 @@ All three services are TypeScript-first, though they don't all share the same mo
 
 Signals Search's toolchain also trails the other two repos' shared versions rather than moving in lockstep with them: its TypeScript is two majors behind Signals DPG's, and its Vitest is one major behind.
 
-## Other services
+## Other services <span class="sprint-badge">New</span>
 
 **notification-service** — the provider-agnostic email/SMS/WhatsApp dispatcher described in [Notification Service Architecture](/core-concepts/architecture/notification-service/) — isn't part of the three-repo comparison above, but is worth a brief mention:
 
