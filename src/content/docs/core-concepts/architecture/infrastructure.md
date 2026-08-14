@@ -70,6 +70,8 @@ Three umbrella charts (plus a monitoring chart) deploy in **strict dependency or
 
 The `search` component listed above is itself a subchart at `helm/signals/charts/search/`, with a sibling `search-embeddings` subchart running the TEI (Text Embeddings Inference) server it calls to generate embeddings during ingestion. Unlike the other Signals components, signals-search has no in-process rate limiter of its own — it relies entirely on the Kong ingress layer for rate limiting (see [Ingress & rate limiting: Kong](#ingress--rate-limiting-kong) below).
 
+The `notification-service` component listed above is a single shared HTTP endpoint (`POST /notify`) that every DPG can call to send email/SMS/WhatsApp without knowing the underlying provider. See [Notification Service](/core-concepts/architecture/notification-service/) for its architecture.
+
 ### Deployment topology
 
 <!-- Editable source: src/assets/diagrams/infra-topology.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. -->
@@ -86,6 +88,14 @@ Keycloak is moving out of the `aggregator` chart into its own top-level chart, `
 <!-- Editable source: src/assets/diagrams/unified-keycloak-target.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. -->
 
 ![In progress: a single shared Keycloak realm will serve both DPGs plus future integrating DPGs, replacing the standalone aggregator realm](../../../../assets/diagrams/unified-keycloak-target.png)
+:::
+
+:::note[In progress: retiring an old public hostname]
+Helm values `ui.blockedHosts` (a list) plus `blockedHostStatusCode`/`blockedHostMessage` let a previously served public hostname stop serving the Signals UI: a Kong `request-termination` plugin returns the configured status/message for `/` on that host, while `/api` on the same host keeps resolving normally. This is useful when a previously-unified domain splits into separate per-participant domains and the old shared hostname needs to stop serving UI traffic without breaking API clients still pointed at it. Merged on `develop`/`feature`, **not yet on `main`**.
+:::
+
+:::note[In progress: migrate Job moves to a pre-install hook]
+The Signals migrate Job is moving from a post-install to a `pre-install`/`pre-upgrade` Helm hook. `helm upgrade --wait` blocks post-install hooks until every release resource reports Ready, but the Signals API can't become Ready without the schema that migrate job creates — a deadlock on any from-scratch install. Merged on `develop`/`feature`, **not yet on `main`**.
 :::
 
 ## Ingress & rate limiting: Kong

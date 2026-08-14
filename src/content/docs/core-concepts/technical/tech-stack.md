@@ -23,6 +23,15 @@ All three services are TypeScript-first, though they don't all share the same mo
 
 Signals Search's toolchain also trails the other two repos' shared versions rather than moving in lockstep with them: its TypeScript is two majors behind Signals DPG's, and its Vitest is one major behind.
 
+## Other services
+
+**notification-service** — the provider-agnostic email/SMS/WhatsApp dispatcher described in [Notification Service Architecture](/core-concepts/architecture/notification-service/) — isn't part of the three-repo comparison above, but is worth a brief mention:
+
+- **Fastify** API, same as Signals DPG and Signals Search.
+- Queueing is built on **`ioredis`** with custom Redis primitives (priority lists, a delayed-retry sorted set, a dead-letter list) rather than BullMQ.
+- Provider payloads are validated with **Zod** schemas, one per channel.
+- It runs against its **own dedicated Redis instance** — no datastore is shared with Signals-DPG.
+
 ## Runtime & package management
 
 - **Node ≥ 24** (CI pins Node 24; Node 22 works locally for the Aggregator).

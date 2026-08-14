@@ -65,7 +65,8 @@ Deployment is driven by `opentofu/aws/<env>/install.sh` — one script for both 
 
 ```bash
 cd opentofu/aws/<env>
-export GHCR_PAT=ghp_xxxxxxxxxxxx          # read:packages — needed to pull private images
+# only needed if IMAGES_PUBLIC=false — public images (the default) need no PAT
+export GHCR_PAT=ghp_xxxxxxxxxxxx          # read:packages
 
 # static checks (install nothing)
 bash install.sh lint        # helm lint all charts
@@ -79,13 +80,15 @@ bash install.sh deploy_all_services
 
 <!-- Editable source: src/assets/diagrams/cicd-deploy-chain.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. -->
 
-![deploy_all_services runs in strict order: 1 preflight, 2 create_namespaces_and_secrets (3 namespaces + ghcr-pull secret), 3 deploy_monitoring, 4 deploy_common_services (gp3 default SC + Kong CRDs + platform), 5 deploy_signals, 6 deploy_aggregator, 7 fix_acme_issuer_uri](../../../assets/diagrams/cicd-deploy-chain.png)
+![deploy_all_services runs in strict order: 1 preflight, 2 create_namespaces_and_secrets (3 namespaces + ghcr-pull secret if IMAGES_PUBLIC=false), 3 deploy_monitoring, 4 deploy_common_services (gp3 default SC + Kong CRDs + platform), 5 deploy_signals, 6 deploy_aggregator, 7 fix_acme_issuer_uri](../../../assets/diagrams/cicd-deploy-chain.png)
+
+`create_namespaces_and_secrets` always creates the three namespaces; it also creates a `ghcr-pull` image-pull secret from `GHCR_PAT`, but only when `IMAGES_PUBLIC=false`. Images are public by default (`IMAGES_PUBLIC=true`), so by default no pull secret is created and no PAT is required.
 
 See the [Deployment guide](/guides/deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) for what each layer is.
 
 ### Scripted / non-interactive runs
 
-For automation (e.g. a future pipeline), the OpenTofu apply functions honour `AUTO_APPROVE=1` for non-interactive `terragrunt apply`, and `GHCR_PAT` can be supplied via the environment instead of an interactive prompt:
+For automation (e.g. a future pipeline), the OpenTofu apply functions honour `AUTO_APPROVE=1` for non-interactive `terragrunt apply`, and (when `IMAGES_PUBLIC=false`) `GHCR_PAT` can be supplied via the environment instead of an interactive prompt:
 
 ```bash
 AUTO_APPROVE=1 GHCR_PAT=ghp_xxx bash install.sh apply_tf_eks
@@ -124,3 +127,17 @@ Never deploy a customer environment from `main` — use that environment's branc
 5. Validate (`helm list -A`, pod health, ingress, TLS) — see the [Deployment guide](/guides/deployment/).
 
 Rollback is the inverse: set the tag back to the previous known-good SHA and re-run the deploy.
+
+## 6. Security scanning in CI
+
+:::note[Not yet on `main`]
+Everything in this section is built and merged, but **not yet promoted to `main`**. The reusable workflow and its per-repo callers exist on `develop`/`feature` across all four repos, still pinned `@feature`. It is documented here so the target setup is visible, not because it's live in production today.
+:::
+
+A shared reusable workflow runs three kinds of security scanning across the repos:
+
+- **Trivy** — both a filesystem scan (dependency manifests) and an image scan (the built container images), run via the reusable workflow.
+- **gitleaks** — secret scanning; opt-in per calling repo rather than enforced everywhere.
+- **CodeQL** — static analysis, but wired separately per repo through GitHub's own default setup rather than as a step inside the reusable workflow.
+
+All three are **report-only** today: findings are uploaded as SARIF to each repo's own **Security** tab, and none of them fail the build or block a merge.

@@ -38,6 +38,10 @@ Admin endpoints (`/api/v1/admin/*`) additionally require an **`x-acting-org-id`*
 
 signals-search authenticates purely via **`x-api-key`** — it does not send or check `x-acting-org-id` at all. This is a **permanent, known divergence** from the two-header model the other integrating DPGs use (below), not a gap awaiting a fix.
 
+### notification-service: HMAC request signing
+
+notification-service is a **fourth participant** in the ecosystem's auth landscape, using a **third, distinct service-auth pattern** alongside Keycloak, Better-Auth, and the `x-api-key` models above: every route requires a signed request — HMAC-SHA256 over the method/path/timestamp/nonce — with nonce-based replay protection. It shares no session or key store with the other paths. See [Notification Service Architecture](/core-concepts/architecture/notification-service/) for the full mechanism.
+
 ### The two-header service-auth model
 
 When an integrating DPG other than signals-search calls Signals, it presents **two headers**:

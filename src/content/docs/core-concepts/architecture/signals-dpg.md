@@ -39,6 +39,18 @@ Item tables are **partitioned** in PostgreSQL. Always use the partition-aware qu
 - **Lock semantics.** The default path takes a **non-blocking try-lock**: if another request already holds the lock for that `(aggregator_id, domain)`, the request skips recompute rather than waiting. A `force=true` path instead takes a **blocking** lock, so a caller that needs a guaranteed-fresh result waits for any in-flight recompute to finish.
 - **Directionality.** An action event (e.g. a seeker connecting to a provider) has a source item domain and a target item domain. Metrics are counted from each item's own point of view: the item is `initiated` when its domain is the action's source, and `received` when its domain is the action's target. A same-domain interaction (source domain equals target domain) emits **both** an `initiated` row and a `received` row, since the same item plays both roles at once. Per-item status is evaluated against the combined (`initiated` + `received`) counts, not either direction alone.
 
+## In progress: public shareable profile links
+
+:::note[Not yet in production]
+Everything in this section is built and merged, but **not yet promoted to `main`/production**. It is documented here so the target architecture is visible, not because it's live today.
+:::
+
+A profile item can be shared via a public, unauthenticated link, so it can be viewed without signing in.
+
+- **No new PII.** The public view reuses the same masked public projection already exposed via the existing map/discover flows — the shared link surfaces nothing that wasn't already reachable through those paths.
+- **The link uses the item's existing id directly**, rather than a signed or opaque token. This is a deliberate v1 choice: since the id is already public via the existing fetch paths, embedding it directly in the share link doesn't expose anything new.
+- **Only resolves for live items.** The link only renders a profile when the item's `lifecycle_status` is `live`. Any other state — retired, unknown, or an error — renders a generic "unavailable" page rather than a raw error, so the response never leaks which of those states caused it.
+
 ## Engineering conventions
 
 - **ESM only**, strict TypeScript, no `any`; `import type` for type-only imports.
