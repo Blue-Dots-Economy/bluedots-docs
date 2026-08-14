@@ -5,20 +5,32 @@ sidebar:
   order: 4
 ---
 
-Both DPGs are TypeScript-first **pnpm + Turborepo** monorepos that share a common technology base.
+All three services are TypeScript-first, though they don't all share the same monorepo shape: Signals DPG and Aggregator DPG are **pnpm + Turborepo** monorepos; Signals Search (`signals-search`) is a single package.
 
 ## At a glance
 
-| Concern | Signals DPG | Aggregator DPG |
-| --- | --- | --- |
-| API framework | Fastify + Zod (`fastify-type-provider-zod`) | Fastify (BFF) |
-| Web UI | React 19 + Vite (schema-driven) | Next.js 15 (App Router) + BFF |
-| Background jobs | — | BullMQ worker |
-| ORM / DB | Drizzle + PostgreSQL (partitioned items) | Drizzle + PostgreSQL |
-| Cache / sessions / queue | Redis | Redis |
-| Object storage | S3 | S3 |
-| Auth | Better-Auth + API keys | Keycloak (OIDC) |
-| Notifications | SMTP, SMS | SMTP (Mailpit local), SMS |
+| Concern | Signals DPG | Aggregator DPG | Signals Search |
+| --- | --- | --- | --- |
+| API framework | Fastify + Zod (`fastify-type-provider-zod`) | Fastify (BFF) | Fastify + Zod |
+| Web UI | React 19 + Vite (schema-driven) | Next.js 15 (App Router) + BFF | — (API-only service) |
+| Background jobs | — | BullMQ worker | Ingestion worker (Redis Stream consumer) |
+| ORM / DB | Drizzle + PostgreSQL (partitioned items) | Drizzle + PostgreSQL | **postgres.js (no ORM)** + PostgreSQL with **pgvector + PostGIS** |
+| Cache / sessions / queue | Redis | Redis | Redis (ingestion stream + result cache) |
+| Object storage | S3 | S3 | — |
+| Auth | Better-Auth + API keys | Keycloak (OIDC) | `x-api-key` only (no acting-org) |
+| Notifications | SMTP, SMS | SMTP (Mailpit local), SMS | — |
+| Test infra | Vitest | Vitest | Vitest + **Testcontainers** (Postgres pgvector/PostGIS, Redis) |
+
+Signals Search's toolchain also trails the other two repos' shared versions rather than moving in lockstep with them: its TypeScript is two majors behind Signals DPG's, and its Vitest is one major behind.
+
+## Other services <span class="sprint-badge">New</span>
+
+**notification-service** — the provider-agnostic email/SMS/WhatsApp dispatcher described in [Notification Service Architecture](/core-concepts/architecture/notification-service/) — isn't part of the three-repo comparison above, but is worth a brief mention:
+
+- **Fastify** API, same as Signals DPG and Signals Search.
+- Queueing is built on **`ioredis`** with custom Redis primitives (priority lists, a delayed-retry sorted set, a dead-letter list) rather than BullMQ.
+- Provider payloads are validated with **Zod** schemas, one per channel.
+- It runs against its **own dedicated Redis instance** — no datastore is shared with Signals-DPG.
 
 ## Runtime & package management
 

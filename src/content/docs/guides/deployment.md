@@ -23,7 +23,7 @@ For the architecture behind this flow, see [Infrastructure & Deployment Architec
 | `helm` | ≥ 3.12 | install the charts |
 | `bash`, `git` | 4.x / 2.x | run `install.sh`, clone |
 
-Also required: an **AWS account** that can create VPC/EKS/IAM/S3 (plus an S3 bucket for OpenTofu remote state), a **GitHub PAT** with `read:packages` (`GHCR_PAT`) to pull images from GHCR, and **DNS control** for the public hostnames.
+Also required: an **AWS account** that can create VPC/EKS/IAM/S3 (plus an S3 bucket for OpenTofu remote state) and **DNS control** for the public hostnames. <span class="sprint-badge sprint-badge-fixed">Fixed</span> Images are public by default (`IMAGES_PUBLIC=true`, the default), so no GHCR pull secret is created and no PAT is needed out of the box; set `IMAGES_PUBLIC=false` to restore PAT-gated pulls for private images, in which case you'll also need a **GitHub PAT** with `read:packages` (`GHCR_PAT`).
 
 `yq` and a Makefile are **not** used — `opentofu/aws/<env>/install.sh` is the single entrypoint for both infrastructure and Helm.
 
@@ -73,6 +73,7 @@ The aggregator's `global.signalstack.actingOrgId` is a **post-Signals** step —
 Deploy in strict dependency order. Either run the whole stack at once, or step through it gating on health.
 
 ```bash
+# only needed for private images (IMAGES_PUBLIC=false) — public images (the default) need no PAT
 export GHCR_PAT=ghp_xxxxxxxxxxxx     # read:packages
 
 # optional static checks (install nothing)

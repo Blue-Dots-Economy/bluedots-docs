@@ -34,4 +34,8 @@ Other non-negotiable rules: every cross-package contract is an **abstract class*
 
 ![An organisation registers and is approved, then bulk-uploads a file to S3; the worker processes it (file to rows to finalise) and hands rows to signalstack-writer, which writes to the Signals API](../../../../assets/diagrams/aggregator-dpg-data-flow.png)
 
-See [Identity & Auth](/core-concepts/architecture/identity-and-auth/) for the Keycloak setup and the service-auth handshake with Signals.
+## Dashboard data sources <span class="sprint-badge">New</span>
+
+The aggregator dashboard's two views read Signals differently. The rollup view now consumes Signals-DPG's precomputed `item_metrics` (see [Signals DPG Architecture](/core-concepts/architecture/signals-dpg/)) — an improvement over the earlier raw per-item fetch. The item-table/lifecycle-tile view still pages Signals' `fetch_local` endpoint directly: lifecycle tile counts are computed from a capped sweep, and the response surfaces a `tiles_truncated` flag when an aggregator's item count exceeds the cap, so the UI can render a "showing N+" affordance. That capped sweep stays in place pending a server-side per-lifecycle count endpoint from Signals-DPG — the N+1-style inefficiency flagged earlier is partially, not fully, resolved.
+
+See [Identity & Auth](/core-concepts/architecture/identity-and-auth/) for the Keycloak setup and the service-auth handshake with Signals — including the `SIGNALSTACK_AUTH_MODE` (`apikey`/`bearer`) knob this app uses to authenticate to Signals.

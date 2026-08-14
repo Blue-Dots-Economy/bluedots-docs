@@ -218,3 +218,44 @@ main h1#_top,
 .dot-name--brown {
   color: var(--dot-brown);
 }
+
+/* ---------------------------------------------------------------------------
+   TEMPORARY — sprint review markers (added 2026-08-14).
+   Flags pages/sections changed by the signals-search + notification-service +
+   sprint-driven-validation documentation pass (PR #13) for a quick local
+   review pass. Sidebar badges are set per-page in astro.config.mjs; these
+   inline spans mark the specific new/changed headings within a page.
+
+   TO DISABLE without touching any content file: uncomment the `display: none`
+   rule at the bottom of this block — every badge instantly disappears site-
+   wide, sidebar badges included (Starlight badges use `.sl-badge`, unaffected
+   by this override; disable those separately by deleting the `badge:` keys
+   in astro.config.mjs if desired).
+   TO FULLY REMOVE: delete this CSS block, then grep the content tree for
+   `sprint-badge` and delete each matching `<span>` from the Markdown source.
+   --------------------------------------------------------------------------- */
+.sprint-badge {
+  display: inline-block;
+  vertical-align: 0.15em;
+  margin-inline-start: 0.5em;
+  padding: 0.1em 0.55em;
+  border-radius: 999px;
+  font-family: var(--sl-font);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  color: white;
+  background: var(--dot-pink);
+  white-space: nowrap;
+}
+.sprint-badge.sprint-badge-fixed {
+  background: var(--dot-orange);
+}
+
+/* Uncomment to hide every sprint-review badge instantly, no content edits:
+.sprint-badge {
+  display: none;
+}
+*/
