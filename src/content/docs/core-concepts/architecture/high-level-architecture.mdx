@@ -9,9 +9,9 @@ The Blue Dots stack is organised into clear horizontal layers, with two parallel
 
 ## The layered view
 
-{/* Editable source: src/assets/diagrams/high-level-architecture.excalidraw — open at https://excalidraw.com to adjust, re-export to high-level-architecture-latest.png. */}
+{/* Editable source: src/assets/diagrams/high-level-architecture.excalidraw — open at https://excalidraw.com to adjust, re-export to high-level-architecture.png. */}
 
-![The Blue Dots layered architecture: Apps (Aggregator App, Signals App); Auth — a single Keycloak spanning both verticals (OIDC, shared realm and service tokens); API (Aggregator API BFF, Signals API network-aware); shared datastores (Redis, PostgreSQL, Object Storage) and integrations (SMTP, SMS). DBs and integrations are shared across both verticals.](../../../../assets/diagrams/high-level-architecture-latest.png)
+![The Blue Dots layered architecture: Apps (Aggregator App, Signals App); Auth — a single Keycloak spanning both verticals (OIDC, shared realm and service tokens); API (Aggregator API BFF, Signals API network-aware); shared datastores (Redis, PostgreSQL, Object Storage) and integrations (SMTP, SMS). DBs and integrations are shared across both verticals.](../../../../assets/diagrams/high-level-architecture.png)
 
 ## Layer by layer
 
@@ -34,8 +34,8 @@ The Blue Dots stack is organised into clear horizontal layers, with two parallel
 
 The Aggregator vertical is an **on-ramp**: it feeds participant signals into the Signals vertical, which is the **network**. In the MVP the Aggregator writes to Signals only through controlled bulk-create paths and otherwise reads from it.
 
-{/* Editable source: src/assets/diagrams/two-verticals-one-network.excalidraw — open at https://excalidraw.com to adjust, re-export to two-verticals-one-network-latest.png. */}
+{/* Editable source: src/assets/diagrams/two-verticals-one-network.excalidraw — open at https://excalidraw.com to adjust, re-export to two-verticals-one-network.png. */}
 
-![One Keycloak (OIDC) authenticates both verticals: the Aggregator vertical (Aggregator App → Aggregator API) bulk-creates into and reads from the Signals vertical (Signals App → Signals API → Network discovery). Both share PostgreSQL, Redis and Object Storage (S3). Both verticals share one Keycloak realm.](../../../../assets/diagrams/two-verticals-one-network-latest.png)
+![One Keycloak (OIDC) authenticates both verticals: the Aggregator vertical (Aggregator App → Aggregator API) bulk-creates into and reads from the Signals vertical (Signals App → Signals API → Network discovery). Both share PostgreSQL, Redis and Object Storage (S3). Both verticals share one Keycloak realm.](../../../../assets/diagrams/two-verticals-one-network.png)
 
 Dive deeper into each vertical in [Signals DPG](/core-concepts/architecture/signals-dpg/) and [Aggregator DPG](/core-concepts/architecture/aggregator-dpg/).
