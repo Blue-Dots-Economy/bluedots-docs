@@ -34,7 +34,7 @@ This page summarises the public surface of both DPGs. It is a starting scaffold 
 ### Auth headers
 
 ```http
-x-api-key: <integrating DPG key>      # checked first; invalid ⇒ 403 INVALID_API_KEY
+authorization: Bearer <token>         # Keycloak-issued; OIDC (people) or client credentials (DPGs)
 x-acting-org-id: <acting org id>      # required on /admin/*
 ```
 
@@ -51,6 +51,15 @@ The Aggregator API (Fastify BFF on `:4000`) exposes registration/approval, profi
 | Bulk upload | Entry point for CSV/file upload; processed by the worker. |
 | Registration links | Create/track shareable self-registration links. |
 
-Common error codes include `403 MISSING_AGGREGATOR_ID` (Keycloak protocol mappers not configured) and `403 INVALID_API_KEY` (Signals service-auth).
+Common auth error codes:
+
+| Code | Meaning |
+| --- | --- |
+| `401` | Token missing, expired, or failing signature/issuer validation |
+| `403 TOKEN_ROLE_REJECTED` | Token carries none of `KEYCLOAK_REQUIRED_REALM_ROLES` |
+| `403 MISSING_AGGREGATOR_ID` | Token has no `aggregator_id` claim — the user is not attached to an aggregator |
+| `401 PEER_AUTH_FAILED` | Inter-instance peer call with a missing or invalid instance token |
+
+A client id absent from `KEYCLOAK_ACCEPTED_CLIENT_IDS` (human path) or `KEYCLOAK_SERVICE_CLIENT_IDS` (service path) is rejected — the service list is **empty by default**, so a newly registered DPG is refused until listed. See [Identity & Auth](/core-concepts/architecture/identity-and-auth/).
 
 The complete, always-current operation-by-operation reference for all three services is generated from code — see the [API Reference](/api/) section.

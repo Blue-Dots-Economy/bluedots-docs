@@ -44,8 +44,8 @@ This avoids the naive "every instance queries every other" fan-out and is the co
 
 Writes into Signals are deliberately constrained:
 
-- The **Signals UI / direct clients** create items through the authenticated session path.
-- **Integrating DPGs** (Aggregator app, voice DPG) write through **controlled bulk-create paths** using the [two-header service-auth model](/core-concepts/architecture/identity-and-auth/). In the MVP the Aggregator has no other write access to Signals.
+- The **Signals UI / direct clients** create items with a user's Keycloak token from the OIDC login.
+- **Integrating DPGs** (Aggregator app, voice DPG) write through **controlled bulk-create paths**, authenticating with a [client-credentials service token](/core-concepts/architecture/identity-and-auth/) plus `x-acting-org-id`. In the MVP the Aggregator has no other write access to Signals.
 - On write, the backend generates `item_instance_url` and `item_schema_url`; clients cannot set them.
 
 ## Reliability rules for writes and external calls

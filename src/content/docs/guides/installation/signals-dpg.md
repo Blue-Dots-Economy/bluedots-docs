@@ -12,7 +12,8 @@ next:
 ---
 
 The Signals DPG is the network-aware backend (API + UI). It runs **standalone** —
-it needs only its own Postgres + Redis, no other DPG.
+no other DPG required. Its `local-setup/` brings up everything it depends on:
+**Postgres, Redis, Keycloak and Mailpit**.
 
 - **Repository:** [Blue-Dots-Economy/signals-dpg](https://github.com/Blue-Dots-Economy/signals-dpg)
 - **Canonical local guide:** [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/signals-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) — the self-contained `local-setup/` folder is the source of truth for running locally.
@@ -26,24 +27,32 @@ Pick a track: **A — Docker-only** (fastest, one command) or **B — hybrid dev
 git clone https://github.com/Blue-Dots-Economy/signals-dpg.git
 cd signals-dpg/local-setup
 cp .env.example .env            # set SIGNALS_PII_KEY (openssl rand -base64 32)
-docker compose up -d --build
+docker compose --profile keycloak up -d --build
 ```
 
 This builds a Postgres image with **pgvector + PostGIS** (the extensions
-`db:init` needs), applies the schema, then starts the API and UI.
+`db:init` needs), applies the schema, starts Keycloak and imports the realm, then
+starts the API and UI.
 
-| Open this      | URL                                            |
-| -------------- | ---------------------------------------------- |
-| **Signals UI** | http://localhost:5173 (must be `:5173` — CORS) |
-| Signals API    | http://localhost:2742 (`/reference` = Swagger) |
+The `--profile keycloak` flag is required: Keycloak, Mailpit and the realm-import
+job are profiled services, so a plain `docker compose up -d` skips them and login
+will not work.
+
+| Open this      | URL                                                  |
+| -------------- | ---------------------------------------------------- |
+| **Signals UI** | http://localhost:5173 (must be `:5173` — CORS)       |
+| Signals API    | http://localhost:2742 (`/reference` = Swagger)       |
+| Keycloak       | http://localhost:8080 (login screen + admin console) |
+| Mailpit        | http://localhost:8025 (catches login OTP emails)     |
 
 ## Track B — hybrid dev (hot-reload)
 
-Run Postgres + Redis from `local-setup/`, then the API + UI from source:
+Run the backing services from `local-setup/`, then the API + UI from source:
 
 ```bash
 cd signals-dpg/local-setup && cp .env.example .env
-docker compose up -d postgres redis      # backing services only
+docker compose --profile keycloak up -d \
+  postgres redis keycloak keycloak-init mailpit   # backing services only
 
 cd ..                                     # repo root
 pnpm install
@@ -57,9 +66,10 @@ Full env values, resets, and troubleshooting are in the
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/signals-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) guide.
 
 :::tip
-Login uses a **test OTP** in dev (`CREATE_TEST_OTP=true`) — the code is printed
-to the API logs, so no SMS/email provider is needed. `AUTH_MIDDLEWARE_ENABLED=false`
-disables auth entirely for seed/migration scripts.
+Login goes through **Keycloak**, which sends a one-time code. Email codes land in
+**Mailpit**; phone codes print to the Keycloak container logs — no real provider
+needed. Set `AUTH_PROVIDER=keycloak` and the `KEYCLOAK_*` values in `.env` — see
+[Keycloak Setup](/guides/keycloak-setup/).
 :::
 
 Because the model is [schema-driven](/core-concepts/technical/schema-driven-model/),

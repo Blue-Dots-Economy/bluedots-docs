@@ -87,7 +87,7 @@ Kong's CRDs ship inside the vendored subchart, but Helm only installs subchart C
 
 ## Identity at runtime
 
-Keycloak (Aggregator) and Better-Auth + API keys (Signals) are covered in [Identity & Auth](/core-concepts/architecture/identity-and-auth/). One deployment-time detail: the aggregator's `global.signalstack.actingOrgId` must be set **after** Signals is deployed (it is read from the seeded `organization` table via `get-signalstack-org-id.sh`), or aggregator login fails with `SIGNALSTACK_ORG_NOT_REGISTERED`.
+Both verticals authenticate against one shared Keycloak realm — see [Identity & Auth](/core-concepts/architecture/identity-and-auth/) and the [realm reference](/core-concepts/architecture/keycloak-realm/). Keycloak is deployed in the `aggregator` namespace but serves both. One deployment-time detail: the aggregator's `global.signalstack.actingOrgId` must be set **after** Signals is deployed (it is read from the seeded `organization` table via `get-signalstack-org-id.sh`), or aggregator login fails with `SIGNALSTACK_ORG_NOT_REGISTERED`.
 
 ## Where to go next
 

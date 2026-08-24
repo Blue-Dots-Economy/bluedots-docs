@@ -12,7 +12,7 @@ A high-level view of direction. This is a scaffold — replace items with the in
 - Harden the **Signals DPG** read/write paths and inter-instance discovery.
 - Mature the **Aggregator DPG** bulk-upload and approval flows.
 - Expand **Voice-AI** capture coverage and languages.
-- Document and stabilise the **two-header service-auth** model for integrating DPGs.
+- Complete the rollout of **Keycloak client-credentials service auth** for integrating DPGs, retiring the legacy API-key path.
 
 ## Next
 
