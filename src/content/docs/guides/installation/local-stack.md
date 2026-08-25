@@ -10,8 +10,12 @@ next:
 
 Each repo ships a self-contained **`local-setup/`** folder — a `docker-compose.yml`,
 a `.env.example`, and a `LOCAL_SETUP.md` guide — that brings up the DPG **and its
-backing services** (Postgres, Redis, and, for the Aggregator, Keycloak / MinIO /
+backing services** (Postgres, Redis, Keycloak, and, for the Aggregator, MinIO /
 Mailpit). You don't wire the infra by hand; you copy an env file and run one command.
+
+Keycloak is shared: both DPGs authenticate against the same realm — one per
+network, named by `KEYCLOAK_REALM` (`bluedots` by default locally) — so it must be
+running and the realm imported before either UI will let you sign in.
 
 Both offer the same two tracks:
 
@@ -44,7 +48,7 @@ The Aggregator's `local-setup/` builds **both** repos, so clone them as
 | Signals UI         | `5173` | both                  |
 | Aggregator API     | `4000` | Aggregator (full)     |
 | Signals API        | `2742` | both                  |
-| Keycloak           | `8080` | Aggregator (full)     |
+| Keycloak           | `8080` | both                  |
 | Mailpit (email UI) | `8025` | Aggregator (full)     |
 | Postgres           | `5432` | both                  |
 | Redis              | `5555` / `6379` | Signals / Aggregator |

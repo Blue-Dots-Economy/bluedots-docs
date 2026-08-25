@@ -35,7 +35,8 @@ Representative images (Signals + Aggregator):
 | Aggregator API | `ghcr.io/blue-dots-economy/aggregator-dpg/api` |
 | Aggregator web | `ghcr.io/blue-dots-economy/aggregator-dpg/web` |
 | Aggregator worker | `ghcr.io/blue-dots-economy/aggregator-dpg/worker` |
-| Keycloak (custom) | `ghcr.io/blue-dots-economy/aggregator-dpg/keycloak-server` |
+| Keycloak server (custom) | `ghcr.io/blue-dots-economy/keycloak-server` — built in `bluedots-automation` (`dockerfiles/keycloak/`) |
+| Keycloak login theme (per network) | built in `aggregator-dpg` from `config/<network>/keycloak.env` |
 
 Third-party platform images (Postgres, Redis, cert-manager, Kong) come from their own registries and are pinned the same way.
 

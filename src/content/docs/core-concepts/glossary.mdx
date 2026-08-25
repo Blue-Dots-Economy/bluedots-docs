@@ -70,7 +70,7 @@ The vocabulary below is used consistently across the product, this documentation
   <Card title="Inter-instance fetch">
     `GET /api/v1/network/item/fetch` — count-first discovery across peers, merged and cached.
   </Card>
-  <Card title="Two-header service auth">
-    The `x-api-key` + acting-org header model used by integrating DPGs to call Signals.
+  <Card title="Service token">
+    A Keycloak client-credentials token used by an integrating DPG to call Signals, sent with an acting-org header. The client id equals the organisation's `slug`.
   </Card>
 </CardGrid>

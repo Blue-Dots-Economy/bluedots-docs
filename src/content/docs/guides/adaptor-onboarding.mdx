@@ -54,12 +54,17 @@ Decide the **network** you participate in (e.g. `blue_dot`) and the **domains** 
 
 ## Step 3 — Add the Aggregator DPG
 
-When you are ready to onboard partner organisations at scale, add the [Aggregator DPG](/guides/installation/aggregator-dpg/). Configure it to write participant signals into your Signals instance through the bulk-create paths, authenticating with the [two-header service-auth model](/core-concepts/architecture/identity-and-auth/):
+When you are ready to onboard partner organisations at scale, add the [Aggregator DPG](/guides/installation/aggregator-dpg/). Configure it to write participant signals into your Signals instance through the bulk-create paths, authenticating with a [Keycloak service token](/core-concepts/architecture/identity-and-auth/):
 
 ```http
-x-api-key: <your aggregator's API key>
+authorization: Bearer <client-credentials token>
 x-acting-org-id: <the organisation you act as>
 ```
+
+Register a confidential Keycloak client whose **client id equals your
+organisation's `slug`**, then add it to `KEYCLOAK_SERVICE_CLIENT_IDS` on the
+Signals API — it is empty by default, so a new DPG is refused until listed. See
+[Keycloak Setup](/guides/keycloak-setup/).
 
 ## Step 4 — Add capture channels
 
@@ -78,8 +83,9 @@ Run a bounded pilot in one district (as Ghaziabad and Dharwad did) and track the
 
 - [ ] Signals API + UI running, migrations applied.
 - [ ] Network schema and `SERVED_DOMAINS` defined; item types registered.
-- [ ] Aggregator DPG deployed; Keycloak protocol mappers added.
-- [ ] Service-auth API key issued and acting-org configured.
+- [ ] Keycloak realm imported; admin user created.
+- [ ] Aggregator DPG deployed.
+- [ ] Service client registered (id = org `slug`), listed in `KEYCLOAK_SERVICE_CLIENT_IDS`, acting-org configured.
 - [ ] SMTP + SMS providers connected.
 - [ ] S3 bucket + credentials provisioned for bulk upload.
 - [ ] Pilot scope and impact metrics agreed.

@@ -14,7 +14,7 @@ The **Signals DPG** is the network-aware backend at the heart of Blue Dots. It s
 - **`packages/config`** — Zod env schemas, allowed-origin lists, network-config loader. **All env vars are declared here**, never parsed ad hoc.
 - **`packages/database`** — Drizzle setup and partition-aware query helpers.
 - **`packages/schemas`** — shared Zod schemas for request bodies, admin and the schema registry.
-- **`packages/auth`, `packages/notification`, `packages/match_score`** — service clients and config.
+- **`packages/auth`, `packages/notification`, `packages/match_score`** — auth helpers (token validation, PII crypto), service clients and config.
 
 It is a **pnpm + Turborepo** monorepo; the workspace alias `@dpg/*` maps to `packages/*/src`.
 

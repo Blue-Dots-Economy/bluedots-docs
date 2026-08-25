@@ -13,7 +13,7 @@ Install these before setting up either DPG.
 | --- | --- | --- |
 | Node.js | **≥ 24** | CI pins Node 24. Node 22 works locally for the Aggregator. Use a version manager (nvm/fnm/volta). |
 | pnpm | **≥ 10** (Signals pins 11.x) | `corepack enable pnpm` or `npm i -g pnpm`. Other package managers are not supported. |
-| Docker + Compose | latest | Brings up Postgres, Redis, Keycloak and Mailpit. |
+| Docker + Compose | latest | Brings up Postgres, Redis, Keycloak and Mailpit. Keycloak is required by **both** DPGs. |
 | Git | latest | — |
 | Make | latest | The Aggregator uses a `Makefile` for one-shot setup. |
 

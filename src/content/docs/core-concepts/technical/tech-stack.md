@@ -17,7 +17,7 @@ Both DPGs are TypeScript-first **pnpm + Turborepo** monorepos that share a commo
 | ORM / DB | Drizzle + PostgreSQL (partitioned items) | Drizzle + PostgreSQL |
 | Cache / sessions / queue | Redis | Redis |
 | Object storage | S3 | S3 |
-| Auth | Better-Auth + API keys | Keycloak (OIDC) |
+| Auth | Keycloak (OIDC) — one shared realm per network | Keycloak (OIDC) — same realm |
 | Notifications | SMTP, SMS | SMTP (Mailpit local), SMS |
 
 ## Runtime & package management
@@ -25,7 +25,7 @@ Both DPGs are TypeScript-first **pnpm + Turborepo** monorepos that share a commo
 - **Node ≥ 24** (CI pins Node 24; Node 22 works locally for the Aggregator).
 - **pnpm** is required (Signals pins `pnpm@11.x`; Aggregator requires pnpm ≥ 10). Other package managers are not supported.
 - **Turbo** orchestrates `build`, `test`, `lint`, `typecheck`, `dev` topologically.
-- **Docker + Compose** brings up Postgres, Redis, and (Aggregator) Keycloak + Mailpit. S3 is a real cloud dependency, not containerised.
+- **Docker + Compose** brings up Postgres, Redis, Keycloak and Mailpit. Keycloak is shared infrastructure — both DPGs authenticate against it. S3 is a real cloud dependency, not containerised.
 
 ## Testing & quality
 

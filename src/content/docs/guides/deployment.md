@@ -111,6 +111,10 @@ bash install.sh deploy_aggregator          # redeploy with the value set
 
 Without it, aggregator login fails with `SIGNALSTACK_ORG_NOT_REGISTERED`.
 
+Keycloak deploys with the aggregator release but serves **both** verticals from
+the shared realm, so Signals logins depend on it too. Realm import and admin
+bootstrap are covered in [Keycloak Setup](/guides/keycloak-setup/).
+
 ## 5. Validate & point DNS
 
 ```bash

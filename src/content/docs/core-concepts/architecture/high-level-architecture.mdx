@@ -9,15 +9,15 @@ The Blue Dots stack is organised into clear horizontal layers, with two parallel
 
 ## The layered view
 
-{/* Editable source: src/assets/diagrams/high-level-architecture.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. */}
+{/* Editable source: src/assets/diagrams/high-level-architecture.excalidraw — open at https://excalidraw.com to adjust, re-export to high-level-architecture.png. */}
 
-![The Blue Dots layered architecture: Apps (Aggregator App, Signals App), Auth (Keycloak, Better-Auth), API (Aggregator API, Signals API), shared datastores (Redis, PostgreSQL, Object Storage) and integrations (SMTP, SMS)](../../../../assets/diagrams/high-level-architecture.png)
+![The Blue Dots layered architecture: Apps (Aggregator App, Signals App); Auth — a single Keycloak spanning both verticals (OIDC, shared realm and service tokens); API (Aggregator API BFF, Signals API network-aware); shared datastores (Redis, PostgreSQL, Object Storage) and integrations (SMTP, SMS). DBs and integrations are shared across both verticals.](../../../../assets/diagrams/high-level-architecture.png)
 
 ## Layer by layer
 
 **Apps.** Two web front-ends. The **Aggregator App** is the organisation-facing portal for onboarding and bulk upload. The **Signals App** is the schema-driven UI that renders forms and cards directly from network and item schemas.
 
-**Auth.** The two verticals use different identity systems by design: the Aggregator stack uses **Keycloak** (OIDC, realm `aggregator`), while the Signals stack uses **Better-Auth** with an additional API-key path for integrating DPGs. See [Identity & Auth](/core-concepts/architecture/identity-and-auth/).
+**Auth.** Both verticals authenticate against **one shared Keycloak realm** (named per network via `KEYCLOAK_REALM`). People sign in with the OIDC authorization-code flow on a Keycloak-hosted login screen; integrating DPGs use client-credentials service tokens. Because the realm is shared, the API checks a token's audience and realm role rather than trusting its signature alone. See [Identity & Auth](/core-concepts/architecture/identity-and-auth/).
 
 **API.** The **Aggregator API** is a Fastify backend-for-frontend that owns the aggregator database and the registration/approval/bulk-upload flows. The **Signals API** is the network-aware Fastify backend that owns items, actions, events and cross-instance discovery.
 
@@ -34,8 +34,8 @@ The Blue Dots stack is organised into clear horizontal layers, with two parallel
 
 The Aggregator vertical is an **on-ramp**: it feeds participant signals into the Signals vertical, which is the **network**. In the MVP the Aggregator writes to Signals only through controlled bulk-create paths and otherwise reads from it.
 
-{/* Editable source: src/assets/diagrams/two-verticals-one-network.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. */}
+{/* Editable source: src/assets/diagrams/two-verticals-one-network.excalidraw — open at https://excalidraw.com to adjust, re-export to two-verticals-one-network.png. */}
 
-![The Aggregator vertical (Keycloak → Aggregator App → Aggregator API) bulk-creates into and reads from the Signals vertical (Better-Auth → Signals App → Signals API → Network discovery); both verticals share PostgreSQL, Redis and Object Storage. Better-Auth will be replaced with Keycloak.](../../../../assets/diagrams/two-verticals-one-network.png)
+![One Keycloak (OIDC) authenticates both verticals: the Aggregator vertical (Aggregator App → Aggregator API) bulk-creates into and reads from the Signals vertical (Signals App → Signals API → Network discovery). Both share PostgreSQL, Redis and Object Storage (S3). Both verticals share one Keycloak realm.](../../../../assets/diagrams/two-verticals-one-network.png)
 
 Dive deeper into each vertical in [Signals DPG](/core-concepts/architecture/signals-dpg/) and [Aggregator DPG](/core-concepts/architecture/aggregator-dpg/).

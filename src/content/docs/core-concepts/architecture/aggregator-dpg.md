@@ -10,7 +10,7 @@ The **Aggregator DPG** is the aggregator-facing application of the Blue Dots eco
 ## Three deployable apps
 
 - **`api`** — Fastify backend-for-frontend. Owns the Aggregator database (Drizzle + Postgres), the Keycloak admin integration, and the registration/approval flow, bulk-upload entry point, registration links and profile endpoints. Reads the upstream Signals stack; in the MVP it has **no write access to Signals except via the bulk-create paths**. Every handler asserts `session.aggregator_id` — which is **never trusted from the client**.
-- **`web`** — Next.js 15 (App Router) portal plus its own BFF. Anonymous flows use a service-account token; authenticated flows attach the user's OIDC token. Sessions are signed cookies backed by Redis. Forms are **RJSF-driven** from JSON schemas, so non-engineers can evolve registration/profile forms without code changes.
+- **`web`** — Next.js 15 (App Router) portal plus its own BFF. Anonymous flows use an `aggregator-bff` service-account token (client-credentials); authenticated flows attach the user's OIDC token. The session cookie carries only a session id — **access tokens are never written to cookies, they live in Redis only**. Forms are **RJSF-driven** from JSON schemas, so non-engineers can evolve registration/profile forms without code changes.
 - **`worker`** — BullMQ jobs: `bulk-file-process`, `bulk-row-process`, `bulk-finalise`, `cron-watchdog`, `link-metrics-rollup`. Shares the same DB schema, S3 and the Signals writer. Cron-style jobs are watchdogged.
 
 ## Shared packages
@@ -34,4 +34,4 @@ Other non-negotiable rules: every cross-package contract is an **abstract class*
 
 ![An organisation registers and is approved, then bulk-uploads a file to S3; the worker processes it (file to rows to finalise) and hands rows to signalstack-writer, which writes to the Signals API](../../../../assets/diagrams/aggregator-dpg-data-flow.png)
 
-See [Identity & Auth](/core-concepts/architecture/identity-and-auth/) for the Keycloak setup and the service-auth handshake with Signals.
+See [Identity & Auth](/core-concepts/architecture/identity-and-auth/) for the shared realm and the service-auth handshake with Signals.

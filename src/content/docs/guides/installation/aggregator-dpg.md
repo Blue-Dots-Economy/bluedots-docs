@@ -56,11 +56,14 @@ pnpm --filter @aggregator-dpg/web dev                   # portal :3000
 ```
 
 The full guide lists the exact per-app `.env` values (Signals wiring, Keycloak
-issuer, ports).
+issuer, ports). Keycloak serves **both** DPGs from one realm, so it is shared
+infrastructure here rather than an aggregator-only service — see [Keycloak
+Setup](/guides/keycloak-setup/).
 
 :::tip
 Local mail (approval links + login OTP) is caught by **Mailpit** at
-http://localhost:8025 — no real SMTP needed. Phone OTPs print to the Keycloak logs.
+http://localhost:8025 — no real SMTP needed. Phone OTPs print to the Keycloak
+container logs. Both portals log in through the same shared realm (`KEYCLOAK_REALM`).
 :::
 
 :::note
