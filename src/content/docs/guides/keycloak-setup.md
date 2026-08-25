@@ -104,17 +104,30 @@ For each **public** client (`signals-ui`, `aggregator-portal`) update:
 and replace `localhost` / `keycloak` hostnames throughout the environment
 config. See [Deployment](/guides/deployment/).
 
-## Existing instances
+## Migrating an existing instance
 
-An instance that already has local user records needs those users present in the
-realm before its users can sign in — nothing creates a missing Keycloak identity
-on demand at login, so an unmigrated user is locked out.
+Applies to instances provisioned before the `GA-2026-08-18` release, and to any
+instance still running the legacy path. Skip this for a fresh deployment.
+
+**This is an operator-run cutover, not a self-serve upgrade.** There is no
+in-app migration and no automatic fallback: nothing creates a missing Keycloak
+identity on demand at login, so any user who is not in the realm at the moment
+you switch is locked out.
+
+Migrate every user **before** flipping the provider:
 
 ```bash
-pnpm keycloak:migrate:users                 # dry run
+pnpm keycloak:migrate:users                 # dry run — writes nothing
 pnpm keycloak:migrate:users --apply         # create the users
 pnpm keycloak:migrate:users --reconcile     # verify every local user has a match by id
 ```
 
-Run `--reconcile` until it reports a 1:1 mapping. This does not apply to a fresh
-deployment.
+Run `--reconcile` until it reports a 1:1 mapping. Only then set
+`AUTH_PROVIDER=keycloak` and restart. Create at least one admin first (step 3
+above), since the legacy admin-by-email-domain rule has no Keycloak equivalent.
+
+There is no mixed mode to stage the change through — an instance is on one
+provider or the other, so the switch happens for all users at once. If something
+goes wrong, the switch is reversible per instance: set `AUTH_PROVIDER` back and
+restart. Users created while on Keycloak can still sign in afterwards, because
+the legacy OTP login does not require a stored credential.

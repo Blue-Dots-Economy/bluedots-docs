@@ -18,6 +18,24 @@ Sharing one realm is what makes the audience checks below load-bearing: a token
 minted for the Aggregator portal carries the same issuer and the same signature
 as one minted for the Signals UI.
 
+:::note[Versions and legacy instances]
+Keycloak is the **recommended identity provider as of the `GA-2026-08-18`
+release** of both DPGs, which is where the shared realm first shipped. These
+pages describe that release and later.
+
+Instances provisioned before it run the **legacy better-auth path**, which is not
+documented here. One caveat worth checking even on a current release:
+`AUTH_PROVIDER` still ships defaulting to `betterauth`, so an instance runs the
+legacy path until it is explicitly switched to `keycloak`. If your login screen
+asks for a code without redirecting to Keycloak, you are on the legacy path — the
+docs are not wrong.
+
+**There is no self-serve migration.** Moving an existing instance across is an
+operator-run cutover: every user must exist in the realm before the switch, or
+they are locked out. See [Migrating an existing
+instance](/guides/keycloak-setup/#migrating-an-existing-instance).
+:::
+
 ## Clients
 
 | Client | Used by | Kind |
