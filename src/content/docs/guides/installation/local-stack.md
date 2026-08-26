@@ -87,6 +87,14 @@ that keeps the search index current, and a **TEI embedding server** with
 `BAAI/bge-m3` baked in. All are pulled prebuilt from public GHCR, so there is no
 extra checkout and no registry login.
 
+:::note[Apple Silicon / arm64]
+These images are published for **amd64 only**, so on an arm64 machine they run
+under emulation — the compose files pin `platform: linux/amd64` for you, without
+which the pull fails with `no matching manifest for linux/arm64/v8`. It works,
+just slower: the embedder needs roughly half a minute to warm up before it can
+serve. There is no native arm64 embedding image upstream to switch to.
+:::
+
 :::caution[It is opt-in for a reason]
 The embedding server loads a ~2.3 GB model and wants **3-4 GB of memory to
 itself**. On the Signals-only stack, budget ~4 GB on top of the base; on the

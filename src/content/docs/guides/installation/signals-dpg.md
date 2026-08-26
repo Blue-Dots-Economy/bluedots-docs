@@ -109,6 +109,12 @@ The embedding server loads a ~2.3 GB model and wants 3-4 GB to itself. That is
 why search is opt-in rather than part of the default bring-up.
 :::
 
+:::note[Apple Silicon / arm64]
+The search images are amd64-only, so they run emulated on arm64 — the compose
+pins the platform for you. Expect a slower first query; there is no native arm64
+embedder available upstream.
+:::
+
 Two required steps that are easy to miss:
 
 1. **Mint an apikey.** Search authenticates against the `apikey` table in the
