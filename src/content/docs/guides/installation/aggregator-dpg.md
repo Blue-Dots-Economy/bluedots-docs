@@ -34,6 +34,11 @@ docker compose up -d --build
 | **Aggregator portal** | http://localhost:3100                        |
 | **Signals UI**        | http://localhost:5173                        |
 | **Mailpit inbox**     | http://localhost:8025 (catches all dev mail) |
+| Signals Search        | http://localhost:3110 (only with `--profile search`) |
+
+Search is published on **`3110`** here, not `3100` — the Aggregator portal already
+owns that port. Inside the compose network it still listens on `3100`, so
+container-to-container URLs match the Signals-only stack.
 
 Full URL list, cross-DPG wiring and troubleshooting are in the
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) guide.
@@ -72,3 +77,29 @@ with `--no-verify`.
 :::
 
 Continue to [Configuration](/guides/configuration/) or the [Adaptor Onboarding](/guides/adaptor-onboarding/) walkthrough.
+
+## Adding search (relevance ranking)
+
+The unified stack runs the Signals tier too, so without search its discover
+results come back in recency order and match scores are unavailable. To add it:
+
+```bash
+cd aggregator-dpg/local-setup
+cp .env.search.example .env.search     # then mint an apikey — see §10.3 of the guide
+docker compose --profile search up -d
+```
+
+Unlike the two DPGs, which this stack builds from source, signals-search is
+pulled **prebuilt from public GHCR** — no third checkout and no registry login.
+
+:::caution[Budget ≥10 GB of Docker memory]
+This stack is already around a dozen containers, and its guide asks for ≥6 GB
+before search. The embedding server loads a ~2.3 GB model and wants 3-4 GB more.
+:::
+
+Details specific to this stack — the `3110` port, targeting the `signals`
+database rather than `aggregator`, and using the `signals-redis` instance — are in
+**§10** of the
+[`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md)
+guide. The canonical reference for signals-search's own configuration is **§7 of
+[signals-dpg's guide](https://github.com/Blue-Dots-Economy/signals-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md)**.
