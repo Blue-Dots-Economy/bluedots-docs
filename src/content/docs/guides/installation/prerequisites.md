@@ -19,7 +19,15 @@ Install these before setting up either DPG.
 
 ## Cloud / external dependencies
 
-- **AWS S3** (or an S3-compatible store) — **not** part of the local Docker stack. The API and worker hit a real bucket via an IAM role or `~/.aws/credentials`. Provision a bucket and credentials before running bulk-upload flows.
+- **Object storage** — **already in the local stack**: MinIO runs as part of
+  `local-setup` (S3 API on `9000`, console on `9001`) and its bucket is created
+  automatically, so bulk-upload flows work locally with no AWS account. A real
+  **AWS S3** bucket, reached via an IAM role or `~/.aws/credentials`, is a
+  deploy-time concern only.
+- **A Docker Hub account** — the app images build from Docker Hardened Images,
+  so Track A needs `docker login dhi.io`. Track B does not.
+- **openssl** — used by `gen-secrets.sh` to generate local secrets. Pre-installed
+  on macOS and most Linux distributions.
 - **SMS provider** — required for OTP and notifications in non-trivial deployments. A no-op/sandbox provider is fine for local development.
 
 ## Verify your setup

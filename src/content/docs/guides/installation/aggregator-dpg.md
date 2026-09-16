@@ -24,7 +24,9 @@ git clone https://github.com/Blue-Dots-Economy/aggregator-dpg.git
 git clone https://github.com/Blue-Dots-Economy/signals-dpg.git   # sibling — required
 
 cd aggregator-dpg/local-setup
+docker login dhi.io                                   # app images build FROM dhi.io
 cp .env.example .env                                  # set ADMIN_EMAILS
+./gen-secrets.sh                                      # fills every CHANGE_ME_* value
 echo "127.0.0.1 keycloak" | sudo tee -a /etc/hosts    # OIDC issuer must resolve
 docker compose up -d --build
 ```
@@ -35,6 +37,20 @@ docker compose up -d --build
 | **Signals UI**        | http://localhost:5173                        |
 | **Mailpit inbox**     | http://localhost:8025 (catches all dev mail) |
 | Signals Search        | http://localhost:3110 (only with `--profile search`) |
+| MinIO console         | http://localhost:9001 (S3 API on `9000`)     |
+
+:::caution[Two steps that are easy to miss]
+**`docker login dhi.io`** — the api, web and worker images build `FROM
+dhi.io/...` (Docker Hardened Images), which refuse anonymous pulls. Without it
+`docker compose up -d --build` fails at the first `FROM` with `401
+Unauthorized`. Any Docker Hub account works. Track B needs no login — it builds
+no app images.
+
+**`./gen-secrets.sh`** — `.env.example` ships seven `CHANGE_ME_*` placeholders.
+They are *set*, so compose starts happily and the apps then crash-loop on their
+own guards (`SESSION_KEY` and `APPROVAL_TOKEN_SECRET` are length-checked;
+`SIGNALS_PII_KEY` must be base64). Run it right after the `cp`.
+:::
 
 Search is published on **`3110`** here, not `3100` — the Aggregator portal already
 owns that port. Inside the compose network it still listens on `3100`, so
@@ -49,6 +65,8 @@ Run the backing services in Docker and the apps from source:
 
 ```bash
 cd aggregator-dpg/local-setup && cp .env.example .env
+./gen-secrets.sh                                        # fills every CHANGE_ME_*
+echo "127.0.0.1 keycloak" | sudo tee -a /etc/hosts      # needed for Track B too
 docker compose up -d postgres signals-redis aggregator-redis \
   keycloak keycloak-init mailpit minio minio-init      # infra only
 

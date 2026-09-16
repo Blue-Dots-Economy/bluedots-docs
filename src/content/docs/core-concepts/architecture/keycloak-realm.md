@@ -14,7 +14,8 @@ its name comes from `KEYCLOAK_REALM` — `bluedots`, `yellowdots`, `purpledots`.
 Examples below use `bluedots`; substitute your own.
 
 The realm is defined as JSON and imported, not configured by hand. Signals keeps
-a template at `infra/keycloak/realms/bluedots-realm.json` which `render-realm.sh`
+a template — `infra/keycloak/realms/bluedots-realm.json` in signals-dpg,
+`infra/keycloak/realms/realm.json` in aggregator-dpg — which `render-realm.sh`
 expands per deployment, stamping in the realm name and brand.
 
 ## Clients
@@ -39,6 +40,7 @@ can call itself.
 | --- | --- |
 | `signals_participant` | A person who can hold items and take actions |
 | `signals_admin` | Administrative access to Signals |
+| `org_owner` | Parent-org owner; granted at org approval. Present even when `ORG_HIERARCHY_ENABLED=false` |
 
 At least one of these must be present on a human token — see
 `KEYCLOAK_REQUIRED_REALM_ROLES`.
