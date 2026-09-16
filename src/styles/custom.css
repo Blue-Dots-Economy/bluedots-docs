@@ -218,3 +218,26 @@ main h1#_top,
 .dot-name--brown {
   color: var(--dot-brown);
 }
+
+/* ---------------------------------------------------------------------------
+ * TEMPORARY review marker — adopter-guide PDF integration.
+ * Flags sections added or rewritten from "Answers to questions on Blue Dots
+ * initiative". Remove this block and every `.bd-new` span once the content has
+ * been manually verified:
+ *   grep -rn 'bd-new' src/
+ * ------------------------------------------------------------------------- */
+.bd-new {
+  display: inline-block;
+  margin-block: 0.15rem;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--sl-color-green-high, #4ade80);
+  border-radius: 999px;
+  background: var(--sl-color-green-low, rgba(74, 222, 128, 0.15));
+  color: var(--sl-color-green-high, #166534);
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
