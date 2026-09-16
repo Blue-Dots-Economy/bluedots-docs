@@ -58,7 +58,9 @@ up and resend. Two recoveries exist:
 - **An expired grant is self-healing** — opening it and submitting mints a fresh
   link and emails it to the organisation's registered owner address.
 - **Re-submitting the organisation registration** with the same owner email
-  re-sends the link. Mail always goes to the **stored** owner address, never the
+  re-sends the link. This path is rate-limited per owner address, so a rapid
+  second attempt is refused with a `Retry-After` rather than a fresh mail —
+  every admitted call mints another live 90-day credential. Mail always goes to the **stored** owner address, never the
   address on the new submission — that endpoint is anonymous, so honouring the
   submitted address would hand a stranger the organisation's credential.
 
