@@ -27,7 +27,9 @@ Pick a track: **A — Docker-only** (fastest, one command) or **B — hybrid dev
 ```bash
 git clone https://github.com/Blue-Dots-Economy/signals-dpg.git
 cd signals-dpg/local-setup
+docker login dhi.io             # app images build FROM dhi.io
 cp .env.example .env            # set SIGNALS_PII_KEY (openssl rand -base64 32)
+echo "INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)" >> .env
 docker compose --profile keycloak up -d --build
 ```
 
@@ -50,7 +52,7 @@ docker compose --profile keycloak --profile search up -d --build
 | Open this      | URL                                                  |
 | -------------- | ---------------------------------------------------- |
 | **Signals UI** | http://localhost:5173 (must be `:5173` — CORS)       |
-| Signals API    | http://localhost:2742 (`/reference` = Swagger)       |
+| Signals API    | http://localhost:2742 (`/api/reference` = Swagger)   |
 | Keycloak       | http://localhost:8080 (login screen + admin console) |
 | Mailpit        | http://localhost:8025 (catches login OTP emails)     |
 | Signals Search | http://localhost:3100 (only with `--profile search`) |
@@ -61,6 +63,7 @@ Run the backing services from `local-setup/`, then the API + UI from source:
 
 ```bash
 cd signals-dpg/local-setup && cp .env.example .env
+echo "INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)" >> .env
 docker compose --profile keycloak up -d \
   postgres redis keycloak keycloak-init mailpit   # backing services only
 

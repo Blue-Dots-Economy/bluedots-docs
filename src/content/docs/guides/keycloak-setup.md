@@ -16,15 +16,30 @@ example.
 ## 1. Render and import the realm
 
 The realm is imported from JSON, not clicked together in the admin console.
-Signals keeps the template at `infra/keycloak/realms/bluedots-realm.json`:
+Signals keeps its template at `infra/keycloak/realms/bluedots-realm.json`; the
+aggregator's is `infra/keycloak/realms/realm.json`.
 
 ```bash
-# expand the template for this deployment
-./infra/keycloak/render-realm.sh
-
-# Keycloak imports the rendered file on first boot
+# both happen automatically — render-realm.sh is the Keycloak container's
+# entrypoint, so you only set the env vars it reads (PUBLIC_BASE_URL, ...)
 docker compose up -d keycloak
 ```
+
+:::caution[Don't run these on the host]
+`render-realm.sh` is the container ENTRYPOINT, not a host script: it reads
+`/opt/keycloak/data/import-template`, writes `/opt/keycloak/data/import`, and
+ends by exec'ing `kc.sh`. Run from a shell it fails on the missing
+`PUBLIC_BASE_URL` and then on the missing Keycloak paths. The same applies to
+`init/apply-user-profile.sh`, which the `keycloak-init` sidecar runs for you.
+
+**The realm JSON is read on first import only.** Changing `PUBLIC_BASE_URL`
+later needs `docker compose down -v`, or an edit in the admin console.
+
+**For the full ecosystem, import the aggregator's realm** — it is the superset
+(8 clients including `aggregator-portal`, plus the `org_owner` role) where
+signals' has 4. Bring up the signals-only stack first against a shared Keycloak
+and the portal has no client to authenticate against.
+:::
 
 Then apply the declarative user-profile configuration, which the import does not
 cover:
@@ -67,10 +82,10 @@ explicit operator action:
 
 ```bash
 # dry run — writes nothing
-pnpm keycloak:create:admin --email=ops@example.org --name="Ops"
+pnpm --filter api keycloak:create:admin --email=ops@example.org --name="Ops"
 
 # actually create
-pnpm keycloak:create:admin --email=ops@example.org --name="Ops" --apply
+pnpm --filter api keycloak:create:admin --email=ops@example.org --name="Ops" --apply
 ```
 
 Use `--phone=+919876543210` instead of `--email` to drive the phone OTP channel.
@@ -117,9 +132,9 @@ you switch is locked out.
 Migrate every user **before** flipping the provider:
 
 ```bash
-pnpm keycloak:migrate:users                 # dry run — writes nothing
-pnpm keycloak:migrate:users --apply         # create the users
-pnpm keycloak:migrate:users --reconcile     # verify every local user has a match by id
+pnpm --filter api keycloak:migrate:users                 # dry run — writes nothing
+pnpm --filter api keycloak:migrate:users --apply         # create the users
+pnpm --filter api keycloak:migrate:users --reconcile     # verify every local user has a match by id
 ```
 
 Run `--reconcile` until it reports a 1:1 mapping. Only then set
