@@ -5,10 +5,10 @@ sidebar:
   order: 2
 prev:
   link: /explore/use-cases/
-  label: "Path 3 of 6: Use Cases"
+  label: "Path 3 of 7: Use Cases"
 next:
-  link: /explore/economics/
-  label: "Path 5 of 6: The Economics of Local Discovery"
+  link: /explore/learnings/
+  label: "Path 5 of 7: What We're Learning"
 ---
 
 import StatCard from '../../../components/StatCard.astro';
@@ -23,7 +23,7 @@ The answer was unambiguous. The pilots **revealed**, rather than created, demand
   <StatCard value="10,000+" label="Local job openings per district, from < 10% of SMBs" color="blue" />
   <StatCard value="20,000+" label="Seekers structured across two districts in just 2 weeks" color="green" />
   <StatCard value="2–3 min" label="To become digitally discoverable via voice AI on any phone" color="accent" />
-  <StatCard value="> 50%" label="Placement conversion in targeted drives (vs < 10% at job fairs)" color="green" />
+  <StatCard value="~50%" label="Placement conversion in targeted drives, vs ~5% at conventional drives" color="green" />
   <StatCard value="< ₹10" label="Per interaction (voice AI) vs ₹500+ for traditional field survey" color="purple" />
 </StatGrid>
 
@@ -41,9 +41,45 @@ Voice-enabled Blue Dotting reduced intent capture to **2–3 minutes per person*
 
 ## Outcomes
 
-- Placement conversion rose from **under 10%** at typical job fairs to **over 50%** in targeted placement drives.
+- Placement conversion rose from **around 5%** at conventional placement drives and job fairs to **around 50%** in targeted, digitally enabled drives, where both candidates and jobs are Blue-Dotted before the event.
 - Time to discover a relevant candidate fell from **more than 2 weeks to under 2 days**.
 - Jobs that once required long commutes — often to another city — were now **within 2 bus stops**.
+
+## The lifecycle in practice
+
+<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
+
+Both districts ran the same [seven-step lifecycle](/core-concepts/blue-dot-lifecycle/) — one cohort of job seekers, one of job providers, reaching them by different routes.
+
+### Dharwad — electrician graduates from ITI Dharwad
+
+ITI Dharwad trains electricians every year, but its graduates had no way of being found by employers beyond word of mouth. The institute became the **aggregator** for the batch.
+
+| Step | What happened |
+|---|---|
+| 1. To Become a Blue Dot | The district identified ITI Dharwad as the aggregator with direct reach to a graduating batch of electricians — real skills, no digital visibility |
+| 2. Route in | **Assisted** — the institute already held student records |
+| 3. Data collection | **Bulk upload** of the whole batch at once, rather than student by student |
+| 4. Profile completion | Each graduate reached by **AI Voice Agent** — a short call, at a fraction of the cost of a manual survey, confirming role preferences, location and trade skills. The webapp stayed available for students who preferred it |
+| 5. Blue Dot checks | Each profile checked automatically for structured, complete, consented |
+| 6. Blue Dot Verified | ITI Dharwad reviewed and confirmed the batch on the Aggregator DPG |
+| 7. Live Blue Dot | Each electrician a live, discoverable job seeker — local manufacturers could find exactly this skill set for the first time, instead of relying on informal referrals |
+
+### Ghaziabad — an MSME association converting job openings into Blue Dots
+
+Ghaziabad's manufacturing MSMEs had jobs to fill, often circulating only by word of mouth for months. A local MSME association took on the **aggregator** role for its member businesses.
+
+| Step | What happened |
+|---|---|
+| 1. To Become a Blue Dot | The Ghaziabad administration, with UPSDM and the DIC, identified the MSME association as best placed to reach its manufacturing members |
+| 2. Route in | **Assisted** — an onboarding drive at a member gathering, since many owners would not have registered on their own |
+| 3. Data collection | An **inbound campaign** — members scanned a shared QR code and registered their open roles on the spot |
+| 4. Profile completion | Each business completed its listing — role, requirements, location — through the AI Voice Agent or the webapp |
+| 5. Blue Dot checks | Each listing checked automatically for structured, complete, consented |
+| 6. Blue Dot Verified | The association reviewed and confirmed new listings on the Aggregator DPG |
+| 7. Live Blue Dot | Each opening a live, discoverable Blue Dot |
+
+Across the district, this conversion took the pilot from **under 100 jobs visible on national platforms to over 10,000 local openings** surfaced from under 10% of MSMEs — with discovery time falling from over two weeks to under two days.
 
 ## Before / After
 
@@ -53,7 +89,7 @@ Voice-enabled Blue Dotting reduced intent capture to **2–3 minutes per person*
   { dimension: "Time to become digitally discoverable", before: "Multiple touchpoints, physical presence required", after: "2–3-minute voice conversation on any phone" },
   { dimension: "Speed of surfacing job seekers", before: "Weeks of physical mobilisation, camps and job fairs", after: "20,000+ surfaced across two districts in 2 weeks" },
   { dimension: "Time to discover a relevant candidate", before: "> 2 weeks", after: "< 2 days" },
-  { dimension: "Placement conversion", before: "< 10% at job fairs", after: "> 50% in targeted placement drives" },
+  { dimension: "Placement conversion", before: "~5% at conventional drives and job fairs", after: "~50% in targeted placement drives" },
   { dimension: "Distance to employment", before: "Long commutes, often to another city", after: "Within 2 bus stops" }
 ]} />
 
@@ -83,5 +119,5 @@ See [The Economics of Local Discovery](/explore/economics/) for the underlying m
 :::
 
 :::note
-Figures on this page are drawn from the initiative's published pilot results (white paper, pp. 2, 12–13). Update them as new pilot data is reported.
+Figures on this page are drawn from the initiative's published pilot results (white paper, pp. 2, 12–13) and from *Answers to questions on Blue Dots initiative*, which supersedes the earlier placement-conversion figures. Update them as new pilot data is reported. <span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
 :::

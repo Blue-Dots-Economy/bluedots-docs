@@ -2,7 +2,7 @@
 title: Adaptor Onboarding
 description: The end-to-end path for an adaptor to stand up Blue Dots for a district or domain.
 sidebar:
-  order: 5
+  order: 3
 ---
 
 import PhaseTimeline from '../../../components/PhaseTimeline.astro';
@@ -69,11 +69,19 @@ Signals API — it is empty by default, so a new DPG is refused until listed. Se
 ## Step 4 — Add capture channels
 
 - **Web** — the schema-driven Signals UI and the Aggregator portal.
-- **Voice AI** — for low-cost, local-language signal capture. A voice DPG integrates the same way an aggregator does (service-auth + bulk create).
+- **Voice AI** — for low-cost, local-language signal capture. A voice DPG integrates the same way an aggregator does (service-auth + bulk create). Ready-made prompt sets are published as DPGs — see [AI Voice Agent Prompts](/guides/voice-ai-prompts/). <span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
+
+On the assisted side, pick the intake method per campaign — offline camp, bulk upload, outbound campaign or inbound QR campaign. All four ship ready-made; see [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#3-data-collection-assisted-route). <span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
 
 ## Step 5 — Integrate notifications
 
 Wire **SMTP** (email) and an **SMS** provider for OTP, confirmations and match notifications. Mailpit covers email locally.
+
+## Step 5b — Make it yours
+
+<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
+
+Branding, operational settings, dashboards and a public landing page are configuration and presentation layers — none of them require touching Signals or Aggregator. See [Customisation & Branding](/guides/customisation/).
 
 ## Step 6 — Pilot and measure
 
@@ -88,4 +96,6 @@ Run a bounded pilot in one district (as Ghaziabad and Dharwad did) and track the
 - [ ] Service client registered (id = org `slug`), listed in `KEYCLOAK_SERVICE_CLIENT_IDS`, acting-org configured.
 - [ ] SMTP + SMS providers connected.
 - [ ] S3 bucket + credentials provisioned for bulk upload.
+- [ ] Branding applied (`brand.json`, UI theme, Keycloak login theme). <span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
+- [ ] Route in (assisted / self) and intake method chosen per campaign. <span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
 - [ ] Pilot scope and impact metrics agreed.

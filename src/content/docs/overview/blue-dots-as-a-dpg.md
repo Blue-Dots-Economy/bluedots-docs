@@ -44,6 +44,31 @@ The **aggregator-facing application** that lets organisations onboard participan
 
 See [Core Concepts → Aggregators](/core-concepts/aggregators/) and [Architecture → Aggregator DPG](/core-concepts/architecture/aggregator-dpg/).
 
+### Where each one does its work
+
+<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
+
+The two DPGs divide the [seven-step lifecycle](/core-concepts/blue-dot-lifecycle/) between them:
+
+| DPG | What it does | Where it shows up in the lifecycle |
+|---|---|---|
+| **Signals** | Core registration, discovery and connection | Profile completion (step 4), verification checks (step 5), going live (step 7) |
+| **Aggregator** | Onboarding and tracking for partner organisations and teams | Assisted data collection (step 3), verification review (step 6), ongoing tracking after go-live |
+
+## Supporting blocks, also ready to use
+
+<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
+
+Alongside the two DPGs, an adaptor inherits a set of ready-made supporting pieces — none of which need to be built:
+
+- **Discovery & connection** — finds and ranks relevant matches, including by location.
+- **Notifications** — Email, SMS and WhatsApp.
+- **A shared rulebook** — common rules applied consistently across deployments.
+- **Setup automation** — [infrastructure and deployment](/guides/deployment/) stood up quickly, on AWS out of the box and adaptable to other clouds.
+- **Voice agent prompts** — [published as DPGs](/guides/voice-ai-prompts/), platform-independent.
+- **Participant profiles** — [three types already defined](/core-concepts/participant-profiles/).
+- **Full documentation** — this site.
+
 ## How adaptors start
 
 A typical adoption path:

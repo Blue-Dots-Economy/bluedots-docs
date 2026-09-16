@@ -2,7 +2,7 @@
 title: Configuration
 description: How configuration-as-code works across the Blue Dots DPGs, and where each value lives.
 sidebar:
-  order: 6
+  order: 5
 ---
 
 Blue Dots follows strict **configuration discipline**: no domain- or environment-specific value is hardcoded. Values are read once at startup from a config loader or environment, with per-environment overrides.

@@ -2,7 +2,7 @@
 title: Keycloak Setup
 description: Stand up your network's Keycloak realm — import, admin bootstrap, registering an integrating DPG, and the two base URLs.
 sidebar:
-  order: 6
+  order: 4
 ---
 
 Operator guide for a network's shared Keycloak realm. For what the realm

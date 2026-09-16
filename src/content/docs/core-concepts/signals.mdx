@@ -35,6 +35,16 @@ The network's job is to discover and connect compatible seekers and providers th
 Every signal — every Blue Dot — exists only because the person or organisation it represents chose to publish it. A signal becomes digital, and is then discovered and exchanged across the network, solely by the choice of the seeker or provider behind it. Consent is not an add-on to the model; it is the reason a signal exists at all.
 </Aside>
 
+### Contact details are shared on connection, not on discovery
+
+<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
+
+Discovery surfaces that a relevant match **exists**. It does not hand over phone numbers.
+
+Personal contact details are released only once **both parties agree to connect** — enforced in the network schema itself, where each action interaction declares `reveals_pii_on_status`, listing the statuses at which PII becomes visible. In the reference `blue_dot` network that status is `accepted`, on every interaction.
+
+This is what makes a Blue Dot safe to publish: being discoverable is not the same as being contactable.
+
 ## How a signal moves through the network
 
 1. **Create** — a signal is created (directly, by voice, or via an aggregator) and stored as an item in an instance.
@@ -48,4 +58,6 @@ This count-first, fetch-only-what-matters approach is what lets discovery scale 
 
 - **Direct** — a citizen or enterprise creates a Blue Dot through a web or voice interface.
 - **Voice AI** — signals are captured conversationally, in local languages, at a fraction of survey cost.
-- **Aggregators** — organisations bulk-create signals for the participants they onboard, via the [Aggregator DPG](/core-concepts/aggregators/).
+- **Aggregators** — organisations bulk-create signals for the participants they onboard, via the [Aggregator DPG](/core-concepts/aggregators/). Four intake methods ship ready-made: offline camp, bulk upload, outbound campaign and inbound QR campaign. <span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
+
+For the full journey from "who should become a Blue Dot" to a live, verified, discoverable entry, see [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/). <span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
