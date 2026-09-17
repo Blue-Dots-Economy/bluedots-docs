@@ -19,11 +19,13 @@ Install these before setting up either DPG.
 
 ## Cloud / external dependencies
 
-None of these run in the local Docker stack. Most have a free or key-less fallback, so a first local run needs almost nothing — the **Local dev** column says what you can skip.
+Most of these have a free, key-less or already-local fallback, so a first local run needs almost nothing — the **Local dev** column says what you actually have to set up.
 
 | Dependency | What it's for | Local dev |
 | --- | --- | --- |
-| **AWS S3** (or S3-compatible) | Bulk-upload objects. The API and worker hit a real bucket via an IAM role or `~/.aws/credentials`. | Required before running bulk-upload flows |
+| **Object storage** (MinIO / AWS S3) | Bulk-upload objects. | **Already in the local stack** — MinIO runs as part of `local-setup` (S3 API on `9000`, console on `9001`) and its bucket is created automatically, so bulk upload works with no AWS account. A real S3 bucket, reached via an IAM role or `~/.aws/credentials`, is a deploy-time concern only. |
+| **Docker Hub account** | The app images build from Docker Hardened Images. | Required for **Track A** — `docker login dhi.io`. Track B does not need it. |
+| **openssl** | `gen-secrets.sh` generates local secrets with it. | Pre-installed on macOS and most Linux distributions |
 | **SMS provider** (MSG91) | OTP and SMS notifications. Supplies `MSG91_AUTH_KEY`, `MSG91_TEMPLATE_ID`, `MSG91_SENDER_ID`. | Optional — `CREATE_TEST_OTP=true` issues a test OTP |
 | **SMTP** | Transactional email — OTP, approvals, admin alerts. Gmail needs a 16-character **App Password**, not the account password. | Optional — Mailpit catches mail locally |
 | **Google Maps API key** (browser) | Rendering Google Maps in the Signals UI. Required only when `VITE_MAP_PROVIDER=google-maps`. Set as `VITE_GOOGLE_MAPS_API_KEY`. | Optional — the default provider is Leaflet |
