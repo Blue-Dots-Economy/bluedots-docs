@@ -2,7 +2,7 @@
 title: API Reference
 description: Reference for the Signals and Aggregator endpoints, auth headers and error conventions.
 sidebar:
-  order: 7
+  order: 8
 prev:
   link: /guides/installation/signals-dpg/
   label: "Path 8 of 9: Signals DPG Setup"

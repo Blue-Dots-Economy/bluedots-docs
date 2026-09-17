@@ -2,7 +2,7 @@
 title: Glossary
 description: Precise definitions of the Blue Dots vocabulary, used identically in product, docs and code.
 sidebar:
-  order: 5
+  order: 7
 ---
 
 import { CardGrid, Card } from '@astrojs/starlight/components';
@@ -36,7 +36,33 @@ The vocabulary below is used consistently across the product, this documentation
   <Card title="Seeker / Provider">
     The demand side and supply side of a signal — e.g. a jobseeker (seeker) and a local employer (provider).
   </Card>
+  <Card title="Service Provider">
+    An organisation delivering a support service around the job-seeking process — training, counselling, assessment, placement assistance. The third participant type, served by the `service_provider` domain.
+  </Card>
+  <Card title="Blue Dot Verified">
+    The state a profile reaches after a person — the adaptor or the aggregator — reviews and confirms it. The one human-in-the-loop step in the lifecycle.
+  </Card>
+  <Card title="Assisted route">
+    Onboarding where the adaptor or field team brings a participant in on their behalf.
+  </Card>
+  <Card title="Self route">
+    Onboarding where the participant starts the process themselves.
+  </Card>
+  <Card title="Intake method">
+    How data is collected on the assisted route: offline camp, bulk upload, outbound campaign, or inbound QR campaign.
+  </Card>
+  <Card title="AI Voice Agent">
+    The call-based, local-language channel for completing a profile. The primary self-service channel; its prompts are published as DPGs.
+  </Card>
+  <Card title="Blue Dot Webapp">
+    The self-serve web app built on the Signals DPG — the fallback channel for participants who prefer typing to speaking.
+  </Card>
+  <Card title="Adaptor (a.k.a. adopter / anchor adopter)">
+    The organisation deploying Blue Dots for a district, state or domain. These docs use **adaptor** throughout; *adopter* and *anchor adopter* mean the same role.
+  </Card>
 </CardGrid>
+
+<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span> Entries from *Service Provider* onwards were added from the adopter guide.
 
 ## Platform
 

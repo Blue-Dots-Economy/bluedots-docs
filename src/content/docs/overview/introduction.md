@@ -35,6 +35,21 @@ Blue Dots is delivered as **Digital Public Goods (DPGs)** — open, reusable bui
 
 Adaptors typically *start with Signals*, then add the Aggregator app as they onboard partner organisations. The rest of this documentation walks through both.
 
+## What an adaptor actually does
+
+<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
+
+Mostly **configuration, not construction.** Registration, discovery, connection, notifications and tracking already exist. So do the pieces an adaptor might expect to design from scratch:
+
+- **Participant types** — Job Seeker, Job Provider and Service Provider are [already defined](/core-concepts/participant-profiles/).
+- **Onboarding routes** — assisted or self-serve, via app or AI voice call, [both supported out of the box](/core-concepts/blue-dot-lifecycle/#2-choose-the-route-in).
+- **Verification checks** — structured, completed and consented, [built in](/core-concepts/blue-dot-lifecycle/#5-verification-checks).
+- **Deployment** — [automated on AWS](/guides/deployment/), adaptable to any major cloud.
+
+> The adaptor brings local knowledge and a local ecosystem to reach providers and seekers. The DPGs bring the underlying machinery.
+
+What is genuinely local — who should become a Blue Dot, which aggregators can reach them, which use case to start with — is exactly what [the lifecycle](/core-concepts/blue-dot-lifecycle/) and the [district activation guide](/guides/district-activation/) walk through.
+
 ## How this documentation is organised
 
 | Section | What you'll find |
@@ -42,7 +57,7 @@ Adaptors typically *start with Signals*, then add the Aggregator app as they onb
 | [Overview](/overview/introduction/) | The vision, the problem, the approach, and the DPG model. |
 | [Core Concepts](/core-concepts/) | Signals, aggregators, the domain vocabulary, architecture and technical docs. |
 | [Guides](/guides/) | Installation, adaptor onboarding, configuration, API reference and deployment. |
-| [Explore](/explore/use-cases/) | Pilots, use cases and the road beyond livelihoods. |
+| [Explore](/explore/use-cases/) | Pilots, use cases, field learnings and the road beyond livelihoods. |
 | [Community](/community/contributing/) | How to contribute, the roadmap and release notes. |
 
 :::note
