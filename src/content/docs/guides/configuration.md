@@ -25,7 +25,10 @@ Two places must change **together**, or you'll hit the classic "works locally, f
 
 ## Adding an environment variable (Aggregator)
 
-Add it to the config loader's schema. Remember `NEXT_PUBLIC_*` values are **baked at compile time** in the web app — after changing one, rebuild the web image (`make rebuild-web`) rather than just restarting.
+Add it to the config loader's schema. The aggregator web image deliberately
+takes **no `NEXT_PUBLIC_*` build args** (see the comment in
+`apps/web/Dockerfile`), so those values are read at runtime: an env change
+applies on a plain restart. `make rebuild-web` is for web **code** changes.
 
 ## Evolving forms without code
 
