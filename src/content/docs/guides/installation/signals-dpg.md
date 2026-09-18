@@ -28,10 +28,23 @@ Pick a track: **A — Docker-only** (fastest, one command) or **B — hybrid dev
 git clone https://github.com/Blue-Dots-Economy/signals-dpg.git
 cd signals-dpg/local-setup
 docker login dhi.io             # app images build FROM dhi.io
-cp .env.example .env            # set SIGNALS_PII_KEY (openssl rand -base64 32)
-echo "INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)" >> .env
+cp .env.example .env            # ships working dev values for both secrets below
 docker compose --profile keycloak up -d --build
 ```
+
+`.env.example` already sets `INSTANCE_SHARED_SECRET` and `SIGNALS_PII_KEY`, so the
+stack starts as copied. Rotate them **in place** on anything reachable beyond
+localhost — replace the existing line, never append a second one:
+
+```bash
+# macOS/BSD sed. On Linux, drop the '' that follows -i.
+sed -i '' "s|^INSTANCE_SHARED_SECRET=.*|INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)|" .env
+sed -i '' "s|^SIGNALS_PII_KEY=.*|SIGNALS_PII_KEY=$(openssl rand -base64 32)|" .env
+```
+
+Appending with `>>` gives the file two definitions of the same key, and — because
+`>>` writes no leading newline — silently joins onto the last line when the file
+does not end in one, producing two broken variables and no error.
 
 This builds a Postgres image with **pgvector + PostGIS** (the extensions
 `db:init` needs), applies the schema, starts Keycloak and imports the realm, then
@@ -62,8 +75,7 @@ docker compose --profile keycloak --profile search up -d --build
 Run the backing services from `local-setup/`, then the API + UI from source:
 
 ```bash
-cd signals-dpg/local-setup && cp .env.example .env
-echo "INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)" >> .env
+cd signals-dpg/local-setup && cp .env.example .env   # secrets already set, see Track A
 docker compose --profile keycloak up -d \
   postgres redis keycloak keycloak-init mailpit   # backing services only
 
@@ -74,6 +86,30 @@ pnpm db:push:api && pnpm db:init:api      # schema + extensions/tables
 pnpm dev:api                              # API on :2742  (terminal 1)
 pnpm dev:ui                               # UI  on :5173  (terminal 2)
 ```
+
+### Secrets in the root `.env`
+
+The root `.env` is a **separate file** from `local-setup/.env` — rotating one does
+not touch the other. Two entries there carry secrets:
+
+```ini
+INSTANCE_SHARED_SECRET=<openssl rand -hex 32>    # min 32 chars
+SIGNALS_PII_KEY=<openssl rand -base64 32>        # must decode to exactly 32 bytes
+```
+
+`.env.example` ships a value for each, but `INSTANCE_SHARED_SECRET` is a published
+CI placeholder (`ci-instance-shared-secret-at-least-32-chars`) — long enough to
+pass validation, so nothing will warn you. Replace both lines in place:
+
+```bash
+# macOS/BSD sed. On Linux, drop the '' that follows -i.
+sed -i '' "s|^INSTANCE_SHARED_SECRET=.*|INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)|" .env
+sed -i '' "s|^SIGNALS_PII_KEY=.*|SIGNALS_PII_KEY=$(openssl rand -base64 32)|" .env
+```
+
+`SIGNALS_PII_KEY` must be base64 that decodes to **exactly 32 bytes** — `openssl
+rand -base64 32` produces that; a hand-typed string almost never will, and the API
+refuses to boot on a wrong-length key.
 
 Full env values, resets, and troubleshooting are in the
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/signals-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) guide.
