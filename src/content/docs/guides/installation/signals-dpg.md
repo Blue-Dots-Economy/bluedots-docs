@@ -28,8 +28,10 @@ Pick a track: **A — Docker-only** (fastest, one command) or **B — hybrid dev
 git clone https://github.com/Blue-Dots-Economy/signals-dpg.git
 cd signals-dpg/local-setup
 docker login dhi.io             # app images build FROM dhi.io
-cp .env.example .env            # set SIGNALS_PII_KEY (openssl rand -base64 32)
-echo "INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)" >> .env
+cp .env.example .env            # ships working dev values for both secrets
+# Rotate them in place (macOS/BSD sed; on Linux drop the '' after -i).
+sed -i '' "s|^INSTANCE_SHARED_SECRET=.*|INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)|" .env
+sed -i '' "s|^SIGNALS_PII_KEY=.*|SIGNALS_PII_KEY=$(openssl rand -base64 32)|" .env
 docker compose --profile keycloak up -d --build
 ```
 
@@ -63,13 +65,16 @@ Run the backing services from `local-setup/`, then the API + UI from source:
 
 ```bash
 cd signals-dpg/local-setup && cp .env.example .env
-echo "INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)" >> .env
+sed -i '' "s|^INSTANCE_SHARED_SECRET=.*|INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)|" .env
 docker compose --profile keycloak up -d \
   postgres redis keycloak keycloak-init mailpit   # backing services only
 
 cd ..                                     # repo root
 pnpm install
 cp .env.example .env                      # point at the Docker DB/Redis (see the guide)
+# Root .env is a separate file from local-setup/.env — rotate its secrets too:
+#   SIGNALS_PII_KEY=<openssl rand -base64 32>       # must decode to exactly 32 bytes
+sed -i '' "s|^SIGNALS_PII_KEY=.*|SIGNALS_PII_KEY=$(openssl rand -base64 32)|" .env
 pnpm db:push:api && pnpm db:init:api      # schema + extensions/tables
 pnpm dev:api                              # API on :2742  (terminal 1)
 pnpm dev:ui                               # UI  on :5173  (terminal 2)
