@@ -186,6 +186,8 @@ export default defineConfig({
           items: [
             { label: 'Overview', slug: 'core-concepts' },
             { label: 'Signals (Blue Dots)', slug: 'core-concepts/signals' },
+            { label: 'The Blue Dot Lifecycle', slug: 'core-concepts/blue-dot-lifecycle' },
+            { label: 'Participant Profiles', slug: 'core-concepts/participant-profiles' },
             { label: 'Aggregators', slug: 'core-concepts/aggregators' },
             { label: 'Networks, Domains & Instances', slug: 'core-concepts/networks-domains-instances' },
             { label: 'Items, Actions & Events', slug: 'core-concepts/items-actions-events' },
@@ -230,6 +232,8 @@ export default defineConfig({
             { label: 'Adaptor Onboarding', slug: 'guides/adaptor-onboarding' },
             { label: 'Keycloak Setup', slug: 'guides/keycloak-setup' },
             { label: 'Configuration', slug: 'guides/configuration' },
+            { label: 'Customisation & Branding', slug: 'guides/customisation' },
+            { label: 'AI Voice Agent Prompts', slug: 'guides/voice-ai-prompts' },
             { label: 'API Guide', slug: 'guides/api-reference' },
             { label: 'CI/CD & Build Pipeline', slug: 'guides/cicd-and-builds' },
             { label: 'Deployment', slug: 'guides/deployment' },
@@ -249,6 +253,7 @@ export default defineConfig({
           items: [
             { label: 'Use Cases', slug: 'explore/use-cases' },
             { label: 'Pilots: Ghaziabad & Dharwad', slug: 'explore/pilots' },
+            { label: "What We're Learning", slug: 'explore/learnings' },
             { label: 'The Economics of Local Discovery', slug: 'explore/economics' },
             { label: 'The Dots Family', slug: 'explore/beyond-livelihoods' },
           ],

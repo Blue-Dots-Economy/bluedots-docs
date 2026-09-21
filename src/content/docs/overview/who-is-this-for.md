@@ -12,7 +12,9 @@ This documentation serves everyone building on or operating Blue Dots. Find your
 You want to deploy Blue Dots for a district, state or domain.
 
 - Start with [Blue Dots as a DPG](/overview/blue-dots-as-a-dpg/) for the model.
+- Read [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) for the seven steps a participant walks, and who owns each one.
 - Then follow [Adaptor Onboarding](/guides/adaptor-onboarding/) and the [Installation](/guides/installation/prerequisites/) guides.
+- Tailor the deployment with [Customisation & Branding](/guides/customisation/).
 
 **Follow the full path →** [Deploy for a district](/start/deploy/)
 
@@ -29,7 +31,8 @@ You will run, extend or integrate the Signals and Aggregator DPGs.
 
 You are an institute, employer, NGO or government department onboarding participants.
 
-- See [Core Concepts → Aggregators](/core-concepts/aggregators/).
+- See [Core Concepts → Aggregators](/core-concepts/aggregators/) — including who qualifies and the four intake methods.
+- Walk [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/), especially the verification and *Blue Dot Verified* steps you own.
 - Follow the [Aggregator DPG Setup](/guides/installation/aggregator-dpg/) guide.
 
 **Follow the full path →** [Onboard participants](/start/onboard/)
@@ -39,6 +42,7 @@ You are an institute, employer, NGO or government department onboarding particip
 You care about outcomes and impact at district scale.
 
 - Read the [Overview](/overview/introduction/) and [Explore → Use Cases](/explore/use-cases/) and [Pilots](/explore/pilots/).
+- Then [What We're Learning on the Ground](/explore/learnings/) for what live district operations are showing.
 
 **Follow the full path →** [Evaluate impact](/start/evaluate/)
 
