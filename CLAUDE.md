@@ -39,3 +39,21 @@ No `base` — the site is served from the domain root, so internal links are roo
 The sidebar in `astro.config.mjs` is the authoritative list of sections and slugs.
 
 Many sidebar slugs (especially in `overview/`, `core-concepts/architecture/`, `core-concepts/technical/`, `guides/installation/`) reference pages that do not yet exist as files — they need to be created before the site will build without 404s.
+
+## Implementation plans are temporary
+
+A plan markdown is scaffolding for work in flight, not documentation. **When the
+work it describes has shipped, delete the plan in the same PR that completes it.**
+
+- Plans live at the repo root as `*-PLAN.md` / `*-plan.md` while the work is open.
+- Do not leave a shipped plan behind with a stale `Status:` line — every root plan
+  in this repo's history said "not executed" long after it had, in fact, executed.
+  A stale plan is worse than no plan: the next reader treats it as pending work.
+- The content is the record. Anything worth keeping from a plan (a decision and
+  its reasoning, a rollback procedure, a gotcha) belongs in the docs themselves,
+  in `CLAUDE.md`, or in the PR description — not in a file that outlives its job.
+- **Exception:** dated records under `docs/superpowers/plans/` and
+  `docs/superpowers/specs/` are a deliberate point-in-time archive, and one of
+  them is referenced above as the live dual-domain runbook. Leave them.
+
+Before opening a PR, check: does this PR complete a plan? If so, `git rm` it.
