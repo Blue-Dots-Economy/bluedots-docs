@@ -37,8 +37,6 @@ Adaptors typically *start with Signals*, then add the Aggregator app as they onb
 
 ## What an adaptor actually does
 
-<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
-
 Mostly **configuration, not construction.** Registration, discovery, connection, notifications and tracking already exist. So do the pieces an adaptor might expect to design from scratch:
 
 - **Participant types** — Job Seeker, Job Provider and Service Provider are [already defined](/core-concepts/participant-profiles/).

@@ -46,8 +46,6 @@ See [Core Concepts → Aggregators](/core-concepts/aggregators/) and [Architectu
 
 ### Where each one does its work
 
-<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
-
 The two DPGs divide the [seven-step lifecycle](/core-concepts/blue-dot-lifecycle/) between them:
 
 | DPG | What it does | Where it shows up in the lifecycle |
@@ -56,8 +54,6 @@ The two DPGs divide the [seven-step lifecycle](/core-concepts/blue-dot-lifecycle
 | **Aggregator** | Onboarding and tracking for partner organisations and teams | Assisted data collection (step 3), verification review (step 6), ongoing tracking after go-live |
 
 ## Supporting blocks, also ready to use
-
-<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
 
 Alongside the two DPGs, an adaptor inherits a set of ready-made supporting pieces — none of which need to be built:
 

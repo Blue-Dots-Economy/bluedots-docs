@@ -11,8 +11,6 @@ That verification role is the point. Volume without credibility is just a list; 
 
 ## Who can be an aggregator
 
-<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
-
 Any organisation with **reach and trust on the ground** for a given cohort:
 
 | Aggregator type | Typical cohort |
@@ -43,8 +41,6 @@ The Aggregator DPG is aggregator-facing and provides:
 - **Verification** — the human review that turns a checked profile into a *Blue Dot Verified* one.
 
 ## Four intake methods
-
-<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
 
 Assisted onboarding is not one flow. Four intake methods ship ready-made, and an aggregator simply runs whichever fits the context:
 

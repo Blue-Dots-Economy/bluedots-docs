@@ -16,8 +16,6 @@ A high-level view of direction. This is a scaffold — replace items with the in
 
 ## Next
 
-<span class="bd-new" title="Added/updated from the adopter-guide PDF">new</span>
-
 - More **domains** beyond livelihoods (skilling, schemes, local services).
 - Richer **match-scoring** and feedback loops from events.
 - **Observability** dashboards over signal flow and outcomes.
