@@ -5,7 +5,7 @@ sidebar:
   order: 2
 next:
   link: /guides/installation/signals-dpg/
-  label: "Path 8 of 9: Signals DPG Setup"
+  label: "Path 9 of 10: Signals DPG Setup"
 ---
 
 Each repo ships a self-contained **`local-setup/`** folder — a `docker-compose.yml`,

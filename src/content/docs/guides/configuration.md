@@ -38,3 +38,9 @@ Registration and profile forms are **schema-driven** (RJSF in the Aggregator; it
 
 - Local secrets live in `.env` files (the Aggregator's `make setup` writes a `chmod 600` root `.env`).
 - Never commit secrets. Production secrets are managed by your platform's secret store (see the Signals repo `docs/operations/secrets.md`).
+
+## Where to go next
+
+- [Customisation & Branding](/guides/customisation/) — the presentation layer on top of these values.
+- [Schema-Driven Model](/core-concepts/technical/schema-driven-model/) — why form changes are config, not code.
+- [Deployment](/guides/deployment/) — where per-environment values are set for a cluster.

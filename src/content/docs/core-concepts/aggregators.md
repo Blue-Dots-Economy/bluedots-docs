@@ -17,7 +17,7 @@ Any organisation with **reach and trust on the ground** for a given cohort:
 |---|---|
 | Colleges and ITIs | Graduating batches, students |
 | Skilling centres | Trainees completing a course |
-| MSME / SMB associations | Member businesses and their vacancies |
+| MSME associations | Member businesses and their vacancies |
 | Project Implementation Agencies | Programme beneficiaries |
 | Employment exchanges | Registered job seekers |
 | NGOs and civil-society organisations | Communities they already serve |
@@ -116,3 +116,9 @@ Integrating DPGs (such as the Aggregator app, or a voice DPG) authenticate to Si
 ![Participants flow into the Aggregator DPG (the on-ramp), which bulk-creates signals in the Signals DPG (the network), enabling network discovery and matching](../../../assets/diagrams/aggregators-relationship.png)
 
 The Aggregator app is the on-ramp; the Signals DPG is the network. Adaptors usually stand up Signals first, then add the Aggregator app as partner organisations come on board.
+
+## Where to go next
+
+- [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) — the seven steps an aggregator's participants walk.
+- [Aggregator DPG Architecture](/core-concepts/architecture/aggregator-dpg/) — the API, portal and worker.
+- [Aggregator DPG Setup](/guides/installation/aggregator-dpg/) — install and run it.

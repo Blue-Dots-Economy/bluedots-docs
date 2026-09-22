@@ -57,3 +57,32 @@ work it describes has shipped, delete the plan in the same PR that completes it.
   them is referenced above as the live dual-domain runbook. Leave them.
 
 Before opening a PR, check: does this PR complete a plan? If so, `git rm` it.
+
+## Writing register
+
+Overview and Explore make the case for Blue Dots; Core Concepts, Guides and API Reference describe what exists. Keep advocacy out of pages a reader executes — a Guide should say what happens and what to do, not why the idea is good.
+
+## Figures have one owning page
+
+A headline figure is stated once and linked from everywhere else. Restating a number copies it and lets the copies drift.
+
+| Figure | Owner |
+|---|---|
+| Pilot outcomes — jobs surfaced, discovery time, conversion, cost per interaction | `explore/pilots` |
+| ₹87,500 crore and its derivation | `explore/economics` |
+| Field observations — proximity, ratios, employer response, women's assurances | `explore/learnings` |
+| Time to create a Blue Dot (2–3 minutes) | `overview/the-blue-dots-approach` |
+
+Terminology: use **MSME**, not SMB, outside the Brown Dots sector naming.
+
+## Guided paths
+
+`Start Here` hubs list their steps as `PhaseTimeline` phases; member pages carry `Path N of M` labels in `prev`/`next` frontmatter.
+
+Two constraints:
+
+- **A page in two paths can only carry one chain.** `guides/installation/local-stack` is step 9 of Build and step 5 of Deploy; its frontmatter serves Build. Do not add a second chain — resolve it in the hub instead.
+- **Inserting a step renumbers every label after it.** Keep the hub list and the labels in sync in the same commit.
+
+`starlight-links-validator` cannot see `PhaseTimeline` hrefs (they sit in a JSX expression). Run `pnpm check:paths` after `pnpm build` when you change a hub.
+

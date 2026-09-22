@@ -9,7 +9,7 @@ Blue Dots is built as **Digital Public Goods (DPGs)** — open-source, standards
 
 ## The intuition: shared rails, like UPI
 
-Blue Dots is digital discovery infrastructure — comparable in spirit to what **UPI** created for payments. UPI built shared rails that any bank, any app, and any citizen could use, without anyone owning the network. Blue Dots builds shared digital rails that any government department, SMB, private or social-sector organisation, or citizen can use to **become discoverable and find others** — without anyone owning or controlling the map, connected through an **open discovery protocol**.
+Blue Dots is digital discovery infrastructure — comparable in spirit to what **UPI** created for payments. UPI built shared rails that any bank, any app, and any citizen could use, without anyone owning the network. Blue Dots builds shared digital rails that any government department, MSME, private or social-sector organisation, or citizen can use to **become discoverable and find others** — without anyone owning or controlling the map, connected through an **open discovery protocol**.
 
 Any actor can plug in, contribute, and leverage. That is what makes Blue Dots replicable across districts and states without a bespoke implementation each time.
 

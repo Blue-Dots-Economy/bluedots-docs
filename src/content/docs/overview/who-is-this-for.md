@@ -23,7 +23,7 @@ You want to deploy Blue Dots for a district, state or domain.
 You will run, extend or integrate the Signals and Aggregator DPGs.
 
 - Read [Architecture](/core-concepts/architecture/high-level-architecture/) and [Technical Documentation](/core-concepts/technical/overview/).
-- Use the [API Reference](/guides/api-reference/) and [Configuration](/guides/configuration/) guides.
+- Use the [API Conventions](/guides/api-conventions/) guide, the generated [API Reference](/api/) and [Configuration](/guides/configuration/).
 
 **Follow the full path →** [Build & integrate](/start/build/)
 
@@ -45,6 +45,13 @@ You care about outcomes and impact at district scale.
 - Then [What We're Learning on the Ground](/explore/learnings/) for what live district operations are showing.
 
 **Follow the full path →** [Evaluate impact](/start/evaluate/)
+
+## Contributors
+
+You want to improve the DPGs or this documentation.
+
+- Read [Contributing](/community/contributing/) for the engineering gate and the docs workflow.
+- Recent changes are in the [Release Notes](/community/release-notes/); planned work is on the [Roadmap](/community/roadmap/).
 
 :::tip
 New to the vocabulary? Keep the [Glossary](/core-concepts/glossary/) open in a second tab — the terms *network*, *domain*, *instance*, *item*, *action* and *event* recur everywhere.
