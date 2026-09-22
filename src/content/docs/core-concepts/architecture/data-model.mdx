@@ -5,10 +5,10 @@ sidebar:
   order: 4
 prev:
   link: /core-concepts/technical/schema-driven-model/
-  label: "Path 4 of 9: Schema-Driven Model"
+  label: "Path 5 of 10: Schema-Driven Model"
 next:
   link: /core-concepts/technical/read-write-paths/
-  label: "Path 6 of 9: Read & Write Paths"
+  label: "Path 7 of 10: Read & Write Paths"
 ---
 
 Both DPGs use **PostgreSQL** as their system of record (via **Drizzle ORM**) and **Redis** for caching, sessions and queues. Each DPG owns its own database; they do not share tables.
@@ -52,3 +52,8 @@ The Aggregator database (Drizzle, owned by `apps/api`) holds:
 - **Schema-typed, never freeform.** An item's structure is governed by its `item_type` schema; clients cannot invent fields.
 - **Backend-owned identity fields.** `item_instance_url` and `item_schema_url` are generated server-side.
 - **Configuration as code.** No domain/env-specific value is hardcoded — values load once at startup from config loaders or env. Per-env overrides live in `config/env/{dev,staging,prod}.yaml`.
+
+## Where to go next
+
+- [Schema-Driven Model](/core-concepts/technical/schema-driven-model/) — how these tables are shaped by schemas rather than code.
+- [Read & Write Paths](/core-concepts/technical/read-write-paths/) — how the data is actually queried and written.

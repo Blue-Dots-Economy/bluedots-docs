@@ -5,10 +5,10 @@ sidebar:
   order: 3
 prev:
   link: /core-concepts/architecture/data-model/
-  label: "Path 5 of 9: Data Model"
+  label: "Path 6 of 10: Data Model"
 next:
   link: /guides/installation/local-stack/
-  label: "Path 7 of 9: Local Stack"
+  label: "Path 8 of 10: Local Stack"
 ---
 
 Signals keeps **two read layers strictly separate**. Before writing a read endpoint, decide which layer it belongs to.
@@ -51,3 +51,8 @@ Writes into Signals are deliberately constrained:
 ## Reliability rules for writes and external calls
 
 Every external call (including cross-instance fetches and writes) must have an **explicit timeout, at least one retry with exponential backoff, and a typed error**. Routes never throw — they return `reply.code(N).send({ error, message })`, handling Postgres `23505` (unique violation) and `23503` (FK violation) explicitly.
+
+## Where to go next
+
+- [Data Model](/core-concepts/architecture/data-model/) — the tables these paths touch.
+- [Identity & Auth](/core-concepts/architecture/identity-and-auth/) — what a caller must prove on each path.

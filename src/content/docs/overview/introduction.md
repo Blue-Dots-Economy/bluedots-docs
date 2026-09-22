@@ -13,7 +13,7 @@ Blue Dots closes that gap with open **discovery infrastructure**: a way for citi
 
 A **Blue Dot** is a local signal of intent from a citizen or an enterprise, usually around livelihoods and services. A jobseeker looking for work of a specific trade, an employer who needs that exact skill 800 metres away, a citizen seeking a government scheme — each is a Blue Dot.
 
-A Blue Dot can be created in about two minutes, including over voice in the user's own language. Once created, it becomes discoverable to the relevant peers on the network, so that a match that used to take weeks (or never happened at all) can happen in under a day.
+A Blue Dot can be created in 2–3 minutes, including over voice in the user's own language. Once created, it becomes discoverable to the relevant peers on the network, so that a match that used to take weeks — or never happened at all — can happen in under two days.
 
 ## Why it matters
 
@@ -52,12 +52,10 @@ What is genuinely local — who should become a Blue Dot, which aggregators can 
 
 | Section | What you'll find |
 | --- | --- |
+| [Start Here](/start/build/) | Four guided paths — build, deploy, onboard, evaluate. Pick one and follow it in order. |
 | [Overview](/overview/introduction/) | The vision, the problem, the approach, and the DPG model. |
 | [Core Concepts](/core-concepts/) | Signals, aggregators, the domain vocabulary, architecture and technical docs. |
 | [Guides](/guides/) | Installation, adaptor onboarding, configuration, API reference and deployment. |
+| [API Reference](/api/) | Generated, always-current operation reference for all three services. |
 | [Explore](/explore/use-cases/) | Pilots, use cases, field learnings and the road beyond livelihoods. |
 | [Community](/community/contributing/) | How to contribute, the roadmap and release notes. |
-
-:::note
-This is a living document. Pages are seeded with real material from the initiative and its reference architecture; refine them as the DPGs evolve.
-:::

@@ -22,3 +22,9 @@ A few principles hold across the entire codebase:
 - **Schema-first.** Forms, cards and API contracts derive from Zod/JSON schemas, so domains evolve without code changes.
 - **Observability by default.** Log entries carry `operation`, `status`, `latency_ms` for external calls, and `error`/`error_type` on failure. No bare `console.log` in module code.
 - **Tested to a bar.** Vitest only; cross-package tests use the in-memory fake from each package's `./testing` export; target ≥ 70% line coverage.
+
+## Where to go next
+
+- [Schema-Driven Model](/core-concepts/technical/schema-driven-model/) — start here; most other behaviour follows from it.
+- [Read & Write Paths](/core-concepts/technical/read-write-paths/) — instance-local and inter-instance reads.
+- [Tech Stack](/core-concepts/technical/tech-stack/) — the runtimes, libraries and tooling.

@@ -5,10 +5,10 @@ sidebar:
   order: 3
 prev:
   link: /guides/installation/local-stack/
-  label: "Path 7 of 9: Local Stack"
+  label: "Path 8 of 10: Local Stack"
 next:
-  link: /guides/api-reference/
-  label: "Path 9 of 9: API Reference"
+  link: /guides/api-conventions/
+  label: "Path 10 of 10: API Conventions"
 ---
 
 The Signals DPG is the network-aware backend (API + UI). It runs **standalone** —
@@ -93,7 +93,7 @@ needed. Set `AUTH_PROVIDER=keycloak` and the `KEYCLOAK_*` values in `.env` — s
 Because the model is [schema-driven](/core-concepts/technical/schema-driven-model/),
 you add item types and forms through `network.json` schemas rather than code.
 
-Next: set up the [Aggregator DPG](/guides/installation/aggregator-dpg/), or wire an integration via the [API Reference](/guides/api-reference/).
+Next: set up the [Aggregator DPG](/guides/installation/aggregator-dpg/), or wire an integration via the [API Conventions](/guides/api-conventions/) guide and the generated [API Reference](/api/).
 
 ## Adding search (relevance ranking)
 

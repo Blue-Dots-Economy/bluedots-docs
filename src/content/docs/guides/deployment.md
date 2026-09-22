@@ -1,6 +1,6 @@
 ---
 title: Deployment
-description: Provision AWS infrastructure and deploy the Blue Dots stack with OpenTofu/Terragrunt + Helm, plus deploying this docs site.
+description: Provisioning the infrastructure and deploying the Blue Dots stack to a cluster.
 sidebar:
   order: 10
 ---
@@ -142,33 +142,10 @@ Deleting the `common-services` namespace deletes its Postgres + Redis PVCs (gp3 
 
 ## Deploying this documentation site
 
-This site is **Astro + Starlight**, deployed to **GitHub Pages** via GitHub Actions.
+This is a separate concern from deploying the DPGs — the documentation site has its own repository, workflow and domain. See [Contributing](/community/contributing/#deploying-this-site).
 
-### One-time GitHub setup
+## Where to go next
 
-1. Push the `bluedots-docs` project to a repository.
-2. In **Settings → Pages**, set **Source = GitHub Actions**.
-3. Confirm `astro.config.mjs` has the right `site` (no `base` needed for a custom domain):
-   ```js
-   site: 'https://docs.bluedotseconomy.org',
-   ```
-   A `public/CNAME` file pins the custom domain across deploys. If instead deploying to a GitHub Pages project URL (`<org>.github.io/<repo>`), set `site` to that origin and add `base: '/<repo>'`.
-
-### Domains and the legacy redirect
-
-The canonical host is **`docs.bluedotseconomy.org`**. The earlier host `docs-signals-dpg.bluedotseconomy.org` still resolves and redirects to the same path on the canonical host, so old links keep working.
-
-GitHub Pages allows only one custom domain per repository and cannot issue redirects for extra hostnames, so the legacy host is served by a small separate Pages repository containing nothing but a path-preserving redirect page. Both hostnames are GoDaddy `CNAME` records pointing at `blue-dots-economy.github.io`; Pages routes each one to the repository that claims it.
-
-### The workflow
-
-The bundled workflow at `.github/workflows/deploy.yml` builds with the official `withastro/action` and publishes on every push to `main`. After the first successful run, the site is live at the configured URL.
-
-### Local preview
-
-```bash
-pnpm install
-pnpm dev        # local dev server (under /)
-pnpm build      # production build to dist/
-pnpm preview    # preview the production build
-```
+- [CI/CD & Build Pipeline](/guides/cicd-and-builds/) — how a code change becomes a deployed image.
+- [Configuration](/guides/configuration/) — where each value lives.
+- [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) — what the cluster looks like.

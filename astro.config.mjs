@@ -31,6 +31,11 @@ function apiReferenceSidebarGroup(label, service) {
 export default defineConfig({
   site: 'https://docs.bluedotseconomy.org',
 
+  // The hand-written API page was retired once /api/ became generated from
+  // each service's OpenAPI. starlight-links-validator resolves links through
+  // redirects, so inbound links stay valid.
+  redirects: { '/guides/api-reference': '/api/' },
+
   // Astro 7 defaults to the new Sätteri Markdown processor, which
   // starlight-image-zoom doesn't support yet (HiDeoo/starlight-image-zoom#63).
   // Pin the classic unified/remark processor until it does.
@@ -43,6 +48,12 @@ export default defineConfig({
       plugins: [
         starlightLinksValidator({
           errorOnLocalLinks: false,
+          // The validator only inspects markdown links, frontmatter prev/next and
+          // the two built-in link components. NavCard is ours, so register it —
+          // otherwise every "Go deeper" card is unchecked. PhaseTimeline passes
+          // its hrefs inside a JSX expression (phases={[…]}), which cannot be
+          // registered at all; scripts/check-path-links.mjs covers those.
+          components: [['NavCard', 'href']],
           // starlight-openapi injects its pages via a separate integration
           // (not the content collection), so starlight-links-validator can't
           // see them as valid targets — exclude the generated reference roots.
@@ -184,7 +195,7 @@ export default defineConfig({
         {
           label: 'Core Concepts',
           items: [
-            { label: 'Overview', slug: 'core-concepts' },
+            { label: 'Core Concepts', slug: 'core-concepts' },
             { label: 'Signals (Blue Dots)', slug: 'core-concepts/signals' },
             { label: 'The Blue Dot Lifecycle', slug: 'core-concepts/blue-dot-lifecycle' },
             { label: 'Participant Profiles', slug: 'core-concepts/participant-profiles' },
@@ -196,18 +207,18 @@ export default defineConfig({
               label: 'Architecture',
               items: [
                 { label: 'High-Level Architecture', slug: 'core-concepts/architecture/high-level-architecture' },
-                { label: 'Signals DPG', slug: 'core-concepts/architecture/signals-dpg' },
-                { label: 'Aggregator DPG', slug: 'core-concepts/architecture/aggregator-dpg' },
+                { label: 'Signals DPG Architecture', slug: 'core-concepts/architecture/signals-dpg' },
+                { label: 'Aggregator DPG Architecture', slug: 'core-concepts/architecture/aggregator-dpg' },
                 { label: 'Data Model', slug: 'core-concepts/architecture/data-model' },
                 { label: 'Identity & Auth', slug: 'core-concepts/architecture/identity-and-auth' },
                 { label: 'Keycloak Realm Reference', slug: 'core-concepts/architecture/keycloak-realm' },
-                { label: 'Infrastructure & Deployment', slug: 'core-concepts/architecture/infrastructure' },
+                { label: 'Infrastructure & Deployment Architecture', slug: 'core-concepts/architecture/infrastructure' },
               ],
             },
             {
               label: 'Technical Documentation',
               items: [
-                { label: 'Overview', slug: 'core-concepts/technical/overview' },
+                { label: 'Technical Documentation', slug: 'core-concepts/technical/overview' },
                 { label: 'Schema-Driven Model', slug: 'core-concepts/technical/schema-driven-model' },
                 { label: 'Read & Write Paths', slug: 'core-concepts/technical/read-write-paths' },
                 { label: 'Tech Stack', slug: 'core-concepts/technical/tech-stack' },
@@ -218,7 +229,7 @@ export default defineConfig({
         {
           label: 'Guides',
           items: [
-            { label: 'Overview', slug: 'guides' },
+            { label: 'Guides', slug: 'guides' },
             {
               label: 'Installation',
               items: [
@@ -228,13 +239,13 @@ export default defineConfig({
                 { label: 'Aggregator DPG Setup', slug: 'guides/installation/aggregator-dpg' },
               ],
             },
-            { label: 'Activating in a District', slug: 'guides/district-activation' },
+            { label: 'Activating Blue Dots in a District', slug: 'guides/district-activation' },
             { label: 'Adaptor Onboarding', slug: 'guides/adaptor-onboarding' },
             { label: 'Keycloak Setup', slug: 'guides/keycloak-setup' },
             { label: 'Configuration', slug: 'guides/configuration' },
             { label: 'Customisation & Branding', slug: 'guides/customisation' },
             { label: 'AI Voice Agent Prompts', slug: 'guides/voice-ai-prompts' },
-            { label: 'API Guide', slug: 'guides/api-reference' },
+            { label: 'API Conventions', slug: 'guides/api-conventions' },
             { label: 'CI/CD & Build Pipeline', slug: 'guides/cicd-and-builds' },
             { label: 'Deployment', slug: 'guides/deployment' },
           ],
@@ -242,7 +253,7 @@ export default defineConfig({
         {
           label: 'API Reference',
           items: [
-            { label: 'Overview', slug: 'api' },
+            { label: 'API Reference', slug: 'api' },
             apiReferenceSidebarGroup('Signals-DPG API', 'signals-dpg'),
             apiReferenceSidebarGroup('Aggregator-DPG API', 'aggregator-dpg'),
             apiReferenceSidebarGroup('Signals-Search API', 'signals-search'),
@@ -252,10 +263,10 @@ export default defineConfig({
           label: 'Explore',
           items: [
             { label: 'Use Cases', slug: 'explore/use-cases' },
-            { label: 'Pilots: Ghaziabad & Dharwad', slug: 'explore/pilots' },
+            { label: 'Pilots — Ghaziabad & Dharwad', slug: 'explore/pilots' },
             { label: "What We're Learning", slug: 'explore/learnings' },
             { label: 'The Economics of Local Discovery', slug: 'explore/economics' },
-            { label: 'The Dots Family', slug: 'explore/beyond-livelihoods' },
+            { label: 'Beyond Livelihoods: The Dots Family', slug: 'explore/beyond-livelihoods' },
           ],
         },
         {

@@ -146,3 +146,9 @@ provider or the other, so the switch happens for all users at once. If something
 goes wrong, the switch is reversible per instance: set `AUTH_PROVIDER` back and
 restart. Users created while on Keycloak can still sign in afterwards, because
 the legacy OTP login does not require a stored credential.
+
+## Where to go next
+
+- [Keycloak Realm Reference](/core-concepts/architecture/keycloak-realm/) — what the imported realm contains.
+- [Identity & Auth](/core-concepts/architecture/identity-and-auth/) — the token and acting-org model.
+- [API Conventions](/guides/api-conventions/) — the errors a misconfigured client will see.

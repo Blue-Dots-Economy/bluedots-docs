@@ -11,7 +11,7 @@ Blue Dots turns local proximity into economic value through **four reinforcing l
 
 1. **Blue Dots as shared digital rails.** A 2–3 minute voice conversation — in any local language, on any phone, including a basic feature phone — is enough to become a *Blue Dot*: a precise, location-anchored digital signal on a shared district map. No form, no English, no digital literacy required. AI understands intent, structures the signal and places it on the map, then keeps working — nudging seekers and providers toward nearby options, surfacing relevant dots, and emitting live patterns for administrators. This reaches the long tail: the 80%+ of the district economy that has never appeared on any digital system. The rails are offered as Digital Public Goods.
 
-2. **Local ecosystem aggregators.** Density doesn't have to be built one entity at a time. ITIs, MSME/SMB associations, civil-society organisations and skilling centres onboard entire institutions at once — an ITI has hundreds of students, an MSME association hundreds of member businesses. This builds density rapidly and gives signals institutional credibility. Aggregators are what make Blue Dots both scalable and credible.
+2. **Local ecosystem aggregators.** Density doesn't have to be built one entity at a time. ITIs, MSME associations, civil-society organisations and skilling centres onboard entire institutions at once — an ITI has hundreds of students, an MSME association hundreds of member businesses. This builds density rapidly and gives signals institutional credibility. Aggregators are what make Blue Dots both scalable and credible.
 
 3. **District facilitation team.** A live map needs a live rhythm; without active maintenance, dots go stale and discovery reverts to word-of-mouth. Anchored by the district administration, the facilitation team is the "rhythm keeper" — keeping both sides of the map current, connecting aggregators and innovators, and maintaining follow-through. This is a convening and coordination role, not a technology-management one. It is typically 6–8 members drawn from government, the social sector and MSME associations, with a small Project Management Unit (PMU) behind it.
 
@@ -22,6 +22,10 @@ Together these levers convert proximity into economic value not through new inve
 :::note[Consent and stewardship]
 Every Blue Dot exists only because the person or organisation behind it chose to be there — **consent is the foundation**. And the rails are anchored by the district administration and enabled by state-government champions: *the infrastructure is the rail; the administration keeps the trains running.*
 :::
+
+## How this relates to the lifecycle
+
+The four levers are the conditions that make discovery work in a district. [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) is what one participant walks through inside those conditions — seven steps from being identified to being live and discoverable. Levers are the environment; the lifecycle is the journey.
 
 ## From signal to match
 
