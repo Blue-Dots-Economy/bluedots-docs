@@ -140,12 +140,6 @@ bash install.sh destroy_tf_resources       # terragrunt run --all destroy (needs
 Deleting the `common-services` namespace deletes its Postgres + Redis PVCs (gp3 `reclaimPolicy: Delete`) — the EBS volumes and all data are destroyed. Back up first.
 :::
 
-## Deploying this documentation site
-
-<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
-
-This is a separate concern from deploying the DPGs — the documentation site has its own repository, workflow and domain. See [Contributing](/community/contributing/#deploying-this-site).
-
 ## Where to go next
 
 <span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
