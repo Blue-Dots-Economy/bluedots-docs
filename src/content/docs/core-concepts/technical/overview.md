@@ -25,6 +25,8 @@ A few principles hold across the entire codebase:
 
 ## Where to go next
 
+<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
+
 - [Schema-Driven Model](/core-concepts/technical/schema-driven-model/) — start here; most other behaviour follows from it.
 - [Read & Write Paths](/core-concepts/technical/read-write-paths/) — instance-local and inter-instance reads.
 - [Tech Stack](/core-concepts/technical/tech-stack/) — the runtimes, libraries and tooling.

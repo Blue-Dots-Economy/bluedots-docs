@@ -142,9 +142,13 @@ Deleting the `common-services` namespace deletes its Postgres + Redis PVCs (gp3 
 
 ## Deploying this documentation site
 
+<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
+
 This is a separate concern from deploying the DPGs — the documentation site has its own repository, workflow and domain. See [Contributing](/community/contributing/#deploying-this-site).
 
 ## Where to go next
+
+<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
 
 - [CI/CD & Build Pipeline](/guides/cicd-and-builds/) — how a code change becomes a deployed image.
 - [Configuration](/guides/configuration/) — where each value lives.
