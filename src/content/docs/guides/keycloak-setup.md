@@ -149,6 +149,8 @@ the legacy OTP login does not require a stored credential.
 
 ## Where to go next
 
+<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
+
 - [Keycloak Realm Reference](/core-concepts/architecture/keycloak-realm/) — what the imported realm contains.
 - [Identity & Auth](/core-concepts/architecture/identity-and-auth/) — the token and acting-org model.
 - [API Conventions](/guides/api-conventions/) — the errors a misconfigured client will see.

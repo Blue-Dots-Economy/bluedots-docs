@@ -48,6 +48,8 @@ You care about outcomes and impact at district scale.
 
 ## Contributors
 
+<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
+
 You want to improve the DPGs or this documentation.
 
 - Read [Contributing](/community/contributing/) for the engineering gate and the docs workflow.

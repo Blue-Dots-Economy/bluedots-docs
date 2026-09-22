@@ -39,6 +39,8 @@ This site is **Astro + Starlight**. Content lives in `src/content/docs/` as Mark
 
 ## Deploying this site
 
+<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
+
 The site is deployed to **GitHub Pages** by `.github/workflows/deploy.yml`, which builds with `withastro/action` and publishes on every push to `main`.
 
 The canonical host is **`docs.bluedotseconomy.org`**, set in `astro.config.mjs` as `site` (no `base` — the site is served from the domain root). The earlier host `docs-signals-dpg.bluedotseconomy.org` still resolves and redirects to the same path, so old links keep working; it is served by a separate redirect-only Pages repository, because GitHub Pages allows one custom domain per repository.

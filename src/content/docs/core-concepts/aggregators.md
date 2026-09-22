@@ -119,6 +119,8 @@ The Aggregator app is the on-ramp; the Signals DPG is the network. Adaptors usua
 
 ## Where to go next
 
+<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
+
 - [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) — the seven steps an aggregator's participants walk.
 - [Aggregator DPG Architecture](/core-concepts/architecture/aggregator-dpg/) — the API, portal and worker.
 - [Aggregator DPG Setup](/guides/installation/aggregator-dpg/) — install and run it.
