@@ -37,20 +37,6 @@ This site is **Astro + Starlight**. Content lives in `src/content/docs/` as Mark
 
 </Steps>
 
-## Deploying this site
-
-<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
-
-The site is deployed to **GitHub Pages** by `.github/workflows/deploy.yml`, which builds with `withastro/action` and publishes on every push to `main`.
-
-The canonical host is **`docs.bluedotseconomy.org`**, set in `astro.config.mjs` as `site` (no `base` — the site is served from the domain root). The earlier host `docs-signals-dpg.bluedotseconomy.org` still resolves and redirects to the same path, so old links keep working; it is served by a separate redirect-only Pages repository, because GitHub Pages allows one custom domain per repository.
-
-:::caution[`public/CNAME` does not set the domain]
-This repository uses the **GitHub Actions** Pages source, which ignores the `CNAME` file in the build artifact. The custom domain lives only in **Settings → Pages**. The committed `public/CNAME` is documentation, plus insurance if the repository is ever switched to a branch source — changing the domain means changing **both**.
-:::
-
-The full switchover procedure and rollback are in `docs/superpowers/plans/2026-07-30-dual-domain-docs-redirect.md`.
-
 ## Where to ask
 
 - File issues and PRs on the relevant repository under the [Blue Dots Economy GitHub org](https://github.com/Blue-Dots-Economy).

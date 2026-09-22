@@ -57,4 +57,4 @@ See [Infrastructure & Deployment Architecture](/core-concepts/architecture/infra
 
 ## Documentation site
 
-This documentation site itself is built with **Astro + Starlight** and deployed to **GitHub Pages** — see the [Guides](/guides/) and the repository `README` for how to run and deploy it.
+This documentation site itself is built with **Astro + Starlight**. Running and deploying it is covered in the docs repository `README` and `CLAUDE.md`, not here — it is unrelated to a Blue Dots instance.
