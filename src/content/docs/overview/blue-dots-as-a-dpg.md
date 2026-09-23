@@ -60,7 +60,7 @@ Alongside the two DPGs, an adaptor inherits a set of ready-made supporting piece
 - **Discovery & connection** — finds and ranks relevant matches, including by location.
 - **Notifications** — Email and SMS.
 - **A shared rulebook** — common rules applied consistently across deployments.
-- **Setup automation** — [infrastructure and deployment](/guides/deployment/) stood up quickly, on AWS out of the box and adaptable to other clouds.
+- **Setup automation** — [infrastructure and deployment](/guides/installation/cloud-setup/aws/deployment/) stood up quickly, on AWS out of the box and adaptable to other clouds.
 - **Voice agent prompts** — [published as DPGs](/guides/voice-ai-prompts/), platform-independent.
 - **Participant profiles** — [three types already defined](/core-concepts/participant-profiles/).
 - **Full documentation** — this site.

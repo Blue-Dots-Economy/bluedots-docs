@@ -4,7 +4,7 @@ description: Auth headers, error codes and response conventions shared by the Si
 sidebar:
   order: 8
 prev:
-  link: /guides/installation/signals-dpg/
+  link: /guides/installation/local-setup/signals-dpg/
   label: "Path 9 of 10: Signals DPG Setup"
 next:
   link: /api/

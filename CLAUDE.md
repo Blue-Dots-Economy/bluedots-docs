@@ -34,6 +34,15 @@ No `base` — the site is served from the domain root, so internal links are roo
 - MDX pages can import Starlight components: `Card`, `CardGrid`, `LinkCard`, `Tabs`, etc.
 - The landing page (`src/content/docs/index.mdx`) uses `template: splash` — it is MDX, not plain Markdown.
 
+### Local preview
+
+```bash
+pnpm install
+pnpm dev        # local dev server (under /)
+pnpm build      # production build to dist/
+pnpm preview    # preview the production build
+```
+
 ## Information architecture
 
 The sidebar in `astro.config.mjs` is the authoritative list of sections and slugs.

@@ -233,10 +233,28 @@ export default defineConfig({
             {
               label: 'Installation',
               items: [
-                { label: 'Prerequisites', slug: 'guides/installation/prerequisites' },
-                { label: 'Local Stack (Docker)', slug: 'guides/installation/local-stack'  },
-                { label: 'Signals DPG Setup', slug: 'guides/installation/signals-dpg'  },
-                { label: 'Aggregator DPG Setup', slug: 'guides/installation/aggregator-dpg'  },
+{ label: 'Overview', slug: 'guides/installation' },
+                {
+                  label: 'Local Setup',
+                  items: [
+                    { label: 'Prerequisites', slug: 'guides/installation/local-setup/prerequisites' },
+                    { label: 'Local Stack (Docker)', slug: 'guides/installation/local-setup/local-stack' },
+                    { label: 'Signals DPG Setup', slug: 'guides/installation/local-setup/signals-dpg' },
+                    { label: 'Aggregator DPG Setup', slug: 'guides/installation/local-setup/aggregator-dpg' },
+                  ],
+                },
+                {
+                  label: 'Cloud Setup',
+                  items: [
+                    {
+                      label: 'AWS',
+                      items: [
+                        { label: 'Infrastructure Setup', slug: 'guides/installation/cloud-setup/aws/infrastructure' },
+                        { label: 'Deployment', slug: 'guides/installation/cloud-setup/aws/deployment' },
+                      ],
+                    },
+                  ],
+                },
               ],
             },
             { label: 'Activating Blue Dots in a District', slug: 'guides/district-activation'  },
@@ -247,7 +265,7 @@ export default defineConfig({
             { label: 'AI Voice Agent Prompts', slug: 'guides/voice-ai-prompts' },
             { label: 'API Conventions', slug: 'guides/api-conventions' },
             { label: 'CI/CD & Build Pipeline', slug: 'guides/cicd-and-builds' },
-            { label: 'Deployment', slug: 'guides/deployment'  },
+
           ],
         },
         {

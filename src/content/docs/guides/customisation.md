@@ -40,7 +40,7 @@ Operational settings specific to a deployment:
 - Admin email addresses for alerts and approvals
 - SMTP settings for transactional email
 
-These follow the project's [configuration discipline](/guides/configuration/) — declared in a config package, overridden per environment, never hardcoded. See [Configuration](/guides/configuration/) for exactly which file each value belongs in, and [Deployment](/guides/deployment/) for the values that must be set before a stack comes up.
+These follow the project's [configuration discipline](/guides/configuration/) — declared in a config package, overridden per environment, never hardcoded. See [Configuration](/guides/configuration/) for exactly which file each value belongs in, and [Deployment](/guides/installation/cloud-setup/aws/deployment/) for the values that must be set before a stack comes up.
 
 ## 3. Dashboards
 

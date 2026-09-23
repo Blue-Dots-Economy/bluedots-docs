@@ -117,7 +117,7 @@ For each **public** client (`signals-ui`, `aggregator-portal`) update:
 - **Web Origins**
 
 and replace `localhost` / `keycloak` hostnames throughout the environment
-config. See [Deployment](/guides/deployment/).
+config. See [Deployment](/guides/installation/cloud-setup/aws/deployment/).
 
 ## Migrating an existing instance
 

@@ -13,7 +13,7 @@ You want to deploy Blue Dots for a district, state or domain.
 
 - Start with [Blue Dots as a DPG](/overview/blue-dots-as-a-dpg/) for the model.
 - Read [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) for the seven steps a participant walks, and who owns each one.
-- Then follow [Adaptor Onboarding](/guides/adaptor-onboarding/) and the [Installation](/guides/installation/prerequisites/) guides.
+- Then follow [Adaptor Onboarding](/guides/adaptor-onboarding/) and the [Installation](/guides/installation/local-setup/prerequisites/) guides.
 - Tailor the deployment with [Customisation & Branding](/guides/customisation/).
 
 **Follow the full path →** [Deploy for a district](/start/deploy/)
@@ -33,7 +33,7 @@ You are an institute, employer, NGO or government department onboarding particip
 
 - See [Core Concepts → Aggregators](/core-concepts/aggregators/) — including who qualifies and the four intake methods.
 - Walk [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/), especially the verification and *Blue Dot Verified* steps you own.
-- Follow the [Aggregator DPG Setup](/guides/installation/aggregator-dpg/) guide.
+- Follow the [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/) guide.
 
 **Follow the full path →** [Onboard participants](/start/onboard/)
 
