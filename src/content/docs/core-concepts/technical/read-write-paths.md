@@ -7,7 +7,7 @@ prev:
   link: /core-concepts/architecture/data-model/
   label: "Path 6 of 10: Data Model"
 next:
-  link: /guides/installation/local-stack/
+  link: /guides/installation/local-setup/local-stack/
   label: "Path 8 of 10: Local Stack"
 ---
 

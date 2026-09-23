@@ -9,12 +9,10 @@ These guides take you from a clean machine to a running, integrated Blue Dots de
 
 ## Installation
 
-Stand up the stack locally, then each DPG:
+Two separate tracks :
 
-- [Prerequisites](/guides/installation/prerequisites/) — tools and accounts you need.
-- [Local Stack (Docker)](/guides/installation/local-stack/) — Postgres, Redis, Keycloak, Mailpit.
-- [Signals DPG Setup](/guides/installation/signals-dpg/) — the network-aware backend + UI.
-- [Aggregator DPG Setup](/guides/installation/aggregator-dpg/) — the onboarding app (API, web, worker).
+- **Local Setup** — run a DPG on your own machine: [Prerequisites](/guides/installation/local-setup/prerequisites/), [Local Stack (Docker)](/guides/installation/local-setup/local-stack/), [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/), [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/).
+- **Cloud Setup** — deploy a real instance: [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/), [AWS Deployment](/guides/installation/cloud-setup/aws/deployment/).
 
 ## Activate a district
 
@@ -32,7 +30,6 @@ Stand up the stack locally, then each DPG:
 ## Build & deploy
 
 - [CI/CD & Build Pipeline](/guides/cicd-and-builds/) — how images are built, pinned and delivered across environments.
-- [Deployment](/guides/deployment/) — provision AWS infra and deploy the stack with OpenTofu/Terragrunt + Helm.
 
 :::tip[New adaptor?]
 Start with [Adaptor Onboarding](/guides/adaptor-onboarding/) for the big picture, then drop into the installation guides for the step-by-step.

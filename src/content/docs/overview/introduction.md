@@ -42,7 +42,7 @@ Mostly **configuration, not construction.** Registration, discovery, connection,
 - **Participant types** — Job Seeker, Job Provider and Service Provider are [already defined](/core-concepts/participant-profiles/).
 - **Onboarding routes** — assisted or self-serve, via app or AI voice call, [both supported out of the box](/core-concepts/blue-dot-lifecycle/#2-choose-the-route-in).
 - **Verification checks** — structured, completed and consented, [built in](/core-concepts/blue-dot-lifecycle/#5-verification-checks).
-- **Deployment** — [automated on AWS](/guides/deployment/), adaptable to any major cloud.
+- **Deployment** — [automated on AWS](/guides/installation/cloud-setup/aws/deployment/), adaptable to any major cloud.
 
 > The adaptor brings local knowledge and a local ecosystem to reach providers and seekers. The DPGs bring the underlying machinery.
 

@@ -134,4 +134,4 @@ Two settings are easy to confuse and account for most setup failures:
 When moving off `localhost`, update each public client's **Valid Redirect URIs**
 and **Web Origins**. See the [Keycloak setup
 guide](/guides/keycloak-setup/) and
-[Deployment](/guides/deployment/).
+[Deployment](/guides/installation/cloud-setup/aws/deployment/).

@@ -43,4 +43,4 @@ Registration and profile forms are **schema-driven** (RJSF in the Aggregator; it
 
 - [Customisation & Branding](/guides/customisation/) — the presentation layer on top of these values.
 - [Schema-Driven Model](/core-concepts/technical/schema-driven-model/) — why form changes are config, not code.
-- [Deployment](/guides/deployment/) — where per-environment values are set for a cluster.
+- [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/) — where per-environment values are set for a cluster.

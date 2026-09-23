@@ -23,7 +23,11 @@ The diagram shows two distinct "CI/CD" surfaces, bridged by the image registry (
 Each application repo runs GitHub Actions on every PR and on pushes:
 
 - **Quality gates** — `pnpm -w lint`, `typecheck`, `test`, `build`, and (for `aggregator-dpg`) `pnpm dep-check`. Branch protection requires the `CI` check to pass before merge.
-- **Image build & publish** — a Docker matrix builds one image per deployable service and publishes to **GitHub Container Registry (GHCR)** under `ghcr.io/blue-dots-economy/…`. Images are tagged with the commit short SHA (`sha-<short>`); some services also cut per-app release tags (e.g. `web-v*`, `api-v*`, `worker-v*`).
+- **Image build & publish** — images are built and published to **GitHub Container Registry (GHCR)** under `ghcr.io/blue-dots-economy/…` when a **release tag** is pushed, not on every merge. One tag cuts every service's image at once, across the fleet:
+  - `v*.*.*` — a semver release, e.g. `v1.2.0`
+  - `20*-s*-rc*` — a sprint release candidate, e.g. `202608-s1-rc1` (`<YYYYMM>-s<sprint>-rc<candidate>`; a fix found in `-rc1` ships as `-rc2`, so every candidate is its own image)
+
+  `aggregator-dpg` additionally supports per-app tags (`web-v*.*.*`, `api-v*.*.*`, `worker-v*.*.*`) to release one of its three services independently of the other two.
 
 Representative images (Signals + Aggregator):
 
@@ -49,12 +53,12 @@ The `bluedots-automation` repo does not build images — it **selects** them. Ea
 api:
   image:
     repository: ghcr.io/blue-dots-economy/signals-dpg/api
-    tag: "sha-46c05dd"          # ← promote by changing this
+    tag: "v1.2.0"          # ← promote by changing this to a release tag
     pullPolicy: Always
 web:
   image:
     repository: ghcr.io/blue-dots-economy/aggregator-dpg/web
-    tag: "sha-15afbce"
+    tag: "web-v1.4.0"
     pullPolicy: Always
 ```
 
@@ -82,7 +86,7 @@ bash install.sh deploy_all_services
 
 ![deploy_all_services runs in strict order: 1 preflight, 2 create_namespaces_and_secrets (3 namespaces + ghcr-pull secret), 3 deploy_monitoring, 4 deploy_common_services (gp3 default SC + Kong CRDs + platform), 5 deploy_signals, 6 deploy_aggregator, 7 fix_acme_issuer_uri](../../../assets/diagrams/cicd-deploy-chain.png)
 
-See the [Deployment guide](/guides/deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) for what each layer is.
+See the [Deployment guide](/guides/installation/cloud-setup/aws/deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) for what each layer is.
 
 ### Scripted / non-interactive runs
 
@@ -103,25 +107,16 @@ Each live deployment has its **own long-lived branch** carrying that deployment'
 - `develop` — pre-release integration.
 - `feature` — collects in-progress work (often the newest trunk branch).
 
-**Per-deployment branches** (examples):
-
-| Branch | Env | Notes |
-| --- | --- | --- |
-| `blue-dots-dev` | dev | |
-| `orange-dots-dev` | dev | |
-| `orange-dot-prod` | prod | |
-| `purple-dots-prod` | prod | |
-
 :::caution
 Never deploy a customer environment from `main` — use that environment's branch. The branch carries the hostnames, image pins, and `opentofu/aws/<env>/` that make the deployment specific.
 :::
 
 ## 5. How a code change reaches a cluster
 
-1. Open a PR in an app repo → CI runs lint/typecheck/test/build; reviewers approve.
-2. Merge → the Docker matrix publishes `ghcr.io/blue-dots-economy/<service>:sha-<short>` to GHCR.
-3. In `bluedots-automation`, on the target environment's branch, update the relevant tag(s) in `opentofu/aws/<env>/global-images.yaml`.
+1. Open a PR in an app repo → CI runs lint/typecheck/test/build; reviewers approve; merge.
+2. When ready to ship, cut a release tag (`v1.2.0` or a sprint RC like `202608-s1-rc1`) → that tag triggers the build, publishing `ghcr.io/blue-dots-economy/<service>:<tag>` to GHCR for every service at once.
+3. In `bluedots-automation`, on the target environment's branch, update the relevant tag(s) in `opentofu/aws/<env>/global-images.yaml` to the new release tag.
 4. Run `bash install.sh deploy_<service>` (or `deploy_all_services`) — Helm rolls out the new image with `--wait`.
-5. Validate (`helm list -A`, pod health, ingress, TLS) — see the [Deployment guide](/guides/deployment/).
+5. Validate (`helm list -A`, pod health, ingress, TLS) — see the [Deployment guide](/guides/installation/cloud-setup/aws/deployment/).
 
-Rollback is the inverse: set the tag back to the previous known-good SHA and re-run the deploy.
+Rollback is the inverse: set the tag back to the previous known-good release tag and re-run the deploy.

@@ -4,7 +4,7 @@ description: Run the Signals backend and UI locally, standalone, in one command.
 sidebar:
   order: 3
 prev:
-  link: /guides/installation/local-stack/
+  link: /guides/installation/local-setup/local-stack/
   label: "Path 8 of 10: Local Stack"
 next:
   link: /guides/api-conventions/
@@ -93,7 +93,8 @@ needed. Set `AUTH_PROVIDER=keycloak` and the `KEYCLOAK_*` values in `.env` — s
 Because the model is [schema-driven](/core-concepts/technical/schema-driven-model/),
 you add item types and forms through `network.json` schemas rather than code.
 
-Next: set up the [Aggregator DPG](/guides/installation/aggregator-dpg/), or wire an integration via the [API Conventions](/guides/api-conventions/) guide and the generated [API Reference](/api/).
+  link: /guides/installation/local-setup/local-stack/
+  label: "Path 8 of 10: Local Stack"
 
 ## Adding search (relevance ranking)
 

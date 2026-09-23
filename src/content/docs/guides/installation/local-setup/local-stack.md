@@ -4,7 +4,7 @@ description: Choose your local setup — Signals alone, or the full Aggregator +
 sidebar:
   order: 2
 next:
-  link: /guides/installation/signals-dpg/
+  link: /guides/installation/local-setup/signals-dpg/
   label: "Path 9 of 10: Signals DPG Setup"
 ---
 
@@ -29,8 +29,8 @@ Both also offer an opt-in **`search` profile** that adds relevance ranking — s
 
 | I want to…                                    | Use                                                                 | Guide                                                                     |
 | --------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Run **Signals only** (backend + UI)           | `signals-dpg/local-setup/`                                          | [Signals DPG Setup](/guides/installation/signals-dpg/)      |
-| Run the **full ecosystem** (Aggregator + Signals) | `aggregator-dpg/local-setup/`                                   | [Aggregator DPG Setup](/guides/installation/aggregator-dpg/) |
+| Run **Signals only** (backend + UI)           | `signals-dpg/local-setup/`                                          | [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/)      |
+| Run the **full ecosystem** (Aggregator + Signals) | `aggregator-dpg/local-setup/`                                   | [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/) |
 
 The Aggregator's `local-setup/` builds **both** repos, so clone them as
 **siblings** under one parent directory:
@@ -121,4 +121,4 @@ table keyed by the exact error message: **§7 of
 `signals-dpg/local-setup/LOCAL_SETUP.md`** (canonical), and §10 of the
 Aggregator's guide for what differs in the unified stack.
 
-Next: set up each DPG — [Signals](/guides/installation/signals-dpg/) or the [Aggregator](/guides/installation/aggregator-dpg/).
+Next: set up each DPG — [Signals](/guides/installation/local-setup/signals-dpg/) or the [Aggregator](/guides/installation/local-setup/aggregator-dpg/).
