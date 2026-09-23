@@ -48,7 +48,7 @@ Assisted onboarding is not one flow. Four intake methods ship ready-made, and an
 |---|---|---|
 | **Offline camp** | Data collected in person, e.g. at a job fair | Aggregator portal, assisted entry |
 | **Bulk upload** | An existing list (CSV, database) imported in one go | CSV → background worker → bulk-create |
-| **Outbound campaign** | Proactive outreach over WhatsApp or a voice bot | Notifications + voice DPG |
+| **Outbound campaign** | Proactive outreach over email or a voice bot | Notifications + voice DPG |
 | **Inbound campaign** | Participants scan a shared QR code and start on their own | Registration links, with roll-up metrics |
 
 The choice of **assisted or self** route, and of intake method, is a configuration decision made per campaign or geography — not a technical build. See [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#2-choose-the-route-in).
