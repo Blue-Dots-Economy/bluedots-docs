@@ -23,11 +23,9 @@ The diagram shows two distinct "CI/CD" surfaces, bridged by the image registry (
 Each application repo runs GitHub Actions on every PR and on pushes:
 
 - **Quality gates** — `pnpm -w lint`, `typecheck`, `test`, `build`, and (for `aggregator-dpg`) `pnpm dep-check`. Branch protection requires the `CI` check to pass before merge.
-- **Image build & publish** — images are built and published to **GitHub Container Registry (GHCR)** under `ghcr.io/blue-dots-economy/…` when a **release tag** is pushed, not on every merge. One tag cuts every service's image at once, across the fleet:
-  - `v*.*.*` — a semver release, e.g. `v1.2.0`
-  - `20*-s*-rc*` — a sprint release candidate, e.g. `202608-s1-rc1` (`<YYYYMM>-s<sprint>-rc<candidate>`; a fix found in `-rc1` ships as `-rc2`, so every candidate is its own image)
-
-  `aggregator-dpg` additionally supports per-app tags (`web-v*.*.*`, `api-v*.*.*`, `worker-v*.*.*`) to release one of its three services independently of the other two.
+- **Image build & publish** — images are built and published to **GitHub Container Registry (GHCR)** under `ghcr.io/blue-dots-economy/…`. Two triggers exist today:
+  - **A release tag** — the promotion path. One tag cuts every service's image at once, across the fleet. In current practice this is **always a sprint release candidate**, `20*-s*-rc*`, e.g. `202608-s1-rc1` (`<YYYYMM>-s<sprint>-rc<candidate>`; a fix found in `-rc1` ships as `-rc2`, so every candidate is its own image). The workflows also match a semver tag (`v*.*.*`), but that scheme isn't in active use. `aggregator-dpg` additionally supports per-app tags (`web-v*.*.*`, `api-v*.*.*`, `worker-v*.*.*`) to release one of its three services independently.
+  - **A push to `main`/`develop`/`feature`** — still builds and publishes a moving `sha-<short>` tag in most repos today (`notification-service` is the exception: tags only). This path is being removed fleet-wide, so a release tag will be the only build trigger going forward — don't build new tooling around the branch-triggered tags.
 
 Representative images (Signals + Aggregator):
 
@@ -53,16 +51,16 @@ The `bluedots-automation` repo does not build images — it **selects** them. Ea
 api:
   image:
     repository: ghcr.io/blue-dots-economy/signals-dpg/api
-    tag: "v1.2.0"          # ← promote by changing this to a release tag
+    tag: "sha-46c05dd"     # dev: riding a branch build
     pullPolicy: Always
 web:
   image:
     repository: ghcr.io/blue-dots-economy/aggregator-dpg/web
-    tag: "web-v1.4.0"
+    tag: "web-v1.4.0"      # prod: pinned to a release tag
     pullPolicy: Always
 ```
 
-Because the file is **per-environment**, each deployment pins its own tags independently — dev can ride `sha-…` builds while a production environment stays on a known-good SHA. **Promoting a release = updating a tag here and re-running the deploy.** The keys map directly to subchart names in the umbrella Helm charts.
+Because the file is **per-environment**, each deployment pins its own tags independently — dev can ride `sha-…` builds while a production environment stays on a known-good **release tag**. **Promoting a release = updating a tag here and re-running the deploy.** The keys map directly to subchart names in the umbrella Helm charts.
 
 ## 3. Delivery (CD) with `install.sh`
 
@@ -84,7 +82,7 @@ bash install.sh deploy_all_services
 
 <!-- Editable source: src/assets/diagrams/cicd-deploy-chain.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. -->
 
-![deploy_all_services runs in strict order: 1 preflight, 2 create_namespaces_and_secrets (3 namespaces + ghcr-pull secret), 3 deploy_monitoring, 4 deploy_common_services (gp3 default SC + Kong CRDs + platform), 5 deploy_signals, 6 deploy_aggregator, 7 fix_acme_issuer_uri](../../../assets/diagrams/cicd-deploy-chain.png)
+![deploy_all_services runs in strict order: 1 preflight, 2 create_namespaces_and_secrets (3 namespaces + ghcr-pull secret), 3 deploy_monitoring, 4 deploy_common_services (Kong CRDs + platform), 5 deploy_signals, 6 deploy_aggregator](../../../assets/diagrams/cicd-deploy-chain.png)
 
 See the [Deployment guide](/guides/installation/cloud-setup/aws/deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) for what each layer is.
 
@@ -114,7 +112,7 @@ Never deploy a customer environment from `main` — use that environment's branc
 ## 5. How a code change reaches a cluster
 
 1. Open a PR in an app repo → CI runs lint/typecheck/test/build; reviewers approve; merge.
-2. When ready to ship, cut a release tag (`v1.2.0` or a sprint RC like `202608-s1-rc1`) → that tag triggers the build, publishing `ghcr.io/blue-dots-economy/<service>:<tag>` to GHCR for every service at once.
+2. When ready to ship, cut a sprint release-candidate tag (e.g. `202608-s1-rc1`) → that tag triggers the build, publishing `ghcr.io/blue-dots-economy/<service>:<tag>` to GHCR for every service at once.
 3. In `bluedots-automation`, on the target environment's branch, update the relevant tag(s) in `opentofu/aws/<env>/global-images.yaml` to the new release tag.
 4. Run `bash install.sh deploy_<service>` (or `deploy_all_services`) — Helm rolls out the new image with `--wait`.
 5. Validate (`helm list -A`, pod health, ingress, TLS) — see the [Deployment guide](/guides/installation/cloud-setup/aws/deployment/).
