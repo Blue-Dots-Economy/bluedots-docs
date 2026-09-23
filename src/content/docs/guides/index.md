@@ -18,14 +18,10 @@ Stand up the stack locally, then each DPG:
 
 ## Activate a district
 
-<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
-
 - [Activating Blue Dots in a District](/guides/district-activation/) — the institutional and operational model.
 - [Adaptor Onboarding](/guides/adaptor-onboarding/) — the end-to-end path for a new adaptor.
 
 ## Configure & extend
-
-<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
 
 - [Keycloak Setup](/guides/keycloak-setup/) — realm import, admin user, registering an integrating DPG.
 - [Configuration](/guides/configuration/) — env vars, config-as-code, per-environment overrides.
@@ -34,8 +30,6 @@ Stand up the stack locally, then each DPG:
 - [API Conventions](/guides/api-conventions/) — auth headers, error codes and response conventions shared by both APIs.
 
 ## Build & deploy
-
-<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
 
 - [CI/CD & Build Pipeline](/guides/cicd-and-builds/) — how images are built, pinned and delivered across environments.
 - [Deployment](/guides/deployment/) — provision AWS infra and deploy the stack with OpenTofu/Terragrunt + Helm.

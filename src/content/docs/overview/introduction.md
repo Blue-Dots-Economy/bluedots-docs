@@ -50,8 +50,6 @@ What is genuinely local — who should become a Blue Dot, which aggregators can 
 
 ## How this documentation is organised
 
-<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
-
 | Section | What you'll find |
 | --- | --- |
 | [Start Here](/start/build/) | Four guided paths — build, deploy, onboard, evaluate. Pick one and follow it in order. |

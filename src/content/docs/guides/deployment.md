@@ -142,8 +142,6 @@ Deleting the `common-services` namespace deletes its Postgres + Redis PVCs (gp3 
 
 ## Where to go next
 
-<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
-
 - [CI/CD & Build Pipeline](/guides/cicd-and-builds/) — how a code change becomes a deployed image.
 - [Configuration](/guides/configuration/) — where each value lives.
 - [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) — what the cluster looks like.

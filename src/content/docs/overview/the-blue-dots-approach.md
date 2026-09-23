@@ -25,8 +25,6 @@ Every Blue Dot exists only because the person or organisation behind it chose to
 
 ## How this relates to the lifecycle
 
-<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
-
 The four levers are the conditions that make discovery work in a district. [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) is what one participant walks through inside those conditions — seven steps from being identified to being live and discoverable. Levers are the environment; the lifecycle is the journey.
 
 ## From signal to match
