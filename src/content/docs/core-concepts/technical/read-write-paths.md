@@ -54,7 +54,5 @@ Every external call (including cross-instance fetches and writes) must have an *
 
 ## Where to go next
 
-<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
-
 - [Data Model](/core-concepts/architecture/data-model/) — the tables these paths touch.
 - [Identity & Auth](/core-concepts/architecture/identity-and-auth/) — what a caller must prove on each path.

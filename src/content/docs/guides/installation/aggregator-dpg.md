@@ -124,8 +124,6 @@ guide. The canonical reference for signals-search's own configuration is **§7 o
 
 ## Where to go next
 
-<span class="bd-new" title="Added or rewritten by the flow &amp; narrative PR">new</span>
-
 - [Keycloak Setup](/guides/keycloak-setup/) — register the service client this app authenticates with.
 - [Configuration](/guides/configuration/) — env vars and schema-driven forms.
 - [Aggregators](/core-concepts/aggregators/) — what the app is for.
