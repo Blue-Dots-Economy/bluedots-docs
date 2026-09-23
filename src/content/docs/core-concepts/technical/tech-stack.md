@@ -54,7 +54,3 @@ The cloud deployment is its own codebase (`bluedots-automation`) with a distinct
 | Observability | Prometheus, Alertmanager, Loki, Alloy, Grafana (monitoring chart) |
 
 See [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) and the [CI/CD & Build Pipeline](/guides/cicd-and-builds/) guide.
-
-## Documentation site
-
-This documentation site itself is built with **Astro + Starlight**. Running and deploying it is covered in the docs repository `README` and `CLAUDE.md`, not here — it is unrelated to a Blue Dots instance.
