@@ -56,7 +56,7 @@ api:
 web:
   image:
     repository: ghcr.io/blue-dots-economy/aggregator-dpg/web
-    tag: "web-v1.4.0"      # prod: pinned to a release tag
+    tag: "202609-s1-rc3"   # prod: pinned to a release tag
     pullPolicy: Always
 ```
 
@@ -82,7 +82,7 @@ bash install.sh deploy_all_services
 
 <!-- Editable source: src/assets/diagrams/cicd-deploy-chain.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. -->
 
-![deploy_all_services runs in strict order: 1 preflight, 2 create_namespaces_and_secrets (3 namespaces + ghcr-pull secret), 3 deploy_monitoring, 4 deploy_common_services (Kong CRDs + platform), 5 deploy_signals, 6 deploy_aggregator](../../../assets/diagrams/cicd-deploy-chain.png)
+![deploy_all_services runs in strict order: 1 preflight, 2 create_namespaces_and_secrets (3 namespaces + ghcr-pull secret), 3 deploy_monitoring, 4 deploy_common_services (Kong CRDs + platform), 5 deploy_keycloak, 6 deploy_signals, 7 deploy_aggregator](../../../assets/diagrams/cicd-deploy-chain.png)
 
 See the [Deployment guide](/guides/installation/cloud-setup/aws/deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) for what each layer is.
 
