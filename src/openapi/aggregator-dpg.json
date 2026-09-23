@@ -14097,6 +14097,14 @@
       "description": "Admin approve/reject for pending aggregators."
     },
     {
+      "name": "invites",
+      "description": "Coordinator invites minted by an approved org owner."
+    },
+    {
+      "name": "aggregator-orgs",
+      "description": "Parent-org registration, listing and network-admin approval."
+    },
+    {
       "name": "aggregator-profile",
       "description": "Authenticated aggregator profile read/update."
     },
