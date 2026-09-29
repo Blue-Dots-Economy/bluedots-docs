@@ -28,25 +28,34 @@ Most of these have a free, key-less or already-local fallback, so a first local 
 | **openssl** | `gen-secrets.sh` generates local secrets with it. | Pre-installed on macOS and most Linux distributions |
 | **SMS provider** (MSG91) | OTP and SMS notifications. Supplies `MSG91_AUTH_KEY`, `MSG91_TEMPLATE_ID`, `MSG91_SENDER_ID`. | Optional — `CREATE_TEST_OTP=true` issues a test OTP |
 | **SMTP** | Transactional email — OTP, approvals, admin alerts. Gmail needs a 16-character **App Password**, not the account password. | Optional — Mailpit catches mail locally |
-| **Google Maps API key** (browser) | Rendering Google Maps in the Signals UI. Required only when `VITE_MAP_PROVIDER=google-maps`. Set as `VITE_GOOGLE_MAPS_API_KEY`. | Optional — the default provider is Leaflet |
+| **Google Maps API key** (Signals browser) | Rendering Google Maps in the Signals UI. Required only when `VITE_MAP_PROVIDER=google-maps`. Set as `VITE_GOOGLE_MAPS_API_KEY`. | Optional — the default provider is Leaflet |
+| **Google Maps API key** (Aggregator browser) | Address autocomplete on the Aggregator's registration forms. A **separate** key from the Signals one — see below. Set as the Aggregator web pod's `GOOGLE_MAPS_API_KEY` (`aggregator_google_maps_api_key` in the deployment secrets). | Optional — falls back to Photon |
 | **Google Geocoding API key** (server) | Server-side geocoding of items created via the API without coordinates. Set as `GOOGLE_GEOCODING_API_KEY`. | Optional — falls back to Photon |
 | **Mapbox access token** | Alternative map provider. Required only when `VITE_MAP_PROVIDER=mapbox`. | Optional |
-| **Photon** (OpenStreetMap) | Free, key-less geocoding and address autocomplete — the fallback for both Google keys. Override the endpoint with `PHOTON_URL` / `VITE_PHOTON_URL`. | Used automatically, no account |
+| **Photon** (OpenStreetMap) | Free, key-less geocoding and address autocomplete — the fallback for **all three** Google keys. Unless overridden it calls the public instance at `https://photon.komoot.io`, so the address text being looked up leaves your infrastructure. Point `PHOTON_URL` (Signals API, Aggregator web) / `VITE_PHOTON_URL` (Signals UI) at your own instance to keep it in-house. | Used automatically, no account |
 | **Hosted embedding API** (Gemini, OpenAI, Voyage) | Optional backend for Signals-Search relevance ranking. | Optional — the default is in-cluster HuggingFace TEI with the OSS BGE-M3 model, no external key |
 | **Credential-import providers** (Dhiway Wallet, DigiLocker agent) | Pre-filling a profile form from a verifiable credential. `VITE_VC_WALLET_URL` / `VITE_VC_WALLET_API_KEY`, `VITE_AGENT_URL` / `VITE_AGENT_TOKEN`. | Optional — the providers are hidden when unset |
 | **Discord webhooks** | Alert routing from the monitoring stack (critical / warning / info channels). | Not used locally |
 
-### The two Google keys are deliberately separate
+### The three Google keys are deliberately separate
 
-A Google API key accepts only **one** application restriction — HTTP referrers *or* IP addresses, never both. The browser key and the server key therefore have to be different keys to be restrictable at all:
+Two separate constraints force three keys, and neither is obvious:
+
+- A Google API key accepts only **one** application restriction — HTTP referrers *or* IP addresses, never both. So a browser key and a server key cannot be the same key and stay restrictable.
+- Referrer restrictions are **per-origin**. Signals and the Aggregator are served from different hosts, so each browser key has to name its own origin.
 
 | Key | API to enable | Application restriction |
 | --- | --- | --- |
-| `VITE_GOOGLE_MAPS_API_KEY` (browser) | Maps JavaScript API | **HTTP referrers** — `https://<each signals host>/*` |
-| `GOOGLE_GEOCODING_API_KEY` (server) | Geocoding API | **IP addresses** — the environment's NAT gateway Elastic IPs, **both** AZs |
+| `VITE_GOOGLE_MAPS_API_KEY` (Signals browser) | Maps JavaScript API | **HTTP referrers** — `https://<each signals host>/*` |
+| `GOOGLE_MAPS_API_KEY` (Aggregator browser) | Maps JavaScript API **+ Places API (New)** | **HTTP referrers** — `https://<the aggregator public host>/*` |
+| `GOOGLE_GEOCODING_API_KEY` (Signals server) | Geocoding API | **IP addresses** — the environment's NAT gateway Elastic IPs, **both** AZs |
 
 :::caution
-The server key must **not** be HTTP-referrer restricted — server-side calls send no referrer, so a referrer-restricted key fails every request. If you are not restricting keys at all, both values can be the same key.
+The server key must **not** be HTTP-referrer restricted — server-side calls send no referrer, so a referrer-restricted key fails every request. If you are not restricting keys at all, one key can serve all three, provided all three APIs are enabled on it.
+:::
+
+:::note
+Leaving the Aggregator key unset is a decision, not just a missing feature: the registration address field then autocompletes against the public Photon instance, so each registrant's browser sends the address text it is typing — and its IP — to a third party. Set the key, point `PHOTON_URL` at your own Photon, or accept that deliberately.
 :::
 
 Server geocoding results are cached in Redis (`GEO_CACHE_TTL_SECONDS`, default 30 days) so a repeated place string does not re-bill the paid API.
