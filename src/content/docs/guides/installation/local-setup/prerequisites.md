@@ -19,16 +19,46 @@ Install these before setting up either DPG.
 
 ## Cloud / external dependencies
 
-- **Object storage** — **already in the local stack**: MinIO runs as part of
-  `local-setup` (S3 API on `9000`, console on `9001`) and its bucket is created
-  automatically, so bulk-upload flows work locally with no AWS account. A real
-  **AWS S3** bucket, reached via an IAM role or `~/.aws/credentials`, is a
-  deploy-time concern only.
-- **A Docker Hub account** — the app images build from Docker Hardened Images,
-  so Track A needs `docker login dhi.io`. Track B does not.
-- **openssl** — used by `gen-secrets.sh` to generate local secrets. Pre-installed
-  on macOS and most Linux distributions.
-- **SMS provider** — required for OTP and notifications in non-trivial deployments. A no-op/sandbox provider is fine for local development.
+Most of these have a free, key-less or already-local fallback, so a first local run needs almost nothing — the **Local dev** column says what you actually have to set up.
+
+| Dependency | What it's for | Local dev |
+| --- | --- | --- |
+| **Object storage** (MinIO / AWS S3) | Bulk-upload objects. | **Already in the local stack** — MinIO runs as part of `local-setup` (S3 API on `9000`, console on `9001`) and its bucket is created automatically, so bulk upload works with no AWS account. A real S3 bucket, reached via an IAM role or `~/.aws/credentials`, is a deploy-time concern only. |
+| **Docker Hub account** | The app images build from Docker Hardened Images. | Required for **Track A** — `docker login dhi.io`. Track B does not need it. |
+| **openssl** | `gen-secrets.sh` generates local secrets with it. | Pre-installed on macOS and most Linux distributions |
+| **SMS provider** (MSG91) | OTP and SMS notifications. Supplies `MSG91_AUTH_KEY`, `MSG91_TEMPLATE_ID`, `MSG91_SENDER_ID`. | Optional — `CREATE_TEST_OTP=true` issues a test OTP |
+| **SMTP** | Transactional email — OTP, approvals, admin alerts. Gmail needs a 16-character **App Password**, not the account password. | Optional — Mailpit catches mail locally |
+| **Google Maps API key** (Signals browser) | Rendering Google Maps in the Signals UI. Required only when `VITE_MAP_PROVIDER=google-maps`. Set as `VITE_GOOGLE_MAPS_API_KEY`. | Optional — the default provider is Leaflet |
+| **Google Maps API key** (Aggregator browser) | Address autocomplete on the Aggregator's registration forms. A **separate** key from the Signals one — see below. Set as the Aggregator web pod's `GOOGLE_MAPS_API_KEY` (`aggregator_google_maps_api_key` in the deployment secrets). | Optional — falls back to Photon |
+| **Google Geocoding API key** (server) | Server-side geocoding of items created via the API without coordinates. Set as `GOOGLE_GEOCODING_API_KEY`. | Optional — falls back to Photon |
+| **Mapbox access token** | Alternative map provider. Required only when `VITE_MAP_PROVIDER=mapbox`. | Optional |
+| **Photon** (OpenStreetMap) | Free, key-less geocoding and address autocomplete — the fallback for **all three** Google keys. Unless overridden it calls the public instance at `https://photon.komoot.io`, so the address text being looked up leaves your infrastructure. Point `PHOTON_URL` (Signals API, Aggregator web) / `VITE_PHOTON_URL` (Signals UI) at your own instance to keep it in-house. | Used automatically, no account |
+| **Hosted embedding API** (Gemini, OpenAI, Voyage) | Optional backend for Signals-Search relevance ranking. | Optional — the default is in-cluster HuggingFace TEI with the OSS BGE-M3 model, no external key |
+| **Credential-import providers** (Dhiway Wallet, DigiLocker agent) | Pre-filling a profile form from a verifiable credential. `VITE_VC_WALLET_URL` / `VITE_VC_WALLET_API_KEY`, `VITE_AGENT_URL` / `VITE_AGENT_TOKEN`. | Optional — the providers are hidden when unset |
+| **Discord webhooks** | Alert routing from the monitoring stack (critical / warning / info channels). | Not used locally |
+
+### The three Google keys are deliberately separate
+
+Two separate constraints force three keys, and neither is obvious:
+
+- A Google API key accepts only **one** application restriction — HTTP referrers *or* IP addresses, never both. So a browser key and a server key cannot be the same key and stay restrictable.
+- Referrer restrictions are **per-origin**. Signals and the Aggregator are served from different hosts, so each browser key has to name its own origin.
+
+| Key | API to enable | Application restriction |
+| --- | --- | --- |
+| `VITE_GOOGLE_MAPS_API_KEY` (Signals browser) | Maps JavaScript API | **HTTP referrers** — `https://<each signals host>/*` |
+| `GOOGLE_MAPS_API_KEY` (Aggregator browser) | Maps JavaScript API **+ Places API (New)** | **HTTP referrers** — `https://<the aggregator public host>/*` |
+| `GOOGLE_GEOCODING_API_KEY` (Signals server) | Geocoding API | **IP addresses** — the environment's NAT gateway Elastic IPs, **both** AZs |
+
+:::caution
+The server key must **not** be HTTP-referrer restricted — server-side calls send no referrer, so a referrer-restricted key fails every request. If you are not restricting keys at all, one key can serve all three, provided all three APIs are enabled on it.
+:::
+
+:::note
+Leaving the Aggregator key unset is a decision, not just a missing feature: the registration address field then autocompletes against the public Photon instance, so each registrant's browser sends the address text it is typing — and its IP — to a third party. Set the key, point `PHOTON_URL` at your own Photon, or accept that deliberately.
+:::
+
+Server geocoding results are cached in Redis (`GEO_CACHE_TTL_SECONDS`, default 30 days) so a repeated place string does not re-bill the paid API.
 
 ## Verify your setup
 

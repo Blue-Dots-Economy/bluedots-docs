@@ -21,8 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4- name: Install, build, and upload site
-        uses: withastro/action@56781b97402ce0487b7e61ce2cb960c0e2cc5289  # v3with:
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install, build, and upload site
+        uses: withastro/action@56781b97402ce0487b7e61ce2cb960c0e2cc5289 # v3
+        with:
           # Build defaults to `pnpm` because a pnpm-lock.yaml is present.
           node-version: 22
 
