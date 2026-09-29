@@ -2,7 +2,7 @@
 title: Configuration
 description: How configuration-as-code works across the Blue Dots DPGs, and where each value lives.
 sidebar:
-  order: 6
+  order: 5
 ---
 
 Blue Dots follows strict **configuration discipline**: no domain- or environment-specific value is hardcoded. Values are read once at startup from a config loader or environment, with per-environment overrides.
@@ -38,3 +38,9 @@ Registration and profile forms are **schema-driven** (RJSF in the Aggregator; it
 
 - Local secrets live in `.env` files (the Aggregator's `make setup` writes a `chmod 600` root `.env`).
 - Never commit secrets. Production secrets are managed by your platform's secret store (see the Signals repo `docs/operations/secrets.md`).
+
+## Where to go next
+
+- [Customisation & Branding](/guides/customisation/) — the presentation layer on top of these values.
+- [Schema-Driven Model](/core-concepts/technical/schema-driven-model/) — why form changes are config, not code.
+- [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/) — where per-environment values are set for a cluster.

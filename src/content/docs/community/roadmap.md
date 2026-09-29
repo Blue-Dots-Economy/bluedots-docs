@@ -20,6 +20,11 @@ A high-level view of direction. This is a scaffold — replace items with the in
 - Richer **match-scoring** and feedback loops from events.
 - **Observability** dashboards over signal flow and outcomes.
 - Additional **adaptor** deployments across districts.
+- Shift the capture mix from **outbound calling to an inbound, QR-backed helpline**, so people reach the system when they have a need.
+- Grow the **service network** around needs beyond placement — counselling, proof of skill, capital, market access, interview preparation.
+- Support **Common Hiring Standards** on the employer side: a named HR contact, a two-day response commitment, and digital hiring notices.
+
+These follow directly from field experience — see [What We're Learning](/explore/learnings/#what-is-changing-as-the-system-gets-used).
 
 ## Later
 

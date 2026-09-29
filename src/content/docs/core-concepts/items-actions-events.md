@@ -2,7 +2,7 @@
 title: Items, Actions & Events
 description: The record and interaction primitives at the heart of the Signals DPG.
 sidebar:
-  order: 4
+  order: 6
 ---
 
 Inside an instance, everything is built from three primitives: **items**, **actions** and **events**.

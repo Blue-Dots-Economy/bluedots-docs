@@ -2,7 +2,7 @@
 title: Keycloak Setup
 description: Stand up your network's Keycloak realm — import, admin bootstrap, registering an integrating DPG, and the two base URLs.
 sidebar:
-  order: 6
+  order: 4
 ---
 
 Operator guide for a network's shared Keycloak realm. For what the realm
@@ -117,7 +117,7 @@ For each **public** client (`signals-ui`, `aggregator-portal`) update:
 - **Web Origins**
 
 and replace `localhost` / `keycloak` hostnames throughout the environment
-config. See [Deployment](/guides/deployment/).
+config. See [Deployment](/guides/installation/cloud-setup/aws/deployment/).
 
 ## Migrating an existing instance
 
@@ -146,3 +146,9 @@ provider or the other, so the switch happens for all users at once. If something
 goes wrong, the switch is reversible per instance: set `AUTH_PROVIDER` back and
 restart. Users created while on Keycloak can still sign in afterwards, because
 the legacy OTP login does not require a stored credential.
+
+## Where to go next
+
+- [Keycloak Realm Reference](/core-concepts/architecture/keycloak-realm/) — what the imported realm contains.
+- [Identity & Auth](/core-concepts/architecture/identity-and-auth/) — the token and acting-org model.
+- [API Conventions](/guides/api-conventions/) — the errors a misconfigured client will see.

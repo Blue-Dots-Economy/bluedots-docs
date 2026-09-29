@@ -121,3 +121,9 @@ database rather than `aggregator`, and using the `signals-redis` instance — ar
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md)
 guide. The canonical reference for signals-search's own configuration is **§7 of
 [signals-dpg's guide](https://github.com/Blue-Dots-Economy/signals-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md)**.
+
+## Where to go next
+
+- [Keycloak Setup](/guides/keycloak-setup/) — register the service client this app authenticates with.
+- [Configuration](/guides/configuration/) — env vars and schema-driven forms.
+- [Aggregators](/core-concepts/aggregators/) — what the app is for.

@@ -9,7 +9,7 @@ Blue Dots is built as **Digital Public Goods (DPGs)** — open-source, standards
 
 ## The intuition: shared rails, like UPI
 
-Blue Dots is digital discovery infrastructure — comparable in spirit to what **UPI** created for payments. UPI built shared rails that any bank, any app, and any citizen could use, without anyone owning the network. Blue Dots builds shared digital rails that any government department, SMB, private or social-sector organisation, or citizen can use to **become discoverable and find others** — without anyone owning or controlling the map, connected through an **open discovery protocol**.
+Blue Dots is digital discovery infrastructure — comparable in spirit to what **UPI** created for payments. UPI built shared rails that any bank, any app, and any citizen could use, without anyone owning the network. Blue Dots builds shared digital rails that any government department, MSME, private or social-sector organisation, or citizen can use to **become discoverable and find others** — without anyone owning or controlling the map, connected through an **open discovery protocol**.
 
 Any actor can plug in, contribute, and leverage. That is what makes Blue Dots replicable across districts and states without a bespoke implementation each time.
 
@@ -43,6 +43,27 @@ See [Core Concepts → Signals](/core-concepts/signals/) and [Architecture → S
 The **aggregator-facing application** that lets organisations onboard participants and bring their signals into the network at scale — through registration flows, approval, bulk upload and profile management. The Aggregator app reads from the upstream Signals stack and writes participant signals into it.
 
 See [Core Concepts → Aggregators](/core-concepts/aggregators/) and [Architecture → Aggregator DPG](/core-concepts/architecture/aggregator-dpg/).
+
+### Where each one does its work
+
+The two DPGs divide the [seven-step lifecycle](/core-concepts/blue-dot-lifecycle/) between them:
+
+| DPG | What it does | Where it shows up in the lifecycle |
+|---|---|---|
+| **Signals** | Core registration, discovery and connection | Profile completion (step 4), verification checks (step 5), going live (step 7) |
+| **Aggregator** | Onboarding and tracking for partner organisations and teams | Assisted data collection (step 3), verification review (step 6), ongoing tracking after go-live |
+
+## Supporting blocks, also ready to use
+
+Alongside the two DPGs, an adaptor inherits a set of ready-made supporting pieces — none of which need to be built:
+
+- **Discovery & connection** — finds and ranks relevant matches, including by location.
+- **Notifications** — Email and SMS.
+- **A shared rulebook** — common rules applied consistently across deployments.
+- **Setup automation** — [infrastructure and deployment](/guides/installation/cloud-setup/aws/deployment/) stood up quickly, on AWS out of the box and adaptable to other clouds.
+- **Voice agent prompts** — [published as DPGs](/guides/voice-ai-prompts/), platform-independent.
+- **Participant profiles** — [three types already defined](/core-concepts/participant-profiles/).
+- **Full documentation** — this site.
 
 ## How adaptors start
 

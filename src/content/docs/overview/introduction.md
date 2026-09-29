@@ -13,7 +13,7 @@ Blue Dots closes that gap with open **discovery infrastructure**: a way for citi
 
 A **Blue Dot** is a local signal of intent from a citizen or an enterprise, usually around livelihoods and services. A jobseeker looking for work of a specific trade, an employer who needs that exact skill 800 metres away, a citizen seeking a government scheme — each is a Blue Dot.
 
-A Blue Dot can be created in about two minutes, including over voice in the user's own language. Once created, it becomes discoverable to the relevant peers on the network, so that a match that used to take weeks (or never happened at all) can happen in under a day.
+A Blue Dot can be created in 2–3 minutes, including over voice in the user's own language. Once created, it becomes discoverable to the relevant peers on the network, so that a match that used to take weeks — or never happened at all — can happen in under two days.
 
 ## Why it matters
 
@@ -35,16 +35,27 @@ Blue Dots is delivered as **Digital Public Goods (DPGs)** — open, reusable bui
 
 Adaptors typically *start with Signals*, then add the Aggregator app as they onboard partner organisations. The rest of this documentation walks through both.
 
+## What an adaptor actually does
+
+Mostly **configuration, not construction.** Registration, discovery, connection, notifications and tracking already exist. So do the pieces an adaptor might expect to design from scratch:
+
+- **Participant types** — Job Seeker, Job Provider and Service Provider are [already defined](/core-concepts/participant-profiles/).
+- **Onboarding routes** — assisted or self-serve, via app or AI voice call, [both supported out of the box](/core-concepts/blue-dot-lifecycle/#2-choose-the-route-in).
+- **Verification checks** — structured, completed and consented, [built in](/core-concepts/blue-dot-lifecycle/#5-verification-checks).
+- **Deployment** — [automated on AWS](/guides/installation/cloud-setup/aws/deployment/), adaptable to any major cloud.
+
+> The adaptor brings local knowledge and a local ecosystem to reach providers and seekers. The DPGs bring the underlying machinery.
+
+What is genuinely local — who should become a Blue Dot, which aggregators can reach them, which use case to start with — is exactly what [the lifecycle](/core-concepts/blue-dot-lifecycle/) and the [district activation guide](/guides/district-activation/) walk through.
+
 ## How this documentation is organised
 
 | Section | What you'll find |
 | --- | --- |
+| [Start Here](/start/build/) | Four guided paths — build, deploy, onboard, evaluate. Pick one and follow it in order. |
 | [Overview](/overview/introduction/) | The vision, the problem, the approach, and the DPG model. |
 | [Core Concepts](/core-concepts/) | Signals, aggregators, the domain vocabulary, architecture and technical docs. |
 | [Guides](/guides/) | Installation, adaptor onboarding, configuration, API reference and deployment. |
-| [Explore](/explore/use-cases/) | Pilots, use cases and the road beyond livelihoods. |
+| [API Reference](/api/) | Generated, always-current operation reference for all three services. |
+| [Explore](/explore/use-cases/) | Pilots, use cases, field learnings and the road beyond livelihoods. |
 | [Community](/community/contributing/) | How to contribute, the roadmap and release notes. |
-
-:::note
-This is a living document. Pages are seeded with real material from the initiative and its reference architecture; refine them as the DPGs evolve.
-:::

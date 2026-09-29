@@ -2,7 +2,7 @@
 title: Networks, Domains & Instances
 description: The three structural concepts that make Blue Dots network-aware.
 sidebar:
-  order: 3
+  order: 5
 ---
 
 Three structural concepts make Blue Dots **network-aware**. They are distinct and should not be conflated.

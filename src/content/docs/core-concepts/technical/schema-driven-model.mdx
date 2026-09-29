@@ -3,9 +3,12 @@ title: Schema-Driven Model
 description: How schemas define networks, domains and items so domains evolve without code changes.
 sidebar:
   order: 2
+prev:
+  link: /core-concepts/architecture/high-level-architecture/
+  label: "Path 4 of 10: High-Level Architecture"
 next:
   link: /core-concepts/architecture/data-model/
-  label: "Path 5 of 9: Data Model"
+  label: "Path 6 of 10: Data Model"
 ---
 
 import BeforeAfter from '../../../../components/BeforeAfter.astro';
@@ -65,3 +68,9 @@ Schema-driven design is paired with strict configuration discipline:
 - **All env vars are declared in one place** (the Signals `packages/config` Zod schema; the Aggregator config loader). Ad-hoc `process.env` reads are not allowed.
 - In Signals, adding an env var means changing **two places together**: the Zod schema *and* `turbo.json`'s `globalPassThroughEnv`, or the value won't reach filtered tasks.
 - Per-environment values live in `config/env/{dev,staging,prod}.yaml`.
+
+## Where to go next
+
+- [Participant Profiles](/core-concepts/participant-profiles/) — the shipped schemas, field by field.
+- [Data Model](/core-concepts/architecture/data-model/) — where schema-typed items are stored.
+- [Configuration](/guides/configuration/) — which file each schema lives in.

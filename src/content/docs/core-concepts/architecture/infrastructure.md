@@ -91,6 +91,6 @@ Both verticals authenticate against one shared Keycloak realm — see [Identity 
 
 ## Where to go next
 
-- Run it: [Deployment guide](/guides/deployment/).
+- Run it: [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/).
 - Ship to it: [CI/CD & Build Pipeline](/guides/cicd-and-builds/).
 - Configure it: [Configuration](/guides/configuration/).

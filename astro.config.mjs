@@ -31,6 +31,11 @@ function apiReferenceSidebarGroup(label, service) {
 export default defineConfig({
   site: 'https://docs.bluedotseconomy.org',
 
+  // The hand-written API page was retired once /api/ became generated from
+  // each service's OpenAPI. starlight-links-validator resolves links through
+  // redirects, so inbound links stay valid.
+  redirects: { '/guides/api-reference': '/api/' },
+
   // Astro 7 defaults to the new Sätteri Markdown processor, which
   // starlight-image-zoom doesn't support yet (HiDeoo/starlight-image-zoom#63).
   // Pin the classic unified/remark processor until it does.
@@ -43,6 +48,12 @@ export default defineConfig({
       plugins: [
         starlightLinksValidator({
           errorOnLocalLinks: false,
+          // The validator only inspects markdown links, frontmatter prev/next and
+          // the two built-in link components. NavCard is ours, so register it —
+          // otherwise every "Go deeper" card is unchecked. PhaseTimeline passes
+          // its hrefs inside a JSX expression (phases={[…]}), which cannot be
+          // registered at all; scripts/check-path-links.mjs covers those.
+          components: [['NavCard', 'href']],
           // starlight-openapi injects its pages via a separate integration
           // (not the content collection), so starlight-links-validator can't
           // see them as valid targets — exclude the generated reference roots.
@@ -165,49 +176,51 @@ export default defineConfig({
         {
           label: 'Start Here',
           items: [
-            { label: 'Build & integrate', slug: 'start/build' },
-            { label: 'Deploy for a district', slug: 'start/deploy' },
-            { label: 'Onboard participants', slug: 'start/onboard' },
-            { label: 'Evaluate impact', slug: 'start/evaluate' },
+            { label: 'Build & integrate', slug: 'start/build'  },
+            { label: 'Deploy for a district', slug: 'start/deploy'  },
+            { label: 'Onboard participants', slug: 'start/onboard'  },
+            { label: 'Evaluate impact', slug: 'start/evaluate'  },
           ],
         },
         {
           label: 'Overview',
           items: [
-            { label: 'Introduction', slug: 'overview/introduction' },
-            { label: 'The Paradox of Proximity', slug: 'overview/paradox-of-proximity' },
-            { label: 'The Blue Dots Approach', slug: 'overview/the-blue-dots-approach' },
-            { label: 'Blue Dots as a DPG', slug: 'overview/blue-dots-as-a-dpg' },
-            { label: 'Who Is This For', slug: 'overview/who-is-this-for' },
+            { label: 'Introduction', slug: 'overview/introduction'  },
+            { label: 'The Paradox of Proximity', slug: 'overview/paradox-of-proximity'  },
+            { label: 'The Blue Dots Approach', slug: 'overview/the-blue-dots-approach'  },
+            { label: 'Blue Dots as a DPG', slug: 'overview/blue-dots-as-a-dpg'  },
+            { label: 'Who Is This For', slug: 'overview/who-is-this-for'  },
           ],
         },
         {
           label: 'Core Concepts',
           items: [
-            { label: 'Overview', slug: 'core-concepts' },
+            { label: 'Core Concepts', slug: 'core-concepts'  },
             { label: 'Signals (Blue Dots)', slug: 'core-concepts/signals' },
-            { label: 'Aggregators', slug: 'core-concepts/aggregators' },
+            { label: 'The Blue Dot Lifecycle', slug: 'core-concepts/blue-dot-lifecycle'  },
+            { label: 'Participant Profiles', slug: 'core-concepts/participant-profiles' },
+            { label: 'Aggregators', slug: 'core-concepts/aggregators'  },
             { label: 'Networks, Domains & Instances', slug: 'core-concepts/networks-domains-instances' },
             { label: 'Items, Actions & Events', slug: 'core-concepts/items-actions-events' },
-            { label: 'Glossary', slug: 'core-concepts/glossary' },
+            { label: 'Glossary', slug: 'core-concepts/glossary'  },
             {
               label: 'Architecture',
               items: [
                 { label: 'High-Level Architecture', slug: 'core-concepts/architecture/high-level-architecture' },
-                { label: 'Signals DPG', slug: 'core-concepts/architecture/signals-dpg' },
-                { label: 'Aggregator DPG', slug: 'core-concepts/architecture/aggregator-dpg' },
-                { label: 'Data Model', slug: 'core-concepts/architecture/data-model' },
+                { label: 'Signals DPG Architecture', slug: 'core-concepts/architecture/signals-dpg' },
+                { label: 'Aggregator DPG Architecture', slug: 'core-concepts/architecture/aggregator-dpg' },
+                { label: 'Data Model', slug: 'core-concepts/architecture/data-model'  },
                 { label: 'Identity & Auth', slug: 'core-concepts/architecture/identity-and-auth' },
                 { label: 'Keycloak Realm Reference', slug: 'core-concepts/architecture/keycloak-realm' },
-                { label: 'Infrastructure & Deployment', slug: 'core-concepts/architecture/infrastructure' },
+                { label: 'Infrastructure & Deployment Architecture', slug: 'core-concepts/architecture/infrastructure' },
               ],
             },
             {
               label: 'Technical Documentation',
               items: [
-                { label: 'Overview', slug: 'core-concepts/technical/overview' },
-                { label: 'Schema-Driven Model', slug: 'core-concepts/technical/schema-driven-model' },
-                { label: 'Read & Write Paths', slug: 'core-concepts/technical/read-write-paths' },
+                { label: 'Technical Documentation', slug: 'core-concepts/technical/overview'  },
+                { label: 'Schema-Driven Model', slug: 'core-concepts/technical/schema-driven-model'  },
+                { label: 'Read & Write Paths', slug: 'core-concepts/technical/read-write-paths'  },
                 { label: 'Tech Stack', slug: 'core-concepts/technical/tech-stack' },
               ],
             },
@@ -216,29 +229,49 @@ export default defineConfig({
         {
           label: 'Guides',
           items: [
-            { label: 'Overview', slug: 'guides' },
+            { label: 'Guides', slug: 'guides'  },
             {
               label: 'Installation',
               items: [
-                { label: 'Prerequisites', slug: 'guides/installation/prerequisites' },
-                { label: 'Local Stack (Docker)', slug: 'guides/installation/local-stack' },
-                { label: 'Signals DPG Setup', slug: 'guides/installation/signals-dpg' },
-                { label: 'Aggregator DPG Setup', slug: 'guides/installation/aggregator-dpg' },
+{ label: 'Overview', slug: 'guides/installation' },
+                {
+                  label: 'Local Setup',
+                  items: [
+                    { label: 'Prerequisites', slug: 'guides/installation/local-setup/prerequisites' },
+                    { label: 'Local Stack (Docker)', slug: 'guides/installation/local-setup/local-stack' },
+                    { label: 'Signals DPG Setup', slug: 'guides/installation/local-setup/signals-dpg' },
+                    { label: 'Aggregator DPG Setup', slug: 'guides/installation/local-setup/aggregator-dpg' },
+                  ],
+                },
+                {
+                  label: 'Cloud Setup',
+                  items: [
+                    {
+                      label: 'AWS',
+                      items: [
+                        { label: 'Infrastructure Setup', slug: 'guides/installation/cloud-setup/aws/infrastructure' },
+                        { label: 'Deployment', slug: 'guides/installation/cloud-setup/aws/deployment' },
+                      ],
+                    },
+                  ],
+                },
               ],
             },
-            { label: 'Activating in a District', slug: 'guides/district-activation' },
-            { label: 'Adaptor Onboarding', slug: 'guides/adaptor-onboarding' },
-            { label: 'Keycloak Setup', slug: 'guides/keycloak-setup' },
-            { label: 'Configuration', slug: 'guides/configuration' },
-            { label: 'API Guide', slug: 'guides/api-reference' },
+            { label: 'Activating Blue Dots in a District', slug: 'guides/district-activation'  },
+            { label: 'Adaptor Onboarding', slug: 'guides/adaptor-onboarding'  },
+            { label: 'Keycloak Setup', slug: 'guides/keycloak-setup'  },
+            { label: 'Configuration', slug: 'guides/configuration'  },
+            { label: 'Customisation & Branding', slug: 'guides/customisation' },
+            { label: 'AI Voice Agent Prompts', slug: 'guides/voice-ai-prompts' },
+            { label: 'API Conventions', slug: 'guides/api-conventions' },
             { label: 'CI/CD & Build Pipeline', slug: 'guides/cicd-and-builds' },
-            { label: 'Deployment', slug: 'guides/deployment' },
+
           ],
         },
         {
           label: 'API Reference',
           items: [
-            { label: 'Overview', slug: 'api' },
+            { label: 'API Reference', slug: 'api'  },
             apiReferenceSidebarGroup('Signals-DPG API', 'signals-dpg'),
             apiReferenceSidebarGroup('Aggregator-DPG API', 'aggregator-dpg'),
             apiReferenceSidebarGroup('Signals-Search API', 'signals-search'),
@@ -247,16 +280,17 @@ export default defineConfig({
         {
           label: 'Explore',
           items: [
-            { label: 'Use Cases', slug: 'explore/use-cases' },
-            { label: 'Pilots: Ghaziabad & Dharwad', slug: 'explore/pilots' },
-            { label: 'The Economics of Local Discovery', slug: 'explore/economics' },
-            { label: 'The Dots Family', slug: 'explore/beyond-livelihoods' },
+            { label: 'Use Cases', slug: 'explore/use-cases'  },
+            { label: 'Pilots — Ghaziabad & Dharwad', slug: 'explore/pilots'  },
+            { label: "What We're Learning", slug: 'explore/learnings' },
+            { label: 'The Economics of Local Discovery', slug: 'explore/economics'  },
+            { label: 'Beyond Livelihoods: The Dots Family', slug: 'explore/beyond-livelihoods'  },
           ],
         },
         {
           label: 'Community',
           items: [
-            { label: 'Contributing', slug: 'community/contributing' },
+            { label: 'Contributing', slug: 'community/contributing'  },
             { label: 'Roadmap', slug: 'community/roadmap' },
             { label: 'Release Notes', slug: 'community/release-notes' },
           ],

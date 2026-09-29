@@ -4,11 +4,11 @@ description: Run the Signals backend and UI locally, standalone, in one command.
 sidebar:
   order: 3
 prev:
-  link: /guides/installation/local-stack/
-  label: "Path 7 of 9: Local Stack"
+  link: /guides/installation/local-setup/local-stack/
+  label: "Path 8 of 10: Local Stack"
 next:
-  link: /guides/api-reference/
-  label: "Path 9 of 9: API Reference"
+  link: /guides/api-conventions/
+  label: "Path 10 of 10: API Conventions"
 ---
 
 The Signals DPG is the network-aware backend (API + UI). It runs **standalone** —
@@ -28,8 +28,10 @@ Pick a track: **A — Docker-only** (fastest, one command) or **B — hybrid dev
 git clone https://github.com/Blue-Dots-Economy/signals-dpg.git
 cd signals-dpg/local-setup
 docker login dhi.io             # app images build FROM dhi.io
-cp .env.example .env            # set SIGNALS_PII_KEY (openssl rand -base64 32)
-echo "INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)" >> .env
+cp .env.example .env            # ships working dev values for both secrets
+# Rotate them in place (macOS/BSD sed; on Linux drop the '' after -i).
+sed -i '' "s|^INSTANCE_SHARED_SECRET=.*|INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)|" .env
+sed -i '' "s|^SIGNALS_PII_KEY=.*|SIGNALS_PII_KEY=$(openssl rand -base64 32)|" .env
 docker compose --profile keycloak up -d --build
 ```
 
@@ -63,13 +65,16 @@ Run the backing services from `local-setup/`, then the API + UI from source:
 
 ```bash
 cd signals-dpg/local-setup && cp .env.example .env
-echo "INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)" >> .env
+sed -i '' "s|^INSTANCE_SHARED_SECRET=.*|INSTANCE_SHARED_SECRET=$(openssl rand -hex 32)|" .env
 docker compose --profile keycloak up -d \
   postgres redis keycloak keycloak-init mailpit   # backing services only
 
 cd ..                                     # repo root
 pnpm install
 cp .env.example .env                      # point at the Docker DB/Redis (see the guide)
+# Root .env is a separate file from local-setup/.env — rotate its secrets too:
+#   SIGNALS_PII_KEY=<openssl rand -base64 32>       # must decode to exactly 32 bytes
+sed -i '' "s|^SIGNALS_PII_KEY=.*|SIGNALS_PII_KEY=$(openssl rand -base64 32)|" .env
 pnpm db:push:api && pnpm db:init:api      # schema + extensions/tables
 pnpm dev:api                              # API on :2742  (terminal 1)
 pnpm dev:ui                               # UI  on :5173  (terminal 2)
@@ -88,7 +93,8 @@ needed. Set `AUTH_PROVIDER=keycloak` and the `KEYCLOAK_*` values in `.env` — s
 Because the model is [schema-driven](/core-concepts/technical/schema-driven-model/),
 you add item types and forms through `network.json` schemas rather than code.
 
-Next: set up the [Aggregator DPG](/guides/installation/aggregator-dpg/), or wire an integration via the [API Reference](/guides/api-reference/).
+  link: /guides/installation/local-setup/local-stack/
+  label: "Path 8 of 10: Local Stack"
 
 ## Adding search (relevance ranking)
 

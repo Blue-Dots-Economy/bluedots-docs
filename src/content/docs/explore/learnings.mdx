@@ -1,0 +1,159 @@
+---
+title: What We're Learning on the Ground
+description: Nine findings from live district operations, and the five ways they are reshaping how the model is designed.
+sidebar:
+  order: 3
+prev:
+  link: /explore/pilots/
+  label: "Path 4 of 7: Pilots"
+next:
+  link: /explore/economics/
+  label: "Path 6 of 7: The Economics of Local Discovery"
+---
+
+import StatCard from '../../../components/StatCard.astro';
+import StatGrid from '../../../components/StatGrid.astro';
+
+[Pilots](/explore/pilots/) covers what the Ghaziabad and Dharwad deployments *proved*. This page covers what they are *teaching* — patterns emerging from live operations, and the design changes those patterns are driving.
+
+:::note[Field observation, not shipped capability]
+These are findings from districts in active operation. They describe what is being observed, not what the DPGs guarantee. Expect them to move as coverage grows.
+:::
+
+<StatGrid>
+  <StatCard value="70%" label="Of applications are within 15 km of the applicant" color="blue" />
+  <StatCard value="~50%" label="Conversion in targeted digital drives, vs ~5% conventional" color="green" />
+  <StatCard value="150+" label="Providers mapped against 10+ youth needs and 8+ MSME needs" color="purple" />
+  <StatCard value="90%" label="Of MSMEs report open vacancies; only ~half respond within 48 hours" color="orange" />
+</StatGrid>
+
+## What's working
+
+### 1. Proximity is helping people find relevant local opportunities
+
+**70% of applications are within 15 km.** The pattern is stronger for women, who are more likely to look within roughly two bus stops, while men are more likely to search across the district rather than move out.
+
+Proximity matters more than assumed — and the pattern also reveals what demand is actually present locally. Ghaziabad is now surfacing around **five times more machine-operator roles than fresher roles**, which suggests the system is picking up real local demand rather than generic entry-level listings.
+
+This is the [paradox of proximity](/overview/paradox-of-proximity/) measured rather than argued.
+
+### 2. The conversations are surfacing many different needs
+
+Young people are not only looking for jobs. Depending on where they are in their journey, they may need **further skilling, counselling, internships, capital and financial services, proof of skill, interview preparation, placement and staffing support, market access, or access to schemes**.
+
+Some calls surface very specific next steps — a candidate asking whether an AutoCAD-related role can lead to CAD work; a skilled worker asking how to get proof of skill.
+
+One *Kaam Ki Baat* call in Ghaziabad went further still. The woman who answered was not looking for work herself. She used the conversation to look for opportunities for her family: in a six-minute call she shared details of four people — her three children and her daughter-in-law — and explored specific roles including Solar Energy Advisor, Production Trainee and Client Support Executive, one of them in Noida.
+
+> The same helpline becomes useful beyond the person who answered the call.
+
+Needs are also surfacing well outside employment: capital to start a business, machines and loans to expand existing work, help with schemes and market access. In the seeker profile, this is exactly what the [`otherHelpNeeded` field](/core-concepts/participant-profiles/#job-seeker) is there to catch.
+
+### 3. Voice AI captures a lot in a short conversation
+
+A short call is enough for someone to explain what they have done, what skills they have, what kind of work they are looking for, where they are willing to travel, what pay they expect, and what else would make a job workable for them.
+
+The point is not that people stay on the call. It is that **a short conversation captures enough to understand the person and identify a relevant next step**. The Voice AI has also moved from simply logging interest to helping candidates complete applications during the call.
+
+### 4. Local demand is running well ahead of available talent
+
+| District | Ratio observed |
+|---|---|
+| **Dharwad** | ~3 MSME jobs for every 1 newly trained electrician |
+| **Ghaziabad** | ~5 machine-operator roles for every 1 fresher-type role |
+
+These are useful signals for a district: they show where employers are looking and where available talent may not be enough, and they help training providers see which skills have stronger local demand.
+
+**Targeted placement drives are converting at around 50%, against around 5% for conventional drives and job fairs.** In a digitally enabled drive, both candidates and jobs are Blue-Dotted *before* the event, so the drive can be targeted against demand and supply that has already surfaced, rather than being a generic job fair.
+
+### 5. Guidance is helping first-time graduates take the next step
+
+Around **80% of first-time graduates need four questions answered before they apply**:
+
+1. Is the job nearby?
+2. Is it the right fit?
+3. Does it offer growth?
+4. Is the pay fair for the area?
+
+Districts are now identifying counsellors across colleges and NGOs and **Blue-Dotting them**, so candidates can be connected to someone they already trust. This creates a guidance layer between a listing and an application, instead of expecting a first-time job seeker to decide off a listing alone.
+
+Counsellors entering the map this way are [Service Providers](/core-concepts/participant-profiles/#service-provider).
+
+### 6. Employers are starting to respond to what candidates expect
+
+**90% of MSMEs report having open vacancies, but only about half respond to candidates within the 48 hours candidates expect.**
+
+MSME associations are therefore working towards **Common Hiring Standards**: a named HR contact, a two-day response commitment, and early pilots with AI-HR screening partners. Some associations are also pushing members towards digital hiring, including scannable hiring notices instead of word of mouth.
+
+The change is not only that vacancies get filled. Employers are beginning to change *how they hire*, because candidate expectations have become visible.
+
+### 7. Women are asking for specific assurances before taking a job
+
+Around **75% of women will not proceed without clarity on three things**: safety, closeness to home, and workplace amenities or shift timings.
+
+The ecosystem is responding in practical ways — associations recognising women-friendly workplaces, and dedicated women's training batches through partners such as TRRAIN. The aim is to make these assurances **visible before someone joins**: separate and clean washrooms, transport or no night shifts, a safe workplace, and other women already working there.
+
+This is the evidence behind [women's workforce participation](/explore/use-cases/#womens-workforce-participation) as a use case.
+
+### 8. The local service network is growing around the needs being surfaced
+
+More than **150 providers and services** are now mapped against **10+ youth needs and 8+ MSME needs**, including:
+
+- 100+ counsellors
+- 15–20 ITIs for skill training
+- 8+ placement and staffing agencies
+- providers for capital and market access
+
+The network is expanding further into proof of skill, gig work, higher education and internships. When a direct job match is not possible, there are increasingly **other pathways to offer**.
+
+### 9. Small innovations are helping people stay engaged
+
+The **Ghaziabad Fresher Premier League** and the **Ghaziabad Marketer Premier League** keep candidates and sales talent engaged beyond a single application or placement drive. There are also early pushes around gig work and entrepreneurship.
+
+Targeted digital placement drives are the same idea in another form: ~50% conversion against ~5% conventional shows that small changes in how candidates are identified and engaged make a large difference.
+
+These activities give a district a way to stay connected with people who have already shown interest, instead of losing contact after one conversation.
+
+---
+
+## What is changing as the system gets used
+
+The experience is also changing how the model itself is designed.
+
+### 1. From outbound calls to an easy-to-reach local helpline
+
+Much of the early effort was outbound — the system calls a candidate and tries to understand their needs. Growing interest from candidates and MSMEs suggests the next step is making it easy for **people to call when they have a need**.
+
+A trusted AI helpline, backed by a QR code, is proving more useful than cold outbound calling alone. Administrators are popularising *Kaam Ki Baat* as a trusted local helpline. UPSDM is using job fairs to capture youth needs through QR codes and assisted support — including from candidates who never reach the interview stage. Colleges and training centres are using activities like the Fresher Premier League to build awareness.
+
+In lifecycle terms, this is a shift in weight from [outbound to inbound campaigns](/core-concepts/blue-dot-lifecycle/#3-data-collection-assisted-route).
+
+### 2. From job matching to understanding the whole journey
+
+A job listing is only one part of the journey. A person may need counselling before applying, additional skills before becoming eligible, proof of an existing skill, interview preparation, access to capital, or a connection to a market or a government scheme.
+
+The local network is expanding around those needs rather than treating placement as the only outcome. This also changes what the data tells a district: instead of only knowing how many people are looking for work, it can see **what is stopping them from moving forward**, and what support would help.
+
+### 3. Demand signals are shaping training and placement
+
+Three MSME jobs per newly trained electrician is a very different situation from more trained candidates than jobs. Strong machine-operator demand in Ghaziabad points to where training and placement effort should go.
+
+The same information makes placement drives targeted, rather than bringing large numbers of candidates and employers together without knowing whether a match exists.
+
+### 4. Employers are becoming part of the solution
+
+Candidate-side interventions alone are not enough. Employers need to keep vacancies updated, respond quickly, provide the information candidates care about, and make the hiring process easier.
+
+Common Hiring Standards, digital hiring notices and AI-HR tooling are early signs of this shift. Local employer associations can carry these practices across their members.
+
+### 5. The local ecosystem is working from one set of signals
+
+The larger change is that different parts of the ecosystem are beginning to see the same picture.
+
+A district can see what work people are looking for, how far they will travel, what skills they have, what concerns they hold, and what other services they need — and at the same time where employers have vacancies, what skills they need, and where demand is strong. Government departments, employers, counsellors, training providers and service providers get a **common starting point for action**.
+
+The next step is making these signals available to more people and institutions, so the local ecosystem can respond faster and more precisely.
+
+:::tip[Go deeper]
+[Pilots](/explore/pilots/) for the baseline evidence, [The Economics of Local Discovery](/explore/economics/) for what this is worth at district and national scale, and [Activating Blue Dots in a District](/guides/district-activation/) for how a district starts.
+:::
