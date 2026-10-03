@@ -56,8 +56,10 @@ On the host, the AI Diffusion stack publishes these ports. The blocks themselves
 ## 3. Get the code
 
 ```bash
-git clone https://github.com/Blue-Dots-Economy/ai-diffusion-dpg.git
+git clone --branch <release tag> https://github.com/Blue-Dots-Economy/ai-diffusion-dpg.git
 ```
+
+Releases are tagged `<YYYYMM>-s<sprint>-rc<n>`, for example `202610-s1-rc1`, and the images for a release carry the same tag. Use the same `<release tag>` wherever this guide asks for it. Until the first release tag is published, leave out `--branch <release tag>` to clone `main`, and use `local` as the tag.
 
 You build the images in step 6, once `.env` is written.
 
@@ -190,12 +192,12 @@ SIGNALS_SEARCH_URL=http://host.docker.internal:3100
 SIGNALS_INSTANCE_URL=http://localhost:2742
 TOOL_RESULT_KEY_SECRET=$(openssl rand -hex 32)
 DOMAIN=blue-dots
-DPG_IMAGE_TAG=<commit>
+DPG_IMAGE_TAG=<release tag>
 X
 git check-ignore -v .env
 ```
 
-`BLUE_DOTS_API_KEY` and `BLUE_DOTS_SEARCH_API_KEY` are both the `sk_signals_…` key from step 4. `DPG_IMAGE_TAG` is the tag you build with in step 6: use your checkout's short commit (`git rev-parse --short HEAD`). The heredoc is unquoted on purpose, so `$(openssl rand -hex 32)` runs and writes a random secret.
+`BLUE_DOTS_API_KEY` and `BLUE_DOTS_SEARCH_API_KEY` are both the `sk_signals_…` key from step 4. `DPG_IMAGE_TAG` is your `<release tag>`, the same tag you build with in step 6. The heredoc is unquoted on purpose, so `$(openssl rand -hex 32)` runs and writes a random secret.
 
 **Required**
 
@@ -237,25 +239,25 @@ All commands in this step run from `ai-diffusion-dpg/automation/docker`.
 
 ### Build the images
 
-The stack runs from `docker-compose.dev.yml`, which pulls `ghcr.io/blue-dots-economy/ai-diffusion-dpg/<block>:${DPG_IMAGE_TAG}` and has no `build:` sections. So you build the images with `docker-compose.yml`, which tags them with `${GIT_SHA}` under the same names, and then start the dev file with `DPG_IMAGE_TAG` set to the same value. Docker finds the local images and pulls nothing. Use the same `<commit>` you set as `DPG_IMAGE_TAG` in `.env`; any value works as long as `GIT_SHA` and `DPG_IMAGE_TAG` match.
+The stack runs from `docker-compose.dev.yml`, which pulls `ghcr.io/blue-dots-economy/ai-diffusion-dpg/<block>:${DPG_IMAGE_TAG}` and has no `build:` sections. So you build the images with `docker-compose.yml`, which tags them with `${GIT_SHA}` under the same names, and then start the dev file with `DPG_IMAGE_TAG` set to the same value. Docker finds the local images and pulls nothing. Use the same `<release tag>` you set as `DPG_IMAGE_TAG` in `.env`; `GIT_SHA` and `DPG_IMAGE_TAG` must match.
 
 ```bash
-GIT_SHA=<commit> docker compose -f docker-compose.yml build \
+GIT_SHA=<release tag> docker compose -f docker-compose.yml build \
     action_gateway agent_core knowledge_engine memory_layer observability_layer \
     trust_layer reach_layer_bridge dev_kit
 ```
 
-The bridge is the only channel image you need; the optional channels' images are built with their compose profiles ([AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/)). In the verified run, these images and the web chat image built in 147 seconds. Check that they are there:
+The bridge is the only channel image you need; the optional channels' images are built with their compose profiles ([AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/)). On a laptop these images take a few minutes to build. Check that they are there:
 
 ```bash
 docker images --format '{{.Repository}}:{{.Tag}} {{.Size}}' | grep ai-diffusion
 ```
 
 ```text
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/knowledge-engine:<commit> 2.9GB
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/dev-kit:<commit> 501MB
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/reach-layer-bridge:<commit> 163MB
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/agent-core:<commit> 316MB
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/knowledge-engine:<release tag> 2.9GB
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/dev-kit:<release tag> 501MB
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/reach-layer-bridge:<release tag> 163MB
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/agent-core:<release tag> 316MB
 ...
 ```
 
@@ -427,17 +429,7 @@ docker exec signals-postgres psql -U postgres -d postgresdb -c \
  92664f3e-9f67-4155-8de2-8d0588143a26 | apply       | created       | 660b50b5-03bc-4fce-b54c-6cd81e239065 | dbbd1024-20b1-4b9a-9b8c-d14a0859ffc5 | http://localhost:2742    | org_8c3b6989-d923-4491-84a9-b2b0311e6814 | 2026-10-03 05:54:29.852+00
 ```
 
-One `apply` row: from the seeker profile the call created (`source_item_id`) to the job you seeded (`target_item_id`), performed by the service organisation. The new profile is live, with the age and trade from the call:
-
-```bash
-docker exec signals-postgres psql -U postgres -d postgresdb -c \
-    "SELECT item_id, lifecycle_status, item_state->>'name' name, item_state->>'location' loc, item_state->>'age' age,
-            item_state->>'nameOfJobRolesInterestedIn' trade FROM items WHERE item_domain='seeker';"
-```
-
-```text
- 660b50b5-03bc-4fce-b54c-6cd81e239065 | live | र*** | L*** | 28 | Electrician
-```
+One `apply` row: from the seeker profile the call created (`source_item_id`) to the job you seeded (`target_item_id`), performed by the service organisation.
 
 ## 10. Optional channels
 

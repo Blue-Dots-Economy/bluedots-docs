@@ -168,10 +168,10 @@ reach_layer:
 
 ### 3. Compose profile
 
-Build the web chat image with the same `<commit>` as the other images, then start it with the `web` profile and restart Agent Core so it reads the new block:
+Build the web chat image with the same `<release tag>` as the other images, then start it with the `web` profile and restart Agent Core so it reads the new block:
 
 ```bash
-GIT_SHA=<commit> docker compose -f docker-compose.yml --profile web build reach_layer_web
+GIT_SHA=<release tag> docker compose -f docker-compose.yml --profile web build reach_layer_web
 DOMAIN=blue-dots $COMPOSE --profile web up -d --wait reach_layer_web
 DOMAIN=blue-dots $COMPOSE restart agent_core
 ```
@@ -521,10 +521,10 @@ reach_layer:
 
 ### 3. Compose profile
 
-Build the image with the same `<commit>` as the others, then start it with the `voice` profile and restart Agent Core:
+Build the image with the same `<release tag>` as the others, then start it with the `voice` profile and restart Agent Core:
 
 ```bash
-GIT_SHA=<commit> docker compose -f docker-compose.yml --profile voice build reach_layer_voice
+GIT_SHA=<release tag> docker compose -f docker-compose.yml --profile voice build reach_layer_voice
 DOMAIN=blue-dots $COMPOSE --profile voice up -d reach_layer_voice
 DOMAIN=blue-dots $COMPOSE restart agent_core
 ```
@@ -575,7 +575,7 @@ reach_layer:
 ### 3. Compose profile
 
 ```bash
-GIT_SHA=<commit> docker compose -f docker-compose.yml --profile mcp build reach_layer_mcp
+GIT_SHA=<release tag> docker compose -f docker-compose.yml --profile mcp build reach_layer_mcp
 DOMAIN=blue-dots $COMPOSE --profile mcp up -d reach_layer_mcp
 ```
 
