@@ -1,22 +1,25 @@
 ---
 title: AI Diffusion DPG Setup
-description: Run the Blue Dots voice agent on your machine against the local Signals stack, and finish with a real job application in Signals.
+description: Run the Blue Dots agent on your machine against the local Signals stack, talk to it through the VoicERA bridge, web chat or the CLI, and finish with a real job application in Signals.
 sidebar:
   order: 5
 ---
 
-This guide runs the **AI Diffusion DPG** with the **Blue Dots** use case on your machine, next to the local Signals stack. You build the images from source, connect the agent to your local Signals, hold a short Hindi conversation through the VoicERA bridge, and finish with a job application stored in Signals. For what each block does, read the [AI Diffusion DPG architecture](/core-concepts/architecture/ai-diffusion-dpg/) first. For how the Blue Dots YAML is put together, see [Configuring an AI Diffusion use case](/core-concepts/architecture/ai-diffusion-configuration/).
+This guide runs the **AI Diffusion DPG** with the **Blue Dots** use case on your machine, next to the local Signals stack. You build the images from source, connect the agent to your local Signals, hold a short Hindi conversation, and finish with a job application stored in Signals. For what each block does, read the [AI Diffusion DPG architecture](/core-concepts/architecture/ai-diffusion-dpg/) first. For how the Blue Dots YAML is put together, see [Configuring an AI Diffusion use case](/core-concepts/architecture/ai-diffusion-configuration/).
+
+The main path talks to the agent through the **VoicERA bridge**, an OpenAI-compatible `/v1/chat/completions` endpoint. The bridge is where your own voice pipeline (telephony, speech-to-text and text-to-speech) connects to the agent. The reference voice pipeline is [VoicERA](https://github.com/COSS-India/VoicEra), an external DPG voice service. In this guide, `curl` stands in for the voice pipeline. After the main path, each channel has its own section: web chat, the CLI, the built-in telephony voice channel and MCP.
 
 :::note[Verified]
-Verified on 2026-10-03 against ai-diffusion-dpg `adeea88` (images built at `0a506cf`; only the local-Signals override changed up to `adeea88`), on macOS (Apple Silicon), Docker Engine 29.8.1 and Docker Compose v5.5.1, with a fresh local Signals stack from `signals-dpg` `main` (`79c70c9`). Every command below comes from that run. API keys are shown as `<your key>`.
+Verified on 2026-10-03 against ai-diffusion-dpg `<main commit>`, on macOS (Apple Silicon), Docker Engine 29.8.1 and Docker Compose v5.5.1, with a fresh local Signals stack from `signals-dpg` `main`. The bridge, web chat and CLI conversations were run end to end; the telephony voice channel was not. Every command below comes from those runs. API keys are shown as `<your key>`.
 :::
 
 ## 1. What you'll have at the end
 
-- The AI Diffusion stack running in Docker as 16 containers: the six other blocks, the Reach Layer's web and bridge channels, dev-kit, Redis, Memgraph, and the observability tools (OpenTelemetry Collector, Jaeger, Loki, Prometheus, Grafana).
+- The AI Diffusion stack running in Docker as 16 containers: the six other blocks, the Reach Layer's web channel and VoicERA bridge, dev-kit, Redis, Memgraph, and the observability tools (OpenTelemetry Collector, Jaeger, Loki, Prometheus, Grafana).
 - The agent's tools pointed at your local Signals: Action Gateway reads profiles and jobs from it, searches it, saves a profile and applies for a job.
 - One scripted conversation through the VoicERA bridge with `curl`, as the test caller `9199000000101`: a greeting, a yes, an age, a trade and city, a pick, a name and a confirmation.
 - One `apply` action in the Signals database, from the caller's new profile to a job you seeded.
+- Optionally, the same conversation in web chat, without a login, and in the CLI.
 
 On the host, the AI Diffusion stack publishes these ports. The blocks themselves (8000–8004 and 9999) are reachable only inside the compose network.
 
@@ -36,13 +39,15 @@ On the host, the AI Diffusion stack publishes these ports. The blocks themselves
 - **The local Signals stack, with search.** Follow [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/), *Track A*, with both profiles (`docker compose --profile keycloak --profile search up -d --build`), then the *Adding search* steps. The agent needs the Signals API on host port `2742` and the search API on host port `3100`; without search, the agent has no job search.
 - **Docker with Compose, logged in to Docker Hub** (`docker login`). The AI Diffusion images are built from Docker Hardened Images (`dhi.io/…`), and the build pulls those bases through your Docker Hub login. `docker login dhi.io` is only needed if you `docker pull` a `dhi.io` image directly.
 - **An OpenAI API key.** The Blue Dots configuration uses OpenAI for the agent's model calls.
-- **Memory.** Give Docker **at least 10 GiB**. Measured after one conversation, with both stacks up:
+- **Memory.** Give Docker **at least 12 GiB**. Measured after a web chat conversation and a CLI session, with both stacks up:
 
   | Stack | Containers | Memory |
   |---|---|---|
-  | AI Diffusion | 16 | 1.27 GiB |
-  | Signals, with the search profile | 9 | 6.8 GiB, of which the embedding server is 5.57 GiB (amd64, emulated on Apple Silicon) |
-  | Total | 25 | 8.1 GiB |
+  | AI Diffusion, without the bridge | 15 | 1.29 GiB |
+  | Signals, with the search profile | 9 | 8.2 GiB, of which the embedding server is 6.95 GiB (amd64, emulated on Apple Silicon) |
+  | Total | 24 | 9.5 GiB |
+
+  An earlier run, with the bridge, measured 8.1 GiB in total. Almost all of the difference is the embedding server, so leave headroom.
 
 - **Disk.** Plan for about 30 GiB of images and build cache for both stacks. The search profile's embedding image is about 12 GiB, and the AI Diffusion build adds about 15 GiB including cache.
 - **Port 2742 belongs to the Signals container.** If you ever ran the Signals API from source (Track B), make sure that process is gone. This should list only Docker:
@@ -53,10 +58,8 @@ On the host, the AI Diffusion stack publishes these ports. The blocks themselves
 
 ## 3. Get the code
 
-Clone the `deploy/voicera-vm` branch:
-
 ```bash
-git clone -b deploy/voicera-vm https://github.com/Blue-Dots-Economy/ai-diffusion-dpg.git
+git clone https://github.com/Blue-Dots-Economy/ai-diffusion-dpg.git
 ```
 
 You build the images in step 6, once `.env` is written.
@@ -84,13 +87,13 @@ aggregator-dpg:
 seed complete.
 ```
 
-The raw `sk_signals_…` key is printed **only on the first run**; Signals keeps only its hash. Running the command again is safe: it prints the same `org_id` every time, and on later runs the key line reads `apikey: (existing …)` instead of a key. So if you already ran it for *Adding search*, expect that line, take the `org_id` from the output, and reuse the key you saved then: it is the `SIGNALS_SEARCH_API_KEY` value in `local-setup/.env.search`. If the key is lost, reset Signals and mint a new one ([step 10](#10-stop-reset-and-clean-up)).
+The raw `sk_signals_…` key is printed **only on the first run**; Signals keeps only its hash. Running the command again is safe: it prints the same `org_id` every time, and on later runs the key line reads `apikey: (existing …)` instead of a key. So if you already ran it for *Adding search*, expect that line, take the `org_id` from the output, and reuse the key you saved then: it is the `SIGNALS_SEARCH_API_KEY` value in `local-setup/.env.search`. If the key is lost, reset Signals and mint a new one ([step 15](#15-stop-reset-and-clean-up)).
 
 The same key serves the agent as `BLUE_DOTS_API_KEY` and `BLUE_DOTS_SEARCH_API_KEY`, and the `org_id` becomes `BLUE_DOTS_ORG_ID`.
 
 ### Seed one job
 
-The conversation in step 7 asks for electrician work in Lucknow, so seed one matching job. Save this as `job.json`:
+The conversation in step 9 asks for electrician work in Lucknow, so seed one matching job. Save this as `job.json`:
 
 ```json
 {
@@ -192,8 +195,6 @@ TOOL_RESULT_KEY_SECRET=$(openssl rand -hex 32)
 DOMAIN=blue-dots
 DPG_IMAGE_TAG=<commit>
 X
-echo "REACH_SESSION_SECRET=$(openssl rand -hex 32)" >> .env
-echo "GOOGLE_CLIENT_ID=local-dummy.apps.googleusercontent.com" >> .env
 git check-ignore -v .env
 ```
 
@@ -211,15 +212,15 @@ git check-ignore -v .env
 | `TOOL_RESULT_KEY_SECRET` | The Memory Layer's secret for saved tool results. If it is empty, the Memory Layer still starts but logs `tool_result_store.disabled` and saves no tool results. |
 | `DOMAIN` | The use case whose configuration is mounted: `blue-dots`. |
 | `DPG_IMAGE_TAG` | The image tag to run. |
-| `REACH_SESSION_SECRET`, `GOOGLE_CLIENT_ID` | The web channel will not start without them, because the framework turns on Google sign-in for web chat. The dummy client ID lets it start; see [step 8](#8-optional-the-web-chat). |
 
 **Optional, not needed for this guide**
 
 | Variables | What they are for |
 |---|---|
+| `GOOGLE_CLIENT_ID`, `REACH_SESSION_SECRET` | Google sign-in for web chat. Blue Dots runs web chat without a login, so they are only needed if you turn sign-in on ([step 10](#10-web-chat)). |
 | `HITL_WEBHOOK_URL`, `HITL_WEBHOOK_SECRET` | Human handoff to a receiver you run. Blue Dots ships with handoff off (`human_handoff: none`), and the local compose file does not pass them. |
 | `DISCORD_WEBHOOK_CRITICAL`, `DISCORD_WEBHOOK_WARNING`, `DISCORD_WEBHOOK_INFO` | Grafana alert routing, one Discord webhook per severity. Without them, alerts go to a placeholder that delivers nowhere. |
-| `VOBIZ_AUTH_ID`, `VOBIZ_AUTH_TOKEN`, `VOBIZ_FROM_NUMBER`, `RAYA_API_KEY`, `PUBLIC_URL`, `NGROK_AUTHTOKEN`, `NGROK_DOMAIN` | The telephony voice channel (port 8006): the Vobiz telephony account, the speech provider key and a public URL for call webhooks. This guide does not start the voice channel. |
+| `VOBIZ_AUTH_ID`, `VOBIZ_AUTH_TOKEN`, `VOBIZ_FROM_NUMBER`, `RAYA_API_KEY`, `PUBLIC_URL`, `NGROK_AUTHTOKEN`, `NGROK_DOMAIN` | The telephony voice channel (port 8006): the Vobiz telephony account, the speech provider key and a public URL for call webhooks. See [step 12](#12-voice-telephony). |
 
 ### Port clashes with the Signals stack
 
@@ -254,10 +255,10 @@ docker images --format '{{.Repository}}:{{.Tag}} {{.Size}}' | grep ai-diffusion
 ```
 
 ```text
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/knowledge-engine:0a506cf 2.9GB
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/dev-kit:0a506cf 501MB
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/reach-layer-web:0a506cf 274MB
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/agent-core:0a506cf 316MB
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/knowledge-engine:<commit> 2.9GB
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/dev-kit:<commit> 501MB
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/reach-layer-web:<commit> 274MB
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/agent-core:<commit> 316MB
 ...
 ```
 
@@ -293,7 +294,7 @@ reach_layer_web       Up 49 seconds (healthy)       0.0.0.0:8005->8005/tcp
 
 `COMPOSE` and `CORE` are shell variables, so define them again in any new terminal.
 
-## 7. Verify
+## 7. Verify the stack
 
 ### Every block is healthy
 
@@ -334,9 +335,40 @@ docker exec action_gateway python3 -c "import urllib.request;r=urllib.request.ur
 200 {"status":"ready"}
 ```
 
+## 8. Where channel configuration lives
+
+Every channel has its own block under `channels:`, in two files of the Blue Dots use case:
+
+| File | Block | What it holds |
+|---|---|---|
+| `dev-kit/configs/blue-dots/agent_core.yaml` | `channels.<channel>` | How Agent Core treats turns from that channel, such as the channel's prompt suffix (`system_prompt_suffix`), how it assembles a turn (`turn_assembler`) and, for the bridge, the output contract. |
+| `dev-kit/configs/blue-dots/reach_layer.yaml` | `reach_layer.channels.<channel>` | How the channel itself behaves, such as web chat's sign-in and the bridge's spoken status phrases. |
+
+Blue Dots has a block for each of `web`, `cli`, `voice` and `bridge`. The framework defaults sit under the same keys in `dev-kit/dpg/reach_layer.yaml`, and your use-case file is merged on top of them, so you only write the keys you change. Agent Core answers only on channels that have a block in `agent_core.yaml`.
+
+The blocks read their configuration at startup. After you change a file, restart the container that reads it, from `automation/docker`. For example, after a change to `agent_core.yaml`:
+
+```bash
+DOMAIN=blue-dots $COMPOSE restart agent_core
+```
+
+Agent Core is healthy again after about 25 seconds. For a change to `reach_layer.yaml`, restart that channel's container instead (`reach_layer_bridge`, `reach_layer_web` or `reach_layer_voice`). An unknown key fails validation, and the container does not start.
+
+## 9. The VoicERA bridge (default)
+
+**What it is.** The bridge is the integration point for your own voice pipeline. It speaks the OpenAI chat-completions format (`POST /v1/chat/completions`), so a voice pipeline that expects to talk to an LLM can use the whole agent as if it were one model. The pipeline handles the call, speech-to-text and text-to-speech; the bridge streams the agent's sentences back. [VoicERA](https://github.com/COSS-India/VoicEra), an external DPG voice service, is the reference pipeline. Here, `curl` plays its part.
+
+**What it needs.** Nothing beyond the stack you started in step 6. The override publishes the bridge on `127.0.0.1:8008` (loopback only) and mounts the framework defaults where the bridge reads them.
+
+**How to start it.** It is the `reach_layer_bridge` service in `CORE` (step 6).
+
+**How to connect your voice pipeline.** Point its LLM endpoint at the bridge. In this local setup the bridge is published on loopback only, so the pipeline runs on the same machine and uses `http://127.0.0.1:8008/v1/chat/completions`. On every request, send the caller's phone number as `metadata.caller_phone` (digits only, country code first, no `+`) and a `metadata.call_id` that stays the same for the whole call.
+
+**Where its config lives.** `channels.bridge` in `dev-kit/configs/blue-dots/agent_core.yaml` holds the bridge's output contract (Devanagari script, numbers as words) and prompt suffix. `reach_layer.channels.bridge` in `dev-kit/configs/blue-dots/reach_layer.yaml` holds `terminal_word`, `hangup_tool_name` and `tool_status_phrases`, the lines the bridge speaks while a tool runs. To change them, edit the file and restart `agent_core` or `reach_layer_bridge` (step 8).
+
 ### A conversation through the bridge
 
-The VoicERA bridge speaks the OpenAI chat-completions format and streams the reply. Each turn is one request, and the bridge reads only the newest `user` message. Keep `caller_phone` and `call_id` the same for the whole call; the caller's phone is their identity.
+Each turn is one request, and the bridge reads only the newest `user` message. It streams the reply. Keep `caller_phone` and `call_id` the same for the whole call; the caller's phone is their identity.
 
 ```bash
 curl -sN -X POST http://127.0.0.1:8008/v1/chat/completions -H 'content-type: application/json' -d '{
@@ -416,21 +448,121 @@ docker exec signals-postgres psql -U postgres -d postgresdb -c \
  660b50b5-03bc-4fce-b54c-6cd81e239065 | live | र*** | L*** | 28 | Electrician
 ```
 
-## 8. Optional: the web chat
+## 10. Web chat
 
-The web channel on `http://localhost:8005` starts and passes its health check, but it is **not** part of the verified path. The framework turns on Google sign-in for web chat, and Blue Dots keeps it on, so `POST /chat` needs a session from a real Google sign-in:
+**What it is.** A single-page chat app on `http://localhost:8005`. Each message is one request to Agent Core, and the reply comes back whole, not streamed.
+
+**What it needs.** Nothing beyond the stack. Blue Dots runs web chat without a login: `reach_layer.channels.web.auth.enabled` is `false` in `dev-kit/configs/blue-dots/reach_layer.yaml`, overriding the framework default in `dev-kit/dpg/reach_layer.yaml`. So `GOOGLE_CLIENT_ID` and `REACH_SESSION_SECRET` can stay unset.
+
+**How to start it.** It is the `reach_layer_web` service in `CORE` (step 6).
+
+**How to verify it.** Check that sign-in is off:
 
 ```bash
 curl -s localhost:8005/app-config
 ```
 
 ```text
-{"auth":{"enabled":true,"google_client_id":"local-dummy.apps.googleusercontent.com"}}
+{"auth":{"enabled":false,"google_client_id":""}}
 ```
 
-With the dummy client ID from step 5, `/chat` returns `401 {"detail":{"reason":"missing"}}`. To use web chat, set `GOOGLE_CLIENT_ID` to the client ID of a real Google OAuth client that allows `http://localhost:8005`, then restart `reach_layer_web`.
+Open `http://localhost:8005/` in a browser. It goes straight to the **Start a session** screen, with a user ID box and a **Start chatting →** button. For Blue Dots, **the user ID is the caller's phone number, as `91XXXXXXXXXX`** (country code first, no `+`). Action Gateway uses it as the phone number when it looks up and saves the profile, so any other value is stored as a wrong phone number. Then hold the same conversation as in step 9: a greeting, a yes, an age, a trade and city, a pick, a name and a confirmation. The verified web conversation, as `919900000201`, ended in one `apply` row in `item_actions`; check it with the query in [step 9](#the-application-is-in-signals).
 
-## 9. Common problems
+To script it instead, `POST /chat` takes `session_id`, `user_id`, `message` and `fresh` (`true` on the first turn). This helper builds the JSON with Python, so Devanagari is encoded safely:
+
+```bash
+# chat.sh <session_id> <user_id> <message> [fresh]
+python3 -c 'import json,sys;print(json.dumps({"session_id":sys.argv[1],"user_id":sys.argv[2],"message":sys.argv[3],"fresh":sys.argv[4]=="true"}, ensure_ascii=False))' \
+  "$1" "$2" "$3" "${4:-false}" \
+ | curl -s -X POST localhost:8005/chat -H 'content-type: application/json' --data-binary @- -w '\nHTTP %{http_code} %{time_total}s\n'
+```
+
+```bash
+SID=$(uuidgen | tr A-Z a-z)
+./chat.sh $SID 919900000201 "नमस्ते" true
+```
+
+```text
+{"response_text":"नमस्ते! ब्लू डॉट्स में आपका स्वागत है। क्या आप काम की तलाश में हैं?","was_escalated":false,
+ "was_tool_used":false,"session_id":"…","latency_ms":205,"error_type":null,"error_message":null}
+HTTP 200 0.210528s
+```
+
+Send the next lines with the same `$SID` and without `true`.
+
+**Where its config lives.** `channels.web` in `dev-kit/configs/blue-dots/agent_core.yaml` (the text-chat prompt suffix and turn assembly) and `reach_layer.channels.web` in `dev-kit/configs/blue-dots/reach_layer.yaml` (sign-in). To change them, edit the file and restart `agent_core` or `reach_layer_web` (step 8).
+
+**Optional: Google sign-in.** To make users sign in with Google, set `enabled: true` under `reach_layer.channels.web.auth` in `dev-kit/configs/blue-dots/reach_layer.yaml`. Add `GOOGLE_CLIENT_ID` (the client ID of a Google OAuth client that allows `http://localhost:8005`) and `REACH_SESSION_SECRET` (for example `$(openssl rand -hex 32)`) to `.env`, then start `reach_layer_web` again with `DOMAIN=blue-dots $COMPOSE up -d --wait reach_layer_web`. The verified runs used web chat without a login.
+
+## 11. CLI
+
+**What it is.** A text client in your terminal that talks to Agent Core. It is not a compose service: you build its image and run it on the compose network.
+
+**What it needs.** The stack from step 6. The CLI container needs no environment variables and no secrets, only the two Reach Layer configuration files.
+
+**How to start it.** Build the image, from the root of your ai-diffusion-dpg clone:
+
+```bash
+docker build -f reach_layer/cli/Dockerfile -t ghcr.io/blue-dots-economy/ai-diffusion-dpg/reach-layer-cli:local .
+```
+
+The verified build took 21 seconds. Then run it from `automation/docker`, on the compose network (`<COMPOSE_PROJECT_NAME>_dpg_net`, so `dpg-local_dpg_net` here), with the caller's phone as the user ID:
+
+```bash
+docker run --rm -it --network dpg-local_dpg_net \
+    -v "$PWD/../../dev-kit/dpg/reach_layer.yaml:/app/config/dpg.yaml:ro" \
+    -v "$PWD/../../dev-kit/configs/blue-dots/reach_layer.yaml:/app/config/domain.yaml:ro" \
+    ghcr.io/blue-dots-economy/ai-diffusion-dpg/reach-layer-cli:local python main.py --user-id 919900000203
+```
+
+As on web chat, `--user-id` is the phone number in the form `91XXXXXXXXXX`, because that is the number the tools use.
+
+**How to verify it.** The CLI prints a banner, then the agent's opening line, then a `You:` prompt:
+
+```text
+============================================================
+  Reach Layer — CLI
+  Agent Core:    http://agent_core:8000/process_turn
+  Session ID:    0ba50742-93ed-4bb6-946d-76baefd8f4a2
+  Assembly mode: session
+  User ID:       919900000203
+  Type your message. Ctrl-C or Ctrl-D to exit.
+============================================================
+
+Agent: नमस्ते! ब्लू डॉट्स में आपका स्वागत है। क्या आप काम की तलाश में हैं?
+```
+
+Wait for that opening line before you type. In the verified run, `नमस्ते`, `हाँ ठीक है` and `मेरी उम्र 30 साल है` got the replies "नमस्ते! क्या आप काम की तलाश में हैं?", "आपकी उम्र क्या है?" and "आप किस काम या ट्रेड में नौकरी ढूंढ रहे हैं?". Log lines from the client appear between the replies. Ctrl-C or Ctrl-D ends the session.
+
+**Where its config lives.** `channels.cli` in `dev-kit/configs/blue-dots/agent_core.yaml` (prompt suffix and turn assembly) and `reach_layer.channels.cli` in `dev-kit/configs/blue-dots/reach_layer.yaml`. The CLI reads the Reach Layer files when it starts, so a change there applies the next time you run it. A change to `agent_core.yaml` needs `agent_core` restarted (step 8).
+
+## 12. Voice (telephony)
+
+:::caution[Not verified]
+The built-in telephony voice channel was not run for this guide. This section lists what it needs and where its configuration lives, but no step of it has been tested.
+:::
+
+**What it is.** The `reach_layer_voice` service on port 8006. It takes inbound and outbound phone calls through the Vobiz telephony provider, and converts speech to text and text to speech with Raya. It is the alternative to bringing your own voice pipeline through the bridge.
+
+**What it needs.**
+
+| Variable | What it is for |
+|---|---|
+| `PUBLIC_URL` | A public HTTPS URL that the telephony provider calls back on. It must be set before the channel starts. The compose file includes an optional ngrok service for this, which reads `NGROK_AUTHTOKEN` and `NGROK_DOMAIN`. |
+| `VOBIZ_AUTH_ID`, `VOBIZ_AUTH_TOKEN`, `VOBIZ_FROM_NUMBER` | The Vobiz telephony account and the caller-ID number. |
+| `RAYA_API_KEY` | The Raya speech-to-text and text-to-speech key. |
+
+It also needs its image, `reach-layer-voice`, which is not among the nine images built in step 6.
+
+**How to start it.** Build the image the same way as the others in step 6, adding the `reach_layer_voice` service to the `docker-compose.yml` build with the same `GIT_SHA`. Put the variables above in `.env`, then start `reach_layer_voice` with the same `COMPOSE` command.
+
+**Where its config lives.** `channels.voice` in `dev-kit/configs/blue-dots/agent_core.yaml` and `reach_layer.channels.voice` in `dev-kit/configs/blue-dots/reach_layer.yaml`. The framework defaults in `dev-kit/dpg/reach_layer.yaml`, under `channels.voice`, read the variables above: `public_url`, `vobiz.auth_id`, `vobiz.auth_token`, `vobiz.from_number` and `raya.api_key` are set from `${PUBLIC_URL}`, `${VOBIZ_AUTH_ID}`, `${VOBIZ_AUTH_TOKEN}`, `${VOBIZ_FROM_NUMBER}` and `${RAYA_API_KEY}` when the channel starts.
+
+## 13. MCP (optional)
+
+The MCP server (`reach_layer_mcp`, port 8007) exposes the agent through the Model Context Protocol, as tools for an MCP host such as an AI coding assistant or a desktop chat client. It is an optional integration, not part of this guide, and was not run for it. Its Agent Core channel settings come from the framework defaults in `dev-kit/dpg/agent_core.yaml`.
+
+## 14. Common problems
 
 | Symptom | Cause | Fix |
 |---|---|---|
@@ -445,11 +577,13 @@ With the dummy client ID from step 5, `/chat` returns `401 {"detail":{"reason":"
 | A block fails at startup right after you pulled new configuration | The image is older than the configuration, and a key it does not know fails validation. | Rebuild with the new commit, keeping `GIT_SHA` and `DPG_IMAGE_TAG` the same (step 6). |
 | `port is already allocated` on 8080 or 3100 | The stack was started without the override, so dev-kit and Loki collide with Keycloak and signals-search. | Add `-f local-signals.override.yml` to every compose command (the `COMPOSE` variable in step 6). |
 | `reach_layer_bridge` restarts with `FileNotFoundError: Config file not found: /app/reach_layer/bridge/config/dpg.yaml` | The stack was started without the override, which mounts that file. | Add `-f local-signals.override.yml`. |
-| `reach_layer_web` is unhealthy: `RuntimeError: auth.enabled is true but REACH_SESSION_SECRET env var is not set` | Web chat has Google sign-in on, and needs its secrets. | Add `REACH_SESSION_SECRET` and `GOOGLE_CLIENT_ID` to `.env` (step 5). |
+| `reach_layer_web` is unhealthy: `RuntimeError: auth.enabled is true but REACH_SESSION_SECRET env var is not set` | Google sign-in is on for web chat (`channels.web.auth.enabled: true`), and it needs its secrets. | Add `REACH_SESSION_SECRET` and `GOOGLE_CLIENT_ID` to `.env`, or set `enabled` back to `false` ([step 10](#10-web-chat)). |
+| Every web chat or CLI reply is "We're having trouble connecting to the AI service right now", and Agent Core logs `ValueError: Unsupported channel: web` (or `cli`) | The use case's `agent_core.yaml` has no `channels.<channel>` block for that channel. | Add the block, or pull the current Blue Dots configuration, which has one per channel, then restart `agent_core` ([step 8](#8-where-channel-configuration-lives)). |
+| The CLI prints `(abandoned)` and then shows no replies | Input reached the CLI before the agent's opening line, for example when lines are piped into it. | Start it again and wait for the opening line before typing ([step 11](#11-cli)). |
 | The agent offers a job from the wrong city | On a stock local Signals the job's city is private and not used for ranking. | See [City matching on a local Signals](#a-conversation-through-the-bridge). |
 | The build stops with the disk full | Both stacks need about 30 GiB of images and build cache. | Free disk space, then build again. |
 
-## 10. Stop, reset and clean up
+## 15. Stop, reset and clean up
 
 Stop the AI Diffusion stack and remove its volumes (sessions, profile graph, saved tool results), from `automation/docker`:
 
