@@ -47,7 +47,7 @@ Tools are described in two places on purpose. Agent Core's `connectors` say what
 
 ## One phase, end to end
 
-Blue Dots splits a call into phases (called subagents in the YAML): `opening`, `profile_resolve`, `job_match`, `profile_setup`, `apply_confirm` and a few for closing. This is a trimmed copy of `job_match` from `dev-kit/configs/blue-dots/agent_core.yaml`:
+Blue Dots splits a call into phases (called subagents in the YAML): the main path is `opening`, `profile_resolve`, `job_match`, `profile_setup` and `apply_confirm`. Other phases handle the exceptions: `consent_declined` and `u18_blocked` close the call when consent is refused or the caller is under age, `clarification` is the fallback when no rule matches, `handoff` follows a handoff line, `confirm_close` asks once whether to end the call, and `ended` ends it. This is a trimmed copy of `job_match` from `dev-kit/configs/blue-dots/agent_core.yaml`:
 
 ```yaml
 # agent_workflow.subagents[] — trimmed
@@ -98,9 +98,9 @@ Here is the turn from the architecture page, where the caller asks for electrici
 4. **The prompt.** `system_prompt` tells the model how to read out the results. `tools` lists only `fetch_jobs`, so in this phase the model cannot save a profile or apply for a job, whatever it writes.
 5. **The reply.** The output guard applies `channels.bridge.output_contract` (Devanagari script, numbers as words), and the reply ends on a question, such as asking which job the caller wants to hear more about.
 
-On the caller's next turn, `pending` decides which question they are answering. Agent Core takes the first entry whose `when` conditions hold. After a list of jobs, the last question contains no apply phrase, so `select_job` is pending. When the caller names a job ("the Flipkart one"), `options_from` lets the understanding call match the name against the saved `fetch_jobs` result, and `resolves_to` writes the job's `item_id` to `selected_job_item_id`. When the agent has instead asked "shall I send the application?", `submit_confirm` is pending. An `act_intents` row maps a yes to that question to `apply_now`, and the `apply_now` rule sends the caller to `apply_confirm` if they already have a live profile, or to `profile_setup` to create one. A goodbye that the termination gate accepts maps to `termination_intent`, and the first rule ends the call.
+On the caller's next turn, `pending` decides which question they are answering. Agent Core takes the first entry whose `when` conditions hold. After a list of jobs, the last question contains no apply phrase, so `select_job` is pending. When the caller names a job ("the Flipkart one"), `options_from` lets the understanding call match the name against the saved `fetch_jobs` result, and `resolves_to` writes the job's `item_id` to `selected_job_item_id`. Naming a job maps to the `job_pick` intent, and the phase's `job_pick` rules (not shown in the excerpt) send the caller straight to `apply_confirm` or `profile_setup`, with the same profile condition as `apply_now`. When the agent has instead asked "shall I send the application?", `submit_confirm` is pending. An `act_intents` row maps a yes to that question to `apply_now`, and the `apply_now` rule sends the caller to `apply_confirm` if they already have a live profile, or to `profile_setup` to create one. A goodbye that the termination gate accepts maps to `termination_intent`, and the `termination_intent` rule ends the call.
 
-**Consent works through the same phases.** In Blue Dots, the write tools, `save_profile` and `apply_job`, are listed only in `profile_setup` and `apply_confirm`. Those phases are reached only after the `opening` phase has asked the consent question.
+**Consent works through the same phases.** In Blue Dots, the write tools, `save_profile` and `apply_job`, are listed only in `profile_setup` and `apply_confirm`. Those phases come after `opening`, which settles consent: it asks a new caller the consent question, and lets a returning caller through without asking only when their consent is already on file.
 
 ## What the framework owns
 
@@ -114,7 +114,7 @@ You configure the content of a conversation. The framework owns its mechanics, s
 
 ## The dev-kit
 
-The dev-kit (port 8080) is the tool you use to write a use case. It is a web app that interviews you about your use case, phase by phase (language, knowledge, memory, trust, tools, workflow, channels), and writes the YAML files to `dev-kit/configs/<domain>/`. Its Docker image carries each block's runtime schema, so before it deploys a use case it validates each block's merged configuration against the same schema the block checks at startup. You can also edit the files by hand. A running agent does not depend on the dev-kit.
+The dev-kit (port 8080) is the tool you use to write a use case. It is a web app that interviews you about your use case step by step, with steps such as language, knowledge, memory, trust, tools, workflow and channels, and writes the YAML files to `dev-kit/configs/<domain>/`. Before it deploys a use case, it validates each block's merged configuration. Run from its Docker image, it uses the blocks' runtime schemas, the same ones each block checks at startup. Run directly on your machine, it uses a hand-kept copy of those schemas inside the dev-kit, which can lag behind the runtime. You can also edit the files by hand. A running agent does not depend on the dev-kit.
 
 ## Common mistakes
 
