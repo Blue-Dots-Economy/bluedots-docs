@@ -210,6 +210,7 @@ export default defineConfig({
                 { label: 'Signals DPG Architecture', slug: 'core-concepts/architecture/signals-dpg' },
                 { label: 'Aggregator DPG Architecture', slug: 'core-concepts/architecture/aggregator-dpg' },
                 { label: 'AI Diffusion DPG Architecture', slug: 'core-concepts/architecture/ai-diffusion-dpg' },
+                { label: 'Configuring an AI Diffusion Use Case', slug: 'core-concepts/architecture/ai-diffusion-configuration' },
                 { label: 'Data Model', slug: 'core-concepts/architecture/data-model'  },
                 { label: 'Identity & Auth', slug: 'core-concepts/architecture/identity-and-auth' },
                 { label: 'Keycloak Realm Reference', slug: 'core-concepts/architecture/keycloak-realm' },
