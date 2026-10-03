@@ -2,7 +2,7 @@
 title: AI Diffusion DPG Architecture
 description: How the AI Diffusion DPG runs a conversational agent for a public-service use case — seven services, one turn, and the principles behind them.
 sidebar:
-  order: 4
+  order: 7
 ---
 
 The **AI Diffusion DPG** runs a conversational agent for a public-service use case. It is seven fixed services, one per building block, each a small FastAPI service in Python. You do not change their code to build an agent. You describe your use case in YAML instead: what the agent says in each phase of the conversation, which external systems it can call, what it must refuse, and which channels it answers on. The services load that configuration at startup. **Blue Dots**, the voice job assistant, is the reference use case. A job-seeker calls a phone number and talks in Hindi. The agent finds their profile, searches for jobs, and applies for one on their behalf through the Signals network. Every example on this page comes from Blue Dots.
@@ -79,11 +79,11 @@ Each step is there for a reason:
 
 1. **Load the session.** Agent Core keeps no state of its own, so every turn starts by fetching the session, the caller's profile and earlier tool results from the Memory Layer. On a caller's first turn, the use case can also fetch profile fields up front, so a returning caller is recognised from the start.
 2. **Understand the turn.** An LLM call turns the utterance into dialogue acts and slots (here, a trade and a city), which are written to the session. Code can then make decisions from structured values instead of free text. If the use case turns on language normalisation, it runs in parallel with this call. Blue Dots leaves it off.
-3. **Check the input.** The Trust Layer can block or escalate a turn before any tool runs or any reply is written. On the streaming path, understanding runs before this check so the two do not queue behind each other, and its result is used only if the check passes. On the non-streaming path the check comes first.
+3. **Check the input.** The Trust Layer can block or escalate a turn before any tool runs or any reply is written. On the streaming path, understanding runs just before this check (alongside language normalisation, when that is on), and its result is used only if the check passes. On the non-streaming path the check comes first.
 4. **Route.** Rules in your configuration pick the next phase (a "subagent") from the dialogue act and the session state. Here the trade and city are both known, so the conversation moves to `job_match`. Code makes this decision, so it is the same every time.
 5. **Pre-dispatch the search.** The `job_match` phase declares that `fetch_jobs` runs before the LLM. Starting the search early means the results are already in the prompt, so the model does not have to ask for them and wait for a second round trip.
 6. **Assemble the prompt.** The prompt is built from the agent's identity, the current state, the recent turns, the Trust Layer's constraints and the saved tool results. The model sees facts from the tool results, not from its own memory.
-7. **Call the LLM.** The reply streams back token by token. If the model asks for a tool, Agent Core checks consent, the per-turn call limit and that every identifier came from an earlier tool result, then calls the Action Gateway (or the Knowledge Engine for `knowledge_retrieval`), and continues the reply.
+7. **Call the LLM.** The reply streams back token by token. If the model asks for a tool, Agent Core checks the per-turn call limit and that every identifier came from an earlier tool result, then calls the Action Gateway (or the Knowledge Engine for `knowledge_retrieval`), and continues the reply.
 8. **Apply the output guard.** Each sentence is checked against the channel's output contract. For voice, for example, digits are rewritten as spoken words, so the text-to-speech engine says numbers the way a person would.
 9. **Check the output and stream.** Sentences go to the Trust Layer in small batches, and each batch that passes is sent to the caller straight away. If a batch is blocked, a safe fallback line replaces it and nothing more is sent for that turn.
 10. **Write after the reply.** The memory write, the audit record and the turn event for the Observability Layer happen after the caller has the reply. These writes are needed, but the caller should not have to wait for them.
@@ -94,7 +94,7 @@ Each step is there for a reason:
 
 **The LLM writes the words, and code makes the decisions.** A model can phrase a reply well, but it cannot be relied on to make the same choice twice. So routing between phases, consent, ending the session, handing off to a person and the way numbers are spoken are all decided in code from your configuration. The model's job is the wording of each reply.
 
-**Trust is a fail-closed boundary, and tools are withheld until consent.** A public-service agent must not act for someone who has not agreed to it, even when a dependency is down. If the Trust Layer cannot be reached or returns an error, Agent Core treats the check as a block, not a pass. Tools that write data or establish identity need consent before they run. In Blue Dots, consent is the first question the agent asks, and the phases that hold the write tools (saving a profile, applying for a job) can only be reached after it.
+**Trust is a fail-closed boundary, and tools are withheld until consent.** A public-service agent must not act for someone who has not agreed to it, even when a dependency is down. If the Trust Layer cannot be reached or returns an error, Agent Core treats the check as a block, not a pass. In Blue Dots, the write tools (saving a profile, applying for a job) exist only in the phases that come after the consent question. A new caller is asked for consent at the start of the call. A returning caller whose consent is already on file is not asked again.
 
 **Agent Core is stateless, with all state in the Memory Layer.** A voice call may reach a different Agent Core instance on each turn, and an instance may restart mid-call. So Agent Core keeps nothing between turns. Session state, the profile graph and saved tool results live in the Memory Layer, which is the only block that talks to Redis and the graph database.
 
@@ -108,7 +108,7 @@ Every channel is part of the Reach Layer and calls Agent Core over the same HTTP
 
 - **Web (8005).** A single-page chat app with Google sign-in. Each message is one request to Agent Core, and the reply comes back whole, not streamed. It needs a real OAuth client ID to sign in.
 - **Voice (8006).** Inbound and outbound phone calls through a telephony provider (Vobiz). It handles the audio stream, detects when the caller has finished speaking, and converts speech to text and text to speech (Raya). A single outbound call can be started through the channel's `/campaign` endpoint.
-- **MCP (8007).** Exposes the agent as tools to an MCP host, such as an AI coding assistant or a desktop chat client.
+- **MCP (8007).** Exposes the agent through the Model Context Protocol (MCP), as tools for an MCP host, such as an AI coding assistant or a desktop chat client.
 - **VoicERA bridge (8008).** An OpenAI-compatible `/v1/chat/completions` endpoint. A voice platform that expects to talk to an LLM, such as VoicERA, can use the whole agent as if it were one model. The voice platform handles the audio, and the bridge streams the agent's sentences back.
 
 **Caller identity is the phone number.** On voice, the channel takes the caller's number from the telephony provider and passes it to Agent Core as the user ID. On the bridge, the client must send it as `metadata.caller_phone`: digits only, country code first, no `+` (for example `919900112233`). A number without a country code is still a valid query upstream but matches nothing, so the bridge rejects it. A wrong number would make every call look like a first-time caller. Signals keys the profile and job applications on this number, and the Memory Layer uses it to recognise a returning caller.
