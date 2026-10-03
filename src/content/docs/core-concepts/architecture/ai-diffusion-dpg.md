@@ -16,7 +16,7 @@ The **AI Diffusion DPG** runs a conversational agent for a public-service use ca
 | Memory Layer | 8002 | Session state, the profile graph, saved tool results and the audit trail. |
 | Trust Layer | 8003 | Input and output checks, consent, constraints and human handoff. It fails closed. |
 | Observability Layer | 8004 | Traces, metrics, and turn and outcome events, sent asynchronously. |
-| Reach Layer | 8005–8008 | Channels: web, voice (telephony) and CLI; optional MCP server and VoicERA bridge. |
+| Reach Layer | 8005–8008 | The bridge (OpenAI chat-completions compatible, the default integration) plus optional web chat (local/dev), CLI, voice (telephony) and MCP. |
 | Action Gateway | 9999 | Calls external systems through declared tools. |
 
 **dev-kit** (port 8080) is a configuration tool, not a runtime block. You use it to write and check a use case's YAML. A running agent does not depend on it.
@@ -25,14 +25,14 @@ The **AI Diffusion DPG** runs a conversational agent for a public-service use ca
 
 <pre class="mermaid">
 flowchart LR
-  subgraph Channels["Reach Layer channels"]
-    W[Web chat] --- V[Voice / telephony] --- C[CLI]
+  subgraph Default["Default"]
+    B["Bridge (OpenAI-compatible)"]
   end
-  subgraph Optional["Optional integrations"]
-    M[MCP server] --- B[VoicERA bridge]
+  subgraph Optional["Optional channels"]
+    W["Web chat (local/dev)"] --- V[Voice / telephony] --- C[CLI] --- M[MCP server]
   end
+  Default --> AC[Agent Core]
   Optional --> AC
-  Channels --> AC[Agent Core]
   AC --> TL[Trust Layer]
   AC --> ML[Memory Layer]
   AC --> KE[Knowledge Engine]
@@ -94,16 +94,18 @@ Each step is there for a reason:
 
 ## Channels
 
-Every channel is part of the Reach Layer and calls Agent Core over the same HTTP API, so the conversation logic is written once for all of them. Each channel has its own output contract, which the output guard applies to the reply. The channels are web, voice (telephony) and CLI:
+Every channel is part of the Reach Layer and calls Agent Core over the same HTTP API, so the conversation logic is written once for all of them. Each channel has its own output contract, which the output guard applies to the reply. A channel answers only when the use case has a block for it in its configuration.
 
-- **Web (8005).** A single-page chat app. Each message is one request to Agent Core, and the reply comes back whole, not streamed. Google sign-in is optional: Blue Dots runs web chat without a login, and turning sign-in on needs a real OAuth client ID.
+**The bridge is the default integration**, and the only channel Blue Dots enables out of the box:
+
+- **Bridge (8008).** A generic OpenAI chat-completions-compatible endpoint (`/v1/chat/completions`). Any system that speaks that API can connect to it and use the whole agent as if it were one model, for example an adopter's own voice pipeline. Such a pipeline handles the call, speech-to-text and text-to-speech, and the bridge streams the agent's sentences back. [VoicERA](https://github.com/COSS-India/VoicEra), an external DPG voice service, is one example.
+
+The other channels are optional, and an adopter turns on the ones it needs:
+
+- **Web chat (8005), local/dev only.** A single-page chat app for local and development testing. Each message is one request to Agent Core, and the reply comes back whole, not streamed. It runs without a login; Google sign-in is optional and needs a real OAuth client ID.
 - **Voice (8006).** Inbound and outbound phone calls through a telephony provider (Vobiz). It handles the audio stream, detects when the caller has finished speaking, and converts speech to text and text to speech (Raya). A single outbound call can be started through the channel's `/campaign` endpoint.
 - **CLI.** A text client in the terminal, for trying a use case without a browser or a phone. It runs as a container on the stack's network and publishes no port.
-
-Two optional integrations are part of the Reach Layer too:
-
 - **MCP server (8007).** Exposes the agent through the Model Context Protocol (MCP), as tools for an MCP host, such as an AI coding assistant or a desktop chat client.
-- **VoicERA bridge (8008).** An OpenAI-compatible `/v1/chat/completions` endpoint, where an adopter's own voice pipeline connects. A voice pipeline that expects to talk to an LLM can use the whole agent as if it were one model. The pipeline handles the call, speech-to-text and text-to-speech, and the bridge streams the agent's sentences back. The reference pipeline is [VoicERA](https://github.com/COSS-India/VoicEra), an external DPG voice service.
 
 **Caller identity is the phone number.** On voice, the channel takes the caller's number from the telephony provider and passes it to Agent Core as the user ID. On the bridge, the client must send it as `metadata.caller_phone`: digits only, country code first, no `+` (for example `919900112233`). A number without a country code is still a valid query upstream but matches nothing, so the bridge rejects it. On web chat and the CLI, the user ID entered at the start is the phone number in the same form. A wrong number would make every call look like a first-time caller. Signals keys the profile and job applications on this number, and the Memory Layer uses it to recognise a returning caller.
 
@@ -113,7 +115,7 @@ As of **2026-10-03**.
 
 **Built today**
 - The seven blocks, each a FastAPI service with its own schema-validated YAML configuration, and dev-kit.
-- The channels above: web, voice (telephony) and CLI, plus the optional MCP server and VoicERA bridge.
+- The channels above: the bridge (OpenAI chat-completions compatible, the default integration), plus optional web chat (local/dev), CLI, voice (telephony) and MCP.
 - Configurable phases and routing, dialogue-act understanding, tool pre-dispatch, the output contract and guard, and streamed replies with batched output checks.
 - Saved tool results that are put back into the prompt and used to ground identifiers.
 - LLM providers: Anthropic, OpenAI, Google and Ollama, with a primary and a fallback model.
