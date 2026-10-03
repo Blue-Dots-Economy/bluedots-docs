@@ -8,7 +8,7 @@ sidebar:
 This guide runs the **AI Diffusion DPG** with the **Blue Dots** use case on your machine, next to the local Signals stack. You build the images from source, connect the agent to your local Signals, hold a short Hindi conversation through the VoicERA bridge, and finish with a job application stored in Signals. For what each block does, read the [AI Diffusion DPG architecture](/core-concepts/architecture/ai-diffusion-dpg/) first. For how the Blue Dots YAML is put together, see [Configuring an AI Diffusion use case](/core-concepts/architecture/ai-diffusion-configuration/).
 
 :::note[Verified]
-Verified on 2026-10-03 against ai-diffusion-dpg `adeea88`, on macOS (Apple Silicon), Docker Engine 29.8.1 and Docker Compose v5.5.1, with a fresh local Signals stack from `signals-dpg` `main` (`79c70c9`). Every command below comes from that run. API keys are shown as `<your key>`.
+Verified on 2026-10-03 against ai-diffusion-dpg `adeea88` (images built at `0a506cf`; only the local-Signals override changed up to `adeea88`), on macOS (Apple Silicon), Docker Engine 29.8.1 and Docker Compose v5.5.1, with a fresh local Signals stack from `signals-dpg` `main` (`79c70c9`). Every command below comes from that run. API keys are shown as `<your key>`.
 :::
 
 ## 1. What you'll have at the end
@@ -51,40 +51,15 @@ On the host, the AI Diffusion stack publishes these ports. The blocks themselves
   lsof -nP -iTCP:2742 -sTCP:LISTEN
   ```
 
-## 3. Get the code and build the images
+## 3. Get the code
 
 Clone the `deploy/voicera-vm` branch:
 
 ```bash
 git clone -b deploy/voicera-vm https://github.com/Blue-Dots-Economy/ai-diffusion-dpg.git
-cd ai-diffusion-dpg/automation/docker
 ```
 
-The stack runs from `docker-compose.dev.yml`, which pulls `ghcr.io/blue-dots-economy/ai-diffusion-dpg/<block>:${DPG_IMAGE_TAG}` and has no `build:` sections. So you build the images with `docker-compose.yml`, which tags them with `${GIT_SHA}` under the same names, and then start the dev file with `DPG_IMAGE_TAG` set to the same value. Docker finds the local images and pulls nothing. Use your checkout's short commit (`git rev-parse --short HEAD`) as `<commit>`; any value works as long as `GIT_SHA` and `DPG_IMAGE_TAG` match.
-
-```bash
-GIT_SHA=<commit> docker compose -f docker-compose.yml build \
-    action_gateway agent_core knowledge_engine memory_layer observability_layer \
-    trust_layer reach_layer_web reach_layer_bridge dev_kit
-```
-
-The verified run built all nine images in 147 seconds. Check that they are there:
-
-```bash
-docker images --format '{{.Repository}}:{{.Tag}} {{.Size}}' | grep ai-diffusion
-```
-
-```text
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/knowledge-engine:0a506cf 2.9GB
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/dev-kit:0a506cf 501MB
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/reach-layer-web:0a506cf 274MB
-ghcr.io/blue-dots-economy/ai-diffusion-dpg/agent-core:0a506cf 316MB
-...
-```
-
-:::tip[Pulling instead of building]
-CI publishes images to GHCR tagged `sha-<short commit>`. Once a CI-built image exists for the `deploy/voicera-vm` commit you checked out, you can skip the build and set `DPG_IMAGE_TAG=sha-<short commit>` instead. This guide was verified with the build path above.
-:::
+You build the images in step 6, once `.env` is written.
 
 ## 4. Connect to local Signals
 
@@ -109,7 +84,7 @@ aggregator-dpg:
 seed complete.
 ```
 
-The raw `sk_signals_…` key is printed **only on the first run**; Signals keeps only its hash. If you already ran this command for *Adding search*, reuse that key: it is the `SIGNALS_SEARCH_API_KEY` value in `local-setup/.env.search`. Note the `org_id` too.
+The raw `sk_signals_…` key is printed **only on the first run**; Signals keeps only its hash. Running the command again is safe: it prints the same `org_id` every time, and on later runs the key line reads `apikey: (existing …)` instead of a key. So if you already ran it for *Adding search*, expect that line, take the `org_id` from the output, and reuse the key you saved then: it is the `SIGNALS_SEARCH_API_KEY` value in `local-setup/.env.search`. If the key is lost, reset Signals and mint a new one ([step 10](#10-stop-reset-and-clean-up)).
 
 The same key serves the agent as `BLUE_DOTS_API_KEY` and `BLUE_DOTS_SEARCH_API_KEY`, and the `org_id` becomes `BLUE_DOTS_ORG_ID`.
 
@@ -200,10 +175,10 @@ http://localhost:2742
 
 ## 5. Configure `.env`
 
-Back in your ai-diffusion-dpg checkout, write `automation/docker/.env`. It is git-ignored; `umask 077` keeps it readable only by you.
+Write `automation/docker/.env` in your ai-diffusion-dpg clone. It is git-ignored; `umask 077` keeps it readable only by you. Run this from the directory you cloned into in step 3:
 
 ```bash
-cd automation/docker
+cd ai-diffusion-dpg/automation/docker
 umask 077
 cat > .env <<X
 OPENAI_API_KEY=<your key>
@@ -222,7 +197,7 @@ echo "GOOGLE_CLIENT_ID=local-dummy.apps.googleusercontent.com" >> .env
 git check-ignore -v .env
 ```
 
-`BLUE_DOTS_API_KEY` and `BLUE_DOTS_SEARCH_API_KEY` are both the `sk_signals_…` key from step 4. `DPG_IMAGE_TAG` is the `GIT_SHA` you built with. The heredoc is unquoted on purpose, so `$(openssl rand -hex 32)` runs and writes a random secret.
+`BLUE_DOTS_API_KEY` and `BLUE_DOTS_SEARCH_API_KEY` are both the `sk_signals_…` key from step 4. `DPG_IMAGE_TAG` is the tag you build with in step 6: use your checkout's short commit (`git rev-parse --short HEAD`). The heredoc is unquoted on purpose, so `$(openssl rand -hex 32)` runs and writes a random secret.
 
 **Required**
 
@@ -258,9 +233,37 @@ Both stacks want two of the same host ports. Keycloak and dev-kit both use 8080,
 
 Nothing else collides with the Signals ports (2742, 3100, 5173, 5432, 5555, 8025, 8080).
 
-## 6. Start
+## 6. Build and start
 
-From `automation/docker`, with the Signals stack running:
+All commands in this step run from `ai-diffusion-dpg/automation/docker`.
+
+### Build the images
+
+The stack runs from `docker-compose.dev.yml`, which pulls `ghcr.io/blue-dots-economy/ai-diffusion-dpg/<block>:${DPG_IMAGE_TAG}` and has no `build:` sections. So you build the images with `docker-compose.yml`, which tags them with `${GIT_SHA}` under the same names, and then start the dev file with `DPG_IMAGE_TAG` set to the same value. Docker finds the local images and pulls nothing. Use the same `<commit>` you set as `DPG_IMAGE_TAG` in `.env`; any value works as long as `GIT_SHA` and `DPG_IMAGE_TAG` match.
+
+```bash
+GIT_SHA=<commit> docker compose -f docker-compose.yml build \
+    action_gateway agent_core knowledge_engine memory_layer observability_layer \
+    trust_layer reach_layer_web reach_layer_bridge dev_kit
+```
+
+The verified run built all nine images in 147 seconds. Check that they are there:
+
+```bash
+docker images --format '{{.Repository}}:{{.Tag}} {{.Size}}' | grep ai-diffusion
+```
+
+```text
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/knowledge-engine:0a506cf 2.9GB
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/dev-kit:0a506cf 501MB
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/reach-layer-web:0a506cf 274MB
+ghcr.io/blue-dots-economy/ai-diffusion-dpg/agent-core:0a506cf 316MB
+...
+```
+
+### Start the stack
+
+With the Signals stack running:
 
 ```bash
 export COMPOSE_PROJECT_NAME=dpg-local
@@ -439,7 +442,7 @@ With the dummy client ID from step 5, `/chat` returns `401 {"detail":{"reason":"
 | `memgraph` does not start, exiting with "Unexpected positional argument(s)" | An old, unpinned Memgraph image or compose file. | Pull the current compose file, which pins `memgraph/memgraph:3.13.1`. |
 | Action Gateway exits with `tool '…' has an unresolved ${VAR}` | A tool URL uses a variable with no value and no default. | Set the variable in `.env`, or give the placeholder a default (`${VAR:-…}`). |
 | The Memory Layer logs `tool_result_store.disabled` | `TOOL_RESULT_KEY_SECRET` is empty, so saved tool results are off. | Set it in `.env` and restart: `DOMAIN=blue-dots $COMPOSE up -d --wait memory_layer`. |
-| A block fails at startup right after you pulled new configuration | The image is older than the configuration, and a key it does not know fails validation. | Rebuild with the new commit (`GIT_SHA` and `DPG_IMAGE_TAG` matching), or pull an image tag from the same commit. |
+| A block fails at startup right after you pulled new configuration | The image is older than the configuration, and a key it does not know fails validation. | Rebuild with the new commit, keeping `GIT_SHA` and `DPG_IMAGE_TAG` the same (step 6). |
 | `port is already allocated` on 8080 or 3100 | The stack was started without the override, so dev-kit and Loki collide with Keycloak and signals-search. | Add `-f local-signals.override.yml` to every compose command (the `COMPOSE` variable in step 6). |
 | `reach_layer_bridge` restarts with `FileNotFoundError: Config file not found: /app/reach_layer/bridge/config/dpg.yaml` | The stack was started without the override, which mounts that file. | Add `-f local-signals.override.yml`. |
 | `reach_layer_web` is unhealthy: `RuntimeError: auth.enabled is true but REACH_SESSION_SECRET env var is not set` | Web chat has Google sign-in on, and needs its secrets. | Add `REACH_SESSION_SECRET` and `GOOGLE_CLIENT_ID` to `.env` (step 5). |
@@ -460,11 +463,22 @@ Stop the Signals stack and keep its data, from `signals-dpg/local-setup/`:
 docker compose --profile keycloak --profile search down
 ```
 
-To reset Signals completely, add `-v`. That deletes its database, so you then mint a new service key (step 4), seed the job again and update the three `BLUE_DOTS_*` lines in `.env`:
+To reset Signals completely, add `-v`. That deletes its database, including the service key:
 
 ```bash
 docker compose --profile keycloak --profile search down -v
 ```
+
+To start again after a reset, from `signals-dpg/local-setup/`: bring Signals back up, mint a new key, put it in `.env.search` and run `up -d` again so `signals-api` reads it:
+
+```bash
+docker compose --profile keycloak --profile search up -d --build
+docker compose run --rm signals-bootstrap sh -lc "pnpm --filter api db:seed:services"
+sed -i '' "s|^SIGNALS_SEARCH_API_KEY=.*|SIGNALS_SEARCH_API_KEY=<your key>|" .env.search
+docker compose --profile keycloak --profile search up -d
+```
+
+Then seed the job again (step 4) and update the `BLUE_DOTS_API_KEY`, `BLUE_DOTS_SEARCH_API_KEY` and `BLUE_DOTS_ORG_ID` lines in the AI Diffusion `.env`.
 
 Both commands leave the images in place, so the next start needs no build.
 
