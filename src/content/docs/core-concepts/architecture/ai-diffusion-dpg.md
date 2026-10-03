@@ -26,8 +26,12 @@ The **AI Diffusion DPG** runs a conversational agent for a public-service use ca
 <pre class="mermaid">
 flowchart LR
   subgraph Channels["Reach Layer channels"]
-    W[Web chat] --- V[Voice / telephony] --- M[MCP] --- B[VoicERA bridge]
+    W[Web chat] --- V[Voice / telephony] --- C[CLI]
   end
+  subgraph Optional["Optional integrations"]
+    M[MCP server] --- B[VoicERA bridge]
+  end
+  Optional --> AC
   Channels --> AC[Agent Core]
   AC --> TL[Trust Layer]
   AC --> ML[Memory Layer]
