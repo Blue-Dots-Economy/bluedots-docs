@@ -42,45 +42,31 @@ The rule is that **no block calls another block directly during a turn**. Channe
 
 ## One turn
 
-A Blue Dots caller says, in Hindi, that they want electrician work in Lucknow. This is what happens between the end of their sentence and the agent's reply. The diagram follows the streaming path, which the voice channels use.
+A Blue Dots caller says, in Hindi, that they want electrician work in Lucknow. This is what happens between the end of their sentence and the agent's reply. The diagram follows the streaming path, which the voice channels use; each box names the block that does the work.
 
 <pre class="mermaid">
-sequenceDiagram
-  participant Caller
-  participant Reach
-  participant AC as Agent Core
-  participant Trust
-  participant Memory
-  participant AG as Action Gateway
-  participant LLM
-  Caller->>Reach: "I want electrician work in Lucknow"
-  Reach->>AC: stream_turn (caller phone as user id)
-  AC->>Memory: 1. Load the session
-  Memory-->>AC: Session state, profile, saved tool results
-  AC->>LLM: 2. Understand the turn (dialogue acts and slots)
-  LLM-->>AC: trade = electrician, city = Lucknow
-  AC->>Trust: 3. Check the input
-  Trust-->>AC: allow
-  Note over AC: 4. Routing picks the job_match phase
-  AC->>AG: 5. Pre-dispatch fetch_jobs (trade, city)
-  AG-->>AC: Job results, saved for this session
-  Note over AC: 6. Assemble the prompt: identity, state, recent turns, constraints, tool results
-  AC->>LLM: 7. Reply call, with a tool loop if the model asks for a tool
-  LLM-->>AC: Reply tokens
-  Note over AC: 8. Output guard, sentence by sentence
-  AC->>Trust: 9. Check the output, a few sentences at a time
-  Trust-->>AC: allow
-  AC-->>Reach: Sentences, as they pass
-  Reach-->>Caller: Spoken reply
-  Note over AC,Memory: 10. After the reply: Memory write, audit record, telemetry to the Observability Layer
+flowchart TD
+  IN(["Caller, through a Reach Layer channel:<br/>'I want electrician work in Lucknow'"]) --> S1
+  S1["1 · Memory Layer<br/>Load the session, profile and saved tool results"] --> S2
+  S2["2 · LLM, understanding call<br/>trade = Electrician, location = Lucknow"] --> S3
+  S3["3 · Trust Layer<br/>Check the input"] --> S4
+  S4["4 · Agent Core<br/>Routing picks the job_match phase"] --> S5
+  S5["5 · Action Gateway<br/>Pre-dispatch fetch_jobs; results saved"] --> S6
+  S6["6 · Agent Core<br/>Assemble the prompt"] --> S7
+  S7["7 · LLM, reply call<br/>streams tokens"] -. "tool requested" .-> T["Agent Core checks the call,<br/>then Action Gateway runs it"]
+  T -.-> S7
+  S7 --> S8["8 · Agent Core<br/>Output guard, sentence by sentence"]
+  S8 --> S9["9 · Trust Layer<br/>Check the output in small batches"]
+  S9 --> OUT(["Reach Layer speaks each passed batch"])
+  OUT --> S10["10 · After the reply<br/>Memory write, audit record, telemetry"]
 </pre>
 
 Each step is there for a reason:
 
 1. **Load the session.** Agent Core keeps no state of its own, so every turn starts by fetching the session, the caller's profile and earlier tool results from the Memory Layer. On a caller's first turn, the use case can also fetch profile fields up front, so a returning caller is recognised from the start.
-2. **Understand the turn.** An LLM call turns the utterance into dialogue acts and slots (here, a trade and a city), which are written to the session. Code can then make decisions from structured values instead of free text. If the use case turns on language normalisation, it runs in parallel with this call. Blue Dots leaves it off.
+2. **Understand the turn.** An LLM call turns the utterance into dialogue acts and slots (here, a trade and a location), which are written to the session. Code can then make decisions from structured values instead of free text. If the use case turns on language normalisation, it runs in parallel with this call. Blue Dots leaves it off.
 3. **Check the input.** The Trust Layer can block or escalate a turn before any tool runs or any reply is written. On the streaming path, understanding runs just before this check (alongside language normalisation, when that is on), and its result is used only if the check passes. On the non-streaming path the check comes first.
-4. **Route.** Rules in your configuration pick the next phase (a "subagent") from the dialogue act and the session state. Here the trade and city are both known, so the conversation moves to `job_match`. Code makes this decision, so it is the same every time.
+4. **Route.** Rules in your configuration pick the next phase (a "subagent") from the dialogue act and the session state. Here the trade and location are both known, so the conversation moves to `job_match`. Code makes this decision, so it is the same every time.
 5. **Pre-dispatch the search.** The `job_match` phase declares that `fetch_jobs` runs before the LLM. Starting the search early means the results are already in the prompt, so the model does not have to ask for them and wait for a second round trip.
 6. **Assemble the prompt.** The prompt is built from the agent's identity, the current state, the recent turns, the Trust Layer's constraints and the saved tool results. The model sees facts from the tool results, not from its own memory.
 7. **Call the LLM.** The reply streams back token by token. If the model asks for a tool, Agent Core checks the per-turn call limit and that every identifier came from an earlier tool result, then calls the Action Gateway (or the Knowledge Engine for `knowledge_retrieval`), and continues the reply.
@@ -94,7 +80,7 @@ Each step is there for a reason:
 
 **The LLM writes the words, and code makes the decisions.** A model can phrase a reply well, but it cannot be relied on to make the same choice twice. So routing between phases, consent, ending the session, handing off to a person and the way numbers are spoken are all decided in code from your configuration. The model's job is the wording of each reply.
 
-**Trust is a fail-closed boundary, and tools are withheld until consent.** A public-service agent must not act for someone who has not agreed to it, even when a dependency is down. If the Trust Layer cannot be reached or returns an error, Agent Core treats the check as a block, not a pass. In Blue Dots, the write tools (saving a profile, applying for a job) exist only in the phases that come after the consent question. A new caller is asked for consent at the start of the call. A returning caller whose consent is already on file is not asked again.
+**Trust is a fail-closed boundary, and in Blue Dots the write tools come after consent.** A public-service agent must not act for someone who has not agreed to it, even when a dependency is down. If the Trust Layer cannot be reached or returns an error, Agent Core treats the check as a block, not a pass. In Blue Dots, the write tools (saving a profile, applying for a job) exist only in the phases that come after the consent question. A new caller is asked for consent at the start of the call. A returning caller whose consent is already on file is not asked again.
 
 **Agent Core is stateless, with all state in the Memory Layer.** A voice call may reach a different Agent Core instance on each turn, and an instance may restart mid-call. So Agent Core keeps nothing between turns. Session state, the profile graph and saved tool results live in the Memory Layer, which is the only block that talks to Redis and the graph database.
 

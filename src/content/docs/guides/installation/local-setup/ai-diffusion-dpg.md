@@ -13,7 +13,7 @@ Verified on 2026-10-03 against ai-diffusion-dpg `adeea88` (images built at `0a50
 
 ## 1. What you'll have at the end
 
-- The AI Diffusion stack running in Docker as 16 containers: the seven blocks, the web and bridge channels, dev-kit, Redis, Memgraph, and the observability tools (OpenTelemetry Collector, Jaeger, Loki, Prometheus, Grafana).
+- The AI Diffusion stack running in Docker as 16 containers: the six other blocks, the Reach Layer's web and bridge channels, dev-kit, Redis, Memgraph, and the observability tools (OpenTelemetry Collector, Jaeger, Loki, Prometheus, Grafana).
 - The agent's tools pointed at your local Signals: Action Gateway reads profiles and jobs from it, searches it, saves a profile and applies for a job.
 - One scripted conversation through the VoicERA bridge with `curl`, as the test caller `9199000000101`: a greeting, a yes, an age, a trade and city, a pick, a name and a confirmation.
 - One `apply` action in the Signals database, from the caller's new profile to a job you seeded.
@@ -428,7 +428,7 @@ curl -s localhost:8005/app-config
 {"auth":{"enabled":true,"google_client_id":"local-dummy.apps.googleusercontent.com"}}
 ```
 
-With the dummy client ID from step 5, `/chat` returns `401 {"detail":{"reason":"missing"}}`. To use web chat, set `REACH_SESSION_SECRET` and set `GOOGLE_CLIENT_ID` to the client ID of a real Google OAuth client that allows `http://localhost:8005`, then restart `reach_layer_web`.
+With the dummy client ID from step 5, `/chat` returns `401 {"detail":{"reason":"missing"}}`. To use web chat, set `GOOGLE_CLIENT_ID` to the client ID of a real Google OAuth client that allows `http://localhost:8005`, then restart `reach_layer_web`.
 
 ## 9. Common problems
 
@@ -474,7 +474,7 @@ To start again after a reset, from `signals-dpg/local-setup/`: bring Signals bac
 ```bash
 docker compose --profile keycloak --profile search up -d --build
 docker compose run --rm signals-bootstrap sh -lc "pnpm --filter api db:seed:services"
-sed -i '' "s|^SIGNALS_SEARCH_API_KEY=.*|SIGNALS_SEARCH_API_KEY=<your key>|" .env.search
+sed -i.bak "s|^SIGNALS_SEARCH_API_KEY=.*|SIGNALS_SEARCH_API_KEY=<your key>|" .env.search && rm .env.search.bak
 docker compose --profile keycloak --profile search up -d
 ```
 
