@@ -244,6 +244,7 @@ export default defineConfig({
                     { label: 'Signals DPG Setup', slug: 'guides/installation/local-setup/signals-dpg' },
                     { label: 'Aggregator DPG Setup', slug: 'guides/installation/local-setup/aggregator-dpg' },
                     { label: 'AI Diffusion DPG Setup', slug: 'guides/installation/local-setup/ai-diffusion-dpg' },
+                    { label: 'AI Diffusion Optional Channels', slug: 'guides/installation/local-setup/ai-diffusion-channels' },
                   ],
                 },
                 {
