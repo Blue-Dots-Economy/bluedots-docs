@@ -243,6 +243,7 @@ export default defineConfig({
                     { label: 'Local Stack (Docker)', slug: 'guides/installation/local-setup/local-stack' },
                     { label: 'Signals DPG Setup', slug: 'guides/installation/local-setup/signals-dpg' },
                     { label: 'Aggregator DPG Setup', slug: 'guides/installation/local-setup/aggregator-dpg' },
+                    { label: 'AI Diffusion DPG Setup', slug: 'guides/installation/local-setup/ai-diffusion-dpg' },
                   ],
                 },
                 {
