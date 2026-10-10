@@ -1,0 +1,2 @@
+# Lines that may keep a Tier 1 phrase (matched as fixed substrings by scripts/check-style.sh).
+# Add an entry only for literal, technical uses (security notes, runbooks), with the reason.
