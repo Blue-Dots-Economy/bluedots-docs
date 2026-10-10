@@ -1,22 +1,24 @@
 ---
 title: Roadmap
-description: A Now / Next / Later view of where Blue Dots is heading.
+description: Where each dot stands today, and what Blue Dots is working on now, next and later.
 sidebar:
   order: 2
 ---
 
-A high-level view of direction. This is a scaffold — replace items with the initiative's actual planning as it firms up.
+A short view of where Blue Dots is heading.
+
+**Where each dot stands:** Blue (jobs) is live and piloted. Yellow (education), Purple (persons with disabilities) and Orange (tourism) have their networks defined. Pink, Green and Brown are possible future networks. See [Networks, Domains & Instances](/core-concepts/networks-domains-instances/) for the full list.
 
 ## Now
 
 - Harden the **Signals DPG** read/write paths and inter-instance discovery.
 - Mature the **Aggregator DPG** bulk-upload and approval flows.
 - Expand **Voice-AI** capture coverage and languages.
-- Complete the rollout of **Keycloak client-credentials service auth** for integrating DPGs, retiring the legacy API-key path.
+- Complete the rollout of **Keycloak service accounts** for DPGs that connect to Signals.
 
 ## Next
 
-- More **domains** beyond livelihoods (skilling, schemes, local services).
+- More **networks** beyond jobs, starting from the defined Yellow, Purple and Orange networks.
 - Richer **match-scoring** and feedback loops from events.
 - **Observability** dashboards over signal flow and outcomes.
 - Additional **adaptor** deployments across districts.
@@ -32,6 +34,4 @@ These follow directly from field experience — see [What We're Learning](/explo
 - **Programmable value** flows where outcomes involve disbursement.
 - Self-serve **adaptor onboarding** tooling.
 
-:::note
-Track concrete milestones in the GitHub org's project boards; this page should summarise and link to them.
-:::
+Detailed milestones are tracked on the project boards in the [Blue Dots Economy GitHub org](https://github.com/Blue-Dots-Economy).
