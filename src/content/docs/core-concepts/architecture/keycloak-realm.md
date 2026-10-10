@@ -74,8 +74,8 @@ Keycloak owns the login screen; neither app ships a login form.
   sends a one-time code by email or SMS and verifies it.
 - **FreeMarker themes** under `infra/keycloak/themes/otp/` render the login and
   email templates.
-- Themes are **per-brand**: `blue-dot`, `purple-dot`, `orange-dot`, `upsdm` and
-  `onetac` each supply their own logos and favicon, so a deployment's login page
+- Themes are **per-brand**: each network (such as `blue-dot`, `purple-dot` and
+  `orange-dot`) and each partner brand supplies its own logos and favicon, so a deployment's login page
   matches its network.
 
 ## Realm scripts
