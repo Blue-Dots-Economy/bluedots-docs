@@ -1,6 +1,6 @@
 ---
 title: Signals DPG Setup
-description: Run the Signals backend and UI locally, standalone, in one command.
+description: Run the Signals backend and UI locally, standalone, and choose which network (jobs, education, disability or tourism) it serves.
 sidebar:
   order: 3
 prev:
@@ -90,11 +90,50 @@ needed. Set `AUTH_PROVIDER=keycloak` and the `KEYCLOAK_*` values in `.env` — s
 [Keycloak Setup](/guides/keycloak-setup/).
 :::
 
-Because the model is [schema-driven](/core-concepts/technical/schema-driven-model/),
-you add item types and forms through `network.json` schemas rather than code.
+## Choose a network
 
-  link: /guides/installation/local-setup/local-stack/
-  label: "Path 8 of 10: Local Stack"
+The stack runs the jobs network `blue_dot` by default. Other networks work the
+same way: each is a folder under `examples/schemas/` with a `network.json`, a
+`consent.json` and an optional `messages.properties` (email copy). Pick one from
+[Networks, Domains & Instances](/core-concepts/networks-domains-instances/).
+
+Two values identify a network, and they are not always the same:
+
+- the **folder name**, such as `purple_dot` or `yellow_dot`;
+- the **network id**, the `id` field inside that folder's `network.json`. For
+  `blue_dot`, `purple_dot` and `orange_dot` it matches the folder name. The
+  Yellow Dot (education) network's id differs from its folder name, so read it
+  from its `network.json`.
+
+**Track A (Docker).** Set these in `local-setup/.env`, then rerun
+`docker compose --profile keycloak up -d --build`:
+
+```dotenv
+SIGNALS_NETWORK=purple_dot                                  # folder name
+SERVED_DOMAINS=purple_dot/seeker,purple_dot/provider        # <network-id>/<domain>
+```
+
+**Track B (from source).** Set these in the root `.env`, then restart both
+`pnpm dev:api` and `pnpm dev:ui`:
+
+```dotenv
+NETWORK_CONFIG_LOCAL_FILE=../../examples/schemas/purple_dot/network.json   # folder name
+SERVED_DOMAINS=purple_dot/seeker,purple_dot/provider                       # <network-id>/<domain>
+VITE_NETWORK_ID=purple_dot                                                 # network id
+```
+
+| Network | Folder | `SERVED_DOMAINS` |
+| --- | --- | --- |
+| Blue Dot (jobs, default) | `blue_dot` | `blue_dot/seeker,blue_dot/provider` |
+| Purple Dot (disability) | `purple_dot` | `purple_dot/seeker,purple_dot/provider` |
+| Orange Dot (tourism) | `orange_dot` | `orange_dot/practitioner` |
+| Yellow Dot (education) | `yellow_dot` | `<network-id>/student` |
+
+Consent text comes from the `consent.json` beside the active `network.json`.
+A brand is a sub-folder of the network with its own copy and look; it does not
+change the schema. Because the model is
+[schema-driven](/core-concepts/technical/schema-driven-model/), you add item
+types and forms by editing these files rather than code.
 
 ## Adding search (relevance ranking)
 
@@ -138,7 +177,7 @@ Two required steps that are easy to miss:
 
 `/health` on the search API is unauthenticated and checks neither the database
 nor the embedder, so a `200` from it does not mean the stack can answer a query.
-Test with a real `POST /v1/search` carrying `x-api-key`.
+Test with a real `POST /v1/search` that carries the minted key.
 
 Full reference — the embedding-dimension rules, `network.json` requirements and a
 troubleshooting table keyed by the exact error message — is **§7 of

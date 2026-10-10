@@ -1,6 +1,6 @@
 ---
 title: Local Stack (Docker)
-description: Choose your local setup — Signals alone, or the full Aggregator + Signals ecosystem.
+description: Choose a local setup (Signals alone, or Aggregator plus Signals), see which ports each uses, and pick the network it runs.
 sidebar:
   order: 2
 next:
@@ -42,6 +42,25 @@ The Aggregator's `local-setup/` builds **both** repos, so clone them as
   └── signals-dpg/           # standalone stack lives in signals-dpg/local-setup/
         └── local-setup/
 ```
+
+## Which network it runs
+
+Both stacks run the jobs network `blue_dot` by default. Other networks, such as
+the Purple Dot (disability) or Yellow Dot (education) networks, work the same
+way. You switch with settings in `.env`, not code:
+
+| Setting | Stack | Value |
+| --- | --- | --- |
+| `SIGNALS_NETWORK` | Signals only | Network folder name under `examples/schemas/`, for example `purple_dot` |
+| `SERVED_DOMAINS` | Signals only | `<network-id>/<domain>` pairs, for example `purple_dot/seeker,purple_dot/provider` |
+| `VITE_NETWORK_ID` | Signals, Track B | The network id from that folder's `network.json` |
+| `AGGREGATOR_NETWORK` | Aggregator | Network folder name under the Aggregator's `config/` |
+
+The folder name and the network id match for every network except Yellow, whose
+id is set in its `network.json`. Each network folder also holds its consent text
+(`consent.json`) and optional email copy (`messages.properties`). Exact steps:
+[Signals DPG Setup](/guides/installation/local-setup/signals-dpg/#choose-a-network)
+and [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/#choose-a-network).
 
 ## Ports at a glance
 

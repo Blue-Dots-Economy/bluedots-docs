@@ -1,11 +1,11 @@
 ---
 title: Signals DPG Architecture
-description: Internals of the network-aware Signals backend and schema-driven UI.
+description: The parts of the Signals DPG (API, schema-driven UI and shared packages), its two read layers and its engineering conventions.
 sidebar:
   order: 2
 ---
 
-The **Signals DPG** is the network-aware backend at the heart of Blue Dots. It stores signals as schema-typed items and discovers/matches them across instances.
+The **Signals DPG** is the network-aware backend that every Blue Dots network runs on, from the Blue Dot (jobs) network to the Yellow Dot (education) network. It stores signals as schema-typed items and finds and matches them across instances.
 
 ## Components
 
@@ -25,7 +25,7 @@ An instance serves one or more domains on a network. The two read layers are kep
 - **Instance-local** (`GET /api/v1/item/fetch`) — reads an instance's own items with a brief Redis cache.
 - **Inter-instance** (`GET /api/v1/network/item/fetch`) — *count-first* discovery: ask peers how many relevant items they hold, select only relevant peers, fetch slices, merge and cache. Schema fetching and caching live in this layer.
 
-This separation is the key scaling decision — see [Read & Write Paths](/core-concepts/technical/read-write-paths/).
+[Read & Write Paths](/core-concepts/technical/read-write-paths/) explains why the two layers are kept apart.
 
 ## Data partitioning
 

@@ -1,17 +1,17 @@
 ---
 title: High-Level Architecture
-description: The layered architecture of the Blue Dots stack — apps, auth, APIs, datastores and integrations.
+description: The layers of the Blue Dots stack (apps, auth, APIs, datastores, integrations) and how the Aggregator and Signals sides fit together.
 sidebar:
   order: 1
 ---
 
-The Blue Dots stack is organised into clear horizontal layers, with two parallel verticals — **Aggregator** and **Signals** — that share datastores and integrations.
+The Blue Dots stack is organised into clear horizontal layers, with two parallel verticals, **Aggregator** and **Signals**, that run on the same datastore servers and integrations. The same layers serve every network, whether jobs (Blue Dot) or education (Yellow Dot).
 
 ## The layered view
 
 {/* Editable source: src/assets/diagrams/high-level-architecture.excalidraw — open at https://excalidraw.com to adjust, re-export to high-level-architecture.png. */}
 
-![The Blue Dots layered architecture: Apps (Aggregator App, Signals App); Auth — a single Keycloak spanning both verticals (OIDC, shared realm and service tokens); API (Aggregator API BFF, Signals API network-aware); shared datastores (Redis, PostgreSQL, Object Storage) and integrations (SMTP, SMS). DBs and integrations are shared across both verticals.](../../../../assets/diagrams/high-level-architecture.png)
+![The Blue Dots layered architecture: Apps (Aggregator App, Signals App); Auth — a single Keycloak spanning both verticals (OIDC, shared realm and service tokens); API (Aggregator API BFF, Signals API network-aware); shared datastore servers (Redis, PostgreSQL, Object Storage) and integrations (SMTP, SMS). Both verticals use the same servers and integrations; each has its own database.](../../../../assets/diagrams/high-level-architecture.png)
 
 ## Layer by layer
 
@@ -21,7 +21,7 @@ The Blue Dots stack is organised into clear horizontal layers, with two parallel
 
 **API.** The **Aggregator API** is a Fastify backend-for-frontend that owns the aggregator database and the registration/approval/bulk-upload flows. The **Signals API** is the network-aware Fastify backend that owns items, actions, events and cross-instance discovery.
 
-**Datastores.** Shared across both verticals:
+**Datastores.** Both verticals use the same servers, but each owns its own database and they share no tables (see [Data Model](/core-concepts/architecture/data-model/)):
 - **PostgreSQL** — system of record (Drizzle ORM; item tables are partitioned in Signals).
 - **Redis** — sessions, caches and the background-job queue.
 - **Object Storage (S3)** — bulk-upload files and assets. S3 is a real cloud dependency, not part of the local Docker stack.

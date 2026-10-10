@@ -1,6 +1,6 @@
 ---
 title: AWS Infrastructure Setup
-description: Provision the AWS EKS cluster, database and storage the Blue Dots stack runs on, using OpenTofu/Terragrunt from bluedots-automation.
+description: Provision the AWS EKS cluster, database and storage for a Blue Dots deployment with OpenTofu/Terragrunt, and set which network it runs.
 sidebar:
   order: 1
 ---
@@ -53,6 +53,22 @@ _cloud_storage_region: &cloud_storage_region "ap-south-1"
 ```
 
 The three above decide every AWS resource name, so set them first and don't change them later. Then work down the anchor block for hostnames, SMTP, network and brand — each anchor has a comment above it.
+
+### Choose the network
+
+A deployment runs one network. Three anchors in the same top block set it:
+
+```yaml
+_signals_served_domains: &signals_served_domains "blue_dot/provider,blue_dot/seeker"
+_network: &network "blue_dot"
+_brand:   &brand   ""
+```
+
+- `_network` is the network folder name under `examples/schemas/` in the Signals DPG repository (and under `config/` in the Aggregator). The default `blue_dot` is the jobs network; `purple_dot` and `orange_dot` are set the same way. The list of networks is on [Networks, Domains & Instances](/core-concepts/networks-domains-instances/).
+- `_signals_served_domains` lists `<network-id>/<domain>` pairs. The network id is the `id` in that folder's `network.json`. It matches the folder name for every network except the Yellow Dot (education) network, so read Yellow's id from its `network.json`.
+- `_brand` is an optional brand sub-folder of the network (its own logo and copy). Leave it `""` for none. A brand does not change the network.
+
+The Signals API, the Signals UI, the consent text and the Aggregator all read these anchors, so set them once here.
 
 Infrastructure sizing — node type, VPC CIDR, Pritunl/bastion access, database size — lives further down in this same file, not in the top anchor block. See [Configuration reference](#configuration-reference-sizing-zones-and-access) below.
 
