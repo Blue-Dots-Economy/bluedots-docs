@@ -1,28 +1,34 @@
 ---
 title: Glossary
-description: Precise definitions of the Blue Dots vocabulary, used identically in product, docs and code.
+description: Short definitions of the words used across Blue Dots — in the product, these docs and the code.
 sidebar:
   order: 7
 ---
 
 import { CardGrid, Card } from '@astrojs/starlight/components';
 
-The vocabulary below is used consistently across the product, this documentation and the code. Definitions are deliberately precise.
+These words mean the same thing in the product, in these docs and in the code.
 
 ## Domain model
 
 <CardGrid>
-  <Card title="Blue Dot / Signal">
-    A local signal of intent from a citizen or enterprise, around livelihoods and services. Stored as an item.
+  <Card title="Blue Dots">
+    The platform and programme: open-source software that helps people and organisations in the same district find each other. It runs several sector networks, each shown as a colour of dot.
+  </Card>
+  <Card title="Dot (also: signal)">
+    A short listing from a person or organisation that says what they need or offer — for example a young person looking for work, or a student looking for a tutor. Stored as an item. *Signal* is the same thing, and the name the software uses.
   </Card>
   <Card title="Network">
-    The shared contract that lets independent instances interoperate (e.g. `blue_dot`, `yellow_dot`). Defined by a `network.json` schema.
+    The set of rules for one sector, written in a `network.json` schema: the roles, the forms and the actions. Each colour of dot is a network — Blue Dot (`blue_dot`) for jobs, Yellow Dot for education, and so on. See [the networks today](/core-concepts/networks-domains-instances/#the-networks-today).
+  </Card>
+  <Card title="Blue Dot, Yellow Dot, …">
+    A colour names one network. **Blue Dot** is the jobs network; Yellow Dot is education, Purple Dot is for persons with disabilities, Orange Dot is tourism. A dot on the jobs network is "a Blue Dot"; the generic word is "a dot".
   </Card>
   <Card title="Domain">
-    A role inside a network (e.g. `student`). An instance serves one or more domains via `SERVED_DOMAINS`.
+    A role inside a network — for example `seeker` and `provider` on the jobs network, or `student` on the education network. An instance serves one or more domains via `SERVED_DOMAINS`.
   </Card>
   <Card title="Instance">
-    One deployment of the Signals API serving its configured domains.
+    One running copy of the Signals API, serving the domains it is configured for.
   </Card>
   <Card title="Item">
     A versioned, schema-typed record. `item_type` is a schema identifier such as `profile_1.0`, never freeform.
@@ -34,13 +40,16 @@ The vocabulary below is used consistently across the product, this documentation
     The structured result of an action.
   </Card>
   <Card title="Seeker / Provider">
-    The demand side and supply side of a signal — e.g. a jobseeker (seeker) and a local employer (provider).
+    The person who needs something and the person or organisation who offers it. On the jobs network: a job seeker and a local employer. On the disability network: a person looking for a device or service, and an organisation that provides it.
   </Card>
   <Card title="Service Provider">
-    An organisation delivering a support service around the job-seeking process — training, counselling, assessment, placement assistance. The third participant type, served by the `service_provider` domain.
+    On the jobs network, an organisation that offers support to job seekers — training, counselling, assessment or placement help. A third role, served by the `service_provider` domain in the deployed pilot schemas (the example schema has only `seeker` and `provider`).
   </Card>
-  <Card title="Blue Dot Verified">
-    The state a profile reaches after a person — the adaptor or the aggregator — reviews and confirms it. The one human-in-the-loop step in the lifecycle.
+  <Card title="Practitioner">
+    On the tourism network, a person or business that lists what they offer: a homestay owner, an artisan, a guide or a performer.
+  </Card>
+  <Card title="Verified">
+    The state a profile reaches after a person from the adaptor or aggregator reviews and confirms it. This is the only step in the lifecycle that a person must do by hand.
   </Card>
   <Card title="Assisted route">
     Onboarding where the adaptor or field team brings a participant in on their behalf.
@@ -52,16 +61,13 @@ The vocabulary below is used consistently across the product, this documentation
     How data is collected on the assisted route: offline camp, bulk upload, outbound campaign, or inbound QR campaign.
   </Card>
   <Card title="AI Voice Agent">
-    The call-based, local-language channel for completing a profile. The primary self-service channel; its prompts are published as DPGs.
+    A phone-call channel, in the caller's own language, for completing a profile. It is the main way people sign up by themselves. Its prompts are published as DPGs.
   </Card>
-  <Card title="Blue Dot Webapp">
-    The self-serve web app built on the Signals DPG — the fallback channel for participants who prefer typing to speaking.
+  <Card title="Web app">
+    The self-serve web app built on the Signals DPG, for participants who prefer typing to speaking. Each network shows it with its own name and colours.
   </Card>
   <Card title="MSME (a.k.a. SMB)">
-    Micro, small and medium enterprise — the employer side of the livelihoods use case. These docs use **MSME**, matching the Indian statutory term. *SMB* means the same thing and is kept only in the Brown Dots sector naming.
-  </Card>
-  <Card title="Adaptor (a.k.a. adopter / anchor adopter)">
-    The organisation deploying Blue Dots for a district, state or domain. These docs use **adaptor** throughout; *adopter* and *anchor adopter* mean the same role.
+    Micro, small and medium enterprise — for example, the employers on the jobs network. These docs use **MSME**, matching the Indian statutory term. *SMB* means the same thing and is kept only in the Brown Dots sector naming.
   </Card>
 </CardGrid>
 
@@ -75,10 +81,16 @@ The vocabulary below is used consistently across the product, this documentation
     The aggregator-facing application for onboarding participants and bulk-creating their signals.
   </Card>
   <Card title="Aggregator">
-    An organisation (institute, employer, NGO, government department) that onboards participants. Scoped by `aggregator_id`, which is never trusted from the client.
+    A local organisation that signs participants up and checks their details — for example a skilling centre, a school, a disability organisation, a tourism body, a self-help group or a government department. Scoped by `aggregator_id`, which is never trusted from the client.
   </Card>
-  <Card title="Adaptor">
-    An organisation deploying and extending the Blue Dots DPGs for a district or domain.
+  <Card title="Coordinator">
+    A person who works for an aggregator and onboards participants. Coordinators join an aggregator by invitation only.
+  </Card>
+  <Card title="Adaptor (also: adopter, anchor adopter)">
+    The organisation that deploys and extends Blue Dots for a district, state or sector. These docs use **adaptor**; *adopter* and *anchor adopter* mean the same role.
+  </Card>
+  <Card title="Brand">
+    The name, logo and colours a deployment shows to users. A brand sits on top of a network and does not change its rules. It is set in a `brand.json` next to the network schema.
   </Card>
 </CardGrid>
 
@@ -105,4 +117,4 @@ The vocabulary below is used consistently across the product, this documentation
 ## Where to go next
 
 - [Core Concepts](/core-concepts/) — the same vocabulary in context.
-- [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) — the terms in the order a participant meets them.
+- [The lifecycle](/core-concepts/blue-dot-lifecycle/) — the terms in the order a participant meets them.
