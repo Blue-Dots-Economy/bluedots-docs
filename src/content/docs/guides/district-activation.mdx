@@ -1,108 +1,108 @@
 ---
 title: Activating Blue Dots in a District
-description: The institutional and operational model for how a district government activates Blue Dots in under 90 days.
+description: The steps a district government takes to start Blue Dots for one sector in under 90 days, with the jobs network as the worked example.
 sidebar:
   order: 2
 ---
 
 import PhaseTimeline from '../../../components/PhaseTimeline.astro';
 
-This is the **institutional and operational** path for a district government adopting Blue Dots. For the developer/technical path — standing up Signals, Aggregators and capture channels — see [Adaptor Onboarding](/guides/adaptor-onboarding/).
+This guide covers the institutional and operational steps a district government takes to start Blue Dots. For the technical steps (setting up Signals, the aggregator portal and the phone and web channels), see [Adaptor Onboarding](/guides/adaptor-onboarding/).
 
-Activating Blue Dots does **not** require building a whole district infrastructure on day one. It requires three things: pick the use case(s), find the right local ecosystem aggregators on **both** sides — demand and supply — and start. The infrastructure scales from there.
+A district does not need to build everything on day one. It needs to do three things. Pick one sector (one dot). Find local organisations on both sides: people who need something, and people who offer it. Then start, and add more as it grows.
 
-:::tip[Decision to activation in under 3 months]
-A district can move from decision to meaningful activation in **under 90 days**, across three stages — **Setup, Activate, Drive Outcomes** — each running roughly **4–6 weeks**.
+:::tip[Decision to activation in under 90 days]
+A district can go from decision to activation in **under 90 days**, in three stages of about 4 weeks each: Setup (weeks 1–4), Activate (weeks 5–8) and Drive outcomes (weeks 9–12).
 :::
 
-A *District Livelihoods Playbook* (v1) captures how to do this in practice. It will keep evolving as Blue Dots reach more use cases.
+The steps are the same for every dot. The examples below use jobs (the Blue Dot network), because it is the only network piloted so far. A *District Livelihoods Playbook* (v1) describes how the jobs pilots did this in practice.
 
-## Which use case do we start with?
+## Choosing the sector to start with
 
-Pick the use case where:
+Pick the sector where:
 
-- a **single department can own it**,
-- local ecosystem aggregators on **both sides already exist**, and
-- the **local discovery failure is most visible and felt**.
+- one department can own it,
+- local organisations already work with people on both sides, and
+- people clearly fail to find each other locally today.
 
-Livelihoods is the most common starting point, but **tourism, education and agriculture** are all viable — and often *faster* to activate, because the demand and supply sides are clearer and the aggregators more concentrated.
+Jobs is the sector piloted so far. Education (Yellow Dot), disability support (Purple Dot) and tourism (Orange Dot) have networks defined. See [Networks, Domains and Instances](/core-concepts/networks-domains-instances/) for each network and its status.
 
-## What does early activation look like?
+## The first 4 weeks of activation
 
-The first 4–6 weeks are about **density** — enough Blue Dots on both sides that discovery starts happening without external push.
+Early activation is about getting enough listings on both sides that people start finding each other without the team arranging each match.
 
-This happens fastest when one strong local ecosystem aggregator on each side is mobilised:
+This happens fastest when the team brings in one strong local organisation on each side. For example:
 
-| Use case | Demand-side aggregator | Supply-side aggregator |
+| Dot | Organisations on one side | Organisations on the other side |
 |---|---|---|
-| Jobs / livelihoods | MSME association (jobs) | ITI (seekers) |
-| Tourism | Tourism board (experiences) | Local operators / hosts |
-| Agriculture | Markets / buyers | Farmers' cooperative |
+| Blue (jobs) | ITIs (Industrial Training Institutes) and skilling centres, for young people looking for work | MSME (micro, small and medium enterprise) associations, for employers |
+| Yellow (education) | Schools, colleges and education NGOs, for students | Tutors and counsellors |
+| Orange (tourism) | Tourism bodies, which check and verify listings | Homestay owners, guides and artists who list what they offer |
 
-Once both sides have density, seekers and providers begin finding each other without the team pushing each match.
+Once both sides have enough listings, people begin finding each other without the team pushing each match.
 
-How each cohort comes in — **assisted** (the field team brings them in) or **self** (they start on their own), and by which intake method — is a configuration choice made *per campaign and per geography*, not a technical build. A college batch with existing records is a bulk upload; a member gathering is an inbound QR campaign. See [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#2-choose-the-route-in).
+For each group of people, the team chooses how they join. In an **assisted** route, the field team signs them up. In a **self** route, people sign up on their own. The team also picks the intake method for each campaign and place, and this needs no new software. A college batch with existing records is a bulk upload; a member gathering is a QR code campaign. See [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#2-choose-the-route-in).
 
-## What does the government need to own?
+## What the government owns
 
-Not the technology. Not the mobilisation. Not the matching — the ecosystem does those once the map has density.
+Local organisations run the sign-ups, the software and the matching. The government owns three things:
 
-The government owns three things:
-
-1. **Convening authority** — bringing the right aggregators and innovators to the table.
-2. **The signal** — that this is a serious initiative worth participating in.
-3. **Sustained attention** — keeping the rhythm from becoming episodic.
+1. **Convening authority:** bringing the right organisations and service providers to the table.
+2. **Public backing:** showing that this is a serious programme worth joining.
+3. **Sustained attention:** keeping regular reviews going so the work does not stop and start.
 
 :::note[Who holds it]
-Concretely, this means a **government champion at District Collector level** and a **sponsor at Mission Director or Secretary level**.
+In practice, this means a **government champion at District Collector level** and a **sponsor at Mission Director or Secretary level**.
 :::
 
-## What the team does, by phase
+## What the team does in each stage
+
+The actions below are from the jobs network.
 
 <PhaseTimeline phases={[
   {
     number: 1,
     title: "Setup",
-    weeks: "Weeks 1–6",
-    focus: "Pick the use case; bring local aggregators to the table on both sides.",
+    weeks: "Weeks 1–4",
+    focus: "Pick the sector and bring local organisations on both sides to the table.",
     actions: [
-      "Convene seeker side — ITIs, colleges, NGOs connected to youth and women",
-      "Convene provider side — MSME associations, the District Industries Centre, the employment exchange",
-      "Stand up a Jobs Facilitation Centre (JFC) as the institutional anchor that keeps actors coordinated"
+      "Bring in the seeker side: ITIs, colleges and NGOs that work with young people and women",
+      "Bring in the provider side: MSME associations, the District Industries Centre and the employment exchange",
+      "Set up a Jobs Facilitation Centre (JFC) to keep these organisations working together"
     ]
   },
   {
     number: 2,
     title: "Activate",
-    weeks: "Weeks 4–6",
-    focus: "Build density — light up Blue Dots on both sides until discovery starts happening on its own.",
+    weeks: "Weeks 5–8",
+    focus: "Sign up people on both sides until they start finding each other without help.",
     actions: []
   },
   {
     number: 3,
-    title: "Drive Outcomes",
-    weeks: "Weeks 4–6",
-    focus: "Outcomes and rhythm — innovators begin to plug in; the team shifts to seeing outcomes and sustaining the rhythm.",
+    title: "Drive outcomes",
+    weeks: "Weeks 9–12",
+    focus: "Service providers start to build on the platform; the team tracks outcomes and keeps regular reviews going.",
     actions: []
   }
 ]} />
 
-The **Jobs Facilitation Centre (JFC)** is the institutional anchor for the livelihoods use case — it keeps the seeker-side and provider-side actors coordinated as the map fills in.
+In the jobs network, the **Jobs Facilitation Centre (JFC)** keeps the seeker-side and provider-side organisations working together as more people sign up. Another sector would need a similar coordinating office.
 
-## What does success look like in 90 days?
+## What success looks like at 90 days
 
-- A **live digital district map** with thousands of discoverable Blue Dots on both sides of the chosen use case(s).
-- A **local ecosystem actively engaged**.
-- **Innovators beginning to offer services** on the infrastructure.
-- **Accumulating data that becomes intelligence** every actor — government, business, civil society — can act on.
+- A live district map with thousands of listings on both sides of the chosen sector.
+- Local organisations actively signing people up and responding to listings.
+- Service providers beginning to offer services on the platform.
+- Data building up that the government, businesses and civil society can act on.
 
-:::caution[What actually moved the needle]
-The use cases that activated fastest in Ghaziabad and Dharwad were not the most complex or ambitious — they were the ones where a **single senior champion decided to move fast**. See [Pilots](/explore/pilots/).
+:::caution[What made the difference in the pilots]
+In Ghaziabad and Dharwad, the fastest activation came where **one senior champion decided to move fast**. The size or complexity of the plan mattered less. See [Pilots](/explore/pilots/).
 :::
 
 ## Related reading
 
-- [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) — the seven steps each participant walks, and who owns each one.
-- [Adaptor Onboarding](/guides/adaptor-onboarding/) — the developer/technical path to stand up the infrastructure.
-- [Pilots](/explore/pilots/) — what Ghaziabad and Dharwad did, and the metrics that mattered.
-- [The Blue Dots Approach](/overview/the-blue-dots-approach/) — why density and discovery, not central matching, are the core idea.
+- [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/): the seven steps each participant goes through, and who owns each one.
+- [Adaptor Onboarding](/guides/adaptor-onboarding/): the technical steps to set up the software.
+- [Pilots](/explore/pilots/): what Ghaziabad and Dharwad did, and the figures that mattered.
+- [The Blue Dots Approach](/overview/the-blue-dots-approach/): why Blue Dots lists people locally instead of matching them centrally.

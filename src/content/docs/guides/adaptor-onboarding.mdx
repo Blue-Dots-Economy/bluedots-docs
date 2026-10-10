@@ -1,13 +1,13 @@
 ---
 title: Adaptor Onboarding
-description: The end-to-end path for an adaptor to stand up Blue Dots for a district or domain.
+description: The technical steps an adaptor follows to set up Blue Dots for any network, from Signals and the aggregator portal to capture channels, notifications and a pilot.
 sidebar:
   order: 3
 ---
 
 import PhaseTimeline from '../../../components/PhaseTimeline.astro';
 
-This is the recommended path for a new **adaptor** — an organisation deploying Blue Dots for a district, state or domain. It assumes you have read [Blue Dots as a DPG](/overview/blue-dots-as-a-dpg/).
+This is the recommended path for a new **adaptor**: an organisation deploying Blue Dots for a district, state or domain. The steps are the same for every network, such as jobs (Blue Dot) or education (Yellow Dot). It assumes you have read [Blue Dots as a DPG](/overview/blue-dots-as-a-dpg/).
 
 ## The path at a glance
 
@@ -15,7 +15,7 @@ This is the recommended path for a new **adaptor** — an organisation deploying
   {
     number: 1,
     title: "Stand up Signals",
-    focus: "Start with the network-aware backend — get the Signals API and UI running against local Postgres + Redis."
+    focus: "Start with the network-aware backend: get the Signals API and UI running against local Postgres + Redis."
   },
   {
     number: 2,
@@ -25,12 +25,12 @@ This is the recommended path for a new **adaptor** — an organisation deploying
   {
     number: 3,
     title: "Add Aggregator",
-    focus: "Add the Aggregator DPG to onboard partner organisations at scale, writing participant signals through the bulk-create paths."
+    focus: "Add the Aggregator DPG to onboard many partner organisations, writing participant signals through the bulk-create paths."
   },
   {
     number: 4,
     title: "Add capture channels",
-    focus: "Web — the schema-driven Signals UI and the Aggregator portal — plus Voice AI for low-cost, local-language signal capture."
+    focus: "Web (the schema-driven Signals UI and the Aggregator portal), plus Voice AI for low-cost, local-language signal capture."
   },
   {
     number: 5,
@@ -44,17 +44,17 @@ This is the recommended path for a new **adaptor** — an organisation deploying
   }
 ]} />
 
-## Step 1 — Stand up Signals
+## Step 1: Stand up Signals
 
 Start with the network-aware backend. Follow [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/). At the end you should have the Signals API and UI running against local Postgres + Redis.
 
-## Step 2 — Define your network and domains
+## Step 2: Define your network and domains
 
-Decide the **network** you participate in (e.g. `blue_dot`) and the **domains** your instance serves (e.g. `student`, `employer`). Because the model is [schema-driven](/core-concepts/technical/schema-driven-model/), you express these as schemas and `SERVED_DOMAINS` config, not code. Define your item types (e.g. `profile_1.0`) up front.
+Decide the **network** you participate in and the **domains** your instance serves. For example, the jobs network `blue_dot` has the domains `seeker` and `provider`, and the education network (Yellow Dot) has a student domain and a tutor/counsellor domain. See [Networks, Domains and Instances](/core-concepts/networks-domains-instances/) for every network. Because the model is [schema-driven](/core-concepts/technical/schema-driven-model/), you express these as schemas and `SERVED_DOMAINS` config, not code. Define your item types (e.g. `profile_1.0`) up front.
 
-## Step 3 — Add the Aggregator DPG
+## Step 3: Add the Aggregator DPG
 
-When you are ready to onboard partner organisations at scale, add the [Aggregator DPG](/guides/installation/local-setup/aggregator-dpg/). Configure it to write participant signals into your Signals instance through the bulk-create paths, authenticating with a [Keycloak service token](/core-concepts/architecture/identity-and-auth/):
+When you are ready to onboard many partner organisations, add the [Aggregator DPG](/guides/installation/local-setup/aggregator-dpg/). Configure it to write participant signals into your Signals instance through the bulk-create paths, signing in with a [Keycloak service account](/core-concepts/architecture/identity-and-auth/):
 
 ```http
 authorization: Bearer <client-credentials token>
@@ -63,27 +63,27 @@ x-acting-org-id: <the organisation you act as>
 
 Register a confidential Keycloak client whose **client id equals your
 organisation's `slug`**, then add it to `KEYCLOAK_SERVICE_CLIENT_IDS` on the
-Signals API — it is empty by default, so a new DPG is refused until listed. See
+Signals API. The list is empty by default, so a new DPG is refused until it is listed. See
 [Keycloak Setup](/guides/keycloak-setup/).
 
-## Step 4 — Add capture channels
+## Step 4: Add capture channels
 
-- **Web** — the schema-driven Signals UI and the Aggregator portal.
-- **Voice AI** — for low-cost, local-language signal capture. A voice DPG integrates the same way an aggregator does (service-auth + bulk create). Ready-made prompt sets are published as DPGs — see [AI Voice Agent Prompts](/guides/voice-ai-prompts/).
+- **Web:** the schema-driven Signals UI and the Aggregator portal.
+- **Voice AI:** low-cost capture by phone call in the local language. A voice DPG connects the same way an aggregator does (Keycloak service account and bulk create). Ready-made prompt sets for the jobs network are published as DPGs; see [AI Voice Agent Prompts](/guides/voice-ai-prompts/).
 
-On the assisted side, pick the intake method per campaign — offline camp, bulk upload, outbound campaign or inbound QR campaign. All four ship ready-made; see [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#3-data-collection-assisted-route).
+On the assisted route, pick the intake method per campaign: offline camp, bulk upload, outbound campaign or inbound QR campaign. All four ship ready-made; see [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#3-data-collection-assisted-route).
 
-## Step 5 — Integrate notifications
+## Step 5: Integrate notifications
 
 Wire **SMTP** (email) and an **SMS** provider for OTP, confirmations and match notifications. Mailpit covers email locally.
 
-## Step 5b — Make it yours
+## Step 5b: Make it yours
 
-Branding, operational settings, dashboards and a public landing page are configuration and presentation layers — none of them require touching Signals or Aggregator. See [Customisation & Branding](/guides/customisation/).
+Branding, operational settings, dashboards and a public landing page are configuration and presentation layers. None of them needs changes to the Signals or Aggregator code. See [Customisation & Branding](/guides/customisation/).
 
-## Step 6 — Pilot and measure
+## Step 6: Pilot and measure
 
-Run a bounded pilot in one district (as Ghaziabad and Dharwad did) and track the before/after metrics that matter: jobs surfaced, discovery time, cost per interaction, and conversion. See [Pilots](/explore/pilots/).
+Run a bounded pilot in one district and track before and after metrics. The jobs pilots in Ghaziabad and Dharwad tracked jobs found, time to find a match, cost per interaction and conversion; other networks pick measures for their own sector. See [Pilots](/explore/pilots/).
 
 ## Onboarding checklist
 
@@ -91,7 +91,7 @@ Run a bounded pilot in one district (as Ghaziabad and Dharwad did) and track the
 - [ ] Network schema and `SERVED_DOMAINS` defined; item types registered.
 - [ ] Keycloak realm imported; admin user created.
 - [ ] Aggregator DPG deployed.
-- [ ] Service client registered (id = org `slug`), listed in `KEYCLOAK_SERVICE_CLIENT_IDS`, acting-org configured.
+- [ ] Service client registered (id = org `slug`) and listed in `KEYCLOAK_SERVICE_CLIENT_IDS`.
 - [ ] SMTP + SMS providers connected.
 - [ ] S3 bucket + credentials provisioned for bulk upload.
 - [ ] Branding applied (`brand.json`, UI theme, Keycloak login theme).
@@ -100,6 +100,6 @@ Run a bounded pilot in one district (as Ghaziabad and Dharwad did) and track the
 
 ## Where to go next
 
-- [Activating Blue Dots in a District](/guides/district-activation/) — the institutional path that runs alongside this one.
-- [Customisation & Branding](/guides/customisation/) — make the deployment your own.
-- [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/) — take it to a cluster.
+- [Activating Blue Dots in a District](/guides/district-activation/): the institutional path that runs alongside this one.
+- [Customisation & Branding](/guides/customisation/): make the deployment your own.
+- [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/): take it to a cluster.

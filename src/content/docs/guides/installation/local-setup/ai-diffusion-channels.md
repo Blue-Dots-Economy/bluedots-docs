@@ -1,11 +1,13 @@
 ---
 title: AI Diffusion Optional Channels
-description: Turn on the optional AI Diffusion channels for Blue Dots — web chat for local/dev testing, the CLI, the telephony voice channel and the MCP server — with the exact configuration edits, compose profile and checks for each.
+description: Turn on the optional AI Diffusion channels (web chat for local/dev testing, the CLI, the telephony voice channel and the MCP server), with the configuration edits, compose profile and checks for each.
 sidebar:
   order: 6
 ---
 
 The [AI Diffusion DPG Setup](/guides/installation/local-setup/ai-diffusion-dpg/) guide runs the agent with **the bridge** only. The bridge is the default, and the only channel the Blue Dots configuration and the compose files enable out of the box. This page covers the optional channels: web chat (local/dev only), the CLI, the telephony voice channel and the MCP server.
+
+The paths below are for the Blue Dots use case, the live voice configuration for the jobs network (Blue Dot). Other networks use the same structure: replace `blue-dots` with the use case's own folder under `dev-kit/configs/` and set `DOMAIN` to match.
 
 Each channel needs up to five things:
 

@@ -1,11 +1,15 @@
 ---
 title: AI Diffusion DPG Architecture
-description: How the AI Diffusion DPG runs a conversational agent for a public-service use case — seven services, one turn, and the principles behind them.
+description: How the AI Diffusion DPG runs a conversational agent for a public-service use case, with seven services configured in YAML. The examples come from the live jobs voice agent.
 sidebar:
   order: 7
 ---
 
-The **AI Diffusion DPG** runs a conversational agent for a public-service use case. It is seven fixed services, one per building block, each a small FastAPI service in Python. You do not change their code to build an agent. You describe your use case in YAML instead: what the agent says in each phase of the conversation, which external systems it can call, what it must refuse, and which channels it answers on. The services load that configuration at startup. **Blue Dots**, the voice job assistant, is the reference use case. A job-seeker calls a phone number and talks in Hindi. The agent finds their profile, searches for jobs, and applies for one on their behalf through the Signals network. Every example on this page comes from Blue Dots.
+The **AI Diffusion DPG** runs a conversational agent for a public-service use case. It is seven fixed services, one per building block, each a small FastAPI service in Python. You do not change their code to build an agent. You describe your use case in YAML instead: what the agent says in each phase of the conversation, which external systems it can call, what it must refuse, and which channels it answers on. The services load that configuration at startup.
+
+**Blue Dots**, the voice job assistant, is the reference use case. A job-seeker calls a phone number and talks in Hindi. The agent finds their profile, searches for jobs, and applies for one on their behalf through the Signals network.
+
+The examples on this page are the live voice configuration for the jobs network (Blue Dot), named `blue-dots` in the repository. Other networks use the same structure: a use case for education or tourism would be its own folder of the same YAML files, with its own phases and tools.
 
 ## The seven blocks
 
@@ -120,14 +124,14 @@ As of **2026-10-03**.
 - Saved tool results that are put back into the prompt and used to ground identifiers.
 - LLM providers: Anthropic, OpenAI, Google and Ollama, with a primary and a fallback model.
 - Blue Dots, end to end against Signals: profile lookup, job search, profile save and job application.
-- **Human handoff.** It is built, but it ships switched off (`human_handoff: none` in the Blue Dots configuration). It needs a team to receive the handoff, and some hardening first ([#457](https://github.com/Blue-Dots-Economy/ai-diffusion-dpg/issues/457)). Until then, when a caller asks for a person, the agent says it is an AI assistant and that no one else is on the call.
+- **Human handoff.** It is built, but it ships switched off (`human_handoff: none` in the Blue Dots configuration). It needs a team to receive the handoff, and some hardening first. Until then, when a caller asks for a person, the agent says it is an AI assistant and that no one else is on the call.
 
 **Planned**
 - A WhatsApp channel.
 - Outbound campaigns: calling a list of people, rather than one call at a time.
-- Live tuning: adjusting a deployed use case's configuration without a redeployment ([#12](https://github.com/Blue-Dots-Economy/ai-diffusion-dpg/issues/12)).
-- More LLM providers, such as Azure OpenAI ([#301](https://github.com/Blue-Dots-Economy/ai-diffusion-dpg/issues/301)).
-- A shared consent service, so that consent holds across several Trust Layer instances ([#47](https://github.com/Blue-Dots-Economy/ai-diffusion-dpg/issues/47)).
+- Live tuning: adjusting a deployed use case's configuration without a redeployment.
+- More LLM providers, such as Azure OpenAI.
+- A shared consent service, so that consent holds across several Trust Layer instances.
 
 ## Read next
 
