@@ -1,9 +1,9 @@
 ---
 interface Props {
-  color: 'blue' | 'pink' | 'purple' | 'orange' | 'green' | 'brown';
+  color: 'blue' | 'yellow' | 'pink' | 'purple' | 'orange' | 'green' | 'brown';
   sector: string;
   problem: string;
-  stat: string;
+  stat?: string;
 }
 const { color, sector, problem, stat } = Astro.props;
 const colorName = color.charAt(0).toUpperCase() + color.slice(1);
@@ -22,7 +22,7 @@ const colorName = color.charAt(0).toUpperCase() + color.slice(1);
   </div>
   <div class="dot-card-sector">{sector}</div>
   <p class="dot-card-problem">{problem}</p>
-  <div class="dot-card-stat">{stat}</div>
+  {stat && <div class="dot-card-stat">{stat}</div>}
 </div>
 
 <style>
@@ -53,6 +53,7 @@ const colorName = color.charAt(0).toUpperCase() + color.slice(1);
     }
   }
   .dot-card--blue   { --dot-c: var(--dot-blue); }
+  .dot-card--yellow { --dot-c: var(--dot-yellow); }
   .dot-card--pink   { --dot-c: var(--dot-pink); }
   .dot-card--purple { --dot-c: var(--dot-purple); }
   .dot-card--orange { --dot-c: var(--dot-orange); }
