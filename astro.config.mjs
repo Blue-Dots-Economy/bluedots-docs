@@ -266,6 +266,7 @@ export default defineConfig({
             { label: 'Keycloak Setup', slug: 'guides/keycloak-setup'  },
             { label: 'Configuration', slug: 'guides/configuration'  },
             { label: 'Customisation & Branding', slug: 'guides/customisation' },
+            { label: 'Adding a New Dot', slug: 'guides/adding-a-dot' },
             { label: 'AI Voice Agent Prompts', slug: 'guides/voice-ai-prompts' },
             { label: 'API Conventions', slug: 'guides/api-conventions' },
             { label: 'CI/CD & Build Pipeline', slug: 'guides/cicd-and-builds' },
