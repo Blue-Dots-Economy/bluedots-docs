@@ -67,6 +67,6 @@ See [Identity & Auth](/core-concepts/architecture/identity-and-auth/), [Keycloak
 
 ## Related
 
-- [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) — where the voice channel sits in the seven steps.
+- [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) — where the voice channel sits in the seven steps.
 - [Participant Profiles](/core-concepts/participant-profiles/) — the fields a call has to fill.
 - [Adaptor Onboarding](/guides/adaptor-onboarding/) — adding capture channels to a deployment.
