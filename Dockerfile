@@ -22,4 +22,7 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
 COPY . .
 
 EXPOSE 4321
-CMD ["pnpm", "dev", "--host", "0.0.0.0"]
+# --ignore-lock: .astro/ is bind-mounted from the host, so Astro's dev-server
+# lock file would be shared with (and outlive) the container and block the
+# next `pnpm dev`, inside or outside Docker.
+CMD ["pnpm", "dev", "--host", "0.0.0.0", "--ignore-lock"]
