@@ -31,7 +31,7 @@ Two more things to personalise:
 - **UI theme.** `VITE_DEFAULT_NETWORK_THEME` selects the colours of the Signals web app. If it is unset, the app uses the first value of `VITE_NETWORK_ID`, and then `blue_dot`. A value that matches no theme also falls back to `blue_dot`.
 - **Login screen.** The per-network Keycloak login **theme** image is built alongside the realm. See [Keycloak Setup](/guides/keycloak-setup/).
 
-The Signals web app ships six themes, one per dot. Only some of them have a network schema in Signals-DPG `examples/schemas/`; the others are colours only, with no network behind them yet. See [Networks, Domains and Instances](/core-concepts/networks-domains-instances/) for each network and its status.
+The Signals web app ships six themes, one for each dot except Brown. Only some of them have a network schema in Signals-DPG `examples/schemas/`; the others are colours only, with no network behind them yet. See [Networks, Domains and Instances](/core-concepts/networks-domains-instances/) for each network and its status.
 
 | Theme value | Dot | Network schema in `examples/schemas/` |
 |---|---|---|
