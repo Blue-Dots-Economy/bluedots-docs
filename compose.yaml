@@ -1,0 +1,27 @@
+# Local dev only. Production is GitHub Pages — see .github/workflows/deploy.yml.
+#
+#   docker compose up --build                  # dev server, http://localhost:4321
+#   docker compose run --rm --build validate   # build + link checks
+
+services:
+  dev:
+    build: .
+    image: bluedots-docs-dev
+    init: true
+    ports:
+      - "127.0.0.1:4321:4321"
+    volumes:
+      - .:/app
+      # Keep the container's Linux node_modules separate from the host's.
+      - /app/node_modules
+
+  validate:
+    build: .
+    image: bluedots-docs-dev
+    profiles: [validate]
+    # One-shot job with no server to probe.
+    healthcheck:
+      disable: true
+    # Runs on the source copied into the image, so dist/ never reaches the host.
+    # `pnpm check` (astro check) is left out until its existing type errors are fixed.
+    command: sh -c "pnpm build && pnpm check:links"
