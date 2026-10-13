@@ -19,6 +19,9 @@ services:
     build: .
     image: bluedots-docs-dev
     profiles: [validate]
+    # One-shot job with no server to probe.
+    healthcheck:
+      disable: true
     # Runs on the source copied into the image, so dist/ never reaches the host.
     # `pnpm check` (astro check) is left out until its existing type errors are fixed.
     command: sh -c "pnpm build && pnpm check:links"

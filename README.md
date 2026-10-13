@@ -27,6 +27,8 @@ docker compose down
 
 The dev server mounts your checkout, so edits show up straight away. The container keeps its own `node_modules`, separate from yours. `validate` builds from a copy of the source inside the image, so it doesn't write `dist/` to your checkout. Rebuild (`--build`) after changing dependencies.
 
+The container runs as a non-root user (uid 1000). On Docker Desktop (macOS/Windows) that just works; on a Linux host the checkout must be writable by uid 1000, which is the default first user on most distros.
+
 ## Project structure
 
 ```text
