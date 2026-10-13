@@ -11,15 +11,15 @@ next:
   label: "Path 10 of 10: API Conventions"
 ---
 
-The Signals DPG is the network-aware backend (API + UI). It runs **standalone** —
+The Signals DPG is the network-aware backend (API + UI). It runs **standalone**, with
 no other DPG required. Its `local-setup/` brings up everything it depends on:
-**Postgres, Redis, Keycloak and Mailpit** — plus, optionally,
+**Postgres, Redis, Keycloak and Mailpit**, and optionally
 **signals-search** for relevance ranking.
 
 - **Repository:** [Blue-Dots-Economy/signals-dpg](https://github.com/Blue-Dots-Economy/signals-dpg)
 - **Canonical local guide:** [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/signals-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) — the self-contained `local-setup/` folder is the source of truth for running locally.
 
-Pick a track: **A — Docker-only** (fastest, one command) or **B — hybrid dev**
+Pick a track: **A, Docker-only** (fastest, one command) or **B, hybrid dev**
 (run the API/UI from source with hot-reload).
 
 ## Track A — one command (Docker)
@@ -85,7 +85,7 @@ Full env values, resets, and troubleshooting are in the
 
 :::tip
 Login goes through **Keycloak**, which sends a one-time code. Email codes land in
-**Mailpit**; phone codes print to the Keycloak container logs — no real provider
+**Mailpit**; phone codes print to the Keycloak container logs, so no real provider is
 needed. Set `AUTH_PROVIDER=keycloak` and the `KEYCLOAK_*` values in `.env` — see
 [Keycloak Setup](/guides/keycloak-setup/).
 :::
@@ -138,7 +138,7 @@ types and forms by editing these files rather than code.
 ## Adding search (relevance ranking)
 
 Out of the box, discover returns results in **recency order** and match scores
-are unavailable — the UI shows _"Showing basic matches — relevance ranking is
+are unavailable. The UI shows _"Showing basic matches — relevance ranking is
 temporarily unavailable"_. Adding the `search` profile fixes both:
 
 ```bash
@@ -179,6 +179,6 @@ Two required steps that are easy to miss:
 nor the embedder, so a `200` from it does not mean the stack can answer a query.
 Test with a real `POST /v1/search` that carries the minted key.
 
-Full reference — the embedding-dimension rules, `network.json` requirements and a
-troubleshooting table keyed by the exact error message — is **§7 of
+Full reference (the embedding-dimension rules, `network.json` requirements and a
+troubleshooting table keyed by the exact error message) is **§7 of
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/signals-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md)**.

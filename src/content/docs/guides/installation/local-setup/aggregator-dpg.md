@@ -12,7 +12,7 @@ the shared infra (Postgres, Redis, Keycloak, MinIO, Mailpit).
 - **Repository:** [Blue-Dots-Economy/aggregator-dpg](https://github.com/Blue-Dots-Economy/aggregator-dpg)
 - **Canonical local guide:** [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) — the self-contained `local-setup/` folder is the source of truth. It builds both repos, so it expects `aggregator-dpg` and `signals-dpg` checked out as **siblings**.
 
-Pick a track: **A — Docker-only** (one command, whole ecosystem) or **B — hybrid
+Pick a track: **A, Docker-only** (one command, whole ecosystem) or **B, hybrid
 dev** (run the apps from source with hot-reload).
 
 ## Track A — one command (Docker)
@@ -43,7 +43,7 @@ docker compose up -d --build
 **`docker login dhi.io`** — the api, web and worker images build `FROM
 dhi.io/...` (Docker Hardened Images), which refuse anonymous pulls. Without it
 `docker compose up -d --build` fails at the first `FROM` with `401
-Unauthorized`. Any Docker Hub account works. Track B needs no login — it builds
+Unauthorized`. Any Docker Hub account works. Track B needs no login because it builds
 no app images.
 
 **`./gen-secrets.sh`** — `.env.example` ships seven `CHANGE_ME_*` placeholders.
@@ -141,8 +141,8 @@ This stack is already around a dozen containers, and its guide asks for ≥6 GB
 before search. The embedding server loads a ~2.3 GB model and wants 3-4 GB more.
 :::
 
-Details specific to this stack — the `3110` port, targeting the `signals`
-database rather than `aggregator`, and using the `signals-redis` instance — are in
+Details specific to this stack (the `3110` port, targeting the `signals`
+database rather than `aggregator`, and using the `signals-redis` instance) are in
 **§10** of the
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md)
 guide. The canonical reference for signals-search's own configuration is **§7 of

@@ -1,11 +1,11 @@
 ---
 title: AI Voice Agent Prompts
-description: The published voice agent prompts for the jobs network, how a prompt set is structured so it can be reused for any network, and how a voice DPG connects to Signals.
+description: How a voice agent prompt set is structured so any network can reuse it, the published prompts for the jobs network, and how a voice DPG connects to Signals.
 sidebar:
   order: 7
 ---
 
-The **AI Voice Agent** is the primary self-service channel for [completing a profile](/core-concepts/blue-dot-lifecycle/#4-completing-the-profile-self-route). The prompts that drive it are **Digital Public Goods (DPGs) in their own right**: published, versioned and reusable, like the Signals and Aggregator codebases.
+On the jobs network (Blue Dot), the **AI Voice Agent** is the main self-service channel for [completing a profile](/core-concepts/blue-dot-lifecycle/#4-completing-the-profile-self-route). The prompts that drive it are **Digital Public Goods (DPGs) in their own right**: published, versioned and reusable, like the Signals and Aggregator codebases.
 
 The published agents are for the jobs network (Blue Dot). The prompt structure works for any network: another network writes its own agents with the same files. The prompts work on any voice platform, so an adaptor can run them on whichever Voice AI service it chooses.
 
@@ -18,7 +18,7 @@ Prompt sets are organised per network, then per agent. The jobs agents sit in th
 | Agent | Who it talks to | What the call does |
 |---|---|---|
 | **KKB** — काम की बात | Job seeker | Shows available work clearly so the caller can decide, and captures what they are looking for |
-| **DKB** — धंधे की बात | Job provider (owner of a micro, small or medium enterprise, MSME) | Helps the owner keep job postings current, complete and grounded in real market data |
+| **DKB** — धंधे की बात | Job provider (owner of a micro, small or medium enterprise, MSME) | Helps the owner keep job postings current and complete |
 | **Maya** | Job seeker / graduate | Seeker-facing agent with a dedicated **inbound** variant for callers who reach in rather than being called |
 | **TRRAIN** | Job seeker, post-application | A short follow-up courtesy call that makes **one** offer of a free support service and records the answer |
 

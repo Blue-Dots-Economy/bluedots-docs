@@ -13,7 +13,7 @@ next:
 
 import BeforeAfter from '../../../../components/BeforeAfter.astro';
 
-Blue Dots is **schema-driven** end to end. Schemas, not application code, define what an instance stores, exchanges and renders. A new network, domain or form ships by adding or editing schema files.
+Blue Dots is **schema-driven** end to end. Schemas define what an instance stores, exchanges and renders. A new network, domain or form ships by adding or editing schema files.
 
 ## Three kinds of schema
 
@@ -67,7 +67,7 @@ A network folder holds:
 
 A deployment runs one network. It chooses it with settings, not code: which `network.json` to load, which domains to serve, and which network id the UI shows. The setup guides list the exact variables: [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/#choose-a-network) for local runs and [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/#choose-the-network) for a cluster.
 
-The same `profile_1.0` has different fields on each network. A jobs seeker profile and a Yellow Dot student profile are both `profile_1.0`, but each network's `network.json` defines its own fields.
+The same `profile_1.0` has different fields on each network. A Blue Dot (jobs) seeker profile and a Yellow Dot student profile are both `profile_1.0`, but each network's `network.json` defines its own fields.
 
 ## Backend-owned fields
 

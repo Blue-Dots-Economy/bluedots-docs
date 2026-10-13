@@ -25,12 +25,12 @@ This is the recommended path for a new **adaptor**: an organisation deploying Bl
   {
     number: 3,
     title: "Add Aggregator",
-    focus: "Add the Aggregator DPG to onboard many partner organisations, writing participant signals through the bulk-create paths."
+    focus: "Add the Aggregator DPG to onboard many partner organisations, writing participant profiles and listings through the bulk-create paths."
   },
   {
     number: 4,
     title: "Add capture channels",
-    focus: "Web (the schema-driven Signals UI and the Aggregator portal), plus Voice AI for low-cost, local-language signal capture."
+    focus: "Web (the schema-driven Signals UI and the Aggregator portal), plus Voice AI for low-cost sign-up by phone in the local language."
   },
   {
     number: 5,
@@ -40,7 +40,7 @@ This is the recommended path for a new **adaptor**: an organisation deploying Bl
   {
     number: 6,
     title: "Pilot & measure",
-    focus: "Run a bounded pilot in one district and track the before/after metrics that matter."
+    focus: "Run a bounded pilot in one district and track the before and after measures agreed for the sector."
   }
 ]} />
 
@@ -54,7 +54,7 @@ Decide the **network** you participate in and the **domains** your instance serv
 
 ## Step 3: Add the Aggregator DPG
 
-When you are ready to onboard many partner organisations, add the [Aggregator DPG](/guides/installation/local-setup/aggregator-dpg/). Configure it to write participant signals into your Signals instance through the bulk-create paths, signing in with a [Keycloak service account](/core-concepts/architecture/identity-and-auth/):
+When you are ready to onboard many partner organisations, add the [Aggregator DPG](/guides/installation/local-setup/aggregator-dpg/). Configure it to write participant profiles and listings into your Signals instance through the bulk-create paths, signing in with a [Keycloak service account](/core-concepts/architecture/identity-and-auth/):
 
 ```http
 authorization: Bearer <client-credentials token>

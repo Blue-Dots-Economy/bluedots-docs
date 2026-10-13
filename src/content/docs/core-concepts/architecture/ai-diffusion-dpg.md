@@ -7,7 +7,7 @@ sidebar:
 
 The **AI Diffusion DPG** runs a conversational agent for a public-service use case. It is seven fixed services, one per building block, each a small FastAPI service in Python. You do not change their code to build an agent. You describe your use case in YAML instead: what the agent says in each phase of the conversation, which external systems it can call, what it must refuse, and which channels it answers on. The services load that configuration at startup.
 
-**Blue Dots**, the voice job assistant, is the reference use case. A job-seeker calls a phone number and talks in Hindi. The agent finds their profile, searches for jobs, and applies for one on their behalf through the Signals network.
+**The jobs voice agent** (Blue Dot network) is the reference use case. A job-seeker calls a phone number and talks in Hindi. The agent finds their profile, searches for jobs, and applies for one on their behalf through the Signals network.
 
 The examples on this page are the live voice configuration for the jobs network (Blue Dot), named `blue-dots` in the repository. Other networks use the same structure: a use case for education or tourism would be its own folder of the same YAML files, with its own phases and tools.
 
@@ -86,13 +86,13 @@ Each step is there for a reason:
 
 **Configure, don't code.** Each organisation adopting the DPG has its own use case, and maintaining a fork for each would not scale. So the seven services are the same for everyone. A use case is YAML in two layers: framework defaults, and your use case on top. Each block validates the merged result against its schema at startup, and an unknown key stops the service from starting, so a typo is caught before the first call. See [Configuring a use case](/core-concepts/architecture/ai-diffusion-configuration/).
 
-**The LLM writes the words, and code makes the decisions.** A model can phrase a reply well, but it cannot be relied on to make the same choice twice. So routing between phases, consent, ending the session, handing off to a person and the way numbers are spoken are all decided in code from your configuration. The model's job is the wording of each reply.
+**Code makes routing and consent decisions; the model writes the reply.** A model can phrase a reply well, but it cannot be relied on to make the same choice twice. So routing between phases, consent, ending the session, handing off to a person and the way numbers are spoken are all decided in code from your configuration. The model's job is the wording of each reply.
 
-**Trust is a fail-closed boundary, and in Blue Dots the write tools come after consent.** A public-service agent must not act for someone who has not agreed to it, even when a dependency is down. If the Trust Layer cannot be reached or returns an error, Agent Core treats the check as a block, not a pass. In Blue Dots, the write tools (saving a profile, applying for a job) exist only in the phases that come after the consent question. A new caller is asked for consent at the start of the call. A returning caller whose consent is already on file is not asked again.
+**Trust is a fail-closed boundary, and in the jobs voice agent the write tools come after consent.** A public-service agent must not act for someone who has not agreed to it, even when a dependency is down. If the Trust Layer cannot be reached or returns an error, Agent Core treats the check as a block, not a pass. In the jobs voice agent, the write tools (saving a profile, applying for a job) exist only in the phases that come after the consent question. A new caller is asked for consent at the start of the call. A returning caller whose consent is already on file is not asked again.
 
 **Agent Core is stateless, with all state in the Memory Layer.** A voice call may reach a different Agent Core instance on each turn, and an instance may restart mid-call. So Agent Core keeps nothing between turns. Session state, the profile graph and saved tool results live in the Memory Layer, which is the only block that talks to Redis and the graph database.
 
-**Facts come from saved tool results, not from the model.** A model that reads out a job or a reference number it made up is worse than no agent at all. So every tool result is saved in the Memory Layer and put back into the prompt as a known fact. A tool call that passes an identifier no tool ever returned is refused, and the model is told to use the value from the result.
+**Facts come from saved tool results, not from the model.** A model that reads out a job or a reference number it made up can send a caller to a job that does not exist. So every tool result is saved in the Memory Layer and put back into the prompt as a known fact. A tool call that passes an identifier no tool ever returned is refused, and the model is told to use the value from the result.
 
 **The design meets a voice-latency budget.** On a phone call, silence after the caller stops talking feels like a dropped line. So the reply is streamed and spoken sentence by sentence. Most turns wait on two LLM calls: understanding and the reply. A tool the model asks for mid-reply adds another LLM call, so a phase dispatches the tools it can predict before the reply call starts. When the model does chain tools, the number of rounds is capped (`max_tool_rounds`, 3 by default). Memory, audit and telemetry writes happen after the reply.
 
@@ -123,7 +123,7 @@ As of **2026-10-03**.
 - Configurable phases and routing, dialogue-act understanding, tool pre-dispatch, the output contract and guard, and streamed replies with batched output checks.
 - Saved tool results that are put back into the prompt and used to ground identifiers.
 - LLM providers: Anthropic, OpenAI, Google and Ollama, with a primary and a fallback model.
-- Blue Dots, end to end against Signals: profile lookup, job search, profile save and job application.
+- The jobs voice agent, end to end against Signals: profile lookup, job search, profile save and job application.
 - **Human handoff.** It is built, but it ships switched off (`human_handoff: none` in the Blue Dots configuration). It needs a team to receive the handoff, and some hardening first. Until then, when a caller asks for a person, the agent says it is an AI assistant and that no one else is on the call.
 
 **Planned**

@@ -70,7 +70,7 @@ _brand:   &brand   ""
 
 The Signals API, the Signals UI, the consent text and the Aggregator all read these anchors, so set them once here.
 
-Infrastructure sizing — node type, VPC CIDR, Pritunl/bastion access, database size — lives further down in this same file, not in the top anchor block. See [Configuration reference](#configuration-reference-sizing-zones-and-access) below.
+Infrastructure sizing (node type, VPC CIDR, Pritunl/bastion access, database size) lives further down in this same file, not in the top anchor block. See [Configuration reference](#configuration-reference-sizing-zones-and-access) below.
 
 :::caution
 `_environment` must be **1–9 lowercase letters/digits**, no hyphens. `prod` and `dev2` are fine; `production` and `pre-prod` are rejected.
@@ -78,7 +78,7 @@ Infrastructure sizing — node type, VPC CIDR, Pritunl/bastion access, database 
 
 ## 3. Fill in `secrets.yaml`
 
-Credentials that cannot be generated — a mail password, a maps API key — live in a separate file that is **never committed**:
+Credentials that cannot be generated (a mail password, a maps API key) live in a separate file that is **never committed**:
 
 ```bash
 cp secrets.example.yaml secrets.yaml
@@ -128,7 +128,7 @@ bash install.sh apply_default_sc
 
 ### Managed Postgres (RDS) vs in-cluster
 
-Step 2 also provisions a managed **RDS PostgreSQL** instance, and once it exists every chart's database connection is pointed at it automatically — that's what makes `global-cloud-values.yaml`'s generated `postgres.host` values matter. An in-cluster Postgres pod is also deployed alongside it (`postgresql.enabled: true` in `global-images.yaml`), kept for reference/rollback, but with RDS present it sits unused — there is no supported `global-values.yaml` toggle today to skip RDS and run on the in-cluster pod only. RDS sizing (`rds_instance_class`, `rds_allocated_storage`, `rds_multi_az`, …) is in the [Configuration reference](#configuration-reference-sizing-zones-and-access) below.
+Step 2 also provisions a managed **RDS PostgreSQL** instance, and once it exists every chart's database connection is pointed at it automatically. That is what makes `global-cloud-values.yaml`'s generated `postgres.host` values matter. An in-cluster Postgres pod is also deployed alongside it (`postgresql.enabled: true` in `global-images.yaml`), kept for reference/rollback, but with RDS present it sits unused — there is no supported `global-values.yaml` toggle today to skip RDS and run on the in-cluster pod only. RDS sizing (`rds_instance_class`, `rds_allocated_storage`, `rds_multi_az`, …) is in the [Configuration reference](#configuration-reference-sizing-zones-and-access) below.
 
 ## 5. Connect and validate
 
