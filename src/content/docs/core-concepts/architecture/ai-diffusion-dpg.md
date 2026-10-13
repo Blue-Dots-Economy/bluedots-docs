@@ -84,7 +84,7 @@ Each step is there for a reason:
 
 ## Design principles
 
-**Configure, don't code.** Each organisation adopting the DPG has its own use case, and maintaining a fork for each would not scale. So the seven services are the same for everyone. A use case is YAML in two layers: framework defaults, and your use case on top. Each block validates the merged result against its schema at startup, and an unknown key stops the service from starting, so a typo is caught before the first call. See [Configuring a use case](/core-concepts/architecture/ai-diffusion-configuration/).
+**A use case is configuration in YAML; the service code stays the same.** Each organisation adopting the DPG has its own use case, and maintaining a fork for each would not scale. So the seven services are the same for everyone. A use case is YAML in two layers: framework defaults, and your use case on top. Each block validates the merged result against its schema at startup, and an unknown key stops the service from starting, so a typo is caught before the first call. See [Configuring a use case](/core-concepts/architecture/ai-diffusion-configuration/).
 
 **Code makes routing and consent decisions; the model writes the reply.** A model can phrase a reply well, but it cannot be relied on to make the same choice twice. So routing between phases, consent, ending the session, handing off to a person and the way numbers are spoken are all decided in code from your configuration. The model's job is the wording of each reply.
 
