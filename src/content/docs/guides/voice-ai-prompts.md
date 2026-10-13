@@ -5,7 +5,7 @@ sidebar:
   order: 7
 ---
 
-The **AI Voice Agent** is the primary self-service channel for [completing a profile](/core-concepts/blue-dot-lifecycle/#4-completing-the-profile-self-route). The prompts that drive it are **DPGs in their own right** — published, versioned and reusable, exactly like the Signals and Aggregator codebases.
+The **AI Voice Agent** is the primary self-service channel for [completing a profile](/core-concepts/blue-dot-lifecycle/#4-completing-the-profile). The prompts that drive it are **DPGs in their own right** — published, versioned and reusable, exactly like the Signals and Aggregator codebases.
 
 They are **not tied to any one voice platform.** An adaptor can run them on whichever Voice AI service it chooses; the prompts define the conversation, not the vendor.
 
