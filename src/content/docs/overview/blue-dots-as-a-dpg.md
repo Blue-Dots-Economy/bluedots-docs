@@ -83,6 +83,6 @@ Blue Dots is designed to be replicable anywhere:
 - **Voice AI** works across languages and personas.
 - **Local organisations that sign people up** (aggregators) exist in every geography.
 - A **facilitation team** works wherever there is a local administrative unit.
-- **Innovators** exist in every market.
+- **Private service providers** (innovators) in any country can build on it.
 
 Because it is a Digital Public Good, anyone can copy and run Blue Dots. It can keep going without proprietary platforms or continuous donor funding. For development institutions and governments, it is a low-cost way to list local people and businesses that no one could find before. Others can then act on them. It also gives them district-level data on what people need and offer.

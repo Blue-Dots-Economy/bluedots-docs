@@ -37,7 +37,7 @@ An **event** is the *structured result* of an action: a stored, machine-readable
 
 ![An action connects one item to another, for example a seeker to a provider, and produces an event: the structured result that is stored. The action is apply on the jobs network and connect on the education network. Some networks, such as tourism, have no actions because listings are public.](../../../assets/diagrams/items-actions-events.png)
 
-A signal lifecycle, in these terms:
+From listing to result, in these terms:
 
 1. Create **items** for both sides, for example a student and a tutor.
 2. The network discovers compatible items.

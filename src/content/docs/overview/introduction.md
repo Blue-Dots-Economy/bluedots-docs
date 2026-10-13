@@ -37,10 +37,10 @@ Each colour is a separate network for one sector. All of them run on the same so
 
 When people can't find each other locally, it shows up in national figures. Across Indian districts today:
 
-- Youth placement rates sit below 20%.
+- Service uptake is under 50% of its potential.
 - Women's labour-force participation is under 35%.
 - Scheme budget utilisation runs below 70%.
-- Service uptake is under 50% of its potential.
+- Youth placement rates (jobs) sit below 20%.
 
 Helping people find each other in India's top 100 districts is a conservatively estimated **₹87,500 crore** opportunity in livelihoods alone. [The Economics of Local Discovery](/explore/economics/) shows how this figure is worked out.
 

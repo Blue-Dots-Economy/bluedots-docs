@@ -1,11 +1,11 @@
 ---
 title: Networks, Domains & Instances
-description: How one set of Blue Dots software serves jobs, education, disability services, tourism and other sectors.
+description: How one set of Blue Dots software helps people and organisations nearby find each other, in jobs, education, disability services, tourism and other sectors.
 sidebar:
   order: 5
 ---
 
-Blue Dots uses three ideas to serve many sectors with one set of software: **networks**, **domains** and **instances**. Keep them separate, because each answers a different question.
+Blue Dots helps people and organisations near each other find each other, in many sectors, with one set of software. It uses three ideas to do this: **networks**, **domains** and **instances**. Keep them separate, because each answers a different question.
 
 | Idea | Question it answers | Example |
 |---|---|---|

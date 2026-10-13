@@ -5,11 +5,11 @@ sidebar:
   order: 3
 ---
 
-Blue Dots helps people and organisations in the same district find each other. It works through **four levers** that support each other. Each lever makes the others stronger, and none works well alone.
+Blue Dots helps people and organisations in the same district find each other. It works through **four levers** that support each other.
 
 ## The four levers
 
-1. **Shared open-source software.** A person creates a dot in a 2–3 minute voice call, in their own language, on any phone, including a basic feature phone. A dot is a short listing that says what someone needs or offers, pinned to a place on the district map. No form, no English and no digital skills are needed.
+1. **Shared open-source software.** A person creates a dot in a 2–3 minute voice call, in their own language, on any phone, including a basic feature phone. A dot is a short listing that says what someone needs or offers, pinned to a place on the district map. The person does not need to fill in a form, speak English or use an app.
 
    AI turns the call into a structured listing and puts it on the map. After that, it suggests nearby options to people and shows administrators what is happening across the district. This reaches the 80%+ of the district economy that has never appeared on any digital system. The software is offered as Digital Public Goods (DPGs).
 
@@ -19,7 +19,7 @@ Blue Dots helps people and organisations in the same district find each other. I
 
 3. **District facilitation team.** Without regular upkeep, dots go out of date and people fall back on word-of-mouth. The district administration anchors a facilitation team that keeps listings current, connects aggregators and innovators, and follows up. Its job is coordination; technology is run separately. It typically has 6–8 members from government, the social sector and MSME (micro, small and medium enterprise) associations, with a small Project Management Unit (PMU) behind it.
 
-4. **Innovators.** As more people list, the map becomes useful to private organisations. In the jobs network these include staffing firms, assessment providers, placement firms, and transport and financial-services providers. They join because it helps their own work: finding people costs almost nothing, and a match takes minutes instead of weeks. The more they use it, the more useful the map becomes for everyone.
+4. **Innovators.** As more people list, the map becomes useful to private organisations. In the jobs network these include staffing firms, assessment providers, placement firms, and transport and financial-services providers. On a farming network, for example, a custom hiring centre that rents out tractors could find farmers who need one. They join because it helps their own work: finding people costs almost nothing, and a match takes minutes instead of weeks. The more they use it, the more useful the map becomes for everyone.
 
 Together, the four levers turn people and organisations already in the district into listings that others can trust and act on. They need no new investment in buildings or programmes.
 
