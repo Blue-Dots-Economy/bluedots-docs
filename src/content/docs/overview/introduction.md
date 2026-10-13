@@ -11,7 +11,7 @@ In most districts, people who need something live close to people who offer it. 
 
 ## What is a dot?
 
-A **dot** is a short listing that says what a person or organisation needs or offers. People nearby who can help see it and can ask to connect. In most networks, phone numbers are shared only after both sides agree.
+A **dot** is a short listing that says what a person or organisation needs or offers. People nearby who can help see it and can ask to connect. On the jobs and disability networks, phone numbers are shared only after both sides agree. Orange Dot tourism listings are public on purpose.
 
 Example, Blue Dot (jobs): A young person registers by phone call in their own language. A skilling centre checks the profile. A nearby employer with a vacancy sees it and sends an interview invite. The young person accepts before their number is shared.
 

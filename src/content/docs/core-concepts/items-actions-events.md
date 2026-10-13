@@ -5,7 +5,7 @@ sidebar:
   order: 6
 ---
 
-Inside an instance, everything is built from three primitives: **items**, **actions** and **events**.
+These are the records that let people and organisations nearby find each other. Inside an instance, everything is built from three primitives: **items**, **actions** and **events**.
 
 ## Item
 

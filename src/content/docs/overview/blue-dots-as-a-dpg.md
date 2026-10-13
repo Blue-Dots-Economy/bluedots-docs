@@ -14,7 +14,7 @@ Like **UPI** lets any bank or app send money through one shared system, Blue Dot
 Instances talk to each other through an **open protocol**. Any organisation can join, add listings and build on it. So a new district or state can start without a custom build each time.
 
 :::note[Consent]
-Every dot exists because the person or organisation behind it chose to list it. On most networks, phone numbers are shared only after both sides agree. Orange Dot tourism listings are the exception: they are public on purpose.
+Every dot exists because the person or organisation behind it chose to list it. On the jobs and disability networks, phone numbers are shared only after both sides agree. Orange Dot tourism listings are the exception: they are public on purpose.
 :::
 
 ## What "DPG" means here

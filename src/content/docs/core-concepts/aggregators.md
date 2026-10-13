@@ -5,7 +5,7 @@ sidebar:
   order: 4
 ---
 
-An **aggregator** is a local organisation that signs participants up and **checks their details**, so others on the network can trust their dots. The **Aggregator DPG** (digital public good) is the application aggregators use.
+An **aggregator** is a local organisation that signs participants up and **checks their details**, so people nearby can find and trust their dots. The **Aggregator DPG** (digital public good) is the application aggregators use.
 
 Checking details is the main reason aggregators exist. A dot that a known local organisation has checked is easier for the other side to trust.
 
