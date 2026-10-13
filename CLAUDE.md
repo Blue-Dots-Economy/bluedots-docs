@@ -81,10 +81,10 @@ A headline figure is stated once and linked from everywhere else. Restating a nu
 | ₹87,500 crore and its derivation | `explore/economics` |
 | Field observations — proximity, ratios, employer response, women's assurances | `explore/learnings` |
 | Time to create a dot (2–3 minutes) | `overview/the-blue-dots-approach` |
-| PwD campaign — Feb 2026, 1 lakh+ needs in 10 days, ₹10 per interaction | `explore/beyond-livelihoods` (Purple Dots section) |
+| PwD campaign — Feb 2026, 1 lakh+ needs in 10 days, ₹10 per interaction | `explore/beyond-livelihoods` (Purple Dot section) |
 | Networks, their domains and their status | `core-concepts/networks-domains-instances` |
 
-Terminology: use **MSME**, not SMB, outside the Brown Dots sector naming.
+Terminology: use **MSME**, not SMB, outside the Brown Dot sector naming.
 
 ## Naming: platform, dot, colour
 
