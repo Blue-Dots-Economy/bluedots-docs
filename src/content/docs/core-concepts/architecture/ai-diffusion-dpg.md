@@ -50,7 +50,7 @@ The rule is that **no block calls another block directly during a turn**. Channe
 
 ## One turn
 
-A Blue Dots caller says, in Hindi, that they want electrician work in Lucknow. This is what happens between the end of their sentence and the agent's reply. The diagram follows the streaming path, which the voice channels use; each box names the block that does the work.
+A caller to the jobs (Blue Dot) agent says, in Hindi, that they want electrician work in Lucknow. This is what happens between the end of their sentence and the agent's reply. The diagram follows the streaming path, which the voice channels use; each box names the block that does the work.
 
 <pre class="mermaid">
 flowchart TD
@@ -72,7 +72,7 @@ flowchart TD
 Each step is there for a reason:
 
 1. **Load the session.** Agent Core keeps no state of its own, so every turn starts by fetching the session, the caller's profile and earlier tool results from the Memory Layer. On a caller's first turn, the use case can also fetch profile fields up front, so a returning caller is recognised from the start.
-2. **Understand the turn.** An LLM call turns the utterance into dialogue acts and slots (here, a trade and a location), which are written to the session. Code can then make decisions from structured values instead of free text. If the use case turns on language normalisation, it runs in parallel with this call. Blue Dots leaves it off.
+2. **Understand the turn.** An LLM call turns the utterance into dialogue acts and slots (here, a trade and a location), which are written to the session. Code can then make decisions from structured values instead of free text. If the use case turns on language normalisation, it runs in parallel with this call. The jobs use case leaves it off.
 3. **Check the input.** The Trust Layer can block or escalate a turn before any tool runs or any reply is written. On the streaming path, understanding runs just before this check (alongside language normalisation, when that is on), and its result is used only if the check passes. On the non-streaming path the check comes first.
 4. **Route.** Rules in your configuration pick the next phase (a "subagent") from the dialogue act and the session state. Here the trade and location are both known, so the conversation moves to `job_match`. Code makes this decision, so it is the same every time.
 5. **Pre-dispatch the search.** The `job_match` phase declares that `fetch_jobs` runs before the LLM. Starting the search early means the results are already in the prompt, so the model does not have to ask for them and wait for a second round trip.
@@ -100,7 +100,7 @@ Each step is there for a reason:
 
 Every channel is part of the Reach Layer and calls Agent Core over the same HTTP API, so the conversation logic is written once for all of them. Each channel has its own output contract, which the output guard applies to the reply. A channel answers only when the use case has a block for it in its configuration.
 
-**The bridge is the default integration**, and the only channel Blue Dots enables out of the box:
+**The bridge is the default integration**, and the only channel the jobs use case enables out of the box:
 
 - **Bridge (8008).** A generic OpenAI chat-completions-compatible endpoint (`/v1/chat/completions`). Any system that speaks that API can connect to it and use the whole agent as if it were one model, for example an adopter's own voice pipeline. Such a pipeline handles the call, speech-to-text and text-to-speech, and the bridge streams the agent's sentences back. [VoicERA](https://github.com/COSS-India/VoicEra), an external DPG voice service, is one example.
 
@@ -124,7 +124,7 @@ As of **2026-10-03**.
 - Saved tool results that are put back into the prompt and used to ground identifiers.
 - LLM providers: Anthropic, OpenAI, Google and Ollama, with a primary and a fallback model.
 - The jobs voice agent, end to end against Signals: profile lookup, job search, profile save and job application.
-- **Human handoff.** It is built, but it ships switched off (`human_handoff: none` in the Blue Dots configuration). It needs a team to receive the handoff, and some hardening first. Until then, when a caller asks for a person, the agent says it is an AI assistant and that no one else is on the call.
+- **Human handoff.** It is built, but it ships switched off (`human_handoff: none` in the `blue-dots` configuration). It needs a team to receive the handoff, and some hardening first. Until then, when a caller asks for a person, the agent says it is an AI assistant and that no one else is on the call.
 
 **Planned**
 - A WhatsApp channel.
@@ -136,5 +136,5 @@ As of **2026-10-03**.
 ## Read next
 
 - [Configuring a use case](/core-concepts/architecture/ai-diffusion-configuration/): the configuration layers, and what you configure versus what the framework owns.
-- [AI Diffusion DPG local setup](/guides/installation/local-setup/ai-diffusion-dpg/): run the Blue Dots agent on your machine against a local Signals stack.
+- [AI Diffusion DPG local setup](/guides/installation/local-setup/ai-diffusion-dpg/): run the jobs agent on your machine against a local Signals stack.
 - [Contributor map](https://github.com/Blue-Dots-Economy/ai-diffusion-dpg/blob/main/ARCHITECTURE.md): where each block and each step of a turn lives in the code.

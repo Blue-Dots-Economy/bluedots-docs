@@ -5,9 +5,9 @@ sidebar:
   order: 6
 ---
 
-The [AI Diffusion DPG Setup](/guides/installation/local-setup/ai-diffusion-dpg/) guide runs the agent with **the bridge** only. The bridge is the default, and the only channel the Blue Dots configuration and the compose files enable out of the box. This page covers the optional channels: web chat (local/dev only), the CLI, the telephony voice channel and the MCP server.
+The [AI Diffusion DPG Setup](/guides/installation/local-setup/ai-diffusion-dpg/) guide runs the agent with **the bridge** only. The bridge is the default, and the only channel the `blue-dots` configuration and the compose files enable out of the box. This page covers the optional channels: web chat (local/dev only), the CLI, the telephony voice channel and the MCP server.
 
-The paths below are for the Blue Dots use case, the live voice configuration for the jobs network (Blue Dot). Other networks use the same structure: replace `blue-dots` with the use case's own folder under `dev-kit/configs/` and set `DOMAIN` to match.
+The paths below are for the jobs use case (`blue-dots`), the live voice configuration for the jobs network (Blue Dot). Other networks use the same structure: replace `blue-dots` with the use case's own folder under `dev-kit/configs/` and set `DOMAIN` to match.
 
 Each channel needs up to five things:
 
@@ -131,7 +131,7 @@ channels:
 
 ### 2. Reach Layer block
 
-Add a `web` block under `reach_layer.channels:` in `dev-kit/configs/blue-dots/reach_layer.yaml`. `auth.enabled: false` turns sign-in off, overriding the framework default (`true`); the `ui` keys are the Blue Dots start screen, which asks for the phone number:
+Add a `web` block under `reach_layer.channels:` in `dev-kit/configs/blue-dots/reach_layer.yaml`. `auth.enabled: false` turns sign-in off, overriding the framework default (`true`); the `ui` keys are the jobs use case's start screen, which asks for the phone number:
 
 ```yaml
 reach_layer:
@@ -191,7 +191,7 @@ curl -s localhost:8005/app-config
 
 The first returns `{"status":"ok"}`. The second includes `"auth":{"enabled":false,"google_client_id":""}`.
 
-Open `http://localhost:8005/` in a browser. It goes straight to the **Start a session** screen, with a user ID box and a start button. For Blue Dots, **the user ID is the caller's phone number, as `91XXXXXXXXXX`** (country code first, no `+`). Action Gateway uses it as the phone number when it looks up and saves the profile, so any other value is stored as a wrong phone number. Then hold the same conversation as through the bridge: a greeting, a yes, an age, a trade and city, a pick, a name and a confirmation. It ends in one `apply` row in `item_actions`; check it with the query in [The application is in Signals](/guides/installation/local-setup/ai-diffusion-dpg/#the-application-is-in-signals).
+Open `http://localhost:8005/` in a browser. It goes straight to the **Start a session** screen, with a user ID box and a start button. For the jobs use case, **the user ID is the caller's phone number, as `91XXXXXXXXXX`** (country code first, no `+`). Action Gateway uses it as the phone number when it looks up and saves the profile, so any other value is stored as a wrong phone number. Then hold the same conversation as through the bridge: a greeting, a yes, an age, a trade and city, a pick, a name and a confirmation. It ends in one `apply` row in `item_actions`; check it with the query in [The application is in Signals](/guides/installation/local-setup/ai-diffusion-dpg/#the-application-is-in-signals).
 
 To script it instead, `POST /chat` takes `session_id`, `user_id`, `message` and `fresh` (`true` on the first turn). This helper builds the JSON with Python, so Devanagari is encoded safely:
 
@@ -559,7 +559,7 @@ The `reach_layer_mcp` service on port 8007 exposes the agent through the Model C
 
 ### 1. Agent Core block
 
-None needed. The framework defaults in `dev-kit/dpg/agent_core.yaml` already have a `channels.mcp` block, and it applies to Blue Dots too. To change it, add an `mcp` block under `channels:` in `dev-kit/configs/blue-dots/agent_core.yaml` with only the keys you change.
+None needed. The framework defaults in `dev-kit/dpg/agent_core.yaml` already have a `channels.mcp` block, and it applies to the jobs use case too. To change it, add an `mcp` block under `channels:` in `dev-kit/configs/blue-dots/agent_core.yaml` with only the keys you change.
 
 ### 2. Reach Layer block
 

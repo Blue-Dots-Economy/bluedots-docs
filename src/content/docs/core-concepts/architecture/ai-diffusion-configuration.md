@@ -14,7 +14,7 @@ The examples are the live voice configuration for the jobs network (Blue Dot), i
 Each block reads two files at startup:
 
 - **Framework defaults**, in `dev-kit/dpg/<block>.yaml`. These hold the values every use case shares: ports, the addresses of the other blocks, timeouts and retries. They exist so your files only declare what is different.
-- **Your use case**, in `dev-kit/configs/<domain>/<block>.yaml`. For Blue Dots this is `dev-kit/configs/blue-dots/`.
+- **Your use case**, in `dev-kit/configs/<domain>/<block>.yaml`. For the jobs use case this is `dev-kit/configs/blue-dots/`.
 
 The block deep-merges the two, with your values winning. Maps are merged key by key. Any other value, **including a list**, is replaced whole by yours. The merged result is then checked against the block's schema. The schema rejects unknown keys at every level, so a misspelt or unsupported key stops the block from starting, rather than being silently ignored during a live call.
 
@@ -35,13 +35,13 @@ Reach Layer and Action Gateway expand environment variables in string values bef
 
 Each row names the keys you write in `dev-kit/configs/blue-dots/<block>.yaml`.
 
-| Block | What you describe | Keys in the Blue Dots files |
+| Block | What you describe | Keys in the `blue-dots` files |
 |---|---|---|
-| Agent Core | The model, the phases of the conversation and the rules that move between them, how a caller's turn is understood, the agent's identity, human handoff, the tools the model may see, and each channel's output contract. | `agent` (provider, `primary_model`, `fallback_model`, `max_tool_rounds`); `agent_workflow.subagents` (one entry per phase, each with `tools`, `predispatch`, `system_prompt`, `pending` and `routing`); `agent_workflow.global_routing`; `preprocessing.nlu_processor` (`slots`, `topics`, `act_intents`, `termination_gate`); `identity`; `handoff`; `connectors.read` and `connectors.write`; `channels.<channel>`, one block per channel the use case answers on (Blue Dots ships with `bridge` only, for example `channels.bridge.output_contract`; the optional `web`, `cli` and `voice` channels each need their own block); `conversation` (fixed lines spoken without the LLM). |
+| Agent Core | The model, the phases of the conversation and the rules that move between them, how a caller's turn is understood, the agent's identity, human handoff, the tools the model may see, and each channel's output contract. | `agent` (provider, `primary_model`, `fallback_model`, `max_tool_rounds`); `agent_workflow.subagents` (one entry per phase, each with `tools`, `predispatch`, `system_prompt`, `pending` and `routing`); `agent_workflow.global_routing`; `preprocessing.nlu_processor` (`slots`, `topics`, `act_intents`, `termination_gate`); `identity`; `handoff`; `connectors.read` and `connectors.write`; `channels.<channel>`, one block per channel the use case answers on (the jobs use case ships with `bridge` only, for example `channels.bridge.output_contract`; the optional `web`, `cli` and `voice` channels each need their own block); `conversation` (fixed lines spoken without the LLM). |
 | Action Gateway | How each tool calls an external system, and how much of the answer comes back. | `tools[]`, each with `base_url`, `auth` (the key is read from the environment variable named in `secret_env`), `extra_headers`, `endpoints`, and `response` (`projection` picks the fields kept, `session_mapping` copies some into session state, `max_size_chars` caps the size). |
 | Trust Layer | What the agent must refuse or escalate, what it must never say, and which words count as a yes or a no to consent. | `trust.input_rules` (`blocked_phrases`, `escalation_topics`); `trust.output_rules`; `trust.policy_packs`; `trust.consent` (`consent_phrases`, `decline_phrases`); `trust.hitl`. |
-| Reach Layer | Which channels run, and the channel-specific lines they speak. | `reach_layer.channels.<channel>`, one block per channel. The bridge (OpenAI chat-completions compatible) is the default, and Blue Dots sets its `terminal_word`, `hangup_tool_name` and `tool_status_phrases`. The optional channels are web chat (local/dev only, without a login: `web.auth.enabled: false`), CLI, voice and MCP; see [AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/). |
-| Knowledge Engine | The documents and glossaries the agent can search. | `knowledge.blocks.static_knowledge_base` (`collection_name`, `sources`) and `knowledge.blocks.glossary`. Blue Dots switches both off, and does not offer the `knowledge_retrieval` tool. |
+| Reach Layer | Which channels run, and the channel-specific lines they speak. | `reach_layer.channels.<channel>`, one block per channel. The bridge (OpenAI chat-completions compatible) is the default, and the jobs use case sets its `terminal_word`, `hangup_tool_name` and `tool_status_phrases`. The optional channels are web chat (local/dev only, without a login: `web.auth.enabled: false`), CLI, voice and MCP; see [AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/). |
+| Knowledge Engine | The documents and glossaries the agent can search. | `knowledge.blocks.static_knowledge_base` (`collection_name`, `sources`) and `knowledge.blocks.glossary`. The jobs use case switches both off, and does not offer the `knowledge_retrieval` tool. |
 | Memory Layer | The session fields a conversation keeps, and how long they live. | `state.session.ttl_minutes`; `state.session.schema` (one entry per field, with a type and a default); `state.persistent`. |
 | Observability Layer | The outcomes and service levels you want to measure. | `observability.outcomes`, `observability.sli`, `observability.audit`. |
 
@@ -49,7 +49,7 @@ Tools are described in two places on purpose. Agent Core's `connectors` say what
 
 ## One phase, end to end
 
-Blue Dots splits a call into phases (called subagents in the YAML): the main path is `opening`, `profile_resolve`, `job_match`, `profile_setup` and `apply_confirm`. Other phases handle the exceptions: `consent_declined` and `u18_blocked` close the call when consent is refused or the caller is under age, `clarification` is the fallback when no rule matches, `handoff` follows a handoff line, `confirm_close` asks once whether to end the call, and `ended` ends it. This is a trimmed copy of `job_match` from `dev-kit/configs/blue-dots/agent_core.yaml`:
+The jobs use case splits a call into phases (called subagents in the YAML): the main path is `opening`, `profile_resolve`, `job_match`, `profile_setup` and `apply_confirm`. Other phases handle the exceptions: `consent_declined` and `u18_blocked` close the call when consent is refused or the caller is under age, `clarification` is the fallback when no rule matches, `handoff` follows a handoff line, `confirm_close` asks once whether to end the call, and `ended` ends it. This is a trimmed copy of `job_match` from `dev-kit/configs/blue-dots/agent_core.yaml`:
 
 ```yaml
 # agent_workflow.subagents[] — trimmed
@@ -102,7 +102,7 @@ Here is the turn from the architecture page, where the caller asks for electrici
 
 On the caller's next turn, `pending` decides which question they are answering. Agent Core takes the first entry whose `when` conditions hold. After a list of jobs, the last question contains no apply phrase, so `select_job` is pending. When the caller names a job ("the Flipkart one"), `options_from` lets the understanding call match the name against the saved `fetch_jobs` result, and `resolves_to` writes the job's `item_id` to `selected_job_item_id`. Naming a job maps to the `job_pick` intent, and the phase's `job_pick` rules (not shown in the excerpt) send the caller straight to `apply_confirm` or `profile_setup`, with the same profile condition as `apply_now`. When the agent has instead asked "shall I send the application?", `submit_confirm` is pending. An `act_intents` row maps a yes to that question to `apply_now`, and the `apply_now` rule sends the caller to `apply_confirm` if they already have a live profile, or to `profile_setup` to create one. A goodbye that the termination gate accepts maps to `termination_intent`, and the `termination_intent` rule ends the call.
 
-**Consent works through the same phases.** In Blue Dots, the write tools, `save_profile` and `apply_job`, are listed only in `profile_setup` and `apply_confirm`. Those phases come after `opening`, which settles consent: it asks a new caller the consent question, and lets a returning caller through without asking only when their consent is already on file.
+**Consent works through the same phases.** In the jobs use case, the write tools, `save_profile` and `apply_job`, are listed only in `profile_setup` and `apply_confirm`. Those phases come after `opening`, which settles consent: it asks a new caller the consent question, and lets a returning caller through without asking only when their consent is already on file.
 
 ## What the framework owns
 
@@ -124,10 +124,10 @@ The dev-kit (port 8080) is the tool you use to write a use case. It is a web app
 - **Expecting a list to merge.** A list in your file replaces the default list whole. To add one item to a default list, copy the whole list into your file.
 - **`TOOL_RESULT_KEY_SECRET` is not set.** The Memory Layer needs this secret to save tool results. Without it the block still starts, but logs `tool_result_store.disabled` and saves no tool results. Later turns then cannot put earlier results back into the prompt as known facts. Set it in the Memory Layer's environment.
 - **An unresolved placeholder in a tool URL.** In Action Gateway, a `${VAR}` with no default and no value in a tool's `base_url` stops the block at startup. The error names the tool and the variable. Set the variable, or write `${VAR:-default}`.
-- **Pointing at a different Signals cluster.** The Blue Dots tools read `SIGNALS_BASE_URL`, `SIGNALS_SEARCH_URL` and `SIGNALS_INSTANCE_URL`. Change all three together, and change the API keys with them. A key from another cluster returns 401 or 403 instead of a clear error.
+- **Pointing at a different Signals cluster.** The jobs use case's tools read `SIGNALS_BASE_URL`, `SIGNALS_SEARCH_URL` and `SIGNALS_INSTANCE_URL`. Change all three together, and change the API keys with them. A key from another cluster returns 401 or 403 instead of a clear error.
 - **`${VAR}` in other blocks.** Only Reach Layer and Action Gateway expand variables. In any other block's file, `${VAR}` is just text.
 
 ## Read next
 
 - [AI Diffusion DPG architecture](/core-concepts/architecture/ai-diffusion-dpg/): the blocks, one turn, and the design principles.
-- [AI Diffusion DPG local setup](/guides/installation/local-setup/ai-diffusion-dpg/): run the Blue Dots agent on your machine.
+- [AI Diffusion DPG local setup](/guides/installation/local-setup/ai-diffusion-dpg/): run the jobs agent on your machine.
