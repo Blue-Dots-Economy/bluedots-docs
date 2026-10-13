@@ -8,12 +8,24 @@ Built with [Astro](https://astro.build) + [Starlight](https://starlight.astro.bu
 
 ```bash
 pnpm install      # or npm install
-pnpm dev          # local dev server at http://localhost:4321/bluedots-docs
+pnpm dev          # local dev server at http://localhost:4321
 pnpm build        # production build to ./dist
 pnpm preview      # preview the production build
 ```
 
 > Node ≥ 20 required. Works with `pnpm`, `npm` or `yarn` — a `pnpm-lock.yaml` makes the GitHub Action default to pnpm.
+
+### Run with Docker
+
+For local development without Node or pnpm on your machine. Production is still built and served by GitHub Pages; this setup is not part of it.
+
+```bash
+docker compose up --build                  # dev server at http://localhost:4321, reloads on edit
+docker compose run --rm --build validate   # production build + link checks; non-zero exit on failure
+docker compose down
+```
+
+The dev server mounts your checkout, so edits show up straight away. The container keeps its own `node_modules`, separate from yours. `validate` builds from a copy of the source inside the image, so it doesn't write `dist/` to your checkout. Rebuild (`--build`) after changing dependencies.
 
 ## Project structure
 
