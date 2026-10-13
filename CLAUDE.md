@@ -135,7 +135,7 @@ Write for a reader who is not technical: a block officer, an NGO worker, a Class
 4. **Concrete nouns.** Avoid *discoverability, local intelligence, density, proximity value, demand and supply* unless defined on the page. Say who, what and where.
 5. **Paragraphs** at most 4 sentences or about 80 words, at most one bold phrase. **At most one em dash per paragraph.**
 6. **Headings** in sentence case, saying what the section contains — not headline style ("Local discovery, solved").
-7. **Numbers:** `₹87,500 crore` (never `cr`); lakh/crore for Indian figures with the international figure on first use ("1 lakh (100,000)"); don't mix million and lakh on a page; `US$ 3 trillion`, not `$3 Tn`; "under 2 days" in prose (symbols are fine in StatCards). Figures follow the owner table above.
+7. **Numbers:** `₹87,500 crore` (never `cr`); lakh/crore for Indian figures with the international figure on first use for counts ("1 lakh (100,000)"), but not for the ₹87,500 crore headline; don't mix million and lakh on a page; `US$ 3 trillion`, not `$3 Tn`; "under 2 days" in prose (symbols are fine in StatCards). Figures follow the owner table above.
 8. **Quotes are real or labelled.** A first-person quote has a source or is labelled "Example". "Possible" dots get no outcome quotes.
 9. **Reading level:** at most 3 sentences over 25 words per page. Expand ITI, SHG, FPO, DPO, PwD, MSME, KVK, DPI, DPG on first use per page. Indian/British spelling (colour, organisation, programme); don't italicise Indian words.
 10. **Active voice** ("The coordinator checks the profile"). Technical pages may use the passive for system behaviour.
