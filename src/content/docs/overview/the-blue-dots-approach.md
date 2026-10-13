@@ -19,7 +19,7 @@ Blue Dots helps people and organisations in the same district find each other. I
 
 3. **District facilitation team.** Without regular upkeep, dots go out of date and people fall back on word-of-mouth. The district administration anchors a facilitation team that keeps listings current, connects aggregators and innovators, and follows up. Its job is coordination; technology is run separately. It typically has 6–8 members from government, the social sector and MSME (micro, small and medium enterprise) associations, with a small Project Management Unit (PMU) behind it.
 
-4. **Innovators.** As more people list, the map becomes useful to private organisations. In the jobs network these include staffing firms, assessment providers, placement firms, and transport and financial-services providers. On a farming network, for example, a custom hiring centre that rents out tractors could find farmers who need one. They join because it helps their own work: finding people costs almost nothing, and a match takes days instead of weeks.
+4. **Innovators.** As more people list, the map becomes useful to private organisations. In the jobs network these include staffing firms, assessment providers, placement firms, and transport and financial-services providers. In the jobs pilots, finding people cost them almost nothing and a match took days instead of weeks. On a farming network, for example, a custom hiring centre that rents out tractors could find farmers who need one.
 
 Together, the four levers turn people and organisations already in the district into listings that others can trust and act on. They need no new investment in buildings or programmes.
 
