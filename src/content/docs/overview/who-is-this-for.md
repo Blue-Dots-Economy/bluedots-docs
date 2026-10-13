@@ -5,7 +5,7 @@ sidebar:
   order: 5
 ---
 
-This documentation is for everyone who builds on or runs Blue Dots, on any network: jobs (Blue Dot), education (Yellow Dot), services for persons with disabilities (Purple Dot) or tourism (Orange Dot). Find your role below and go to its starting point.
+Blue Dots helps people and organisations near each other find each other. This documentation is for everyone who builds on or runs it, on any network: jobs (Blue Dot), education (Yellow Dot), services for persons with disabilities (Purple Dot) or tourism (Orange Dot). Find your role below and go to its starting point.
 
 ## Adaptors & implementers
 
