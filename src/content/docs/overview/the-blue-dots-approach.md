@@ -19,12 +19,12 @@ Blue Dots helps people and organisations in the same district find each other. I
 
 3. **District facilitation team.** Without regular upkeep, dots go out of date and people fall back on word-of-mouth. The district administration anchors a facilitation team that keeps listings current, connects aggregators and innovators, and follows up. Its job is coordination; technology is run separately. It typically has 6–8 members from government, the social sector and MSME (micro, small and medium enterprise) associations, with a small Project Management Unit (PMU) behind it.
 
-4. **Innovators.** As more people list, the map becomes useful to private organisations. In the jobs network these include staffing firms, assessment providers, placement firms, and transport and financial-services providers. On a farming network, for example, a custom hiring centre that rents out tractors could find farmers who need one. They join because it helps their own work: finding people costs almost nothing, and a match takes minutes instead of weeks. The more they use it, the more useful the map becomes for everyone.
+4. **Innovators.** As more people list, the map becomes useful to private organisations. In the jobs network these include staffing firms, assessment providers, placement firms, and transport and financial-services providers. On a farming network, for example, a custom hiring centre that rents out tractors could find farmers who need one. They join because it helps their own work: finding people costs almost nothing, and a match takes days instead of weeks.
 
 Together, the four levers turn people and organisations already in the district into listings that others can trust and act on. They need no new investment in buildings or programmes.
 
 :::note[Consent and stewardship]
-Every dot exists because the person or organisation behind it chose to list it. On most networks, phone numbers are shared only after both sides agree; Orange Dot tourism listings are public on purpose. The district administration runs the programme locally, with support from state-government champions.
+Every dot exists because the person or organisation behind it chose to list it. On the jobs and disability networks, phone numbers are shared only after both sides agree; Orange Dot tourism listings are public on purpose. The district administration runs the programme locally, with support from state-government champions.
 :::
 
 ## One set of software for many sectors
