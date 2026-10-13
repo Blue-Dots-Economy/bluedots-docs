@@ -230,7 +230,7 @@ Every key, what it feeds, and whether it's safe to leave as `UPDATE_THIS_VALUE`:
 | `pinnacle_api_key`, `pinnacle_sender_id`, `pinnacle_dlt_entity_id`, `pinnacle_login_otp_template_id`, `sms_login_otp_body` | SMS OTP via Pinnacle (the alternative vendor) | yes, if `SMS_PROVIDER` isn't `pinnacle` |
 | `raya_api_key` | aggregator's outbound key to the Raya voice channel | yes, if you don't use voice campaigns |
 | `google_maps_api_key` | Signals UI map (browser) | no, if the map is used |
-| `aggregator_google_maps_api_key` | Aggregator's address autocomplete (browser) | yes — falls back to a plain text address field |
+| `aggregator_google_maps_api_key` | Aggregator's address autocomplete (browser) | yes — falls back to the public Photon geocoder (see [Prerequisites](/guides/installation/local-setup/prerequisites/)) |
 | `google_geocoding_api_key` | Signals API server-side geocoding | no, if location features are used |
 | `discord_critical_webhook`, `discord_warning_webhook`, `discord_info_webhook` | monitoring alerts to Discord | yes, if alerting is email-only |
 

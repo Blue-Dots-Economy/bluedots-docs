@@ -11,7 +11,7 @@ Blue Dots helps people and organisations in the same district find each other. I
 
 1. **Shared open-source software.** A person creates a dot in a 2–3 minute voice call, in their own language, on any phone, including a basic feature phone. A dot is a short listing that says what someone needs or offers, pinned to a place on the district map. The person does not need to fill in a form, speak English or use an app.
 
-   AI turns the call into a structured listing and puts it on the map. After that, it suggests nearby options to people and shows administrators what is happening across the district. This reaches the 80%+ of the district economy that has never appeared on any digital system. The software is offered as Digital Public Goods (DPGs).
+   AI turns the call into a structured listing and puts it on the map. After that, it suggests nearby options to people and shows administrators what is happening across the district. This reaches the roughly 80% of the district economy that has never appeared on any digital system. The software is offered as Digital Public Goods (DPGs).
 
 2. **Local organisations that sign people up.** Local organisations bring in whole groups at once, so listings grow quickly. Skilling centres and ITIs (Industrial Training Institutes) sign up young people for the Blue Dot jobs network. Schools and education NGOs sign up students for the Yellow Dot. Disabled persons' organisations (DPOs) help people register on the Purple Dot.
 

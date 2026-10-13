@@ -44,7 +44,7 @@ When people can't find each other locally, it shows up in national figures. Acro
 
 Helping people find each other in India's top 100 districts is a conservatively estimated **₹87,500 crore** opportunity in livelihoods alone. [The Economics of Local Discovery](/explore/economics/) shows how this figure is worked out.
 
-[What We're Learning](/explore/learnings/) records how close to home people found work in the jobs pilot. A campaign for persons with disabilities (PwDs) has also used the same software; see the Purple Dots section of [The Dots Family](/explore/beyond-livelihoods/).
+[What We're Learning](/explore/learnings/) records how close to home people found work in the jobs pilot. A campaign for persons with disabilities (PwDs) has also used the same software; see the Purple Dot section of [The Dots Family](/explore/beyond-livelihoods/).
 
 ## How Blue Dots is built
 
