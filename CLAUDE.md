@@ -43,6 +43,8 @@ pnpm build      # production build to dist/
 pnpm preview    # preview the production build
 ```
 
+Docker alternative (local dev only — Pages deploy is unaffected): `docker compose up --build` for the dev server on `127.0.0.1:4321`; `docker compose run --rm --build validate` for build + `check:links`. `pnpm check` (astro check) is not in `validate` yet — it has pre-existing type errors in `astro.config.mjs` and `src/components/ApiPageTitle.astro`.
+
 ## Information architecture
 
 The sidebar in `astro.config.mjs` is the authoritative list of sections and slugs.
