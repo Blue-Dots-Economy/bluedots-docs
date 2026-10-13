@@ -35,7 +35,7 @@ Each sector is a **network** with its own rules, written in a schema file: jobs 
 
 The four levers are the conditions a district needs. [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) covers what one person or organisation goes through inside those conditions. It has seven steps, from being identified to being live and findable.
 
-## From signal to match
+## From listing to match
 
 In short, a dot goes from listing to match like this:
 
