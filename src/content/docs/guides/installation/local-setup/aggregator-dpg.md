@@ -63,19 +63,20 @@ Full URL list, cross-DPG wiring and troubleshooting are in the
 
 Track A runs without signals-search: discover returns results in
 recency/distance order and match scores are unavailable. To add relevance
-ranking and match scores, start the stack with the search file layered on top:
+ranking and match scores, start it with the search file instead — it includes
+the base stack and adds search:
 
 ```bash
 cd aggregator-dpg/local-setup
-docker compose -f docker-compose.yml -f docker-compose.search.yml up -d --build
+docker compose -f docker-compose.search.yml up -d --build
 ```
 
 This adds the search API (http://localhost:3110), its ingestion worker and the
 embedding server. Give Docker **≥ 10 GB** of memory — the embedder alone wants
 3-4 GB.
 
-Use the same two `-f` flags for later commands (`ps`, `logs`, `down`), or put
-`COMPOSE_FILE=docker-compose.yml:docker-compose.search.yml` in `.env` so plain
+Use the same `-f docker-compose.search.yml` for later commands (`ps`, `logs`,
+`down`), or put `COMPOSE_FILE=docker-compose.search.yml` in `.env` so plain
 `docker compose` includes search.
 
 ## Track B — hybrid dev (hot-reload)
