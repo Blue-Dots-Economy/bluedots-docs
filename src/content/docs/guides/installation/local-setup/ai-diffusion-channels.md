@@ -2,7 +2,14 @@
 title: AI Diffusion Optional Channels
 description: Turn on the optional AI Diffusion channels (web chat for local/dev testing, the CLI, the telephony voice channel and the MCP server), with the configuration edits, compose profile and checks for each.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 6
+changed_sections:
+  - _top
+  - 2-reach-layer-block
+  - 5-verify
+  - 1-agent-core-block-3
 ---
 
 The [AI Diffusion DPG Setup](/guides/installation/local-setup/ai-diffusion-dpg/) guide runs the agent with **the bridge** only. The bridge is the default, and the only channel the `blue-dots` configuration and the compose files enable out of the box. This page covers the optional channels: web chat (local/dev only), the CLI, the telephony voice channel and the MCP server.

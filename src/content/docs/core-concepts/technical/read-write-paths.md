@@ -2,6 +2,8 @@
 title: Read & Write Paths
 description: How Signals reads its own items, reads across instances with count-first discovery and caching, and accepts writes through controlled paths.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 3
 prev:
   link: /core-concepts/architecture/data-model/
@@ -9,6 +11,10 @@ prev:
 next:
   link: /guides/installation/local-setup/local-stack/
   label: "Path 8 of 10: Local Stack"
+changed_sections:
+  - _top
+  - inter-instance-read
+  - write-paths
 ---
 
 Signals keeps **two read layers strictly separate**. Before writing a read endpoint, decide which layer it belongs to.

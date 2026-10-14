@@ -2,7 +2,12 @@
 title: Installation
 description: "Two tracks: run a DPG on your own machine for development, or deploy the full stack to AWS for real use."
 sidebar:
+  attrs:
+    class: bd-changed
   order: 0
+changed_sections:
+  - _top
+  - local-setup
 ---
 
 Installation splits into two tracks that should not be confused: running a DPG on your own machine for development, and deploying the whole stack to the cloud for real use.

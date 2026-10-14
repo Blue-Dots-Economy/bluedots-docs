@@ -7,6 +7,10 @@ sidebar:
   order: 7
 changed_sections:
   - _top
+  - whats-published
+  - how-a-prompt-set-is-structured
+  - choosing-a-voice-ai-provider
+  - how-the-voice-channel-connects
   - related
 ---
 

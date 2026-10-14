@@ -2,7 +2,11 @@
 title: Keycloak Realm Reference
 description: The network realm — clients, realm roles, claim mappers, login themes and the OTP authenticator.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 6
+changed_sections:
+  - login-experience
 ---
 
 Reference for the shared network realm. For how these pieces are used at request

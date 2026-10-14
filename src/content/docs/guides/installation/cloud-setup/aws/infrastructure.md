@@ -2,7 +2,15 @@
 title: AWS Infrastructure Setup
 description: Provision the AWS EKS cluster, database and storage for a Blue Dots deployment with OpenTofu/Terragrunt, and set which network it runs.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 1
+changed_sections:
+  - _top
+  - choose-the-network
+  - 3-fill-in-secretsyaml
+  - managed-postgres-rds-vs-in-cluster
+  - what-goes-in-secretsyaml
 ---
 
 First of two steps to run Blue Dots in the cloud: standing up the infrastructure. Then [AWS Deployment](/guides/installation/cloud-setup/aws/deployment/) installs the application charts onto it.

@@ -2,7 +2,14 @@
 title: Configuration
 description: Where each configuration value lives in the Blue Dots DPGs, including the per-network schema folders, env vars and secrets.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 5
+changed_sections:
+  - _top
+  - where-configuration-lives
+  - per-network-schema-folders
+  - evolving-forms-without-code
 ---
 
 Blue Dots follows strict **configuration discipline**: no domain- or environment-specific value is hardcoded. Values are read once at startup from a config loader or environment, with per-environment overrides.

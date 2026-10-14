@@ -2,7 +2,16 @@
 title: AI Diffusion DPG Architecture
 description: How the AI Diffusion DPG runs a conversational agent for a public-service use case, with seven services configured in YAML. The examples come from the live jobs voice agent.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 7
+changed_sections:
+  - _top
+  - one-turn
+  - design-principles
+  - channels
+  - built-today-vs-planned
+  - read-next
 ---
 
 The **AI Diffusion DPG** runs a conversational agent for a public-service use case. It is seven fixed services, one per building block, each a small FastAPI service in Python. You do not change their code to build an agent. You describe your use case in YAML instead: what the agent says in each phase of the conversation, which external systems it can call, what it must refuse, and which channels it answers on. The services load that configuration at startup.

@@ -2,7 +2,11 @@
 title: CI/CD & Build Pipeline
 description: "How code becomes a running deployment: images built and published to GHCR, pinned per environment, then delivered with Helm."
 sidebar:
+  attrs:
+    class: bd-changed
   order: 9
+changed_sections:
+  - _top
 ---
 
 Blue Dots separates **building** application images from **deploying** them. The application repositories build and publish container images; the `bluedots-automation` repository pins specific image versions and deploys them to a cluster. The rest of this page follows from that split.

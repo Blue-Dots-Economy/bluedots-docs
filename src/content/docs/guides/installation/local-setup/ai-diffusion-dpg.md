@@ -2,7 +2,16 @@
 title: AI Diffusion DPG Setup
 description: Run the jobs voice agent from the AI Diffusion DPG on your machine against the local Signals stack, talk to it through the OpenAI-compatible bridge, and finish with a job application in Signals.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 5
+changed_sections:
+  - _top
+  - 2-prerequisites
+  - the-signals-urls
+  - 5-configure-env
+  - 8-where-channel-configuration-lives
+  - 11-common-problems
 ---
 
 This guide runs the **AI Diffusion DPG** with the **jobs** use case (`blue-dots`) on your machine, next to the local Signals stack. You build the images from source, connect the agent to your local Signals, hold a short Hindi conversation, and finish with a job application stored in Signals. For what each block does, read the [AI Diffusion DPG architecture](/core-concepts/architecture/ai-diffusion-dpg/) first. For how the jobs use case YAML is put together, see [Configuring an AI Diffusion use case](/core-concepts/architecture/ai-diffusion-configuration/).

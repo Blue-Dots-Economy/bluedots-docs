@@ -2,7 +2,20 @@
 title: Adding a new dot
 description: The files and settings to add for a new network in Signals-DPG, using the Yellow Dot (education) network as the worked example.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 10
+changed_sections:
+  - _top
+  - before-you-start
+  - 1-create-the-network-folder-and-networkjson
+  - 2-add-the-domain-schemas
+  - 3-set-the-network-id-and-served_domains
+  - 4-add-the-brand-and-ui-theme
+  - 5-add-the-consent-and-messages-files
+  - 6-add-the-voice-prompts
+  - check-the-new-dot
+  - related
 ---
 
 A new dot is a new network. You add it with configuration files in the Signals-DPG repo and a few settings in `.env`. This guide uses the Yellow Dot (education) network as the example. Its domains are student and tutor or counsellor, and its one action is connect.

@@ -2,7 +2,16 @@
 title: Configuring an AI Diffusion Use Case
 description: How a use case is described in YAML for the AI Diffusion DPG, covering the two configuration layers, what you write for each block, one phase of the jobs voice agent end to end, and the mistakes that stop a block at startup.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 8
+changed_sections:
+  - _top
+  - two-layers
+  - what-you-write-block-by-block
+  - one-phase-end-to-end
+  - common-mistakes
+  - read-next
 ---
 
 A use case on the AI Diffusion DPG is a folder of YAML, one file per block. You do not change service code. This page explains how those files are loaded, what goes in each one, and how one phase of the jobs voice agent (Blue Dot network) turns into the turn shown on the [architecture page](/core-concepts/architecture/ai-diffusion-dpg/). All file paths are in the [ai-diffusion-dpg repository](https://github.com/Blue-Dots-Economy/ai-diffusion-dpg).

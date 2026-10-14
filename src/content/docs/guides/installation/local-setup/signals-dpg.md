@@ -2,6 +2,8 @@
 title: Signals DPG Setup
 description: Run the Signals backend and UI locally, standalone, and choose which network (jobs, education, disability or tourism) it serves.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 3
 prev:
   link: /guides/installation/local-setup/local-stack/
@@ -9,6 +11,11 @@ prev:
 next:
   link: /guides/api-conventions/
   label: "Path 10 of 10: API Conventions"
+changed_sections:
+  - _top
+  - track-b--hybrid-dev-hot-reload
+  - choose-a-network
+  - adding-search-relevance-ranking
 ---
 
 The Signals DPG is the network-aware backend (API + UI). It runs **standalone**, with

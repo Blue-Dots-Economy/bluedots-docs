@@ -2,7 +2,14 @@
 title: Aggregator DPG Setup
 description: Run the Aggregator portal, API and worker locally with the Signals DPG beside it, and set which network the portal onboards participants for.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 4
+changed_sections:
+  - _top
+  - track-a--one-command-docker
+  - choose-a-network
+  - adding-search-relevance-ranking
 ---
 
 The Aggregator DPG is the downstream portal (**web**), **API** and **worker**. It

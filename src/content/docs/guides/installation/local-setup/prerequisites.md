@@ -6,6 +6,7 @@ sidebar:
     class: bd-changed
   order: 1
 changed_sections:
+  - _top
   - the-three-google-keys-are-deliberately-separate
 ---
 

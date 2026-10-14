@@ -2,10 +2,16 @@
 title: Local Stack (Docker)
 description: Choose a local setup (Signals alone, or Aggregator plus Signals), see which ports each uses, and pick the network it runs.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 2
 next:
   link: /guides/installation/local-setup/signals-dpg/
   label: "Path 9 of 10: Signals DPG Setup"
+changed_sections:
+  - _top
+  - which-network-it-runs
+  - search-and-relevance-ranking-opt-in
 ---
 
 Each repo ships a self-contained **`local-setup/`** folder (a `docker-compose.yml`,

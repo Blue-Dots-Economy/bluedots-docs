@@ -2,7 +2,15 @@
 title: Customisation & Branding
 description: What an adaptor can change for a deployment (branding and per-network UI themes, settings, dashboards and a landing page) without changing the Signals or Aggregator code.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 6
+changed_sections:
+  - _top
+  - 1-personalisation
+  - 2-configuration
+  - 3-dashboards
+  - 4-landing-page
 ---
 
 Beyond the core [lifecycle](/core-concepts/blue-dot-lifecycle/), adaptors typically tailor four things to make a deployment their own.

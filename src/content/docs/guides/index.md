@@ -2,7 +2,13 @@
 title: Guides
 description: Guides to install, configure, extend and deploy the Blue Dots DPGs for any network, and to add a new dot.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 0
+changed_sections:
+  - _top
+  - installation
+  - configure--extend
 ---
 
 These guides take you from a clean machine to a running, integrated Blue Dots deployment.
