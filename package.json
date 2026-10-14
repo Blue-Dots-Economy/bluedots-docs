@@ -13,7 +13,8 @@
     "check": "astro check",
     "check:paths": "node scripts/check-path-links.mjs",
     "check:openapi": "node scripts/check-openapi-tags.mjs",
-    "check:links": "pnpm check:paths && pnpm check:openapi"
+    "check:links": "pnpm check:paths && pnpm check:openapi",
+    "check:style": "bash scripts/check-style.sh"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.1",

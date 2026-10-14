@@ -8,7 +8,7 @@ This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.bu
 
 - `astro.config.mjs` — single source of truth for the sidebar navigation (information architecture). Every page must have a matching `slug` entry here before it becomes reachable from the nav.
 - `src/content.config.ts` — registers the `docs` collection using Starlight's loader/schema; no custom fields added yet.
-- `src/styles/custom.css` — theme accent overrides only.
+- `src/styles/custom.css` — theme accent overrides plus the dot palette (`--dot-<colour>` for light and dark, `.dot-name--<colour>`). `DotCard.astro` holds the per-colour card rules; a new colour needs both files and a `public/dots/dot-<colour>.svg`.
 - `src/content/docs/` — all documentation as `.md` or `.mdx` with Starlight frontmatter (`title`, `description`, `sidebar.order`).
 
 **Deployment config (`astro.config.mjs`):**
@@ -82,9 +82,71 @@ A headline figure is stated once and linked from everywhere else. Restating a nu
 | Pilot outcomes — jobs surfaced, discovery time, conversion, cost per interaction | `explore/pilots` |
 | ₹87,500 crore and its derivation | `explore/economics` |
 | Field observations — proximity, ratios, employer response, women's assurances | `explore/learnings` |
-| Time to create a Blue Dot (2–3 minutes) | `overview/the-blue-dots-approach` |
+| Time to create a dot (2–3 minutes) | `overview/the-blue-dots-approach` |
+| PwD campaign — Feb 2026, 1 lakh+ needs in 10 days, ₹10 per interaction | `explore/beyond-livelihoods` (Purple Dot section) |
+| Networks, their domains and their status | `core-concepts/networks-domains-instances` |
 
-Terminology: use **MSME**, not SMB, outside the Brown Dots sector naming.
+Terminology: use **MSME**, not SMB, outside the Brown Dot sector naming.
+
+## Naming: platform, dot, colour
+
+- **Blue Dots** (plural, proper noun) is the platform and programme.
+- **a dot** is the generic thing a person or organisation publishes: a short listing that says what they need or offer. Never use "a Blue Dot" for this.
+- **Blue Dot** (singular, with a colour) is the jobs network `blue_dot`, the same pattern as Yellow Dot, Purple Dot and the rest. Lifecycle states are colour-neutral ("Verified", "Live").
+- Product UI strings are per network and are quoted as they appear.
+
+Blue Dots is not a jobs product. Jobs (Blue) is the first live network and the source of all pilot evidence; the pilot pages (`explore/pilots`, `explore/learnings`, `explore/economics`) stay as the factual record of it.
+
+| Colour | Sector | Status (use these labels) |
+|---|---|---|
+| Blue | Livelihoods for youth (jobs) | Live, piloted |
+| Yellow | Education avenues and services | Network defined |
+| Purple | Economic participation of persons with disabilities | Network defined |
+| Orange | Tourism | Network defined |
+| Pink | Women's labour-force participation | Possible |
+| Green | Farming efficiency | Possible |
+| Brown | Growth for SMBs | Possible |
+
+"Network defined" means a schema exists in Signals-DPG `examples/schemas/`. Scenarios for "Possible" dots use "could" or "for example"; make no outcome claims for any dot except Blue. On the public site, name networks by colour and sector only — no partner brand ids, internal ids or unpublished district names.
+
+### Scenario bank
+
+Generic pages (landing, Overview, top-level Core Concepts, Use Cases) name at least one non-Blue dot and draw examples from this table rather than inventing new ones. Pages that document the real `blue_dot` schema keep it and say other networks work the same way.
+
+| Dot | Scenario | Who agrees before contact |
+|---|---|---|
+| Blue | A young person registers by phone call in their language. A nearby employer with a vacancy sees the profile and sends an interview invite. A skilling centre has verified the profile. | The young person accepts before their number is shared. |
+| Yellow | A Class 12 commerce student asks for help with accounts. A tutor who teaches Class 12 commerce and will travel up to 5 km sends a connect request. A school or NGO helps students sign up. (Use subject tutoring or career counselling — tutors can't offer admission guidance in the schema.) | The student accepts. |
+| Purple | A person with a locomotor disability asks for a wheelchair and for help finding work. Providers in the same city who serve that disability see the request: an NGO that gives devices, and a training centre. A disabled persons' organisation (DPO) helps them register. (Matched by city, not distance.) | Either side sends a connect request; the other accepts. |
+| Orange | A homestay owner or a folk artist lists what they offer, with area, languages and price band. A tourism body verifies the listing. Visitors find it in the app and call the number shown. | Not needed — the listing and number are public on purpose. |
+| Pink | A woman who stitches blouses at home lists her work; nearby boutiques see it; her self-help group (SHG) vouches for her. Or: a woman who could work if she had childcare finds a crèche near home. | She accepts. |
+| Green | A farmer needs a tractor for two days or a soil test. A nearby custom hiring centre or soil-testing lab sees the request. A farmer producer organisation (FPO) helps farmers sign up. | The farmer accepts. |
+| Brown | A kirana shop needs a regular supplier of packaged atta. Nearby wholesalers see the request. A trade association helps members sign up. | The shop accepts. |
+
+Organisations that sign people up and check their details: skilling centres and ITIs (Blue); schools, colleges and education NGOs (Yellow); DPOs and disability NGOs (Purple); tourism bodies (Orange); SHGs (Pink); FPOs and KVKs (Green); trade associations (Brown); government departments (any dot). Use this list instead of a jobs-only one.
+
+## Plain language
+
+Write for a reader who is not technical: a block officer, an NGO worker, a Class 8 reader. Scope: R1–R8 everywhere; R9–R10 in Overview, Explore and Start Here. Exempt: fenced code, YAML, voice-prompt text, component names and imports, `api/` pages, attributed quotes, quoted UI strings, organisation names. Page titles and frontmatter `description` are in scope.
+
+1. **Say literally what happens.** "rails" → "the same open-source software and data rules"; "digitally dark" / "invisible" → "not listed anywhere online"; "surfaced" → "found"; "closes the gap" → "helps them find each other"; "signal of intent" → "a short listing that says what someone needs or offers". One literal UPI comparison on the DPG page is fine.
+2. **No rhetorical flips** ("not X, but Y", "isn't just X", "Not X. Not Y. Not Z."). State the positive claim.
+3. **No aphorisms, slogans or rhythmic triads.** Real lists of three are fine.
+4. **Concrete nouns.** Avoid *discoverability, local intelligence, density, proximity value, demand and supply* unless defined on the page. Say who, what and where.
+5. **Paragraphs** at most 4 sentences or about 80 words, at most one bold phrase. **At most one em dash per paragraph.**
+6. **Headings** in sentence case, saying what the section contains — not headline style ("Local discovery, solved").
+7. **Numbers:** `₹87,500 crore` (never `cr`); lakh/crore for Indian figures with the international figure on first use for counts ("1 lakh (100,000)"), but not for the ₹87,500 crore headline; don't mix million and lakh on a page; `US$ 3 trillion`, not `$3 Tn`; "under 2 days" in prose (symbols are fine in StatCards). Figures follow the owner table above.
+8. **Quotes are real or labelled.** A first-person quote has a source or is labelled "Example". "Possible" dots get no outcome quotes.
+9. **Reading level:** at most 3 sentences over 25 words per page. Expand ITI, SHG, FPO, DPO, PwD, MSME, KVK, DPI, DPG on first use per page. Indian/British spelling (colour, organisation, programme); don't italicise Indian words.
+10. **Active voice** ("The coordinator checks the profile"). Technical pages may use the passive for system behaviour.
+
+Don't over-correct: "paradox of proximity" is the programme's named concept (define it once, plainly); keep literal consent statements ("Phone numbers are shared only after both sides agree"); keep "by design" / "deliberately" where a reason follows.
+
+`pnpm check:style` enforces the mechanical part (Tier 1 phrases must be absent; `--review` lists Tier 2 phrases for a person to judge). Exceptions go in `.style-allow` with a reason.
+
+## Before merging
+
+CI builds only on push to `main` — pull requests are not built. Run `pnpm build && pnpm check:links` locally before every merge; a broken build on `main` leaves the site silently on the old version.
 
 ## Guided paths
 

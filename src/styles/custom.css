@@ -113,6 +113,7 @@ main h1#_top,
    --------------------------------------------------------------------------- */
 :root {
   --dot-blue: #1335b5;
+  --dot-yellow: #876500;
   --dot-pink: #cb3982;
   --dot-purple: #7a52a1;
   --dot-orange: #c25e12;
@@ -121,6 +122,7 @@ main h1#_top,
 }
 :root[data-theme='dark'] {
   --dot-blue: #8aa6ff;
+  --dot-yellow: #f2cf5b;
   --dot-pink: #f48fc4;
   --dot-purple: #c3a3e3;
   --dot-orange: #f0a35e;
@@ -202,6 +204,9 @@ main h1#_top,
 }
 .dot-name--blue {
   color: var(--dot-blue);
+}
+.dot-name--yellow {
+  color: var(--dot-yellow);
 }
 .dot-name--pink {
   color: var(--dot-pink);
