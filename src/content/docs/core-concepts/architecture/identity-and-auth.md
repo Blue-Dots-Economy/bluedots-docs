@@ -2,7 +2,11 @@
 title: Identity & Auth
 description: How Keycloak secures the Blue Dots stack — one shared realm, OIDC logins for people, client-credentials tokens for integrating DPGs.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 5
+changed_sections:
+  - _top
 ---
 
 Both verticals authenticate against **one Keycloak realm per network**. Signals

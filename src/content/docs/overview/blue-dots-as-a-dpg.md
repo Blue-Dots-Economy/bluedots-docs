@@ -2,7 +2,17 @@
 title: Blue Dots as a DPG
 description: Why Blue Dots is built as open Digital Public Goods (DPGs), how one set of software serves jobs, education, disability services and tourism, and the two DPGs in the stack.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 4
+changed_sections:
+  - _top
+  - shared-software-for-everyone-like-upi
+  - what-dpg-means-here
+  - signals-dpg
+  - aggregator-dpg
+  - supporting-blocks-also-ready-to-use
+  - a-model-that-can-travel
 ---
 
 Blue Dots is built as **Digital Public Goods (DPGs)**: open-source, standards-based building blocks that any organisation can deploy, run and extend. Helping people in a district find each other is a shared problem. So the software is shared too, and no single company owns it.

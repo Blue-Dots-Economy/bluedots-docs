@@ -2,7 +2,11 @@
 title: Signals DPG Architecture
 description: Internals of the network-aware Signals backend and schema-driven UI.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 2
+changed_sections:
+  - _top
 ---
 
 The **Signals DPG** is the network-aware backend that every Blue Dots network runs on, from the Blue Dot (jobs) network to the Yellow Dot (education) network. It stores signals as schema-typed items and finds and matches them across instances.

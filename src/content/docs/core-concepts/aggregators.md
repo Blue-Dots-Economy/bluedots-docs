@@ -2,7 +2,19 @@
 title: Aggregators
 description: The local organisations that sign participants up and check their details, and the Aggregator DPG they use to do it.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 4
+changed_sections:
+  - _top
+  - who-can-be-an-aggregator
+  - why-aggregators-matter
+  - what-the-aggregator-dpg-does
+  - intake-methods
+  - how-coordinators-join
+  - the-trust-boundary
+  - relationship-to-signals
+  - where-to-go-next
 ---
 
 An **aggregator** is a local organisation that signs participants up and **checks their details**, so people nearby can find and trust their dots. The **Aggregator DPG** (digital public good) is the application aggregators use.

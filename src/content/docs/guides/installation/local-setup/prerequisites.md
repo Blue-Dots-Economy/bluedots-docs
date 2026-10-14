@@ -2,7 +2,11 @@
 title: Prerequisites
 description: Tools, runtimes and accounts required to run the Blue Dots DPGs locally.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 1
+changed_sections:
+  - the-three-google-keys-are-deliberately-separate
 ---
 
 Install these before setting up either DPG.

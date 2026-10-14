@@ -2,7 +2,14 @@
 title: Who Is This For
 description: Who this documentation is for, from district teams and engineers to organisations that sign people up on any dot, and where each should start.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 5
+changed_sections:
+  - _top
+  - adaptors--implementers
+  - aggregator-organisations
+  - programme-and-policy-teams
 ---
 
 Blue Dots helps people and organisations near each other find each other. This documentation is for everyone who builds on or runs it, on any network: jobs (Blue Dot), education (Yellow Dot), services for persons with disabilities (Purple Dot) or tourism (Orange Dot). Find your role below and go to its starting point.

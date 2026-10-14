@@ -2,7 +2,17 @@
 title: Introduction
 description: What Blue Dots is, what a dot is, which sectors it serves, and how this documentation is organised.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 1
+changed_sections:
+  - _top
+  - what-is-a-dot
+  - one-platform-many-dots
+  - why-it-matters
+  - how-blue-dots-is-built
+  - what-an-adaptor-does
+  - how-this-documentation-is-organised
 ---
 
 **Blue Dots** is free, open-source software that helps people and organisations in the same district find each other. It serves many sectors, such as jobs, education, disability support and tourism. Jobs is the first sector running in the field.
