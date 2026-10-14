@@ -1,11 +1,12 @@
 ---
 title: Prerequisites
-description: Tools, runtimes and accounts required to run the Blue Dots DPGs locally.
+description: The tools, runtimes and map API keys you need before running the Signals and Aggregator DPGs on your own machine.
 sidebar:
   attrs:
     class: bd-changed
   order: 1
 changed_sections:
+  - _top
   - the-three-google-keys-are-deliberately-separate
 ---
 
@@ -59,7 +60,7 @@ The server key must **not** be HTTP-referrer restricted — server-side calls se
 :::
 
 :::note
-If you leave the Aggregator key unset, the registration address field then autocompletes against the public Photon instance, so each registrant's browser sends the address text it is typing (and its IP) to a third party. Set the key, point `PHOTON_URL` at your own Photon, or accept that deliberately.
+If you leave the Aggregator key unset, the registration address field then autocompletes against the public Photon instance, so each registrant's browser sends the address text it is typing (and its IP) to a third party. Set the key, point `PHOTON_URL` at your own Photon, or leave it unset only if that is acceptable.
 :::
 
 Server geocoding results are cached in Redis (`GEO_CACHE_TTL_SECONDS`, default 30 days) so a repeated place string does not re-bill the paid API.

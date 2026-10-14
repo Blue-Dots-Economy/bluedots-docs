@@ -1,6 +1,6 @@
 ---
 title: Identity & Auth
-description: How Keycloak secures the Blue Dots stack — one shared realm, OIDC logins for people, client-credentials tokens for integrating DPGs.
+description: "How Keycloak secures the Blue Dots stack: one shared realm per network, OIDC logins for people and Keycloak service accounts for integrating DPGs."
 sidebar:
   attrs:
     class: bd-changed

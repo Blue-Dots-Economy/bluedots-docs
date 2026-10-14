@@ -1,8 +1,16 @@
 ---
 title: AWS Infrastructure Setup
-description: Provision the AWS EKS cluster, database and storage the Blue Dots stack runs on, using OpenTofu/Terragrunt from bluedots-automation.
+description: Provision the AWS EKS cluster, database and storage for a Blue Dots deployment with OpenTofu/Terragrunt, and set which network it runs.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 1
+changed_sections:
+  - _top
+  - choose-the-network
+  - 3-fill-in-secretsyaml
+  - managed-postgres-rds-vs-in-cluster
+  - what-goes-in-secretsyaml
 ---
 
 First of two steps to run Blue Dots in the cloud: standing up the infrastructure. Then [AWS Deployment](/guides/installation/cloud-setup/aws/deployment/) installs the application charts onto it.
@@ -54,7 +62,23 @@ _cloud_storage_region: &cloud_storage_region "ap-south-1"
 
 The three above decide every AWS resource name, so set them first and don't change them later. Then work down the anchor block for hostnames, SMTP, network and brand — each anchor has a comment above it.
 
-Infrastructure sizing — node type, VPC CIDR, Pritunl/bastion access, database size — lives further down in this same file, not in the top anchor block. See [Configuration reference](#configuration-reference-sizing-zones-and-access) below.
+### Choose the network
+
+A deployment runs one network. Three anchors in the same top block set it:
+
+```yaml
+_signals_served_domains: &signals_served_domains "blue_dot/provider,blue_dot/seeker"
+_network: &network "blue_dot"
+_brand:   &brand   ""
+```
+
+- `_network` is the network folder name under `examples/schemas/` in the Signals DPG repository (and under `config/` in the Aggregator). The default `blue_dot` is the jobs network; `purple_dot` and `orange_dot` are set the same way. The list of networks is on [Networks, Domains & Instances](/core-concepts/networks-domains-instances/).
+- `_signals_served_domains` lists `<network-id>/<domain>` pairs. The network id is the `id` in that folder's `network.json`. It matches the folder name for every network except the Yellow Dot (education) network, so read Yellow's id from its `network.json`.
+- `_brand` is an optional brand sub-folder of the network (its own logo and copy). Leave it `""` for none. A brand does not change the network.
+
+The Signals API, the Signals UI, the consent text and the Aggregator all read these anchors, so set them once here.
+
+Infrastructure sizing (node type, VPC CIDR, Pritunl/bastion access, database size) lives further down in this same file, not in the top anchor block. See [Configuration reference](#configuration-reference-sizing-zones-and-access) below.
 
 :::caution
 `_environment` must be **1–9 lowercase letters/digits**, no hyphens. `prod` and `dev2` are fine; `production` and `pre-prod` are rejected.
@@ -62,7 +86,7 @@ Infrastructure sizing — node type, VPC CIDR, Pritunl/bastion access, database 
 
 ## 3. Fill in `secrets.yaml`
 
-Credentials that cannot be generated — a mail password, a maps API key — live in a separate file that is **never committed**:
+Credentials that cannot be generated (a mail password, a maps API key) live in a separate file that is **never committed**:
 
 ```bash
 cp secrets.example.yaml secrets.yaml
@@ -112,7 +136,7 @@ bash install.sh apply_default_sc
 
 ### Managed Postgres (RDS) vs in-cluster
 
-Step 2 also provisions a managed **RDS PostgreSQL** instance, and once it exists every chart's database connection is pointed at it automatically — that's what makes `global-cloud-values.yaml`'s generated `postgres.host` values matter. An in-cluster Postgres pod is also deployed alongside it (`postgresql.enabled: true` in `global-images.yaml`), kept for reference/rollback, but with RDS present it sits unused — there is no supported `global-values.yaml` toggle today to skip RDS and run on the in-cluster pod only. RDS sizing (`rds_instance_class`, `rds_allocated_storage`, `rds_multi_az`, …) is in the [Configuration reference](#configuration-reference-sizing-zones-and-access) below.
+Step 2 also provisions a managed **RDS PostgreSQL** instance, and once it exists every chart's database connection is pointed at it automatically. That is what makes `global-cloud-values.yaml`'s generated `postgres.host` values matter. An in-cluster Postgres pod is also deployed alongside it (`postgresql.enabled: true` in `global-images.yaml`), kept for reference/rollback, but with RDS present it sits unused — there is no supported `global-values.yaml` toggle today to skip RDS and run on the in-cluster pod only. RDS sizing (`rds_instance_class`, `rds_allocated_storage`, `rds_multi_az`, …) is in the [Configuration reference](#configuration-reference-sizing-zones-and-access) below.
 
 ## 5. Connect and validate
 
@@ -214,7 +238,7 @@ Every key, what it feeds, and whether it's safe to leave as `UPDATE_THIS_VALUE`:
 | `pinnacle_api_key`, `pinnacle_sender_id`, `pinnacle_dlt_entity_id`, `pinnacle_login_otp_template_id`, `sms_login_otp_body` | SMS OTP via Pinnacle (the alternative vendor) | yes, if `SMS_PROVIDER` isn't `pinnacle` |
 | `raya_api_key` | aggregator's outbound key to the Raya voice channel | yes, if you don't use voice campaigns |
 | `google_maps_api_key` | Signals UI map (browser) | no, if the map is used |
-| `aggregator_google_maps_api_key` | Aggregator's address autocomplete (browser) | yes — falls back to a plain text address field |
+| `aggregator_google_maps_api_key` | Aggregator's address autocomplete (browser) | yes — falls back to the public Photon geocoder (see [Prerequisites](/guides/installation/local-setup/prerequisites/)) |
 | `google_geocoding_api_key` | Signals API server-side geocoding | no, if location features are used |
 | `discord_critical_webhook`, `discord_warning_webhook`, `discord_info_webhook` | monitoring alerts to Discord | yes, if alerting is email-only |
 

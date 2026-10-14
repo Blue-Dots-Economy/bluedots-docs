@@ -1,6 +1,6 @@
 ---
 title: Schema-Driven Model
-description: How schemas define networks, domains and items so domains evolve without code changes.
+description: How network.json and item schemas define each network's domains, items and forms, and how a deployment chooses which network it runs.
 sidebar:
   attrs:
     class: bd-changed
@@ -12,16 +12,20 @@ next:
   link: /core-concepts/architecture/data-model/
   label: "Path 6 of 10: Data Model"
 changed_sections:
+  - _top
+  - three-kinds-of-schema
   - why-schema-first
+  - choosing-a-network
+  - configuration-discipline
 ---
 
 import BeforeAfter from '../../../../components/BeforeAfter.astro';
 
-Blue Dots is **schema-driven** end to end. The structure of what an instance stores, exchanges and renders is defined by schemas — not hardcoded — so a new domain or form can ship without touching application code.
+Blue Dots is **schema-driven** end to end. Schemas define what an instance stores, exchanges and renders. A new network, domain or form ships by adding or editing schema files.
 
 ## Three kinds of schema
 
-- **Network schema (`network.json`)** — defines a network (e.g. `blue_dot`): which item types, actions and events participants agree to speak.
+- **Network schema (`network.json`)** — defines a network (for example `blue_dot` for jobs, or the Yellow Dot education network): its domains, item types, actions and events.
 - **Item schemas (`item_type`)** — versioned types such as `profile_1.0`. An item's `item_type` always points at one of these; freeform records are not allowed.
 - **Form schemas** — JSON schemas that drive the UI. The Signals UI renders forms and cards from item schemas; the Aggregator portal uses **RJSF** (React JSON Schema Form) so non-engineers can evolve registration and profile forms.
 
@@ -58,6 +62,21 @@ Blue Dots is **schema-driven** end to end. The structure of what an instance sto
   ]}
 />
 
+## Choosing a network
+
+Each network is a folder under `examples/schemas/` in the Signals DPG repository. Today there are four: `blue_dot` (jobs), `yellow_dot` (education), `purple_dot` (persons with disabilities) and `orange_dot` (tourism). The list of networks, their domains and their status is on [Networks, Domains & Instances](/core-concepts/networks-domains-instances/).
+
+A network folder holds:
+
+- `network.json`: the network id, its domains, item types and actions.
+- `consent.json`: the consent text participants accept (terms, privacy, profile and action consent).
+- `messages.properties`: optional overrides for the email copy.
+- Brand sub-folders: a brand is a UI and copy skin over the network. It does not change the schema.
+
+A deployment runs one network. It chooses it with settings, not code: which `network.json` to load, which domains to serve, and which network id the UI shows. The setup guides list the exact variables: [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/#choose-a-network) for local runs and [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/#choose-the-network) for a cluster.
+
+The same `profile_1.0` has different fields on each network. A Blue Dot (jobs) seeker profile and a Yellow Dot student profile are both `profile_1.0`, but each network's `network.json` defines its own fields.
+
 ## Backend-owned fields
 
 Some fields are authoritative and server-generated; clients must never set them:
@@ -71,7 +90,7 @@ Schema-driven design is paired with strict configuration discipline:
 
 - **All env vars are declared in one place** (the Signals `packages/config` Zod schema; the Aggregator config loader). Ad-hoc `process.env` reads are not allowed.
 - In Signals, adding an env var means changing **two places together**: the Zod schema *and* `turbo.json`'s `globalPassThroughEnv`, or the value won't reach filtered tasks.
-- Per-environment values live in `config/env/{dev,staging,prod}.yaml`.
+- Per-environment values are set as environment variables: in `.env` files locally, and through the Helm values in `bluedots-automation` on a cluster.
 
 ## Where to go next
 

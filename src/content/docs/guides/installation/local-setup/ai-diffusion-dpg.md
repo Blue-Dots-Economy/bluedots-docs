@@ -1,15 +1,26 @@
 ---
 title: AI Diffusion DPG Setup
-description: Run the Blue Dots agent on your machine against the local Signals stack, talk to it through the bridge, an OpenAI-compatible endpoint, and finish with a real job application in Signals.
+description: Run the jobs voice agent from the AI Diffusion DPG on your machine against the local Signals stack, talk to it through the OpenAI-compatible bridge, and finish with a job application in Signals.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 5
+changed_sections:
+  - _top
+  - 2-prerequisites
+  - the-signals-urls
+  - 5-configure-env
+  - 8-where-channel-configuration-lives
+  - 11-common-problems
 ---
 
-This guide runs the **AI Diffusion DPG** with the **Blue Dots** use case on your machine, next to the local Signals stack. You build the images from source, connect the agent to your local Signals, hold a short Hindi conversation, and finish with a job application stored in Signals. For what each block does, read the [AI Diffusion DPG architecture](/core-concepts/architecture/ai-diffusion-dpg/) first. For how the Blue Dots YAML is put together, see [Configuring an AI Diffusion use case](/core-concepts/architecture/ai-diffusion-configuration/).
+This guide runs the **AI Diffusion DPG** with the **jobs** use case (`blue-dots`) on your machine, next to the local Signals stack. You build the images from source, connect the agent to your local Signals, hold a short Hindi conversation, and finish with a job application stored in Signals. For what each block does, read the [AI Diffusion DPG architecture](/core-concepts/architecture/ai-diffusion-dpg/) first. For how the jobs use case YAML is put together, see [Configuring an AI Diffusion use case](/core-concepts/architecture/ai-diffusion-configuration/).
+
+The jobs use case is the live voice configuration for the jobs network (Blue Dot), so this guide seeds a job and ends with a job application. Other networks use the same structure and the same setup steps, with their own use-case folder under `dev-kit/configs/`.
 
 The main path talks to the agent through **the bridge**, the default integration. The bridge is a generic OpenAI chat-completions-compatible endpoint (`/v1/chat/completions`), so any system that speaks that API can connect to the agent, for example your own voice pipeline (telephony, speech-to-text and text-to-speech). [VoicERA](https://github.com/COSS-India/VoicEra), an external DPG voice service, is one example of such a pipeline. In this guide, `curl` stands in for any OpenAI-compatible client. API keys are shown as `<your key>`.
 
-The bridge is the only channel the Blue Dots configuration and the compose files enable out of the box. The other channels are optional: web chat (for local/dev testing only), the CLI, the built-in telephony voice channel and MCP. [AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/) lists the exact edits to turn each one on.
+The bridge is the only channel the `blue-dots` configuration and the compose files enable out of the box. The other channels are optional: web chat (for local/dev testing only), the CLI, the built-in telephony voice channel and MCP. [AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/) lists the exact edits to turn each one on.
 
 ## 1. What you'll have at the end
 
@@ -35,7 +46,7 @@ On the host, the AI Diffusion stack publishes these ports. The blocks themselves
 
 - **The local Signals stack, with search.** Follow [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/), *Track A*, with both profiles (`docker compose --profile keycloak --profile search up -d --build`), then the *Adding search* steps. The agent needs the Signals API on host port `2742` and the search API on host port `3100`; without search, the agent has no job search.
 - **Docker with Compose, logged in to Docker Hub** (`docker login`). The AI Diffusion images are built from Docker Hardened Images (`dhi.io/…`), and the build pulls those bases through your Docker Hub login. `docker login dhi.io` is only needed if you `docker pull` a `dhi.io` image directly.
-- **An OpenAI API key.** The Blue Dots configuration uses OpenAI for the agent's model calls.
+- **An OpenAI API key.** The `blue-dots` configuration uses OpenAI for the agent's model calls.
 - **Memory.** Give Docker **at least 12 GiB**. Measured with both stacks up:
 
   | Stack | Containers | Memory |
@@ -156,7 +167,7 @@ The result lists the Lucknow Power Works job with a `score` and `"sort_applied":
 
 ### The Signals URLs
 
-The Blue Dots tools read three variables. Their defaults point at the hosted Signals; for the local stack, set:
+The jobs use case's tools read three variables. Their defaults point at the hosted Signals; for the local stack, set:
 
 | Variable | Local value | Why |
 |---|---|---|
@@ -217,7 +228,7 @@ git check-ignore -v .env
 | Variables | What they are for |
 |---|---|
 | `GOOGLE_CLIENT_ID`, `REACH_SESSION_SECRET` | Google sign-in for the optional web chat. Web chat is for local/dev testing and runs without a login, so they are only needed if you turn sign-in on ([web chat](/guides/installation/local-setup/ai-diffusion-channels/#web-chat-localdev-only)). |
-| `HITL_WEBHOOK_URL`, `HITL_WEBHOOK_SECRET` | Human handoff to a receiver you run. Blue Dots ships with handoff off (`human_handoff: none`), and the local compose file does not pass them. |
+| `HITL_WEBHOOK_URL`, `HITL_WEBHOOK_SECRET` | Human handoff to a receiver you run. The jobs use case ships with handoff off (`human_handoff: none`), and the local compose file does not pass them. |
 | `DISCORD_WEBHOOK_CRITICAL`, `DISCORD_WEBHOOK_WARNING`, `DISCORD_WEBHOOK_INFO` | Grafana alert routing, one Discord webhook per severity. Without them, alerts go to a placeholder that delivers nowhere. |
 | `VOBIZ_AUTH_ID`, `VOBIZ_AUTH_TOKEN`, `VOBIZ_FROM_NUMBER`, `RAYA_API_KEY`, `PUBLIC_URL`, `NGROK_AUTHTOKEN`, `NGROK_DOMAIN` | The telephony voice channel (port 8006): the Vobiz telephony account, the speech provider key and a public URL for call webhooks. See [voice](/guides/installation/local-setup/ai-diffusion-channels/#voice-telephony). |
 
@@ -334,14 +345,14 @@ docker exec action_gateway python3 -c "import urllib.request;r=urllib.request.ur
 
 ## 8. Where channel configuration lives
 
-Every channel has its own block under `channels:`, in two files of the Blue Dots use case:
+Every channel has its own block under `channels:`, in two files of the jobs use case:
 
 | File | Block | What it holds |
 |---|---|---|
 | `dev-kit/configs/blue-dots/agent_core.yaml` | `channels.<channel>` | How Agent Core treats turns from that channel, such as the channel's prompt suffix (`system_prompt_suffix`), how it assembles a turn (`turn_assembler`) and, for the bridge, the output contract. |
 | `dev-kit/configs/blue-dots/reach_layer.yaml` | `reach_layer.channels.<channel>` | How the channel itself behaves, such as the bridge's spoken status phrases or web chat's sign-in. |
 
-Out of the box, Blue Dots has a block only for `bridge`; to turn on another channel, you add its blocks ([AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/)). The framework defaults sit under the same keys in `dev-kit/dpg/agent_core.yaml` and `dev-kit/dpg/reach_layer.yaml`, and your use-case file is merged on top of them, so you only write the keys you change. Agent Core answers only on channels that have a block in `agent_core.yaml`.
+Out of the box, the jobs use case has a block only for `bridge`; to turn on another channel, you add its blocks ([AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/)). The framework defaults sit under the same keys in `dev-kit/dpg/agent_core.yaml` and `dev-kit/dpg/reach_layer.yaml`, and your use-case file is merged on top of them, so you only write the keys you change. Agent Core answers only on channels that have a block in `agent_core.yaml`.
 
 The blocks read their configuration at startup. After you change a file, restart the container that reads it, from `automation/docker`. For example, after a change to `agent_core.yaml`:
 
@@ -451,7 +462,7 @@ Web chat (for local/dev testing only), the CLI, the telephony voice channel and 
 | `port is already allocated` on 8080 or 3100 | The stack was started without the override, so dev-kit and Loki collide with Keycloak and signals-search. | Add `-f local-signals.override.yml` to every compose command (the `COMPOSE` variable in step 6). |
 | `reach_layer_bridge` restarts with `FileNotFoundError: Config file not found: /app/reach_layer/bridge/config/dpg.yaml` | The stack was started without the override, which mounts that file. | Add `-f local-signals.override.yml`. |
 | `reach_layer_web` is unhealthy: `RuntimeError: auth.enabled is true but REACH_SESSION_SECRET env var is not set` | Google sign-in is on for web chat (`channels.web.auth.enabled: true`), and it needs its secrets. | Add `REACH_SESSION_SECRET` and `GOOGLE_CLIENT_ID` to `.env`, or set `enabled` back to `false` ([web chat](/guides/installation/local-setup/ai-diffusion-channels/#web-chat-localdev-only)). |
-| Every web chat or CLI reply is "We're having trouble connecting to the AI service right now", and Agent Core logs `ValueError: Unsupported channel: web` (or `cli`) | The use case's `agent_core.yaml` has no `channels.<channel>` block for that channel. Blue Dots ships with the bridge block only. | Add the channel's block ([AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/)), then restart `agent_core` ([step 8](#8-where-channel-configuration-lives)). |
+| Every web chat or CLI reply is "We're having trouble connecting to the AI service right now", and Agent Core logs `ValueError: Unsupported channel: web` (or `cli`) | The use case's `agent_core.yaml` has no `channels.<channel>` block for that channel. The jobs use case ships with the bridge block only. | Add the channel's block ([AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/)), then restart `agent_core` ([step 8](#8-where-channel-configuration-lives)). |
 | The CLI prints `(abandoned)` and then shows no replies | Input reached the CLI before the agent's opening line, for example when lines are piped into it. | Start it again and wait for the opening line before typing ([CLI](/guides/installation/local-setup/ai-diffusion-channels/#cli)). |
 | The build stops with the disk full | Both stacks need about 30 GiB of images and build cache. | Free disk space, then build again. |
 

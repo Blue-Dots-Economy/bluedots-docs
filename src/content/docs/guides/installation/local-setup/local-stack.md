@@ -1,20 +1,26 @@
 ---
 title: Local Stack (Docker)
-description: Choose your local setup — Signals alone, or the full Aggregator + Signals ecosystem.
+description: Choose a local setup (Signals alone, or Aggregator plus Signals), see which ports each uses, and pick the network it runs.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 2
 next:
   link: /guides/installation/local-setup/signals-dpg/
   label: "Path 9 of 10: Signals DPG Setup"
+changed_sections:
+  - _top
+  - which-network-it-runs
+  - search-and-relevance-ranking-opt-in
 ---
 
-Each repo ships a self-contained **`local-setup/`** folder — a `docker-compose.yml`,
-a `.env.example`, and a `LOCAL_SETUP.md` guide — that brings up the DPG **and its
+Each repo ships a self-contained **`local-setup/`** folder (a `docker-compose.yml`,
+a `.env.example`, and a `LOCAL_SETUP.md` guide) that brings up the DPG **and its
 backing services** (Postgres, Redis, Keycloak, Mailpit, and - for the
 Aggregator - MinIO). You don't wire the infra by hand; you copy an env file and run one command.
 
-Keycloak is shared: both DPGs authenticate against the same realm — one per
-network, named by `KEYCLOAK_REALM` (`bluedots` by default locally) — so it must be
+Keycloak is shared: both DPGs authenticate against the same realm (one per
+network, named by `KEYCLOAK_REALM`, `bluedots` by default locally), so it must be
 running and the realm imported before either UI will let you sign in.
 
 Both offer the same two tracks:
@@ -42,6 +48,25 @@ The Aggregator's `local-setup/` builds **both** repos, so clone them as
   └── signals-dpg/           # standalone stack lives in signals-dpg/local-setup/
         └── local-setup/
 ```
+
+## Which network it runs
+
+Both stacks run the jobs network `blue_dot` by default. Other networks, such as
+the Purple Dot (disability) or Yellow Dot (education) networks, work the same
+way. You switch with settings in `.env`, not code:
+
+| Setting | Stack | Value |
+| --- | --- | --- |
+| `SIGNALS_NETWORK` | Signals only | Network folder name under `examples/schemas/`, for example `purple_dot` |
+| `SERVED_DOMAINS` | Signals only | `<network-id>/<domain>` pairs, for example `purple_dot/seeker,purple_dot/provider` |
+| `VITE_NETWORK_ID` | Signals, Track B | The network id from that folder's `network.json` |
+| `AGGREGATOR_NETWORK` | Aggregator | Network folder name under the Aggregator's `config/` |
+
+The folder name and the network id match for every network except Yellow, whose
+id is set in its `network.json`. Each network folder also holds its consent text
+(`consent.json`) and optional email copy (`messages.properties`). Exact steps:
+[Signals DPG Setup](/guides/installation/local-setup/signals-dpg/#choose-a-network)
+and [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/#choose-a-network).
 
 ## Ports at a glance
 
@@ -73,7 +98,7 @@ containers (no app-image builds) and the Node apps run on the host.
 
 By default neither stack runs **signals-search**. Everything works, but discover
 returns results in **recency order** rather than by relevance, and match scores
-are unavailable. The UI says so explicitly when it happens — _"Showing basic
+are unavailable. The UI says so explicitly when it happens: _"Showing basic
 matches — relevance ranking is temporarily unavailable"_.
 
 To add it:
@@ -100,7 +125,7 @@ serve. There is no native arm64 embedding image upstream to switch to.
 :::caution[It is opt-in for a reason]
 The embedding server loads a ~2.3 GB model and wants **3-4 GB of memory to
 itself**. On the Signals-only stack, budget ~4 GB on top of the base; on the
-Aggregator's unified stack — already around a dozen containers — budget **≥10 GB
+Aggregator's unified stack (already around a dozen containers), budget **≥10 GB
 of Docker memory** in total. That is why it is not part of the default
 `docker compose up -d`.
 :::
@@ -108,7 +133,7 @@ of Docker memory** in total. That is why it is not part of the default
 Two things catch people out, and both are documented in full in the repo guides:
 
 - **Search authenticates against the `apikey` table in the shared Signals
-  database.** There is no API-key environment variable to set — the key has to be
+  database.** There is no API-key environment variable to set. The key has to be
   a real, enabled row, minted with the service-apikey seed step.
 - **Wiring Signals to search takes two separate variable sets.** Relevance-ranked
   discover reads `SIGNALS_SEARCH_URL`; match score reads

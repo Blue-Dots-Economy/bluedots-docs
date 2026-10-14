@@ -1,8 +1,13 @@
 ---
 title: Installation
-description: Two separate tracks — run a DPG locally for development, or deploy the full stack to AWS.
+description: "Two tracks: run a DPG on your own machine for development, or deploy the full stack to AWS for real use."
 sidebar:
+  attrs:
+    class: bd-changed
   order: 0
+changed_sections:
+  - _top
+  - local-setup
 ---
 
 Installation splits into two tracks that should not be confused: running a DPG on your own machine for development, and deploying the whole stack to the cloud for real use.
@@ -15,6 +20,8 @@ Run Signals or the Aggregator on your own machine with Docker Compose — Postgr
 - [Local Stack (Docker)](/guides/installation/local-setup/local-stack/) — bring up the backing services.
 - [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/) — the network-aware backend + UI.
 - [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/) — the onboarding app (API, web, worker).
+- [AI Diffusion DPG Setup](/guides/installation/local-setup/ai-diffusion-dpg/) — the voice and chat agent, run against the local Signals stack.
+- [AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/) — web chat, CLI, telephony voice and MCP.
 
 ## Cloud Setup
 

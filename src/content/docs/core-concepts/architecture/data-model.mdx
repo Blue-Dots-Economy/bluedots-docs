@@ -1,7 +1,9 @@
 ---
 title: Data Model
-description: How items, schemas and partitions are modelled across the Signals and Aggregator datastores.
+description: The tables in the Signals and Aggregator databases, how items are typed by schemas and partitioned, and how migrations are made.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 4
 prev:
   link: /core-concepts/technical/schema-driven-model/
@@ -9,9 +11,12 @@ prev:
 next:
   link: /core-concepts/technical/read-write-paths/
   label: "Path 7 of 10: Read & Write Paths"
+changed_sections:
+  - _top
+  - design-principles
 ---
 
-Both DPGs use **PostgreSQL** as their system of record (via **Drizzle ORM**) and **Redis** for caching, sessions and queues. Each DPG owns its own database; they do not share tables.
+Both DPGs use **PostgreSQL** as their system of record (via **Drizzle ORM**) and **Redis** for caching, sessions and queues. They can run on the same PostgreSQL and Redis servers, but each DPG owns its own database and they do not share tables.
 
 ## Signals data model
 
@@ -51,7 +56,7 @@ The Aggregator database (Drizzle, owned by `apps/api`) holds:
 
 - **Schema-typed, never freeform.** An item's structure is governed by its `item_type` schema; clients cannot invent fields.
 - **Backend-owned identity fields.** `item_instance_url` and `item_schema_url` are generated server-side.
-- **Configuration as code.** No domain/env-specific value is hardcoded — values load once at startup from config loaders or env. Per-env overrides live in `config/env/{dev,staging,prod}.yaml`.
+- **Configuration as code.** No domain- or environment-specific value is hardcoded. Values load once at startup from config loaders or environment variables, and each network's schemas live in their own folder (see [Configuration](/guides/configuration/#per-network-schema-folders)).
 
 ## Where to go next
 

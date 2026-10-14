@@ -1,15 +1,21 @@
 ---
 title: Guides
-description: Practical guides to install, onboard, configure, integrate and deploy the Blue Dots DPGs.
+description: Guides to install, configure, extend and deploy the Blue Dots DPGs for any network, and to add a new dot.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 0
+changed_sections:
+  - _top
+  - installation
+  - configure--extend
 ---
 
 These guides take you from a clean machine to a running, integrated Blue Dots deployment.
 
 ## Installation
 
-Two separate tracks :
+Two separate tracks:
 
 - **Local Setup** — run a DPG on your own machine: [Prerequisites](/guides/installation/local-setup/prerequisites/), [Local Stack (Docker)](/guides/installation/local-setup/local-stack/), [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/), [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/).
 - **Cloud Setup** — deploy a real instance: [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/), [AWS Deployment](/guides/installation/cloud-setup/aws/deployment/).
@@ -22,7 +28,8 @@ Two separate tracks :
 ## Configure & extend
 
 - [Keycloak Setup](/guides/keycloak-setup/) — realm import, admin user, registering an integrating DPG.
-- [Configuration](/guides/configuration/) — env vars, config-as-code, per-environment overrides.
+- [Configuration](/guides/configuration/) — env vars, config-as-code, per-network schema folders.
+- [Adding a new dot](/guides/adding-a-dot/) — set up a new network, such as the Yellow Dot (education) network: schemas, domains, brand and consent.
 - [Customisation & Branding](/guides/customisation/) — branding, dashboards and a landing page, without forking the DPGs.
 - [AI Voice Agent Prompts](/guides/voice-ai-prompts/) — the published prompt DPGs and how a voice channel connects.
 - [API Conventions](/guides/api-conventions/) — auth headers, error codes and response conventions shared by both APIs.

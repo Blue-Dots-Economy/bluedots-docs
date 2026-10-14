@@ -95,8 +95,8 @@ export default defineConfig({
       },
       title: 'Documentation',
       description:
-        'Open documentation for the Blue Dots Economy — the Signals and Aggregator Digital Public Goods (DPGs) that power local discovery.',
-      tagline: 'Discovery infrastructure for India’s districts',
+        'Documentation for Blue Dots, open-source software that helps people and organisations near each other find each other.',
+      tagline: 'Helping people nearby find each other',
       // Header uses the PNG wordmark; the square SVG dot-mark (logo-*.svg)
       // is the hero image on the landing page.
       logo: {
@@ -267,6 +267,7 @@ export default defineConfig({
             { label: 'Keycloak Setup', slug: 'guides/keycloak-setup'  },
             { label: 'Configuration', slug: 'guides/configuration'  },
             { label: 'Customisation & Branding', slug: 'guides/customisation' },
+            { label: 'Adding a New Dot', slug: 'guides/adding-a-dot' },
             { label: 'AI Voice Agent Prompts', slug: 'guides/voice-ai-prompts' },
             { label: 'API Conventions', slug: 'guides/api-conventions' },
             { label: 'CI/CD & Build Pipeline', slug: 'guides/cicd-and-builds' },
@@ -287,7 +288,7 @@ export default defineConfig({
           items: [
             { label: 'The Dots Family', slug: 'explore/beyond-livelihoods'  },
             { label: 'Use Cases', slug: 'explore/use-cases'  },
-            { label: 'Pilots — Ghaziabad & Dharwad', slug: 'explore/pilots'  },
+            { label: 'Jobs Pilots — Ghaziabad & Dharwad', slug: 'explore/pilots'  },
             { label: "What We're Learning", slug: 'explore/learnings' },
             { label: 'The Economics of Local Discovery', slug: 'explore/economics'  },
           ],

@@ -1,8 +1,15 @@
 ---
 title: Aggregator DPG Setup
-description: Run the Aggregator portal, API and worker — plus the whole ecosystem — locally.
+description: Run the Aggregator portal, API and worker locally with the Signals DPG beside it, and set which network the portal onboards participants for.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 4
+changed_sections:
+  - _top
+  - track-a--one-command-docker
+  - choose-a-network
+  - adding-search-relevance-ranking
 ---
 
 The Aggregator DPG is the downstream portal (**web**), **API** and **worker**. It
@@ -12,7 +19,7 @@ the shared infra (Postgres, Redis, Keycloak, MinIO, Mailpit).
 - **Repository:** [Blue-Dots-Economy/aggregator-dpg](https://github.com/Blue-Dots-Economy/aggregator-dpg)
 - **Canonical local guide:** [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) — the self-contained `local-setup/` folder is the source of truth. It builds both repos, so it expects `aggregator-dpg` and `signals-dpg` checked out as **siblings**.
 
-Pick a track: **A — Docker-only** (one command, whole ecosystem) or **B — hybrid
+Pick a track: **A, Docker-only** (one command, whole ecosystem) or **B, hybrid
 dev** (run the apps from source with hot-reload).
 
 ## Track A — one command (Docker)
@@ -43,7 +50,7 @@ docker compose up -d --build
 **`docker login dhi.io`** — the api, web and worker images build `FROM
 dhi.io/...` (Docker Hardened Images), which refuse anonymous pulls. Without it
 `docker compose up -d --build` fails at the first `FROM` with `401
-Unauthorized`. Any Docker Hub account works. Track B needs no login — it builds
+Unauthorized`. Any Docker Hub account works. Track B needs no login because it builds
 no app images.
 
 **`./gen-secrets.sh`** — `.env.example` ships seven `CHANGE_ME_*` placeholders.
@@ -96,6 +103,32 @@ with `--no-verify`.
 
 Continue to [Configuration](/guides/configuration/) or the [Adaptor Onboarding](/guides/adaptor-onboarding/) walkthrough.
 
+## Choose a network
+
+The portal onboards participants for one network. `AGGREGATOR_NETWORK` in
+`local-setup/.env` picks it (default `blue_dot`, the jobs network). The value
+is a folder name under the Aggregator repo's `config/`, which holds that
+network's `aggregator.config.yaml`, `brand.json`, `keycloak.env` (login-screen
+text) and `schemas/`. The same folder name is sent to Signals as the network of
+every item the portal creates.
+
+| Folder | Network | Ready to run |
+| --- | --- | --- |
+| `config/blue_dot/` | Blue Dot (jobs) | Yes (default) |
+| `config/purple_dot/` | Purple Dot (disability) | Yes |
+| `config/orange_dot/` | Orange Dot (tourism) | Yes |
+| `config/yellow_dot/` | Yellow Dot (education) | No: it has `schemas/` only, no `aggregator.config.yaml` or `keycloak.env` |
+
+:::caution[The Signals side of this stack stays on blue_dot]
+`AGGREGATOR_NETWORK` changes only the Aggregator services. The Signals services
+in this compose file are fixed to `blue_dot`: the API and search load
+`examples/schemas/blue_dot/network.json`, the UI is built for `blue_dot`, and
+`SIGNALS_SERVED_DOMAINS` defaults to the `blue_dot` domains. To run another
+network end to end, change those lines in `local-setup/docker-compose.yml` and
+`SIGNALS_SERVED_DOMAINS` in `.env` to match, as described in
+[Signals DPG Setup](/guides/installation/local-setup/signals-dpg/#choose-a-network).
+:::
+
 ## Adding search (relevance ranking)
 
 The unified stack runs the Signals tier too, so without search its discover
@@ -115,8 +148,8 @@ This stack is already around a dozen containers, and its guide asks for ≥6 GB
 before search. The embedding server loads a ~2.3 GB model and wants 3-4 GB more.
 :::
 
-Details specific to this stack — the `3110` port, targeting the `signals`
-database rather than `aggregator`, and using the `signals-redis` instance — are in
+Details specific to this stack (the `3110` port, targeting the `signals`
+database rather than `aggregator`, and using the `signals-redis` instance) are in
 **§10** of the
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md)
 guide. The canonical reference for signals-search's own configuration is **§7 of

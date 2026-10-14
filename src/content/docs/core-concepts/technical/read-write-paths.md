@@ -1,7 +1,9 @@
 ---
 title: Read & Write Paths
-description: The two read layers, count-first discovery, caching, and the controlled write paths into Signals.
+description: How Signals reads its own items, reads across instances with count-first discovery and caching, and accepts writes through controlled paths.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 3
 prev:
   link: /core-concepts/architecture/data-model/
@@ -9,6 +11,10 @@ prev:
 next:
   link: /guides/installation/local-setup/local-stack/
   label: "Path 8 of 10: Local Stack"
+changed_sections:
+  - _top
+  - inter-instance-read
+  - write-paths
 ---
 
 Signals keeps **two read layers strictly separate**. Before writing a read endpoint, decide which layer it belongs to.
@@ -34,7 +40,7 @@ Reads **across instances** using a *count-first discovery* strategy:
 3. **Fetch slices** — request just the needed slices from those peers.
 4. **Merge & cache** — combine results and cache the merged view. **Schema fetching and caching live in this layer**, not in the instance-local layer.
 
-This avoids the naive "every instance queries every other" fan-out and is the core scaling decision of the network.
+This avoids every instance querying every other instance, which is what lets the network grow without each query getting slower.
 
 <!-- Editable source: src/assets/diagrams/read-write-network-fetch.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. -->
 
@@ -45,7 +51,7 @@ This avoids the naive "every instance queries every other" fan-out and is the co
 Writes into Signals are deliberately constrained:
 
 - The **Signals UI / direct clients** create items with a user's Keycloak token from the OIDC login.
-- **Integrating DPGs** (Aggregator app, voice DPG) write through **controlled bulk-create paths**, authenticating with a [client-credentials service token](/core-concepts/architecture/identity-and-auth/) plus `x-acting-org-id`. In the MVP the Aggregator has no other write access to Signals.
+- **Integrating DPGs** (Aggregator app, voice DPG) write through **controlled bulk-create paths**, authenticating with a [Keycloak service account](/core-concepts/architecture/identity-and-auth/). In the MVP the Aggregator has no other write access to Signals.
 - On write, the backend generates `item_instance_url` and `item_schema_url`; clients cannot set them.
 
 ## Reliability rules for writes and external calls
