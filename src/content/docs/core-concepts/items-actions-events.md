@@ -2,7 +2,15 @@
 title: Items, Actions & Events
 description: The three building blocks of the Signals DPG, with examples from the jobs and education networks.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 6
+changed_sections:
+  - _top
+  - item
+  - action
+  - event
+  - how-they-relate
 ---
 
 These are the records that let people and organisations nearby find each other. Inside an instance, everything is built from three primitives: **items**, **actions** and **events**.

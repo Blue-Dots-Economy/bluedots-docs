@@ -2,7 +2,11 @@
 title: Prerequisites
 description: The tools, runtimes and map API keys you need before running the Signals and Aggregator DPGs on your own machine.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 1
+changed_sections:
+  - the-three-google-keys-are-deliberately-separate
 ---
 
 Install these before setting up either DPG.

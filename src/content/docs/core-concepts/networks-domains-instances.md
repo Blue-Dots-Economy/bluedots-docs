@@ -2,7 +2,17 @@
 title: Networks, Domains & Instances
 description: How one set of Blue Dots software helps people and organisations nearby find each other, in jobs, education, disability services, tourism and other sectors.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 5
+changed_sections:
+  - _top
+  - network
+  - domain
+  - instance
+  - the-networks-today
+  - can-networks-talk-to-each-other
+  - how-they-fit-together
 ---
 
 Blue Dots helps people and organisations near each other find each other, in many sectors, with one set of software. It uses three ideas to do this: **networks**, **domains** and **instances**. Keep them separate, because each answers a different question.

@@ -2,7 +2,12 @@
 title: AI Voice Agent Prompts
 description: How a voice agent prompt set is structured so any network can reuse it, the published prompts for the jobs network, and how a voice DPG connects to Signals.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 7
+changed_sections:
+  - _top
+  - related
 ---
 
 The **AI Voice Agent** is the main self-service channel for [completing a profile](/core-concepts/blue-dot-lifecycle/#4-completing-the-profile). The prompts that drive it are **Digital Public Goods (DPGs) in their own right**: published, versioned and reusable, like the Signals and Aggregator codebases.

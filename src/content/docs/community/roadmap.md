@@ -2,7 +2,14 @@
 title: Roadmap
 description: Where each dot stands today, and what Blue Dots is working on now, next and later.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 2
+changed_sections:
+  - _top
+  - now
+  - next
+  - later
 ---
 
 A short view of where Blue Dots is heading.

@@ -2,7 +2,16 @@
 title: The Blue Dots Approach
 description: The four levers that make Blue Dots work in a district, how one set of software serves many sectors, and how a listing becomes a match.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 3
+changed_sections:
+  - _top
+  - the-four-levers
+  - one-set-of-software-for-many-sectors
+  - how-this-relates-to-the-lifecycle
+  - from-listing-to-match
+  - why-dpgs
 ---
 
 Blue Dots helps people and organisations in the same district find each other. It works through **four levers** that support each other.

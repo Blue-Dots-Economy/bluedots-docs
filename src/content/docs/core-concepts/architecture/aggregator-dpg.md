@@ -2,7 +2,16 @@
 title: Aggregator DPG Architecture
 description: Internals of the aggregator-facing app (API, portal and background worker) and how coordinators join an organisation.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 3
+changed_sections:
+  - _top
+  - architectural-guardrails
+  - how-coordinators-join
+  - the-flow
+  - if-the-owner-loses-the-link
+  - why-invitation-only
 ---
 
 The **Aggregator DPG** is the aggregator-facing application of Blue Dots. It is a **pnpm + Turbo** monorepo, TypeScript-only, with three deployable apps.

@@ -121,7 +121,8 @@ export default defineConfig({
       pagination: true,
       components: {
         // Adds the "← <group>" back link on generated API operation pages,
-        // which the sidebar deliberately doesn't list. No-op everywhere else.
+        // which the sidebar deliberately doesn't list. Also draws the gold
+        // "updated" sparkle on changed pages and sections (changed_sections).
         PageTitle: './src/components/ApiPageTitle.astro',
       },
       customCss: [
