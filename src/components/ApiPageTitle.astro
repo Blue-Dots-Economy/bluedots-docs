@@ -41,7 +41,30 @@ if (match) {
     }
   }
 }
+
+/**
+ * Gold "updated" sparkle (Lucide "sparkles"). Sidebar links opt in through
+ * frontmatter sidebar.attrs.class = bd-changed; this page's changed headings
+ * and their table-of-contents entries come from frontmatter changed_sections
+ * ("_top" = the page title and the TOC "Overview" entry). Built here because
+ * PageTitle renders on every page, before the sidebar and TOC exist in the DOM.
+ */
+const changed = Astro.locals.starlightRoute.entry.data.changed_sections ?? [];
+const markerSelectors = [
+  '#starlight__sidebar a.bd-changed',
+  ...changed.flatMap((id) => [
+    `[id="${id}"]`,
+    `:is(starlight-toc, mobile-starlight-toc) a[href="#${id}"]`,
+  ]),
+].map((s) => `${s}::after`);
+
+const SPARKLES =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z'/%3E%3Cpath d='M20 2v4'/%3E%3Cpath d='M22 4h-4'/%3E%3Ccircle cx='4' cy='20' r='2'/%3E%3C/svg%3E\")";
+
+const markerCss = `${markerSelectors.join(',')}{content:'';display:inline-block;flex-shrink:0;width:0.9em;height:0.9em;margin-inline-start:0.35em;vertical-align:-0.05em;background-color:#d4a017;mask:${SPARKLES} center/contain no-repeat}`;
 ---
+
+<style set:html={markerCss}></style>
 
 {
   backLink && (
