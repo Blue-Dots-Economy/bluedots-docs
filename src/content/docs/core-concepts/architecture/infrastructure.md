@@ -19,7 +19,7 @@ Infrastructure is defined as code under `opentofu/aws/`. Each environment is a d
 
 <!-- Editable source: src/assets/diagrams/infra-terragrunt-chain.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. -->
 
-![Terragrunt modules apply in order: network, eks, iam, storage, random_passwords, output-file — output-file generates the per-chart Helm values files](../../../../assets/diagrams/infra-terragrunt-chain.png)
+![Terragrunt modules apply in order: network, eks, iam, storage, random_passwords, backup, output-file — output-file generates the per-chart Helm values files](../../../../assets/diagrams/infra-terragrunt-chain.png)
 
 | Module | Provisions |
 | --- | --- |
@@ -28,6 +28,7 @@ Infrastructure is defined as code under `opentofu/aws/`. Each environment is a d
 | `iam` | IAM roles incl. **IRSA** (service-account → role) |
 | `storage` | storage resources; `gp3` is made the default StorageClass |
 | `random_passwords` | generated Postgres/Redis credentials |
+| `backup` | AWS Backup for the cluster — K8s objects plus EBS/EFS/S3-backed disks, on a schedule; on by default |
 | `output-file` | **generates the per-chart Helm values files** (see below) |
 
 The only file you normally edit per environment is **`global-values.yaml`** — region, EKS sizing, public hostnames, network/domains, SMTP/SMS, and alert recipients. A `tf.sh` file carries the AWS region and the remote-state S3 bucket name and is sourced before any `terragrunt` run.
