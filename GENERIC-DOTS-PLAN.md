@@ -2,7 +2,7 @@
 
 > **For agentic workers:** work task by task. Each task lists the files it owns and its acceptance check. Do not edit files outside your list; send rename/sidebar/hub changes to the integrator (Wave 3). Tick `- [ ]` boxes as you go and update the Status line.
 >
-> **Status: executing — Wave 1 done in PR 1 (2026-10-10); Wave 2 next. All owner decisions answered; see section 2.** Built from a 4-agent analysis of all 58 pages and revised after 3 review agents (accuracy, language, execution). Decisions that differ from the proposed defaults: D3, Q7, Q8, Q12 (applied to the tasks below).
+> **Status: executing — Wave 1 done in PR 1; Wave 2 agents A–D, the integrator (7.0) and diagram 6.2 done in PR 2 (2026-10-10). Next: agents E–F and Wave 4 in PR 3. All owner decisions answered; see section 2.** Built from a 4-agent analysis of all 58 pages and revised after 3 review agents (accuracy, language, execution). Decisions that differ from the proposed defaults: D3, Q7, Q8, Q12 (applied to the tasks below).
 >
 > Per CLAUDE.md, this file is temporary: `git rm` it in the PR that completes the work. Phase 0 moves everything worth keeping (style rules, naming rule, scenario bank, fact owners) into CLAUDE.md first.
 
@@ -252,20 +252,20 @@ Writers use these scenarios and no others, so pages stay consistent. Each scenar
 ### Wave 2: content (6 agents in parallel, exclusive files). PR 2 (A–D) and PR 3 (E–F).
 
 **Agent A: front door**
-- [ ] **2.1 Landing page.**
+- [x] **2.1 Landing page.**
   - Rewrite the hero tagline and the "Solving the paradox of proximity" block. Use review rewrite P1 as the model: one-sentence "what it is", D1 wording, and one example each from Blue, Yellow and Purple.
   - Add a `DotGrid` of all 7 dots (no `stat` props), linking to the family page.
   - Remove the stat grid (Q8). The 7-dot grid replaces it; pilot numbers stay only on the pilots page.
   - Replace the aggregator list with the section 4 list.
   - Replace "crisis" in `description`.
   **Files:** Modify `src/content/docs/index.mdx`.
-- [ ] **2.2 Introduction.**
+- [x] **2.2 Introduction.**
   - Rewrite "What is a Blue Dot?" as "What is a dot?", with Blue and Yellow scenarios.
   - Add "One platform, many dots": 7 lines with a status for each, linking to the family page.
   - Cut "digital darkness", "closes the gap" and "800 metres" (owned by learnings; link instead).
   - Correct the `service_provider` mention.
   **Files:** Modify `src/content/docs/overview/introduction.md`.
-- [ ] **2.3 Paradox of proximity** (largest rewrite).
+- [x] **2.3 Paradox of proximity** (largest rewrite).
   - Use review rewrite P2 as the model for the opening.
   - Replace the two jobs stories with one jobs story and one Green story (problem description only, per D2). Label them "Example:" (R8).
   - Move the MSME-employment macro section into a "For example, in jobs:" aside that links to economics.
@@ -274,17 +274,17 @@ Writers use these scenarios and no others, so pages stay consistent. Each scenar
   **Files:** Modify `src/content/docs/overview/paradox-of-proximity.mdx`.
 
 **Agent B: Overview pages and evidence framing**
-- [ ] **2.4 Approach, DPG and who-is-this-for.**
+- [x] **2.4 Approach, DPG and who-is-this-for.**
   - Remove "rails" (keep one literal UPI comparison), the repeated "consent is the foundation" (keep the literal rule), and the jobs-only aggregator lists.
   - Name the schema-driven networks as what makes the platform generic, linking to schema-driven-model.
   - Correct the "three types already defined" claim on the DPG page.
   **Files:** Modify `overview/the-blue-dots-approach.md`, `overview/blue-dots-as-a-dpg.md`, `overview/who-is-this-for.md`.
-- [ ] **2.5 Community.**
+- [x] **2.5 Community.**
   - Remove the roadmap placeholder text.
   - Add a per-dot status line to the roadmap (from the networks page).
   - Correct the contributing coverage threshold (70% to 80%) after checking the real gate.
   **Files:** Modify `community/roadmap.md`, `community/contributing.mdx`.
-- [ ] **3.4 Pilots, learnings, economics: slop fixes and nav only (D3, Q13).**
+- [x] **3.4 Pilots, learnings, economics: slop fixes and nav only (D3, Q13).**
   - Body text, titles, numbers, places, partners and quotes stay as they are.
   - Fix only Tier 1 style-gate hits (e.g. "measured rather than argued", "to Blue-Dot" verb, flips).
   - Set `prev`/`next`/`sidebar.order` frontmatter per the chain table below.
@@ -292,7 +292,7 @@ Writers use these scenarios and no others, so pages stay consistent. Each scenar
   **Files:** Modify `explore/pilots.mdx`, `explore/learnings.mdx`, `explore/economics.mdx`.
 
 **Agent C: family page and use cases**
-- [ ] **3.1 The Dots Family.**
+- [x] **3.1 The Dots Family.**
   - Title becomes "The Dots Family"; keep the slug `beyond-livelihoods`.
   - Use review rewrite P3 as the model intro, with the status table.
   - Add Yellow. Give each dot a scenario from the bank and a status.
@@ -302,7 +302,7 @@ Writers use these scenarios and no others, so pages stay consistent. Each scenar
   - Fix Purple "within 5 km" to "in the same city".
   - Point the "adding a sector" steps to the new guide (5.4).
   **Files:** Modify `src/content/docs/explore/beyond-livelihoods.mdx`.
-- [ ] **3.3 Use cases.**
+- [x] **3.3 Use cases.**
   - One section per dot, using the bank's wording. Blue comes first only because it is live.
   - Apply the same `JourneyQuote` rule.
   - Fix "within a day".
@@ -324,9 +324,9 @@ Writers use these scenarios and no others, so pages stay consistent. Each scenar
 Update `sidebar.order` to match.
 
 **Agent D: Core Concepts**
-- [ ] **4.1 Signals.** Generic definition with Blue and Yellow scenarios. Remove the "not X, it's Y" flips. Link "fraction of survey cost" to economics.
+- [x] **4.1 Signals.** Generic definition with Blue and Yellow scenarios. Remove the "not X, it's Y" flips. Link "fraction of survey cost" to economics.
   **Files:** Modify `core-concepts/signals.mdx`.
-- [ ] **4.2 Lifecycle.**
+- [x] **4.2 Lifecycle.**
   - Title "The Dot Lifecycle" (Q2) and colour-neutral states.
   - Generic participant types plus a per-network table using real ids (Blue `seeker`/`provider`; Yellow `student`/tutor-counsellor; Purple `seeker`/`provider`; Orange `practitioner`, listing only).
   - Keep one "nothing to build" sentence.
@@ -334,21 +334,21 @@ Update `sidebar.order` to match.
   - Keep the intake-methods table here.
   - Write the alt text for 6.2.
   **Files:** Modify `core-concepts/blue-dot-lifecycle.mdx`.
-- [ ] **4.3 Participant profiles.**
+- [x] **4.3 Participant profiles.**
   - Framing paragraph: this page documents the Blue (jobs) schema; other networks define their own fields. Add a short table of real Yellow, Purple and Orange fields.
   - Correct the `service_provider` citation.
   - Fix the flip and the tip title.
   **Files:** Modify `core-concepts/participant-profiles.mdx`.
-- [ ] **4.4 Aggregators.**
+- [x] **4.4 Aggregators.**
   - Use the section 4 list.
   - Replace the duplicate intake table with a link to lifecycle.
   - Move "How coordinators join" to `core-concepts/architecture/aggregator-dpg.md`.
   - Auth wording per Q12.
   - Fix "non-negotiable" on the receiving page, and add one line there: "the same portal onboards participants for any network the deployment serves".
   **Files:** Modify `core-concepts/aggregators.md`, `core-concepts/architecture/aggregator-dpg.md`.
-- [ ] **4.5 Items, actions, events.** Show `connect` on Yellow next to `apply` on Blue. Note that Orange has no actions. Write the alt text for 6.3.
+- [x] **4.5 Items, actions, events.** Show `connect` on Yellow next to `apply` on Blue. Note that Orange has no actions. Write the alt text for 6.3.
   **Files:** Modify `core-concepts/items-actions-events.md`.
-- [ ] **4.6 Diagrams:**
+- [x] **4.6 Diagrams:**
   - Fix the `apply`-only label in `items-actions-events` (source exists).
   - Check `use-cases-common-pattern.excalidraw` for jobs labels.
   **Files:** `src/assets/diagrams/items-actions-events.*`, `src/assets/diagrams/use-cases-common-pattern.*`.
@@ -395,14 +395,14 @@ Update `sidebar.order` to match.
   - Use real file names from Signals-DPG and display names for domains.
   - Send the sidebar entry to the integrator.
   **Files:** Create `src/content/docs/guides/adding-a-dot.md`.
-- [ ] **6.2 Lifecycle diagram** (agent-owned, Q11; export PNG via chrome-devtools, owner reviews in the PR).
+- [x] **6.2 Lifecycle diagram** (agent-owned, Q11; export PNG via chrome-devtools, owner reviews in the PR).
   - Re-create the source first, because no `.excalidraw` exists.
   - Remove "Job Fairs" and the programme labels, and use colour-neutral states.
   **Files:** Create `src/assets/diagrams/blue-dot-lifecycle.excalidraw`. Modify `blue-dot-lifecycle.png`.
 
 ### Wave 3: integrator (1 agent)
 
-- [ ] **7.0 Sidebar, hubs, renames.**
+- [x] **7.0 Sidebar, hubs, renames.**
   - Apply every handoff: the Explore reorder (Paradox → Dots Family → Use Cases → Pilots → Learnings → Economics, matching the chain table), and the label renames (`Signals (Blue Dots)`, `The Blue Dot Lifecycle`, `Pilots — Ghaziabad & Dharwad`, `Beyond Livelihoods: The Dots Family`).
   - Add the new guide's sidebar entry.
   - In all `start/*.mdx` hubs, update titles and `focus:` text, apply the aggregator lists, and fix slop ("rails" ×2, "digital invisibility", "reinforcing levers", "the design idea everything hangs on", "onboarding journey").

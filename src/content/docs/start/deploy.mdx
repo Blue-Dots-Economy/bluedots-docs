@@ -5,13 +5,18 @@ prev: false
 next:
   link: /overview/introduction/
   label: 'Start the path: Introduction'
+sidebar:
+  attrs:
+    class: bd-changed
+changed_sections:
+  - _top
 ---
 
 import { CardGrid } from '@astrojs/starlight/components';
 import PhaseTimeline from '../../../components/PhaseTimeline.astro';
 import NavCard from '../../../components/NavCard.astro';
 
-Follow this path if you want to deploy Blue Dots for a district, state or domain. It starts with the DPG model, walks the adaptor onboarding journey end to end, then covers installation, deployment, and what district activation looks like on the ground.
+Blue Dots helps people and organisations near each other find each other. Follow this path if you want to deploy Blue Dots for a district, state or sector, such as jobs (Blue) or education (Yellow). It starts with the DPG model, goes through adaptor onboarding step by step, then covers installation, deployment, and what district activation looks like on the ground.
 
 <PhaseTimeline
   phases={[
@@ -19,7 +24,7 @@ Follow this path if you want to deploy Blue Dots for a district, state or domain
       number: 1,
       title: 'Introduction',
       href: '/overview/introduction/',
-      focus: 'The minimum shared context — what the Blue Dots Economy is and why it exists.',
+      focus: 'What Blue Dots is, what a dot is, and which sectors it serves.',
     },
     {
       number: 2,

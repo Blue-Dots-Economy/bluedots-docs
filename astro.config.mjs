@@ -197,8 +197,8 @@ export default defineConfig({
           label: 'Core Concepts',
           items: [
             { label: 'Core Concepts', slug: 'core-concepts'  },
-            { label: 'Signals (Blue Dots)', slug: 'core-concepts/signals' },
-            { label: 'The Blue Dot Lifecycle', slug: 'core-concepts/blue-dot-lifecycle'  },
+            { label: 'Signals (dots)', slug: 'core-concepts/signals' },
+            { label: 'The Dot Lifecycle', slug: 'core-concepts/blue-dot-lifecycle'  },
             { label: 'Participant Profiles', slug: 'core-concepts/participant-profiles' },
             { label: 'Aggregators', slug: 'core-concepts/aggregators'  },
             { label: 'Networks, Domains & Instances', slug: 'core-concepts/networks-domains-instances' },
@@ -285,11 +285,11 @@ export default defineConfig({
         {
           label: 'Explore',
           items: [
+            { label: 'The Dots Family', slug: 'explore/beyond-livelihoods'  },
             { label: 'Use Cases', slug: 'explore/use-cases'  },
             { label: 'Pilots — Ghaziabad & Dharwad', slug: 'explore/pilots'  },
             { label: "What We're Learning", slug: 'explore/learnings' },
             { label: 'The Economics of Local Discovery', slug: 'explore/economics'  },
-            { label: 'Beyond Livelihoods: The Dots Family', slug: 'explore/beyond-livelihoods'  },
           ],
         },
         {

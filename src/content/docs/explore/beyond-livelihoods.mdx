@@ -1,20 +1,50 @@
 ---
-title: "Beyond Livelihoods: The Dots Family"
-description: How the same discovery rails extend across sectors, and what it takes to add one.
+title: "The Dots Family"
+description: One set of open-source software runs a separate network for each need, from jobs and education to disability support and tourism. Each network has a colour.
 sidebar:
-  order: 5
+  attrs:
+    class: bd-changed
+  order: 1
 prev:
-  link: /explore/economics/
-  label: "Path 6 of 7: The Economics of Local Discovery"
+  link: /overview/paradox-of-proximity/
+  label: "Path 2 of 7: The Paradox of Proximity"
+next:
+  link: /explore/use-cases/
+  label: "Path 4 of 7: Use Cases"
+changed_sections:
+  - _top
+  - which-dots-exist-today
+  - the-dots-family
+  - blue-dots--livelihoods-for-youth
+  - yellow-dots--education-avenues-and-services
+  - purple-dots--economic-participation-by-persons-with-disabilities
+  - orange-dots--growing-the-tourism-economy
+  - pink-dots--greater-female-labour-force-participation
+  - green-dots--boosting-efficiency-of-farming
+  - brown-dots--powering-growth-for-smbs
+  - how-a-new-colour-is-added
 ---
 
 import DotCard from '../../../components/DotCard.astro';
 import DotGrid from '../../../components/DotGrid.astro';
-import JourneyQuote from '../../../components/JourneyQuote.astro';
 
-**Blue Dots** is the umbrella brand for a shared digital discovery infrastructure. The same open, shared rails surface local demand and supply in different **colors and icons** depending on the persona and the need — not separate systems, and not a single closed marketplace.
+Blue Dots is one set of open-source software that runs several networks, one for each need. Each network has a colour: Blue for jobs, Yellow for education, Purple for persons with disabilities, and so on.
 
-This fluidic exchange lets specialised discovery ride a shared rail, turning a district into an interconnected economic engine. In every case, voice and vernacular AI create a dot in **2–3 minutes**, on any phone, in any local language.
+Every network works the same way. A person creates a dot by phone call or in the app, in their own language, in [2–3 minutes](/overview/the-blue-dots-approach/). A local organisation checks it. People nearby who match find it. Contact details are shared only when both sides agree, except on Orange, where listings are public.
+
+## Which dots exist today
+
+| Dot | Need | Status |
+|---|---|---|
+| Blue | Jobs for young people | Live, piloted |
+| Yellow | Education | Network defined |
+| Purple | Persons with disabilities | Network defined |
+| Orange | Tourism | Network defined |
+| Pink | Work for women | Possible |
+| Green | Farming | Possible |
+| Brown | Small businesses | Possible |
+
+"Network defined" means the network's data rules are written and the software can run it. "Possible" means the idea is described but no network exists yet. For each network's roles and details, see [Networks, domains and instances](/core-concepts/networks-domains-instances/#the-networks-today).
 
 ## The Dots family
 
@@ -22,109 +52,102 @@ This fluidic exchange lets specialised discovery ride a shared rail, turning a d
   <DotCard
     color="blue"
     sector="Livelihoods for youth"
-    problem="Youth and employers stay invisible to each other even two bus stops apart"
+    problem="Young people and employers miss each other even two bus stops apart"
     stat="< 50% youth placement rate in India"
   />
   <DotCard
-    color="pink"
-    sector="Greater female labour-force participation"
-    problem="Women and flexible-work opportunities remain digitally dark"
-    stat="< 35% female labour-force participation in India"
+    color="yellow"
+    sector="Education avenues and services"
+    problem="Students don't know which tutors and counsellors work near them"
   />
   <DotCard
     color="purple"
     sector="Economic participation by Persons with Disabilities"
-    problem="Discovery failure of livelihoods and services becomes a forced exit from the economy"
+    problem="When people can't find work and services, they drop out of the economy"
     stat="~100 million PwDs can actively participate in India's economy"
   />
   <DotCard
     color="orange"
     sector="Growing the tourism economy"
-    problem="Local guides, experiences and artisans stay digitally dark"
+    problem="Local guides, experiences and artisans are not listed anywhere online"
     stat="Indian tourism projected to grow from $78 Bn to $3 Tn by 2047"
+  />
+  <DotCard
+    color="pink"
+    sector="Greater female labour-force participation"
+    problem="Women and flexible-work opportunities are not listed anywhere online"
+    stat="< 35% female labour-force participation in India"
   />
   <DotCard
     color="green"
     sector="Boosting efficiency of farming"
-    problem="Farm labour, equipment repair and storage stay digitally dark"
+    problem="Farm labour, equipment repair and storage are not listed anywhere online"
     stat="~$12 billion in crop value lost annually"
   />
   <DotCard
     color="brown"
     sector="Powering growth for SMBs"
-    problem="SMBs throttled by invisible local barriers, forced to stay small"
+    problem="Small businesses can't find nearby customers and suppliers, so they stay small"
     stat="~60 million SMBs in India employ fewer than 10 people each"
   />
 </DotGrid>
 
 :::note
-Each color is the **same rail** in a different sector context — a set of [domains](/core-concepts/networks-domains-instances/) and item schemas, not a new platform.
+Each colour runs on the same software. A new colour is a new set of [domains](/core-concepts/networks-domains-instances/) and item schemas, with no new platform to build.
 :::
 
 ### <img class="dot-icon" src="/dots/dot-blue.svg" alt="" aria-hidden="true" />Blue Dots — Livelihoods for Youth
 
-Local discovery failure keeps youth and employers invisible to each other even two bus stops apart. Youth lose income, employers lose productivity, and the demographic dividend stalls.
+Status: **Live, piloted.** Young people and employers often don't know about each other even two bus stops apart. Young people lose income, employers lose productivity, and the demographic dividend stalls.
 
-<JourneyQuote
-  before="I guess I will have to move to a city to find a job."
-  after="I didn't realize there are 100s of relevant jobs in my vicinity!"
-  persona="Blue Dots — Youth livelihoods"
-/>
+Example: a young person registers by phone call in their language, and a skilling centre verifies the profile. A nearby employer with a vacancy sees it and sends an interview invite. The young person accepts before their number is shared. See [Pilots](/explore/pilots/) for results.
 
-### <img class="dot-icon" src="/dots/dot-pink.svg" alt="" aria-hidden="true" />Pink Dots — Greater Female Labour-Force Participation
+### <img class="dot-icon" src="/dots/dot-yellow.svg" alt="" aria-hidden="true" />Yellow Dots — Education Avenues and Services
 
-Women and flexible-work opportunities remain digitally dark. Every day lost finding work is lost income and a stalled economy that sidelines 50% of the population.
+Status: **Network defined.** The Yellow Dot (education) network connects students with tutors and counsellors near them.
 
-<JourneyQuote
-  before="I don't want to travel more than 20 minutes for work."
-  after="Spoke for 2 mins and I can now see remote work and roles just two bus stops away."
-  persona="Pink Dots — Women's workforce"
-/>
+For example, a Class 12 commerce student asks for help with accounts, after a school or NGO helps them sign up. A tutor who teaches Class 12 commerce and will travel up to 5 km sends a connect request. The student accepts before contact details are shared.
 
 ### <img class="dot-icon" src="/dots/dot-purple.svg" alt="" aria-hidden="true" />Purple Dots — Economic Participation by Persons with Disabilities
 
-For PwDs, local discovery failure of livelihoods and services is a forced exit from the economy. Every month waiting for an assistive device, skilling, or a livelihood option is lost income. Blue Dots let livelihoods, schemes and services find PwDs within 5 km.
+Status: **Network defined.** For persons with disabilities (PwDs), not finding work and services often means leaving the economy. Every month spent waiting for an assistive device, skilling or a livelihood option is lost income. The Purple Dot network lets livelihoods, schemes and services find PwDs in the same city.
 
-<JourneyQuote
-  before="I don't know who to talk to for the support I need to start working."
-  after="I just highlighted my needs and I can already see options for both work and services!"
-  persona="Purple Dots — Persons with Disabilities"
-/>
+For example, a person with a locomotor disability asks for a wheelchair and for help finding work. A disabled persons' organisation (DPO) helps them register. Providers in the same city who serve that disability see the request, such as an NGO that gives devices and a training centre. Either side sends a connect request, and the other accepts.
+
+In **February 2026**, the needs of over **one lakh (100,000) persons with disabilities**, across livelihoods, schemes and services, were collected across multiple districts in **ten days at about ₹10 per interaction**, against ₹500+ for a traditional field survey.
 
 ### <img class="dot-icon" src="/dots/dot-orange.svg" alt="" aria-hidden="true" />Orange Dots — Growing the Tourism Economy
 
-Local guides, tour experiences and artisans remain digitally dark. High-friction discovery pushes travelers to overcrowded hubs and forces local entrepreneurs out.
+Status: **Network defined.** Local guides, tour experiences and artisans are often not listed anywhere online. Travellers who can't find them go to crowded hubs, and local entrepreneurs lose business.
 
-<JourneyQuote
-  before="I don't know how to attract more customers."
-  after="I just spoke about my work and somehow, three customers have made an enquiry!"
-  persona="Orange Dots — Tourism economy"
-/>
+For example, a homestay owner or a folk artist lists what they offer, with area, languages and price band. A tourism body verifies the listing. Visitors find it in the app and call the number shown. Orange listings and numbers are public on purpose, so no agreement step is needed.
+
+### <img class="dot-icon" src="/dots/dot-pink.svg" alt="" aria-hidden="true" />Pink Dots — Greater Female Labour-Force Participation
+
+Status: **Possible.** Women and flexible-work opportunities are often not listed anywhere online. Every day lost finding work is lost income, in an economy that sidelines 50% of the population.
+
+For example, a woman who stitches blouses at home could list her work, with her self-help group (SHG) vouching for her. Nearby boutiques could see it and ask to connect. She would accept before her number is shared.
 
 ### <img class="dot-icon" src="/dots/dot-green.svg" alt="" aria-hidden="true" />Green Dots — Boosting Efficiency of Farming
 
-Farm labour, equipment repair and storage stay digitally dark. A farmer who can't find a local mechanic or labour in time loses productivity and margin — a direct tax on the agriculture economy.
+Status: **Possible.** Farm labour, equipment repair and storage are often not listed anywhere online. A farmer who can't find a local mechanic or labour in time loses productivity and margin.
 
-<JourneyQuote
-  before="The crop is ready, but I can't find farm labour anywhere and the rain is coming."
-  after="Took just a few minutes to find many options of farm labour nearby!"
-  persona="Green Dots — Agriculture"
-/>
+For example, a farmer could ask for a tractor for two days or a soil test. A farmer producer organisation (FPO) could help them sign up. A nearby custom hiring centre or soil-testing lab could see the request. The farmer would accept before contact.
 
 ### <img class="dot-icon" src="/dots/dot-brown.svg" alt="" aria-hidden="true" />Brown Dots — Powering Growth for SMBs
 
-SMBs are throttled by invisible local barriers. When "digitally dark" they miss nearby customers and struggle to source services and supplies, forced to stay small.
+Status: **Possible.** Small businesses that are not listed anywhere online miss nearby customers. They also struggle to find local services and supplies, so they stay small.
 
-> "I've found it hard to grow my business because nobody knows we're here."
+For example, a kirana shop could ask for a regular supplier of packaged atta, after a trade association helps it sign up. Nearby wholesalers could see the request. The shop would accept before contact.
 
-## Adding a color is modelling, not rebuilding
+## How a new colour is added
 
-Because Blue Dots is [schema-driven](/core-concepts/technical/schema-driven-model/), introducing a new color or sector is primarily a **modelling** exercise, not a rebuild:
+A new colour needs new data rules, not new software, because Blue Dots is [schema-driven](/core-concepts/technical/schema-driven-model/). The steps are:
 
-1. Define the **domain(s)** for the sector (the seeker and provider roles).
-2. Define the **item schemas** (e.g. a service-offer type, an eligibility-profile type).
+1. Define the **domain(s)** for the sector: who asks and who offers.
+2. Define the **item schemas**, for example a service-offer type or an eligibility-profile type.
 3. Configure the instance's `SERVED_DOMAINS`.
-4. Add capture channels and any sector-specific notifications.
+4. Add ways for people to sign up and any sector-specific notifications.
 5. Pilot and measure.
 
-The discovery problem is shared across every color; solving it once, as a DPG, lets every sector reuse the same rails. See the [Use Cases](/explore/use-cases/) for worked examples.
+See [Use Cases](/explore/use-cases/) for an example from each dot.

@@ -1,22 +1,30 @@
 ---
 title: Blue Dots as a DPG
-description: Why Blue Dots is built as open Digital Public Goods, and the two DPGs that make up the stack.
+description: Why Blue Dots is built as open Digital Public Goods (DPGs), how one set of software serves jobs, education, disability services and tourism, and the two DPGs in the stack.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 4
+changed_sections:
+  - _top
+  - shared-software-for-everyone-like-upi
+  - what-dpg-means-here
+  - signals-dpg
+  - aggregator-dpg
+  - supporting-blocks-also-ready-to-use
+  - a-model-that-can-travel
 ---
 
-Blue Dots is built as **Digital Public Goods (DPGs)** — open-source, standards-based, reusable building blocks that any organisation can deploy, operate and extend. This design choice is deliberate: local discovery is a shared-infrastructure problem, and shared infrastructure is best built as a commons rather than a single closed platform.
+Blue Dots is built as **Digital Public Goods (DPGs)**: open-source, standards-based building blocks that any organisation can deploy, run and extend. Helping people in a district find each other is a shared problem. So the software is shared too, and no single company owns it.
 
-## The intuition: shared rails, like UPI
+## Shared software for everyone, like UPI
 
-Blue Dots is digital discovery infrastructure — comparable in spirit to what **UPI** created for payments. UPI built shared rails that any bank, any app, and any citizen could use, without anyone owning the network. Blue Dots builds shared digital rails that any government department, MSME, private or social-sector organisation, or citizen can use to **become discoverable and find others** — without anyone owning or controlling the map, connected through an **open discovery protocol**.
+Like **UPI** lets any bank or app send money through one shared system, Blue Dots lets anyone list what they need or offer. Others find them through the same shared rules. "Anyone" covers government departments, MSMEs (micro, small and medium enterprises), private and social-sector organisations, and citizens. No one owns or controls the map.
 
-Any actor can plug in, contribute, and leverage. That is what makes Blue Dots replicable across districts and states without a bespoke implementation each time.
+Instances talk to each other through an **open protocol**. Any organisation can join, add listings and build on it. So a new district or state can start without a custom build each time.
 
-> No one owns the map. Everyone can use it.
-
-:::note[Consent is the foundation]
-Every Blue Dot on the map exists only because the person or organisation behind it chose to be there. Consent is the foundation of signals becoming digital, and of signals being exchanged.
+:::note[Consent]
+Every dot exists because the person or organisation behind it chose to list it. On the jobs and disability networks, phone numbers are shared only after both sides agree. Orange Dot tourism listings are the exception: they are public on purpose.
 :::
 
 ## What "DPG" means here
@@ -25,7 +33,7 @@ A DPG in the Blue Dots sense is:
 
 - **Open** — source-available and free to deploy. Adaptors run their own instances.
 - **Network-aware** — instances interoperate on a shared contract (a *network*) instead of in silos.
-- **Schema-driven** — what an instance stores and exchanges is defined by versioned schemas, not hardcoded, so domains can evolve without forking the code.
+- **Schema-driven** — versioned schema files set what an instance stores and exchanges. This is what lets one set of software serve many sectors. The Blue Dot (jobs), Yellow Dot (education), Purple Dot (persons with disabilities) and Orange Dot (tourism) networks each have their own schema. See the [schema-driven model](/core-concepts/technical/schema-driven-model/).
 - **Composable** — an adaptor can serve one domain or many, and integrate with other DPGs.
 
 ## The two DPGs
@@ -34,13 +42,13 @@ The Blue Dots stack is anchored by two DPGs that work together:
 
 ### Signals DPG
 
-The **network-aware backend** that stores Blue Dots and matches them across instances. Its core vocabulary — *network*, *domain*, *instance*, *item*, *action*, *event* — is used consistently in both the product and the code. Signals exposes the read/write APIs that everything else builds on. Most adaptors **start here**.
+The **network-aware backend** that stores dots and matches them across instances. Its core vocabulary (*network*, *domain*, *instance*, *item*, *action*, *event*) is used consistently in both the product and the code. Signals exposes the read/write APIs that everything else builds on. Most adaptors **start here**.
 
 See [Core Concepts → Signals](/core-concepts/signals/) and [Architecture → Signals DPG](/core-concepts/architecture/signals-dpg/).
 
 ### Aggregator DPG
 
-The **aggregator-facing application** that lets organisations onboard participants and bring their signals into the network at scale — through registration flows, approval, bulk upload and profile management. The Aggregator app reads from the upstream Signals stack and writes participant signals into it.
+The **aggregator-facing application** that lets organisations sign up participants and bring their listings into the network in bulk. It does this through registration, approval, bulk upload and profile management. The Aggregator app reads from the upstream Signals stack and writes participant signals into it.
 
 See [Core Concepts → Aggregators](/core-concepts/aggregators/) and [Architecture → Aggregator DPG](/core-concepts/architecture/aggregator-dpg/).
 
@@ -62,7 +70,7 @@ Alongside the two DPGs, an adaptor inherits a set of ready-made supporting piece
 - **A shared rulebook** — common rules applied consistently across deployments.
 - **Setup automation** — [infrastructure and deployment](/guides/installation/cloud-setup/aws/deployment/) stood up quickly, on AWS out of the box and adaptable to other clouds.
 - **Voice agent prompts** — [published as DPGs](/guides/voice-ai-prompts/), platform-independent.
-- **Participant profiles** — [three types already defined](/core-concepts/participant-profiles/).
+- **Participant profiles** — each network defines its own participant types. The jobs network has [three already defined](/core-concepts/participant-profiles/): job seeker, job provider and service provider.
 - **Full documentation** — this site.
 
 ## How adaptors start
@@ -78,13 +86,13 @@ The [Adaptor Onboarding guide](/guides/adaptor-onboarding/) walks through this e
 
 ## A model that can travel
 
-The discovery failure is not unique to India. In any economy where livelihoods and services are informal, vernacular and hyperlocal — where national platforms serve only the digitally fluent — the same [paradox of proximity](/overview/paradox-of-proximity/) applies.
+The same problem exists outside India. Wherever work and services are informal, local and in local languages, national platforms serve only people who are confident online. The same [paradox of proximity](/overview/paradox-of-proximity/) applies there.
 
 Blue Dots is designed to be replicable anywhere:
 
 - **Voice AI** works across languages and personas.
-- **Local ecosystem aggregators** exist in every geography.
+- **Local organisations that sign people up** (aggregators) exist in every geography.
 - A **facilitation team** works wherever there is a local administrative unit.
-- **Innovators** exist in every market.
+- **Private service providers** (innovators) in any country can build on it.
 
-Because it is a Digital Public Good, Blue Dots is financially sustainable and openly replicable — not dependent on proprietary platforms or continuous donor funding. For development institutions and governments, it is a cost-efficient infrastructure for making untapped local market potential visible and actionable, and a new model for unlocking economic data at scale.
+Because it is a Digital Public Good, anyone can copy and run Blue Dots. It can keep going without proprietary platforms or continuous donor funding. For development institutions and governments, it is a low-cost way to list local people and businesses that no one could find before. Others can then act on them. It also gives them district-level data on what people need and offer.

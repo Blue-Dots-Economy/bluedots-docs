@@ -1,9 +1,9 @@
 ---
 title: Blue Dots Economy
-description: Open documentation for the Signals and Aggregator Digital Public Goods (DPGs) that solve India's local discovery crisis.
+description: Documentation for Blue Dots, free open-source software that helps people and organisations in the same district find each other for work, learning, services and more.
 template: splash
 hero:
-  tagline: Individuals, jobs, services and schemes exist in close proximity — but can't digitally discover each other. Blue Dots is the discovery infrastructure that closes the gap.
+  tagline: Blue Dots is free, open-source software that helps people and organisations in the same district find each other — for work, learning, services and more.
   image:
     html: |
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="320" height="320" role="img" aria-label="Blue Dots" class="bd-hero-dots">
@@ -21,62 +21,85 @@ hero:
       link: https://github.com/Blue-Dots-Economy
       icon: external
       variant: minimal
+sidebar:
+  attrs:
+    class: bd-changed
+changed_sections:
+  - _top
+  - what-blue-dots-does
+  - the-seven-dots
+  - how-it-is-built
+  - find-your-path
+  - browse-by-topic
 ---
+
 
 import { CardGrid } from '@astrojs/starlight/components';
 import FeatureCard from '../../components/FeatureCard.astro';
 import NavCard from '../../components/NavCard.astro';
-import StatGrid from '../../components/StatGrid.astro';
-import StatCard from '../../components/StatCard.astro';
+import DotCard from '../../components/DotCard.astro';
+import DotGrid from '../../components/DotGrid.astro';
 
-## Solving the paradox of proximity
+## What Blue Dots does
 
-Cabs and riders find each other in minutes. Livelihoods and talent, just bus stops
-apart, cannot. The difference is not distance — it is **digital discoverability**.
+In most districts, people who need something live close to people who offer it. Most of them are not listed anywhere online, so they never find each other. Blue Dots lets each of them publish a **dot**: a short listing that says what they need or offer. People nearby who can help see the dot and ask to connect.
 
-A **Blue Dot** is a local signal of intent from a citizen or enterprise around
-livelihoods and services. It is created in **2–3 minutes**, including over voice, and made discoverable to relevant peers across a district.
+For example:
+
+- **Blue Dot (jobs):** A young person registers by phone call in their own language. A nearby employer with a vacancy sees the profile and sends an interview invite. The young person accepts before their number is shared.
+- **Yellow Dot (education):** A Class 12 commerce student asks for help with accounts. A tutor who teaches Class 12 commerce and will travel up to 5 km sends a connect request. The student accepts.
+- **Purple Dot (persons with disabilities):** A person with a locomotor disability asks for a wheelchair and for help finding work. An NGO that gives devices and a training centre in the same city see the request and send a connect request.
+
+Local organisations help people sign up and check their details. These include skilling centres and Industrial Training Institutes (ITIs), schools and education NGOs, disabled persons' organisations (DPOs), self-help groups (SHGs), farmer producer organisations (FPOs), tourism bodies, trade associations and government departments.
+
+## The seven dots
+
+Each colour is a separate network for one sector, and all of them run on the same software. Blue (jobs) is live and has been piloted. Yellow, Purple and Orange are network defined, which means their data rules exist. Pink, Green and Brown are possible future networks. Read more in [The Dots Family](/explore/beyond-livelihoods/).
+
+<DotGrid>
+  <DotCard color="blue" sector="Livelihoods for youth" problem="Young people and employers miss each other even two bus stops apart" />
+  <DotCard color="yellow" sector="Education avenues and services" problem="Students don't know which tutors and counsellors work near them" />
+  <DotCard color="purple" sector="Economic participation by Persons with Disabilities" problem="Disability services and work nearby are hard to find" />
+  <DotCard color="orange" sector="Growing the tourism economy" problem="Local guides, experiences and artisans are not listed anywhere online" />
+  <DotCard color="pink" sector="Greater female labour-force participation" problem="Women and flexible-work opportunities are not listed anywhere online" />
+  <DotCard color="green" sector="Boosting efficiency of farming" problem="Tractors for hire and soil-testing labs nearby are hard to find" />
+  <DotCard color="brown" sector="Powering growth for SMBs" problem="Small businesses can't find nearby suppliers and customers" />
+</DotGrid>
+
+## How it is built
 
 <CardGrid>
-  <FeatureCard title="Local discovery, solved" icon="map-pin" color="blue">
-    Pilots in Ghaziabad and Dharwad surfaced **10,000+ jobs** from under 10% of local
-    MSMEs, cutting discovery time from over two weeks to under two days.
+  <FeatureCard title="Free and open source" icon="globe" color="green">
+    Blue Dots is two open Digital Public Goods (DPGs), **Signals** and **Aggregator**.
+    Any government department or organisation can deploy and change them.
   </FeatureCard>
-  <FeatureCard title="Built as Digital Public Goods" icon="globe" color="green">
-    Two open DPGs — **Signals** and **Aggregator** — give any adaptor a network-aware,
-    schema-driven foundation to build on.
+  <FeatureCard title="One set of software for every sector" icon="layers" color="orange">
+    Each dot network has its own data rules, written as a schema. Adding a sector means
+    writing a new schema. See [the schema-driven model](/core-concepts/technical/schema-driven-model/).
   </FeatureCard>
-  <FeatureCard title="Voice-AI native" icon="mic" color="purple">
-    Surface local intelligence at **₹10/interaction** instead of ₹500/survey, in the
-    languages people actually speak.
+  <FeatureCard title="Sign up by phone call" icon="mic" color="purple">
+    People can create a dot through a voice call in their own language, or in the app.
   </FeatureCard>
-  <FeatureCard title="Cross-sector by design" icon="layers" color="orange">
-    Livelihoods first — then services, schemes, skilling and beyond, on the same
-    discovery rails.
+  <FeatureCard title="Tested in the field" icon="map-pin" color="blue">
+    The jobs network has run in pilots in Ghaziabad and Dharwad.
+    See [the pilot results](/explore/pilots/).
   </FeatureCard>
 </CardGrid>
-
-<StatGrid cols={4}>
-  <StatCard value="10,000+" label="jobs surfaced from under 10% of local MSMEs" color="blue" icon="briefcase" />
-  <StatCard value="< 1 day" label="discovery time, down from weeks" color="green" icon="zap" />
-  <StatCard value="₹10" label="per Voice-AI interaction vs ₹500/survey" color="purple" icon="mic" />
-  <StatCard value="2" label="open DPGs powering the network" color="orange" icon="building-2" />
-</StatGrid>
 
 ## Find your path
 
 <CardGrid>
   <NavCard title="Build & integrate" description="Architecture, data model and APIs for engineers building on the DPGs." href="/start/build/" icon="code" color="blue" />
   <NavCard title="Deploy for a district" description="From the DPG model to a running district deployment." href="/start/deploy/" icon="rocket" color="green" />
-  <NavCard title="Onboard participants" description="For institutes, employers, NGOs and departments bulk-creating signals." href="/start/onboard/" icon="users" color="purple" />
-  <NavCard title="Evaluate impact" description="Use cases, pilot evidence and the economics of local discovery." href="/start/evaluate/" icon="trending-up" color="orange" />
+  <NavCard title="Onboard participants" description="For schools, skilling centres, NGOs and departments that sign people up in bulk." href="/start/onboard/" icon="users" color="purple" />
+  <NavCard title="Evaluate impact" description="The problem, the dots, use cases, pilot evidence and the economics." href="/start/evaluate/" icon="trending-up" color="orange" />
 </CardGrid>
 
 ## Browse by topic
 
 <CardGrid>
-  <NavCard title="Overview" description="What Blue Dots is, the problem it solves, and the DPG model." href="/overview/introduction/" icon="book-open" color="blue" />
-  <NavCard title="Core Concepts" description="Signals, aggregators, networks, items — and the architecture." href="/core-concepts/" icon="grid-2x2" color="purple" />
-  <NavCard title="Guides" description="Install the stack, onboard as an adaptor, and call the APIs." href="/guides/" icon="terminal" color="green" />
-  <NavCard title="Explore" description="Pilots, use cases, and the road beyond livelihoods." href="/explore/use-cases/" icon="compass" color="orange" />
+  <NavCard title="Overview" description="What Blue Dots is, the problem it addresses, and the DPG model." href="/overview/introduction/" icon="book-open" color="blue" />
+  <NavCard title="Core Concepts" description="Signals, aggregators, networks, items and the architecture." href="/core-concepts/" icon="grid-2x2" color="purple" />
+  <NavCard title="Guides" description="Install the software, onboard as an adaptor, and call the APIs." href="/guides/" icon="terminal" color="green" />
+  <NavCard title="Explore" description="The dots family, use cases, pilot results and field learnings." href="/explore/beyond-livelihoods/" icon="compass" color="orange" />
 </CardGrid>

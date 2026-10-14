@@ -2,6 +2,8 @@
 title: Schema-Driven Model
 description: How schemas define networks, domains and items so domains evolve without code changes.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 2
 prev:
   link: /core-concepts/architecture/high-level-architecture/
@@ -9,6 +11,8 @@ prev:
 next:
   link: /core-concepts/architecture/data-model/
   label: "Path 6 of 10: Data Model"
+changed_sections:
+  - why-schema-first
 ---
 
 import BeforeAfter from '../../../../components/BeforeAfter.astro';
@@ -23,7 +27,7 @@ Blue Dots is **schema-driven** end to end. The structure of what an instance sto
 
 ## Why schema-first
 
-1. **Interoperability.** Two instances on the same network agree on structure by construction, which is what makes inter-instance discovery possible.
+1. **Interoperability.** Two instances on the same network load the same `network.json`, so they agree on structure. That shared structure is what lets one instance search another.
 2. **Evolvability.** Versioned `item_type`s (e.g. `profile_1.0` → `profile_1.1`) let the model change without breaking peers.
 3. **No-code domain changes.** Product and program teams can add fields or new forms by editing schemas/config, not code.
 
@@ -39,7 +43,7 @@ Blue Dots is **schema-driven** end to end. The structure of what an instance sto
     {
       dimension: 'Interoperability',
       before: 'Instances have no shared structure, so inter-instance discovery is not possible',
-      after: 'Instances on the same network agree on structure by construction, enabling discovery',
+      after: 'Instances on the same network load the same network.json, so they can search each other',
     },
     {
       dimension: 'Evolvability',

@@ -1,39 +1,45 @@
 ---
 title: The Paradox of Proximity
-description: The local discovery crisis Blue Dots exists to solve, and the cost of digital invisibility.
+description: Why people and organisations who live close together often can't find each other, with examples from jobs and farming.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 2
+next:
+  link: /explore/beyond-livelihoods/
+  label: "Path 3 of 7: The Dots Family"
+changed_sections:
+  - _top
+  - what-the-paradox-of-proximity-means
+  - most-of-the-district-economy-is-not-online
+  - national-figures-that-show-the-problem
+  - who-is-affected-most
+  - the-size-of-the-opportunity
+  - what-changes-with-blue-dots
 ---
 
 import StatCard from '../../../components/StatCard.astro';
 import StatGrid from '../../../components/StatGrid.astro';
-import BeforeAfter from '../../../components/BeforeAfter.astro';
 
-## Close in distance, invisible in discovery
+## What the paradox of proximity means
 
-The defining problem Blue Dots addresses is the **paradox of proximity**: livelihoods, talent, services and schemes sit close together in every district, yet cannot find each other digitally.
+The **paradox of proximity** is the name Blue Dots gives to a common problem. People who need something often live close to people who offer it, yet they never find each other. A cab app finds a rider and a driver a few kilometres apart in minutes. Most local work, learning, services and schemes have no shared system like that.
 
-The contrast with consumer apps is stark. Cabs and riders, separated by a few kilometres, find each other in minutes. A jobseeker and an employer two bus stops apart can go a lifetime without connecting. The barrier is not distance — it is **digital discoverability**.
+Example: Kavita, a commerce graduate in Ghaziabad, is urged by her family to move to Delhi or Gurgaon for work. Two kilometres from her house, a manufacturing firm is looking for someone like her. Neither knows the other exists.
 
-The same pattern repeats across every sector, in every district, every day:
+Example: A farmer needs a tractor for two days to prepare his field. A custom hiring centre in the next village has a tractor free that week. The farmer doesn't know the centre exists, so he waits until a neighbour can lend him one.
 
-> An ITI graduate goes unplaced at campus, while a small business 800 metres away needs talent of exactly his trade.
+## Most of the district economy is not online
 
-## The district economy is digitally dark
+Most work, services and schemes in a district are not listed anywhere online. They appear as posters on walls, poles, autos and hoardings, and people hear about them from friends and relatives. National platforms were built for people who are comfortable online. They don't suit local listings in local languages.
 
-Most of the district economy is not on any digital map. Livelihoods, services and schemes live on walls, poles, autos and hoardings as posters, and travel through word-of-mouth chains. National platforms were built for digitally fluent users — not for the fragmented, vernacular, hyperlocal reality of district life.
+As a result, roughly **80% of the district economy has never appeared on any digital system**.
 
-The result: roughly **80% of the district economy has never appeared on any digital system**.
-
-:::note[The core distinction]
-This is **not a resource failure**. The jobs, skills, services and schemes already exist. It is a **local discovery failure** — and unlike resource failure, it does not need large investment. It needs shared discovery infrastructure that makes what already exists visible.
+:::note[What is missing]
+In most districts, the jobs, skills, services and schemes already exist. What is missing is a way for people to find them. A shared system for listing and finding what already exists costs far less than creating new resources.
 :::
 
-> Kavita, a commerce graduate in Ghaziabad, is urged by her family to move to Delhi or Gurgaon, convinced no meaningful career can be built at home. Two kilometres from her house, a manufacturing firm is looking for someone exactly like her. Neither knows the other exists.
-
-## The cost of invisibility
-
-Digital darkness has measurable consequences:
+## National figures that show the problem
 
 <StatGrid cols={2}>
   <StatCard value="< 20%" label="Youth placement rate in India" color="orange" />
@@ -42,32 +48,32 @@ Digital darkness has measurable consequences:
   <StatCard value="< 50%" label="Service uptake vs. potential" color="blue" />
 </StatGrid>
 
-## It falls hardest on those with the fewest resources
+## Who is affected most
 
-Local discovery failure is not evenly shared. It hits hardest those who cannot rely on who they know — women re-entering the workforce, persons with disabilities, first-generation graduates without alumni networks, and daily-wage workers. Personal networks are how opportunities reach most people today; those without them are left out.
+The problem hits hardest the people who can't rely on who they know. These include women returning to work, persons with disabilities, first-generation graduates without alumni networks, and daily-wage workers. Most people hear about work and services through friends and family. People without those contacts miss out.
 
-A shared discovery infrastructure changes this **structurally, not individually**. The proof is concrete: in **February 2026**, the needs of over **one lakh persons with disabilities** — across livelihoods, schemes and services — were surfaced across multiple districts in **ten days at about ₹10 per interaction**, versus ₹500+ for a traditional field survey.
+A shared system for listing and finding helps everyone in a district, including people with no contacts. For a campaign that collected the needs of persons with disabilities (PwDs), see the Purple Dots section of [The Dots Family](/explore/beyond-livelihoods/).
 
-> Fixing the infrastructure changes who gets included — not through redistribution, but through local discovery.
-
-## The macro stake
-
-The cost compounds at national scale. MSMEs contribute roughly **70% of employment** in India but only about **30% of GDP** — constrained not by capital, but by the inability to find nearby talent, customers and services. Local discovery failure is a drag on the productivity of the firms that employ most Indians.
+:::tip[For example, in jobs:]
+Micro, small and medium enterprises (MSMEs) provide roughly **70% of employment** in India but only about **30% of GDP**. One reason is that they struggle to find nearby workers, customers and services. See [The Economics of Local Discovery](/explore/economics/).
+:::
 
 ## The size of the opportunity
 
-Enabling local discovery in India's **top 100 districts** alone represents a conservatively estimated **₹87,500 crore per year** opportunity — and that figure considers only livelihood enhancement. The full potential of local discovery across all sectors is significantly larger. See [The Economics of Local Discovery](/explore/economics/) for the full breakdown.
+Helping people find each other in India's **top 100 districts** is a conservatively estimated **₹87,500 crore per year** opportunity. That figure counts only better livelihoods, so the value across all sectors is larger. [The Economics of Local Discovery](/explore/economics/) shows how it is worked out.
 
-## The good news: it's solvable
+## What changes with Blue Dots
 
-This is not a theoretical problem. Field pilots in **Ghaziabad** and **Dharwad** show that local discovery can be surfaced cheaply and matched quickly when the right infrastructure exists.
+The jobs network (Blue) has been piloted in Ghaziabad and Dharwad. The Blue rows below come from [the pilots](/explore/pilots/). Yellow and Green have not been piloted, so their rows describe only the problem and what the software would do.
 
-<BeforeAfter rows={[
-  { dimension: "Jobs visible on platforms", before: "< 100 listings across the district", after: "10,000+ from just < 10% of MSMEs" },
-  { dimension: "Cost to surface local intelligence", before: "₹500 / survey interaction", after: "₹10 / interaction (voice AI)" },
-  { dimension: "Discovery time", before: "> 2 weeks", after: "< 2 days" },
-  { dimension: "Distance of match", before: "Another city", after: "< 2 bus stops" },
-  { dimension: "Placement / conversion rate", before: "~5%", after: "~50%" }
-]} />
+| Dot | What is measured | Before | With Blue Dots |
+| --- | --- | --- | --- |
+| Blue (jobs) | Jobs visible on platforms | Fewer than 100 listings across the district | 10,000+ from under 10% of MSMEs |
+| Blue (jobs) | Cost of collecting local information | ₹500 per survey interaction | ₹10 per interaction (voice AI) |
+| Blue (jobs) | Time to find a match | Over 2 weeks | Under 2 days |
+| Blue (jobs) | Distance of match | Another city | Within 2 bus stops |
+| Blue (jobs) | Placement or conversion rate | About 5% | About 50% |
+| Yellow (education) | Finding a tutor for one subject | A student asks relatives or visits coaching centres one by one | Not piloted. Tutors nearby who teach that subject could see the request. |
+| Green (farming) | Finding a tractor or a soil test | A farmer asks around the village and often waits | No network yet. A nearby custom hiring centre or soil-testing lab could see the request. |
 
-The remaining chapters explain *how* this is achieved — through the Blue Dots approach and the open DPGs that implement it. Continue to [The Blue Dots Approach](/overview/the-blue-dots-approach/).
+Next, [The Dots Family](/explore/beyond-livelihoods/) describes each dot. [The Blue Dots Approach](/overview/the-blue-dots-approach/) explains how the software works.

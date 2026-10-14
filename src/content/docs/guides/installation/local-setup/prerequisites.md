@@ -2,7 +2,11 @@
 title: Prerequisites
 description: Tools, runtimes and accounts required to run the Blue Dots DPGs locally.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 1
+changed_sections:
+  - the-three-google-keys-are-deliberately-separate
 ---
 
 Install these before setting up either DPG.
@@ -55,7 +59,7 @@ The server key must **not** be HTTP-referrer restricted — server-side calls se
 :::
 
 :::note
-Leaving the Aggregator key unset is a decision, not just a missing feature: the registration address field then autocompletes against the public Photon instance, so each registrant's browser sends the address text it is typing — and its IP — to a third party. Set the key, point `PHOTON_URL` at your own Photon, or accept that deliberately.
+If you leave the Aggregator key unset, the registration address field then autocompletes against the public Photon instance, so each registrant's browser sends the address text it is typing (and its IP) to a third party. Set the key, point `PHOTON_URL` at your own Photon, or accept that deliberately.
 :::
 
 Server geocoding results are cached in Redis (`GEO_CACHE_TTL_SECONDS`, default 30 days) so a repeated place string does not re-bill the paid API.

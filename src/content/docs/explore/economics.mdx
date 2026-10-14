@@ -1,23 +1,32 @@
 ---
 title: The Economics of Local Discovery
-description: How better local discovery adds ~₹87,500 crore of annual economic activity — the full derivation from Ghaziabad to India's top 100 districts.
+description: How better local discovery on the Blue Dot (jobs) network adds ~₹87,500 crore of annual economic activity — the full derivation from Ghaziabad to India's top 100 districts.
 sidebar:
-  order: 4
+  attrs:
+    class: bd-changed
+  order: 5
 prev:
   link: /explore/learnings/
-  label: "Path 5 of 7: What We're Learning"
-next:
-  link: /explore/beyond-livelihoods/
-  label: "Path 7 of 7: The Dots Family"
+  label: "Path 6 of 7: What We're Learning"
+next: false
+changed_sections:
+  - _top
+  - core-logic
+  - base-ghaziabad
+  - step-1--new-workforce-participation
+  - step-2--local-spending
+  - step-3--multiplier-effect
+  - scaling-to-the-top-100-districts
+  - what-this-calculation-excludes
 ---
 
 import StatCard from '../../../components/StatCard.astro';
 import StatGrid from '../../../components/StatGrid.astro';
 
-The docs assert a headline figure: better local discovery can add roughly **₹87,500 crore** of annual economic activity across India's most progressive districts. This page reproduces the full derivation behind that number.
+Better local discovery can add roughly **₹87,500 crore** of annual economic activity across India's most progressive districts. The figure counts only people who find work through the Blue Dot (jobs) network; other dots are not included. This page shows the full derivation behind that number.
 
 <StatGrid>
-  <StatCard value="₹87,500 cr" label="Estimated annual economic activity unlock, India's top 100 districts" />
+  <StatCard value="₹87,500 crore" label="Estimated annual economic activity added, India's top 100 districts" />
   <StatCard value="~70,000" label="New workers added per district (conservative 5% of latent workforce, Ghaziabad)" color="green" />
   <StatCard value="1.5×" label="Local spending multiplier (Bartik 2019 — conservative restatement)" color="blue" />
   <StatCard value="50×" label="Scale factor from Ghaziabad to India's top 100 districts by population" color="purple" />
@@ -25,7 +34,7 @@ The docs assert a headline figure: better local discovery can add roughly **₹8
 
 ## Core logic
 
-Better local discovery addresses the [paradox of proximity](/overview/paradox-of-proximity/) by adding workers who were always present but invisible. Once discoverable, they **earn locally, spend locally**, and that spending creates further activity through a **local multiplier**.
+Better local discovery addresses the [paradox of proximity](/overview/paradox-of-proximity/) by adding workers who were always present but not listed anywhere online. Once employers can find them, they **earn and spend locally**, and that spending creates further activity through a **local multiplier**.
 
 The model is built bottom-up from a single base district — **Ghaziabad** — and then scaled to **India's top 100 progressive districts**.
 
@@ -33,12 +42,12 @@ The model is built bottom-up from a single base district — **Ghaziabad** — a
 
 | Measure | Value |
 | --- | --- |
-| District population (2011) | ~4.7 million (2.4M men, 2.3M women) |
-| Latent workforce — Youth (18–29) | ~920,000 |
-| Latent workforce — Women (30–45) | ~450,000 |
+| District population (2011) | ~47 lakh (4.7 million): 24 lakh men, 23 lakh women |
+| Latent workforce — Youth (18–29) | ~9.2 lakh (920,000) |
+| Latent workforce — Women (30–45) | ~4.5 lakh (450,000) |
 | Latent workforce — Persons with disabilities (18–45) | ~40,000 (2.2% prevalence) |
 
-These groups are present in the district but largely invisible to the formal labour market.
+These groups live in the district, but most formal employers cannot find them.
 
 ## Step 1 — New workforce participation
 
@@ -46,8 +55,8 @@ A conservative **5%** of each group finds work through better local discovery:
 
 | Group | Population | 5% added to workforce |
 | --- | --- | --- |
-| Youth (18–29) | ~920,000 | ~46,000 |
-| Women (30–45) | ~450,000 | ~22,000 |
+| Youth (18–29) | ~9.2 lakh | ~46,000 |
+| Women (30–45) | ~4.5 lakh | ~22,000 |
 | Persons with disabilities (18–45) | ~40,000 | ~2,000 |
 | **Total** | | **~70,000** |
 
@@ -62,7 +71,7 @@ Lower-income and first-time earners retain a high share of income locally. Per-w
 | Transport | 10% | 15,000 |
 | Discretionary | 20% | 30,000 |
 | Savings | 15% | 0 (not counted as local activity) |
-| **Total spends** | | **103,500** |
+| **Total spends** | | **1,03,500** |
 
 Local spending per worker ≈ **₹1,00,000/year** (≈67% of income after excluding savings).
 
@@ -76,27 +85,27 @@ Each ₹1 of local spending generates ~₹1.5 of local economic activity (retail
 
 **GDP addition from the multiplier:**
 
-> ₹700 cr × 1.5 = **₹1,050 crore** for Ghaziabad
+> ₹700 crore × 1.5 = **₹1,050 crore** for Ghaziabad
 
 ## Scaling to the top 100 districts
 
-Ghaziabad's population is ~4.7M. India's top 100 districts (excluding metros) total ~250M population, giving a conservative scaling factor of **50×**.
+Ghaziabad's population is ~47 lakh. India's top 100 districts (excluding metros) have a total population of ~25 crore (250 million), giving a conservative scaling factor of **50×**.
 
-| Component | Ghaziabad (₹ cr/yr) | Top 100 districts (₹ cr/yr) |
+| Component | Ghaziabad (₹ crore/yr) | Top 100 districts (₹ crore/yr) |
 | --- | --- | --- |
 | Local spending | ~700 | ~35,000 |
 | Multiplier on local spend (×1.5) | ~1,050 | ~52,500 |
 | **Total** | | **~87,500 crore** |
 
 :::caution[Caveats]
-Districts with weaker MSME density or local linkages may generate less; stronger cluster districts more — **Ghaziabad is a reasonable mid-point**. The estimate also excludes compounding from repeat local-spending cycles.
+Districts with fewer MSMEs (micro, small and medium enterprises) or weaker local business links may generate less; stronger cluster districts more — **Ghaziabad is a reasonable mid-point**. The estimate also excludes compounding from repeat local-spending cycles.
 :::
 
 ## What this calculation excludes
 
 The headline figure is deliberately conservative. It leaves out three additive channels:
 
-1. **Welfare & scheme utilisation** — faster discovery lifts utilisation for a *different* population, so the effect is additive, not overlapping.
+1. **Welfare & scheme utilisation** — faster discovery lifts utilisation for a *different* population, so the effect adds to the headline figure without counting anyone twice.
 2. **Services activation** — visible local providers (teachers, repair, care, tourism, agri-services) raise service-consumption GDP.
 3. **MSME productivity & revenue** — faster hiring and customer discovery improves output.
 

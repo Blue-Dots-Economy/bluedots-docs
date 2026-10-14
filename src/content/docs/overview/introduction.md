@@ -1,61 +1,89 @@
 ---
 title: Introduction
-description: What the Blue Dots Economy is, why it exists, and how this documentation is organised.
+description: What Blue Dots is, what a dot is, which sectors it serves, and how this documentation is organised.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 1
+changed_sections:
+  - _top
+  - what-is-a-dot
+  - one-platform-many-dots
+  - why-it-matters
+  - how-blue-dots-is-built
+  - what-an-adaptor-does
+  - how-this-documentation-is-organised
 ---
 
-The **Blue Dots Economy** is an initiative to solve India's *local discovery crisis*. Across the country's districts, individuals, jobs, services and schemes exist in close proximity — yet they cannot digitally discover one another. This "paradox of proximity" keeps people, enterprises and entire districts in **digital darkness**, unable to unlock value that is already within walking distance.
+**Blue Dots** is free, open-source software that helps people and organisations in the same district find each other. It serves many sectors, such as jobs, education, disability support and tourism. Jobs is the first sector running in the field.
 
-Blue Dots closes that gap with open **discovery infrastructure**: a way for citizens and enterprises to publish local *signals of intent* and have them matched with the people, opportunities and services nearby that can act on them.
+In most districts, people who need something live close to people who offer it. Most of them are not listed anywhere online, so they don't know about each other. Blue Dots calls this the [paradox of proximity](/overview/paradox-of-proximity/).
 
-## What is a Blue Dot?
+## What is a dot?
 
-A **Blue Dot** is a local signal of intent from a citizen or an enterprise, usually around livelihoods and services. A jobseeker looking for work of a specific trade, an employer who needs that exact skill 800 metres away, a citizen seeking a government scheme — each is a Blue Dot.
+A **dot** is a short listing that says what a person or organisation needs or offers. People nearby who can help see it and can ask to connect. On the jobs and disability networks, phone numbers are shared only after both sides agree. Orange Dot tourism listings are public on purpose.
 
-A Blue Dot can be created in 2–3 minutes, including over voice in the user's own language. Once created, it becomes discoverable to the relevant peers on the network, so that a match that used to take weeks — or never happened at all — can happen in under two days.
+Example, Blue Dot (jobs): A young person registers by phone call in their own language. A skilling centre checks the profile. A nearby employer with a vacancy sees it and sends an interview invite. The young person accepts before their number is shared.
+
+Example, Yellow Dot (education): A Class 12 commerce student asks for help with accounts. A school or education NGO helped the student sign up. A tutor who teaches Class 12 commerce and will travel up to 5 km sends a connect request. The student accepts.
+
+A person can create a dot in a few minutes, by voice call or in the app. [The Blue Dots Approach](/overview/the-blue-dots-approach/) explains how.
+
+## One platform, many dots
+
+Each colour is a separate network for one sector. All of them run on the same software.
+
+- **Blue:** livelihoods for youth (jobs). Live, piloted.
+- **Yellow:** education avenues and services. Network defined.
+- **Purple:** economic participation of persons with disabilities. Network defined.
+- **Orange:** tourism. Network defined.
+- **Pink:** women's labour-force participation. Possible.
+- **Green:** farming efficiency. Possible.
+- **Brown:** growth for small and medium businesses (SMBs). Possible.
+
+"Network defined" means the data rules for that network exist. "Possible" means no network has been built yet. [The Dots Family](/explore/beyond-livelihoods/) gives an example for each dot. [Networks, domains and instances](/core-concepts/networks-domains-instances/) lists each network's roles and status.
 
 ## Why it matters
 
-The cost of invisibility is concrete and measurable. Across Indian districts today:
+When people can't find each other locally, it shows up in national figures. Across Indian districts today:
 
-- Youth placement rates sit below 20%.
+- Service uptake is under 50% of its potential.
 - Women's labour-force participation is under 35%.
 - Scheme budget utilisation runs below 70%.
-- Service uptake is under 50% of its potential.
+- Youth placement rates (jobs) sit below 20%.
 
-Enabling local discovery in India's top 100 districts represents a conservatively estimated **₹87,500 crore** livelihood-enhancement opportunity — and livelihoods are only one of many sectors Blue Dots can serve. For a fuller breakdown, see [The Economics of Local Discovery](/explore/economics/).
+Helping people find each other in India's top 100 districts is a conservatively estimated **₹87,500 crore** opportunity in livelihoods alone. [The Economics of Local Discovery](/explore/economics/) shows how this figure is worked out.
+
+[What We're Learning](/explore/learnings/) records how close to home people found work in the jobs pilot. A campaign for persons with disabilities (PwDs) has also used the same software; see the Purple Dots section of [The Dots Family](/explore/beyond-livelihoods/).
 
 ## How Blue Dots is built
 
-Blue Dots is delivered as **Digital Public Goods (DPGs)** — open, reusable building blocks any adaptor can deploy and extend. Two DPGs anchor the architecture:
+Blue Dots is built as two **Digital Public Goods (DPGs)**. A DPG is open-source software that any organisation can deploy and change. An adaptor is the organisation that deploys Blue Dots, such as a state department.
 
-- **Signals DPG** — the network-aware backend that stores and matches Blue Dots (signals) across instances.
-- **Aggregator DPG** — the aggregator-facing application that lets organisations onboard participants and bring their signals into the network at scale.
+- **Signals DPG** stores dots (called signals in the software) and matches them across running copies of the software.
+- **Aggregator DPG** is the app that lets organisations sign people up and add their dots to the network in bulk.
 
-Adaptors typically *start with Signals*, then add the Aggregator app as they onboard partner organisations. The rest of this documentation walks through both.
+Adaptors usually start with Signals, then add the Aggregator app when partner organisations join. The rest of this documentation covers both.
 
-## What an adaptor actually does
+## What an adaptor does
 
-Mostly **configuration, not construction.** Registration, discovery, connection, notifications and tracking already exist. So do the pieces an adaptor might expect to design from scratch:
+Most of an adaptor's work is configuration. Registration, finding, connecting, notifications and tracking already exist. So do these:
 
-- **Participant types** — Job Seeker, Job Provider and Service Provider are [already defined](/core-concepts/participant-profiles/).
-- **Onboarding routes** — assisted or self-serve, via app or AI voice call, [both supported out of the box](/core-concepts/blue-dot-lifecycle/#2-choose-the-route-in).
-- **Verification checks** — structured, completed and consented, [built in](/core-concepts/blue-dot-lifecycle/#5-verification-checks).
-- **Deployment** — [automated on AWS](/guides/installation/cloud-setup/aws/deployment/), adaptable to any major cloud.
+- **Participant types.** Each network defines its own. The jobs network has job seekers and job providers, and the deployed pilot schema adds service providers. The Yellow Dot (education) network has students and tutors or counsellors. See [participant profiles](/core-concepts/participant-profiles/).
+- **Onboarding routes.** Assisted or self-serve, in the app or by AI voice call, [both supported](/core-concepts/blue-dot-lifecycle/#2-choose-the-route-in).
+- **Verification checks.** Structured, completed and consented, [built in](/core-concepts/blue-dot-lifecycle/#5-verification-checks).
+- **Deployment.** [Automated on AWS](/guides/installation/cloud-setup/aws/deployment/), and adaptable to any major cloud.
 
-> The adaptor brings local knowledge and a local ecosystem to reach providers and seekers. The DPGs bring the underlying machinery.
-
-What is genuinely local — who should become a Blue Dot, which aggregators can reach them, which use case to start with — is exactly what [the lifecycle](/core-concepts/blue-dot-lifecycle/) and the [district activation guide](/guides/district-activation/) walk through.
+The adaptor brings local knowledge and the local organisations that can reach people. The DPGs provide the software. The local choices are who should publish dots, which organisations can reach them, and which sector to start with. [The lifecycle](/core-concepts/blue-dot-lifecycle/) and the [district activation guide](/guides/district-activation/) walk through them.
 
 ## How this documentation is organised
 
 | Section | What you'll find |
 | --- | --- |
-| [Start Here](/start/build/) | Four guided paths — build, deploy, onboard, evaluate. Pick one and follow it in order. |
-| [Overview](/overview/introduction/) | The vision, the problem, the approach, and the DPG model. |
-| [Core Concepts](/core-concepts/) | Signals, aggregators, the domain vocabulary, architecture and technical docs. |
+| [Start Here](/start/build/) | Four guided paths: build, deploy, onboard, evaluate. Pick one and follow it in order. |
+| [Overview](/overview/introduction/) | What Blue Dots is, the problem it addresses, the approach and the DPG model. |
+| [Core Concepts](/core-concepts/) | Signals, aggregators, networks, the shared vocabulary, architecture and technical docs. |
 | [Guides](/guides/) | Installation, adaptor onboarding, configuration, API reference and deployment. |
 | [API Reference](/api/) | Generated, always-current operation reference for all three services. |
-| [Explore](/explore/use-cases/) | Pilots, use cases, field learnings and the road beyond livelihoods. |
+| [Explore](/explore/beyond-livelihoods/) | The dots family, use cases, pilots, field learnings and economics. |
 | [Community](/community/contributing/) | How to contribute, the roadmap and release notes. |

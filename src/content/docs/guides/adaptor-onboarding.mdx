@@ -2,7 +2,11 @@
 title: Adaptor Onboarding
 description: The end-to-end path for an adaptor to stand up Blue Dots for a district or domain.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 3
+changed_sections:
+  - step-4--add-capture-channels
 ---
 
 import PhaseTimeline from '../../../components/PhaseTimeline.astro';
@@ -71,7 +75,7 @@ Signals API — it is empty by default, so a new DPG is refused until listed. Se
 - **Web** — the schema-driven Signals UI and the Aggregator portal.
 - **Voice AI** — for low-cost, local-language signal capture. A voice DPG integrates the same way an aggregator does (service-auth + bulk create). Ready-made prompt sets are published as DPGs — see [AI Voice Agent Prompts](/guides/voice-ai-prompts/).
 
-On the assisted side, pick the intake method per campaign — offline camp, bulk upload, outbound campaign or inbound QR campaign. All four ship ready-made; see [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#3-data-collection-assisted-route).
+On the assisted side, pick the intake method per campaign — offline camp, bulk upload, outbound campaign or inbound QR campaign. All four ship ready-made; see [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#3-data-collection-assisted-route).
 
 ## Step 5 — Integrate notifications
 

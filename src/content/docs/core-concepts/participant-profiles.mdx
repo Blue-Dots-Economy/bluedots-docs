@@ -1,19 +1,30 @@
 ---
 title: Participant Profiles
-description: The three participant types — Job Seeker, Job Provider, Service Provider — and the shared three-part profile structure behind them.
+description: Who can publish a dot on each network and the fields they fill in, shown in full for the Blue Dot (jobs) network, with the main fields for the Yellow, Purple and Orange networks.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 3
+changed_sections:
+  - _top
+  - the-three-parts-in-real-fields
+  - job-seeker
+  - job-provider
+  - service-provider
+  - other-networks
 ---
 
-Three participant types are already worked out in the shared Blue Dots schemas. An adaptor does **not** need to design these from scratch.
+Each network defines who can publish a dot, so that people and organisations nearby can find them, and which fields each type fills in. This page shows the Blue Dot (jobs) network in full, because it is the live network used in the pilots. The Yellow, Purple and Orange networks follow the same pattern with their own fields; see [Other networks](#other-networks) below.
+
+On the Blue Dot network, three participant types are already worked out. An adaptor does **not** need to design them from scratch.
 
 | Type | Who they are | Domain `id` | Item schema |
 |---|---|---|---|
-| **Job Seeker** | The individual looking for work | `seeker` | `profile_1.0` |
-| **Job Provider** | The employer posting a vacancy | `provider` | `job_posting_1.0` |
-| **Service Provider** | An organisation delivering a support service around the job-seeking process — training, counselling, assessment, placement assistance | `service_provider` | `profile_1.0` |
+| **Job Seeker** | A person looking for work | `seeker` | `profile_1.0` |
+| **Job Provider** | An employer posting a vacancy | `provider` | `job_posting_1.0` |
+| **Service Provider** | An organisation offering support to job seekers: training, counselling, assessment or placement help | `service_provider` | `profile_1.0` |
 
-All three are declared in the reference network schema at `examples/schemas/blue_dot/network.json` in the Signals DPG repository.
+`seeker` and `provider` are declared in the example network schema at `examples/schemas/blue_dot/network.json` in the Signals DPG repository. `service_provider` comes from the deployed pilot schemas; the example file does not include it.
 
 ## One structure, three fillings
 
@@ -27,7 +38,7 @@ Only the *details* within each part differ by participant type. An adaptor can a
 
 ## The three parts, in real fields
 
-The structure is not an abstraction layered over the schemas — it is how the shipped schemas are actually laid out. Mapping each part to the real field names:
+The shipped schemas are laid out in these three parts. Here is each part with its real field names:
 
 ### Job Seeker
 
@@ -41,8 +52,8 @@ Domain `seeker`, item schema `profile_1.0`.
 
 Required at minimum: `name`, `location`, `age`, `phone`.
 
-:::tip[`otherHelpNeeded` is doing real work]
-That one field is where needs *beyond a job* surface — counselling, skilling, capital, proof of skill, interview preparation. See [What We're Learning](/explore/learnings/#2-the-conversations-are-surfacing-many-different-needs).
+:::tip[`otherHelpNeeded` records needs beyond a job]
+This one field is where job seekers mention other needs, such as counselling, skilling, capital, proof of skill or interview preparation. See [What We're Learning](/explore/learnings/#2-the-conversations-are-showing-many-different-needs).
 :::
 
 ### Job Provider
@@ -55,17 +66,31 @@ Domain `provider`, item schema `job_posting_1.0`.
 | **What I want** | `candidateExperienceType`, `workExperienceYears`, `lastRoleHeld`, the `minQualification*` family |
 | **What I have** | `role`, `positions`, `natureOfJob`, `salaryMin`/`salaryMax`, `stipendMin`/`stipendMax`, `taskRateMin`/`taskRateMax` |
 
-A job provider's *What I have* is the opportunity itself — the role, how many openings, and on what terms.
+A job provider's *What I have* is the job itself: the role, how many openings, and on what terms.
 
 ### Service Provider
 
-Domain `service_provider`, item schema `profile_1.0`.
+Domain `service_provider`, item schema `profile_1.0`. These fields are from the deployed pilot schemas.
 
 | Part | Fields |
 |---|---|
 | **Who I am** | `serviceProviderName`, `organisationType`, `contactPersonName`, `contactPhoneNumber`, `contactEmail`, `location` |
 | **What I want** | `participantTypesServed`, `needsAddressed` |
 | **What I have** | `servicesOffered`, `serviceMode`, `coverageArea`, `capacityPerMonth`, `costModel`, `accreditation`, `languagesSupported` |
+
+## Other networks
+
+The other defined networks use the same three parts. The fields below are shown by their form labels.
+
+| Network and role | Who I am | What I want | What I have |
+|---|---|---|---|
+| Yellow Dot (education): student | Full Name, Phone Number, Email Address, Location | Service Looking For (for example Subject Tutoring or Career Counseling), Grade, Academic Stream | None |
+| Yellow Dot (education): tutor or counsellor | Full Name, Phone Number, Email Address, Location | Grade Bands Served, Academic Streams Served | Service Offered, Coverage Radius (km) |
+| Purple Dot (persons with disabilities): `seeker` | Name, Age, Gender, Mobile, Address | Looking For (for example Assistive Devices or Employment Opportunities), Details | Disability, Disability %, Documents, Qualification |
+| Purple Dot (persons with disabilities): `provider` | Contact Name, Phone, Organisation, Category, Organisation Address | Disabilities Served | Services Offered, Service Cities, Service Details |
+| Orange Dot (tourism): `practitioner` | Provider Name, Contact Phone, Area | None. Listings are public and have no actions. | Product Name, Category, Description, Services Provided, Languages, Pricing, Verified By |
+
+The schemas for these networks are in `examples/schemas/` in the Signals DPG repository.
 
 ## Extending a profile
 
