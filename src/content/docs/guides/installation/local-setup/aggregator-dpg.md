@@ -59,24 +59,24 @@ container-to-container URLs match the Signals-only stack.
 Full URL list, cross-DPG wiring and troubleshooting are in the
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) guide.
 
-## Track A without search
+## Track A with search
 
-Run the same one-command stack without signals-search when native search is
-enough. It needs about **4 GB less** Docker memory and skips the ~8 GB embedder
-image. Discover then returns results in recency/distance order (text and facet
-filters still apply) and match scores are unavailable.
-
-Follow Track A, but before `docker compose up -d --build` set this in
-`aggregator-dpg/local-setup/.env`:
+Track A runs without signals-search: discover returns results in
+recency/distance order and match scores are unavailable. To add relevance
+ranking and match scores, start the stack with the search file layered on top:
 
 ```bash
-COMPOSE_PROFILES=
+cd aggregator-dpg/local-setup
+docker compose -f docker-compose.yml -f docker-compose.search.yml up -d --build
 ```
 
-`.env.example` ships `COMPOSE_PROFILES=search`; leaving it empty skips the three
-search containers (`tei-embeddings`, `signals-search-api`,
-`signals-search-worker`). To turn search back on, set `COMPOSE_PROFILES=search`
-and run `docker compose up -d`.
+This adds the search API (http://localhost:3110), its ingestion worker and the
+embedding server. Give Docker **≥ 10 GB** of memory — the embedder alone wants
+3-4 GB.
+
+Use the same two `-f` flags for later commands (`ps`, `logs`, `down`), or put
+`COMPOSE_FILE=docker-compose.yml:docker-compose.search.yml` in `.env` so plain
+`docker compose` includes search.
 
 ## Track B — hybrid dev (hot-reload)
 
