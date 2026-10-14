@@ -59,6 +59,25 @@ container-to-container URLs match the Signals-only stack.
 Full URL list, cross-DPG wiring and troubleshooting are in the
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) guide.
 
+## Track A without search
+
+Run the same one-command stack without signals-search when native search is
+enough. It needs about **4 GB less** Docker memory and skips the ~8 GB embedder
+image. Discover then returns results in recency/distance order (text and facet
+filters still apply) and match scores are unavailable.
+
+Follow Track A, but before `docker compose up -d --build` set this in
+`aggregator-dpg/local-setup/.env`:
+
+```bash
+COMPOSE_PROFILES=
+```
+
+`.env.example` ships `COMPOSE_PROFILES=search`; leaving it empty skips the three
+search containers (`tei-embeddings`, `signals-search-api`,
+`signals-search-worker`). To turn search back on, set `COMPOSE_PROFILES=search`
+and run `docker compose up -d`.
+
 ## Track B — hybrid dev (hot-reload)
 
 Run the backing services in Docker and the apps from source:
