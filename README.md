@@ -39,14 +39,12 @@ bluedots-docs/
 │   ├── assets/                    # logos
 │   ├── content/docs/              # all documentation pages (.md / .mdx)
 │   │   ├── index.mdx              # landing (splash) page
-│   │   ├── overview/
-│   │   ├── core-concepts/
-│   │   │   ├── architecture/
-│   │   │   └── technical/
-│   │   ├── guides/
-│   │   │   └── installation/
-│   │   ├── explore/
-│   │   └── community/
+│   │   ├── about/                 # Knowing about Blue Dots
+│   │   ├── get-started/           # Getting Started
+│   │   ├── deploy/                # Start your Deployment
+│   │   ├── api/                   # API Reference (generated from OpenAPI)
+│   │   ├── overview/, explore/,   # not in the sidebar; pages kept so old
+│   │   ├── guides/, community/    #   links work until they move out
 │   ├── content.config.ts          # Starlight content collection
 │   └── styles/custom.css          # theme accent overrides
 └── public/favicon.svg
@@ -54,15 +52,11 @@ bluedots-docs/
 
 ## Information architecture
 
-| Section | Pages |
-| --- | --- |
-| **Overview** | Introduction · Paradox of Proximity · The Blue Dots Approach · Blue Dots as a DPG · Who Is This For |
-| **Core Concepts** | Signals · Aggregators · Networks/Domains/Instances · Items/Actions/Events · Glossary |
-| **— Architecture** | High-Level Architecture · Signals DPG · Aggregator DPG · Data Model · Identity & Auth |
-| **— Technical** | Overview · Schema-Driven Model · Read & Write Paths · Tech Stack |
-| **Guides** | Installation (Prerequisites · Local Stack · Signals · Aggregator) · Adaptor Onboarding · Configuration · API Reference · Deployment |
-| **Explore** | Use Cases · Pilots · Beyond Livelihoods |
-| **Community** | Contributing · Roadmap · Release Notes |
+| Section | For | Pages |
+| --- | --- | --- |
+| **Knowing about Blue Dots** | Implementation in-charge, network operator, PMU, SI, voice AI provider | Introduction · The Blue Dots Approach · Blue Dots as a DPG · Key Concepts · Activating Blue Dots in a District · Cost & Sizing · Glossary |
+| **Getting Started** | All of the above, plus the cloud or hosting provider | Block Diagram · Architecture · Voice Bot (minimal) |
+| **Start your Deployment** | SI, voice AI provider, cloud or hosting provider | Steps of Deployment · Deploy the DPGs (local, cloud) · Deploy the Agents (seeker/provider, platform) · Configure & Customise · API Reference |
 
 Edit the sidebar in `astro.config.mjs`; add pages under `src/content/docs/`.
 

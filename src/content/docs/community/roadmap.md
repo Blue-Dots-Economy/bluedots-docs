@@ -14,7 +14,7 @@ changed_sections:
 
 A short view of where Blue Dots is heading.
 
-**Where each domain stands:** Blue (jobs) is live and piloted. Yellow (education), Purple (persons with disabilities) and Orange (tourism) are defined as domains. Pink, Green and Brown are possible future domains. See [Domains, Participant Types & Instances](/core-concepts/networks-domains-instances/) for the full list.
+**Where each domain stands:** Blue (jobs) is live and piloted. Yellow (education), Purple (persons with disabilities) and Orange (tourism) are defined as domains. Pink, Green and Brown are possible future domains. See [Domains, Participant Types & Instances](/about/key-concepts/networks-domains-instances/) for the full list.
 
 ## Now
 
