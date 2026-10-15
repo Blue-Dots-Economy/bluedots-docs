@@ -13,6 +13,7 @@ next:
   label: "Path 7 of 10: Read & Write Paths"
 changed_sections:
   - _top
+  - signals-data-model
   - design-principles
 ---
 
@@ -25,7 +26,7 @@ The Signals database is organised around the item/action/event primitives:
 | Entity | What it holds |
 | --- | --- |
 | **Items** | Versioned, schema-typed records keyed by `item_type` (e.g. `profile_1.0`). Item tables are **partitioned** so that high-volume reads can prune to relevant partitions. |
-| **Schema registry** | The schemas that define networks and item types. Schemas are fetched and cached at the inter-instance read layer. |
+| **Schema registry** | The schemas that define domains (the code calls a domain a *network*) and item types. Schemas are fetched and cached at the inter-instance read layer. |
 | **Actions & events** | Interactions between items and their structured results. |
 | **Organisations** | Carries a `type` column (`network_service` \| `aggregator` \| `voice`) that gates what each org may do (for example, only `network_service` orgs may upsert aggregators). |
 
@@ -56,7 +57,7 @@ The Aggregator database (Drizzle, owned by `apps/api`) holds:
 
 - **Schema-typed, never freeform.** An item's structure is governed by its `item_type` schema; clients cannot invent fields.
 - **Backend-owned identity fields.** `item_instance_url` and `item_schema_url` are generated server-side.
-- **Configuration as code.** No domain- or environment-specific value is hardcoded. Values load once at startup from config loaders or environment variables, and each network's schemas live in their own folder (see [Configuration](/guides/configuration/#per-network-schema-folders)).
+- **Configuration as code.** No domain- or environment-specific value is hardcoded. Values load once at startup from config loaders or environment variables, and each domain's schemas live in their own folder (see [Configuration](/guides/configuration/#per-domain-schema-folders)).
 
 ## Where to go next
 

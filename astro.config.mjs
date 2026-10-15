@@ -197,11 +197,11 @@ export default defineConfig({
           label: 'Core Concepts',
           items: [
             { label: 'Core Concepts', slug: 'core-concepts'  },
-            { label: 'Signals (dots)', slug: 'core-concepts/signals' },
-            { label: 'The Dot Lifecycle', slug: 'core-concepts/blue-dot-lifecycle'  },
+            { label: 'Signals (blue dots)', slug: 'core-concepts/signals' },
+            { label: 'The Blue Dot Lifecycle', slug: 'core-concepts/blue-dot-lifecycle'  },
             { label: 'Participant Profiles', slug: 'core-concepts/participant-profiles' },
             { label: 'Aggregators', slug: 'core-concepts/aggregators'  },
-            { label: 'Networks, Domains & Instances', slug: 'core-concepts/networks-domains-instances' },
+            { label: 'Domains, Participant Types & Instances', slug: 'core-concepts/networks-domains-instances' },
             { label: 'Items, Actions & Events', slug: 'core-concepts/items-actions-events' },
             { label: 'Glossary', slug: 'core-concepts/glossary'  },
             {
@@ -267,7 +267,7 @@ export default defineConfig({
             { label: 'Keycloak Setup', slug: 'guides/keycloak-setup'  },
             { label: 'Configuration', slug: 'guides/configuration'  },
             { label: 'Customisation & Branding', slug: 'guides/customisation' },
-            { label: 'Adding a New Dot', slug: 'guides/adding-a-dot' },
+            { label: 'Adding a New Domain', slug: 'guides/adding-a-dot' },
             { label: 'AI Voice Agent Prompts', slug: 'guides/voice-ai-prompts' },
             { label: 'API Conventions', slug: 'guides/api-conventions' },
             { label: 'CI/CD & Build Pipeline', slug: 'guides/cicd-and-builds' },

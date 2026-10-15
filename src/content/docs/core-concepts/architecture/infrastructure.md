@@ -2,7 +2,12 @@
 title: Infrastructure & Deployment Architecture
 description: How Blue Dots is provisioned and deployed — AWS EKS via OpenTofu/Terragrunt, Helm umbrella charts, Kong ingress, and TLS.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 6
+changed_sections:
+  - infrastructure-opentofu--terragrunt
+  - the-generated-values-file-model
 ---
 
 This page describes how a Blue Dots deployment is *provisioned and run* on a cluster. It is grounded in the `bluedots-automation` repository, which does two things: provisions AWS infrastructure with **OpenTofu + Terragrunt**, and deploys the application stack with **Helm**. A single `install.sh` per environment is the entrypoint for both.
@@ -30,7 +35,7 @@ Infrastructure is defined as code under `opentofu/aws/`. Each environment is a d
 | `random_passwords` | generated Postgres/Redis credentials |
 | `output-file` | **generates the per-chart Helm values files** (see below) |
 
-The only file you normally edit per environment is **`global-values.yaml`** — region, EKS sizing, public hostnames, network/domains, SMTP/SMS, and alert recipients. A `tf.sh` file carries the AWS region and the remote-state S3 bucket name and is sourced before any `terragrunt` run.
+The only file you normally edit per environment is **`global-values.yaml`** — region, EKS sizing, public hostnames, the domain and its participant types (the code calls these the network and its domains), SMTP/SMS, and alert recipients. A `tf.sh` file carries the AWS region and the remote-state S3 bucket name and is sourced before any `terragrunt` run.
 
 Per-module `plan`/`apply` functions exist (`apply_tf_eks`, etc.) and honour `AUTO_APPROVE=1` for non-interactive runs.
 
@@ -48,7 +53,7 @@ Shared secrets (e.g. the Redis password used by all charts) are templated into e
 
 Alongside these, three checked-in config files feed every deploy:
 
-- `global-values.yaml` — non-secret config (hosts, network, served domains).
+- `global-values.yaml` — non-secret config (hosts, domain, served participant types).
 - `global-images.yaml` — per-environment image pins (see [CI/CD & Build Pipeline](/guides/cicd-and-builds/)).
 - `helm/global-resources.yaml` — replica counts, HPA, PDB and container resources, shared across environments.
 

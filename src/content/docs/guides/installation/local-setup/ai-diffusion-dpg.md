@@ -16,7 +16,7 @@ changed_sections:
 
 This guide runs the **AI Diffusion DPG** with the **jobs** use case (`blue-dots`) on your machine, next to the local Signals stack. You build the images from source, connect the agent to your local Signals, hold a short Hindi conversation, and finish with a job application stored in Signals. For what each block does, read the [AI Diffusion DPG architecture](/core-concepts/architecture/ai-diffusion-dpg/) first. For how the jobs use case YAML is put together, see [Configuring an AI Diffusion use case](/core-concepts/architecture/ai-diffusion-configuration/).
 
-The jobs use case is the live voice configuration for the jobs network (Blue Dot), so this guide seeds a job and ends with a job application. Other networks use the same structure and the same setup steps, with their own use-case folder under `dev-kit/configs/`.
+The jobs use case is the live voice configuration for the Blue Dot (jobs) domain, so this guide seeds a job and ends with a job application. Other domains use the same structure and the same setup steps, with their own use-case folder under `dev-kit/configs/`.
 
 The main path talks to the agent through **the bridge**, the default integration. The bridge is a generic OpenAI chat-completions-compatible endpoint (`/v1/chat/completions`), so any system that speaks that API can connect to the agent, for example your own voice pipeline (telephony, speech-to-text and text-to-speech). [VoicERA](https://github.com/COSS-India/VoicEra), an external DPG voice service, is one example of such a pipeline. In this guide, `curl` stands in for any OpenAI-compatible client. API keys are shown as `<your key>`.
 

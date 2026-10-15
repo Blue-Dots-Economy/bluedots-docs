@@ -9,9 +9,10 @@ changed_sections:
   - _top
   - the-layered-view
   - layer-by-layer
+  - two-verticals-one-network
 ---
 
-The Blue Dots stack is organised into clear horizontal layers, with two parallel verticals, **Aggregator** and **Signals**, that run on the same datastore servers and integrations. The same layers serve every network, whether jobs (Blue Dot) or education (Yellow Dot).
+The Blue Dots stack is organised into clear horizontal layers, with two parallel verticals, **Aggregator** and **Signals**, that run on the same datastore servers and integrations. The same layers serve every domain, whether jobs (Blue Dot) or education (Yellow Dot).
 
 ## The layered view
 
@@ -21,9 +22,9 @@ The Blue Dots stack is organised into clear horizontal layers, with two parallel
 
 ## Layer by layer
 
-**Apps.** Two web front-ends. The **Aggregator App** is the organisation-facing portal for onboarding and bulk upload. The **Signals App** is the schema-driven UI that renders forms and cards directly from network and item schemas.
+**Apps.** Two web front-ends. The **Aggregator App** is the organisation-facing portal for onboarding and bulk upload. The **Signals App** is the schema-driven UI that renders forms and cards directly from domain and item schemas.
 
-**Auth.** Both verticals authenticate against **one shared Keycloak realm** (named per network via `KEYCLOAK_REALM`). People sign in with the OIDC authorization-code flow on a Keycloak-hosted login screen; integrating DPGs use client-credentials service tokens. Because the realm is shared, the API checks a token's audience and realm role rather than trusting its signature alone. See [Identity & Auth](/core-concepts/architecture/identity-and-auth/).
+**Auth.** Both verticals authenticate against **one shared Keycloak realm** (named per domain via `KEYCLOAK_REALM`). People sign in with the OIDC authorization-code flow on a Keycloak-hosted login screen; integrating DPGs use client-credentials service tokens. Because the realm is shared, the API checks a token's audience and realm role rather than trusting its signature alone. See [Identity & Auth](/core-concepts/architecture/identity-and-auth/).
 
 **API.** The **Aggregator API** is a Fastify backend-for-frontend that owns the aggregator database and the registration/approval/bulk-upload flows. The **Signals API** is the network-aware Fastify backend that owns items, actions, events and cross-instance discovery.
 
@@ -38,7 +39,7 @@ The Blue Dots stack is organised into clear horizontal layers, with two parallel
 
 ## Two verticals, one network
 
-The Aggregator vertical is an **on-ramp**: it feeds participant signals into the Signals vertical, which is the **network**. In the MVP the Aggregator writes to Signals only through controlled bulk-create paths and otherwise reads from it.
+The Aggregator vertical is an **on-ramp**: it feeds participant signals into the Signals vertical, which is the **network** of Blue Dots servers. In the MVP the Aggregator writes to Signals only through controlled bulk-create paths and otherwise reads from it.
 
 {/* Editable source: src/assets/diagrams/two-verticals-one-network.excalidraw — open at https://excalidraw.com to adjust, re-export to two-verticals-one-network.png. */}
 

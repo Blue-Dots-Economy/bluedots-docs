@@ -1,15 +1,20 @@
 ---
 title: Keycloak Setup
-description: Stand up your network's Keycloak realm — import, admin bootstrap, registering an integrating DPG, and the two base URLs.
+description: Stand up your domain's Keycloak realm — import, admin bootstrap, registering an integrating DPG, and the two base URLs.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 4
+changed_sections:
+  - _top
+  - 2-set-the-two-base-urls
 ---
 
-Operator guide for a network's shared Keycloak realm. For what the realm
+Operator guide for a domain's shared Keycloak realm. For what the realm
 contains, see the [Keycloak realm
 reference](/core-concepts/architecture/keycloak-realm/).
 
-Set the realm name with `KEYCLOAK_REALM` to match the network you are deploying
+Set the realm name with `KEYCLOAK_REALM` to match the domain you are deploying
 (`bluedots`, `yellowdots`, `purpledots`, …). Commands below use `bluedots` as an
 example.
 
@@ -70,7 +75,7 @@ Locally the OIDC issuer hostname must resolve, so add it to your hosts file:
 echo "127.0.0.1 keycloak" | sudo tee -a /etc/hosts
 ```
 
-Alongside these, set `KEYCLOAK_REALM` (your network's realm name), the UI and API client ids
+Alongside these, set `KEYCLOAK_REALM` (your domain's realm name), the UI and API client ids
 (`KEYCLOAK_UI_CLIENT_ID`, `KEYCLOAK_API_CLIENT_ID`,
 `KEYCLOAK_API_CLIENT_SECRET`) and the acceptance lists described in [Identity &
 Auth](/core-concepts/architecture/identity-and-auth/).

@@ -13,6 +13,7 @@ next:
   label: "Path 8 of 10: Local Stack"
 changed_sections:
   - _top
+  - instance-local-read
   - inter-instance-read
   - write-paths
 ---
@@ -25,7 +26,7 @@ Signals keeps **two read layers strictly separate**. Before writing a read endpo
 GET /api/v1/item/fetch
 ```
 
-Reads an instance's **own** items, backed by a brief Redis cache. Use this for "my own items" reads. It does **not** reach across the network.
+Reads an instance's **own** items, backed by a brief Redis cache. Use this for "my own items" reads. It does **not** reach other instances.
 
 ## Inter-instance read
 
@@ -40,7 +41,7 @@ Reads **across instances** using a *count-first discovery* strategy:
 3. **Fetch slices** — request just the needed slices from those peers.
 4. **Merge & cache** — combine results and cache the merged view. **Schema fetching and caching live in this layer**, not in the instance-local layer.
 
-This avoids every instance querying every other instance, which is what lets the network grow without each query getting slower.
+This avoids every instance querying every other instance, which is what lets the number of instances grow without each query getting slower.
 
 <!-- Editable source: src/assets/diagrams/read-write-network-fetch.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. -->
 

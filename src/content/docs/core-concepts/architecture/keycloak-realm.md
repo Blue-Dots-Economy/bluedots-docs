@@ -1,19 +1,20 @@
 ---
 title: Keycloak Realm Reference
-description: The network realm — clients, realm roles, claim mappers, login themes and the OTP authenticator.
+description: The shared realm — clients, realm roles, claim mappers, login themes and the OTP authenticator.
 sidebar:
   attrs:
     class: bd-changed
   order: 6
 changed_sections:
+  - _top
   - login-experience
 ---
 
-Reference for the shared network realm. For how these pieces are used at request
+Reference for the shared realm. For how these pieces are used at request
 time, see [Identity &
 Auth](/core-concepts/architecture/identity-and-auth/).
 
-**The realm name is per deployment.** One realm serves one network or domain, and
+**The realm name is per deployment.** One realm serves one domain, and
 its name comes from `KEYCLOAK_REALM` — `bluedots`, `yellowdots`, `purpledots`.
 Examples below use `bluedots`; substitute your own.
 
@@ -78,9 +79,9 @@ Keycloak owns the login screen; neither app ships a login form.
   sends a one-time code by email or SMS and verifies it.
 - **FreeMarker themes** under `infra/keycloak/themes/otp/` render the login and
   email templates.
-- Themes are **per-brand**: each network (such as `blue-dot`, `purple-dot` and
+- Themes are **per-brand**: each domain (such as `blue-dot`, `purple-dot` and
   `orange-dot`) and each partner brand supplies its own logos and favicon, so a deployment's login page
-  matches its network.
+  matches its domain.
 
 ## Realm scripts
 

@@ -1,6 +1,6 @@
 ---
 title: Adaptor Onboarding
-description: The technical steps an adaptor follows to set up Blue Dots for any network, from Signals and the aggregator portal to capture channels, notifications and a pilot.
+description: The technical steps an adaptor follows to set up Blue Dots for any domain, from Signals and the aggregator portal to capture channels, notifications and a pilot.
 sidebar:
   attrs:
     class: bd-changed
@@ -9,7 +9,7 @@ changed_sections:
   - _top
   - the-path-at-a-glance
   - step-1-stand-up-signals
-  - step-2-define-your-network-and-domains
+  - step-2-define-your-domain-and-participant-types
   - step-3-add-the-aggregator-dpg
   - step-4-add-capture-channels
   - step-5-integrate-notifications
@@ -21,7 +21,7 @@ changed_sections:
 
 import PhaseTimeline from '../../../components/PhaseTimeline.astro';
 
-This is the recommended path for a new **adaptor**: an organisation deploying Blue Dots for a district, state or domain. The steps are the same for every network, such as jobs (Blue Dot) or education (Yellow Dot). It assumes you have read [Blue Dots as a DPG](/overview/blue-dots-as-a-dpg/).
+This is the recommended path for a new **adaptor**: an organisation deploying Blue Dots for a district, state or domain. The steps are the same for every domain, such as jobs (Blue Dot) or education (Yellow Dot). It assumes you have read [Blue Dots as a DPG](/overview/blue-dots-as-a-dpg/).
 
 ## The path at a glance
 
@@ -29,12 +29,12 @@ This is the recommended path for a new **adaptor**: an organisation deploying Bl
   {
     number: 1,
     title: "Stand up Signals",
-    focus: "Start with the network-aware backend: get the Signals API and UI running against local Postgres + Redis."
+    focus: "Start with the Signals backend: get the Signals API and UI running against local Postgres + Redis."
   },
   {
     number: 2,
-    title: "Define network + domains",
-    focus: "Decide the network you participate in and the domains your instance serves, expressed as schemas and SERVED_DOMAINS config."
+    title: "Define domain + participant types",
+    focus: "Decide the domain you participate in and the participant types your instance serves, expressed as schemas and SERVED_DOMAINS config."
   },
   {
     number: 3,
@@ -60,11 +60,11 @@ This is the recommended path for a new **adaptor**: an organisation deploying Bl
 
 ## Step 1: Stand up Signals
 
-Start with the network-aware backend. Follow [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/). At the end you should have the Signals API and UI running against local Postgres + Redis.
+Start with the Signals backend. Follow [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/). At the end you should have the Signals API and UI running against local Postgres + Redis.
 
-## Step 2: Define your network and domains
+## Step 2: Define your domain and participant types
 
-Decide the **network** you participate in and the **domains** your instance serves. For example, the jobs network `blue_dot` has the domains `seeker` and `provider`, and the education network (Yellow Dot) has a student domain and a tutor/counsellor domain. See [Networks, Domains and Instances](/core-concepts/networks-domains-instances/) for every network. Because the model is [schema-driven](/core-concepts/technical/schema-driven-model/), you express these as schemas and `SERVED_DOMAINS` config, not code. Define your item types (e.g. `profile_1.0`) up front.
+Decide the **domain** you participate in and the **participant types** your instance serves. The code calls a domain a *network*, and its `domains` field and `SERVED_DOMAINS` list participant types. For example, the jobs domain `blue_dot` has the participant types `seeker` and `provider`, and the education domain (Yellow Dot) has student and tutor/counsellor. See [Domains, Participant Types and Instances](/core-concepts/networks-domains-instances/) for every domain. Because the model is [schema-driven](/core-concepts/technical/schema-driven-model/), you express these as schemas and `SERVED_DOMAINS` config, not code. Define your item types (e.g. `profile_1.0`) up front.
 
 ## Step 3: Add the Aggregator DPG
 
@@ -83,9 +83,9 @@ Signals API. The list is empty by default, so a new DPG is refused until it is l
 ## Step 4: Add capture channels
 
 - **Web:** the schema-driven Signals UI and the Aggregator portal.
-- **Voice AI:** low-cost capture by phone call in the local language. A voice DPG connects the same way an aggregator does (Keycloak service account and bulk create). Ready-made prompt sets for the jobs network are published as DPGs; see [AI Voice Agent Prompts](/guides/voice-ai-prompts/).
+- **Voice AI:** low-cost capture by phone call in the local language. A voice DPG connects the same way an aggregator does (Keycloak service account and bulk create). Ready-made prompt sets for the jobs domain are published as DPGs; see [AI Voice Agent Prompts](/guides/voice-ai-prompts/).
 
-On the assisted route, pick the intake method per campaign: offline camp, bulk upload, outbound campaign or inbound QR campaign. All four ship ready-made; see [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#3-data-collection-assisted-route).
+On the assisted route, pick the intake method per campaign: offline camp, bulk upload, outbound campaign or inbound QR campaign. All four ship ready-made; see [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#3-data-collection-assisted-route).
 
 ## Step 5: Integrate notifications
 
@@ -97,12 +97,12 @@ Branding, operational settings, dashboards and a public landing page are configu
 
 ## Step 6: Pilot and measure
 
-Run a bounded pilot in one district and track before and after metrics. The jobs pilots in Ghaziabad and Dharwad tracked jobs found, time to find a match, cost per interaction and conversion; other networks pick measures for their own sector. See [Pilots](/explore/pilots/).
+Run a bounded pilot in one district and track before and after metrics. The jobs pilots in Ghaziabad and Dharwad tracked jobs found, time to find a match, cost per interaction and conversion; other domains pick measures for their own sector. See [Pilots](/explore/pilots/).
 
 ## Onboarding checklist
 
 - [ ] Signals API + UI running, migrations applied.
-- [ ] Network schema and `SERVED_DOMAINS` defined; item types registered.
+- [ ] Domain `network.json` and `SERVED_DOMAINS` defined; item types registered.
 - [ ] Keycloak realm imported; admin user created.
 - [ ] Aggregator DPG deployed.
 - [ ] Service client registered (id = org `slug`) and listed in `KEYCLOAK_SERVICE_CLIENT_IDS`.

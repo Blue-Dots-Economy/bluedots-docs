@@ -1,6 +1,6 @@
 ---
 title: Guides
-description: Guides to install, configure, extend and deploy the Blue Dots DPGs for any network, and to add a new dot.
+description: Guides to install, configure, extend and deploy the Blue Dots DPGs for any domain, and to add a new domain.
 sidebar:
   attrs:
     class: bd-changed
@@ -28,8 +28,8 @@ Two separate tracks:
 ## Configure & extend
 
 - [Keycloak Setup](/guides/keycloak-setup/) — realm import, admin user, registering an integrating DPG.
-- [Configuration](/guides/configuration/) — env vars, config-as-code, per-network schema folders.
-- [Adding a new dot](/guides/adding-a-dot/) — set up a new network, such as the Yellow Dot (education) network: schemas, domains, brand and consent.
+- [Configuration](/guides/configuration/) — env vars, config-as-code, per-domain schema folders.
+- [Adding a new domain](/guides/adding-a-dot/) — set up a domain such as Yellow Dot (education): schemas, participant types, brand and consent.
 - [Customisation & Branding](/guides/customisation/) — branding, dashboards and a landing page, without forking the DPGs.
 - [AI Voice Agent Prompts](/guides/voice-ai-prompts/) — the published prompt DPGs and how a voice channel connects.
 - [API Conventions](/guides/api-conventions/) — auth headers, error codes and response conventions shared by both APIs.

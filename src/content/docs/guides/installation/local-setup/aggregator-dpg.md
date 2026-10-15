@@ -1,6 +1,6 @@
 ---
 title: Aggregator DPG Setup
-description: Run the Aggregator portal, API and worker locally with the Signals DPG beside it, and set which network the portal onboards participants for.
+description: Run the Aggregator portal, API and worker locally with the Signals DPG beside it, and set which domain the portal onboards participants for.
 sidebar:
   attrs:
     class: bd-changed
@@ -8,7 +8,7 @@ sidebar:
 changed_sections:
   - _top
   - track-a--one-command-docker
-  - choose-a-network
+  - choose-a-domain
   - adding-search-relevance-ranking
 ---
 
@@ -103,16 +103,17 @@ with `--no-verify`.
 
 Continue to [Configuration](/guides/configuration/) or the [Adaptor Onboarding](/guides/adaptor-onboarding/) walkthrough.
 
-## Choose a network
+## Choose a domain
 
-The portal onboards participants for one network. `AGGREGATOR_NETWORK` in
-`local-setup/.env` picks it (default `blue_dot`, the jobs network). The value
-is a folder name under the Aggregator repo's `config/`, which holds that
-network's `aggregator.config.yaml`, `brand.json`, `keycloak.env` (login-screen
-text) and `schemas/`. The same folder name is sent to Signals as the network of
+The portal onboards participants for one domain. `AGGREGATOR_NETWORK` in
+`local-setup/.env` picks it (default `blue_dot`, the jobs domain; the code calls
+a domain a *network*). The value is a folder name under the Aggregator repo's
+`config/`, which holds that
+domain's `aggregator.config.yaml`, `brand.json`, `keycloak.env` (login-screen
+text) and `schemas/`. The same folder name is sent to Signals as the domain of
 every item the portal creates.
 
-| Folder | Network | Ready to run |
+| Folder | Domain | Ready to run |
 | --- | --- | --- |
 | `config/blue_dot/` | Blue Dot (jobs) | Yes (default) |
 | `config/purple_dot/` | Purple Dot (disability) | Yes |
@@ -123,10 +124,10 @@ every item the portal creates.
 `AGGREGATOR_NETWORK` changes only the Aggregator services. The Signals services
 in this compose file are fixed to `blue_dot`: the API and search load
 `examples/schemas/blue_dot/network.json`, the UI is built for `blue_dot`, and
-`SIGNALS_SERVED_DOMAINS` defaults to the `blue_dot` domains. To run another
-network end to end, change those lines in `local-setup/docker-compose.yml` and
+`SIGNALS_SERVED_DOMAINS` defaults to the `blue_dot` participant types. To run another
+domain end to end, change those lines in `local-setup/docker-compose.yml` and
 `SIGNALS_SERVED_DOMAINS` in `.env` to match, as described in
-[Signals DPG Setup](/guides/installation/local-setup/signals-dpg/#choose-a-network).
+[Signals DPG Setup](/guides/installation/local-setup/signals-dpg/#choose-a-domain).
 :::
 
 ## Adding search (relevance ranking)

@@ -1,13 +1,14 @@
 ---
 title: AWS Infrastructure Setup
-description: Provision the AWS EKS cluster, database and storage for a Blue Dots deployment with OpenTofu/Terragrunt, and set which network it runs.
+description: Provision the AWS EKS cluster, database and storage for a Blue Dots deployment with OpenTofu/Terragrunt, and set which domain it runs.
 sidebar:
   attrs:
     class: bd-changed
   order: 1
 changed_sections:
   - _top
-  - choose-the-network
+  - 2-fill-in-global-valuesyaml
+  - choose-the-domain
   - 3-fill-in-secretsyaml
   - managed-postgres-rds-vs-in-cluster
   - what-goes-in-secretsyaml
@@ -60,11 +61,11 @@ _environment:    &environment    "prod"          # dev | stg | prod
 _cloud_storage_region: &cloud_storage_region "ap-south-1"
 ```
 
-The three above decide every AWS resource name, so set them first and don't change them later. Then work down the anchor block for hostnames, SMTP, network and brand — each anchor has a comment above it.
+The three above decide every AWS resource name, so set them first and don't change them later. Then work down the anchor block for hostnames, SMTP, domain and brand — each anchor has a comment above it.
 
-### Choose the network
+### Choose the domain
 
-A deployment runs one network. Three anchors in the same top block set it:
+A deployment runs one domain (the code calls a domain a *network*). Three anchors in the same top block set it:
 
 ```yaml
 _signals_served_domains: &signals_served_domains "blue_dot/provider,blue_dot/seeker"
@@ -72,9 +73,9 @@ _network: &network "blue_dot"
 _brand:   &brand   ""
 ```
 
-- `_network` is the network folder name under `examples/schemas/` in the Signals DPG repository (and under `config/` in the Aggregator). The default `blue_dot` is the jobs network; `purple_dot` and `orange_dot` are set the same way. The list of networks is on [Networks, Domains & Instances](/core-concepts/networks-domains-instances/).
-- `_signals_served_domains` lists `<network-id>/<domain>` pairs. The network id is the `id` in that folder's `network.json`. It matches the folder name for every network except the Yellow Dot (education) network, so read Yellow's id from its `network.json`.
-- `_brand` is an optional brand sub-folder of the network (its own logo and copy). Leave it `""` for none. A brand does not change the network.
+- `_network` is the domain folder name under `examples/schemas/` in the Signals DPG repository (and under `config/` in the Aggregator). The default `blue_dot` is the jobs domain; `purple_dot` and `orange_dot` are set the same way. The list of domains is on [Domains, Participant Types & Instances](/core-concepts/networks-domains-instances/).
+- `_signals_served_domains` lists `<network-id>/<domain>` pairs, where each `<domain>` is a participant type. The domain id is the `id` in that folder's `network.json`. It matches the folder name for every domain except the Yellow Dot (education) domain, so read Yellow's id from its `network.json`.
+- `_brand` is an optional brand sub-folder of the domain (its own logo and copy). Leave it `""` for none. A brand does not change the domain.
 
 The Signals API, the Signals UI, the consent text and the Aggregator all read these anchors, so set them once here.
 

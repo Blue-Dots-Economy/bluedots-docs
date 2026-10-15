@@ -1,6 +1,6 @@
 ---
 title: Identity & Auth
-description: "How Keycloak secures the Blue Dots stack: one shared realm per network, OIDC logins for people and Keycloak service accounts for integrating DPGs."
+description: "How Keycloak secures the Blue Dots stack: one shared realm per domain, OIDC logins for people and Keycloak service accounts for integrating DPGs."
 sidebar:
   attrs:
     class: bd-changed
@@ -9,14 +9,14 @@ changed_sections:
   - _top
 ---
 
-Both verticals authenticate against **one Keycloak realm per network**. Signals
+Both verticals authenticate against **one Keycloak realm per domain**. Signals
 and the Aggregator share it, so a single identity works across the stack and
 integrating DPGs authenticate the same way regardless of which service they call.
 
-The realm name follows the network or domain being deployed and is set with
+The realm name follows the domain being deployed and is set with
 `KEYCLOAK_REALM` — `bluedots`, `yellowdots`, `purpledots` and so on. It is a
 deployment input, not a fixed constant, so treat any realm name in these docs as
-an example. A separate network means a separate realm.
+an example. A separate domain means a separate realm.
 
 Because the realm is shared, the audience checks below matter: a token
 minted for the Aggregator portal carries the same issuer and the same signature

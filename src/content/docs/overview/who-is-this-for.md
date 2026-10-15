@@ -1,6 +1,6 @@
 ---
 title: Who Is This For
-description: Who this documentation is for, from district teams and engineers to organisations that sign people up on any dot, and where each should start.
+description: Who this documentation is for, from district teams and engineers to organisations that sign people up in any domain, and where each should start.
 sidebar:
   attrs:
     class: bd-changed
@@ -10,16 +10,17 @@ changed_sections:
   - adaptors--implementers
   - aggregator-organisations
   - programme-and-policy-teams
+  - contributors
 ---
 
-Blue Dots helps people and organisations near each other find each other. This documentation is for everyone who builds on or runs it, on any network: jobs (Blue Dot), education (Yellow Dot), services for persons with disabilities (Purple Dot) or tourism (Orange Dot). Find your role below and go to its starting point.
+Blue Dots helps people and organisations near each other find each other. This documentation is for everyone who builds on or runs it, in any domain: jobs (Blue Dot), education (Yellow Dot), services for persons with disabilities (Purple Dot) or tourism (Orange Dot). Find your role below and go to its starting point.
 
 ## Adaptors & implementers
 
 You want to deploy Blue Dots for a district, state or domain.
 
 - Start with [Blue Dots as a DPG](/overview/blue-dots-as-a-dpg/) for the model.
-- Read [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) for the seven steps a participant goes through, and who owns each one.
+- Read [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) for the seven steps a participant goes through, and who owns each one.
 - Then follow [Adaptor Onboarding](/guides/adaptor-onboarding/) and the [Installation](/guides/installation/local-setup/prerequisites/) guides.
 - Tailor the deployment with [Customisation & Branding](/guides/customisation/).
 
@@ -36,10 +37,10 @@ You will run, extend or integrate the Signals and Aggregator DPGs.
 
 ## Aggregator organisations
 
-You are an organisation that signs people up and checks their details. For example: a skilling centre or ITI (Industrial Training Institute) on the Blue Dot, a school or education NGO on the Yellow Dot, a disabled persons' organisation (DPO) on the Purple Dot, a tourism body on the Orange Dot, or a government department on any dot.
+You are an organisation that signs people up and checks their details. For example: a skilling centre or ITI (Industrial Training Institute) for Blue Dot (jobs), a school or education NGO for Yellow Dot (education), a disabled persons' organisation (DPO) for Purple Dot, a tourism body for Orange Dot, or a government department in any domain.
 
 - See [Core Concepts → Aggregators](/core-concepts/aggregators/) — including who qualifies and the four intake methods.
-- Read [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/), especially the verification steps you own.
+- Read [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/), especially the verification steps you own.
 - Follow the [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/) guide.
 
 **Follow the full path →** [Onboard participants](/start/onboard/)
@@ -61,5 +62,5 @@ You want to improve the DPGs or this documentation.
 - Recent changes are in the [Release Notes](/community/release-notes/); planned work is on the [Roadmap](/community/roadmap/).
 
 :::tip
-New to the vocabulary? Keep the [Glossary](/core-concepts/glossary/) open in a second tab — the terms *network*, *domain*, *instance*, *item*, *action* and *event* recur everywhere.
+New to the vocabulary? Keep the [Glossary](/core-concepts/glossary/) open in a second tab — the terms *domain*, *participant type*, *instance*, *item*, *action* and *event* recur everywhere.
 :::

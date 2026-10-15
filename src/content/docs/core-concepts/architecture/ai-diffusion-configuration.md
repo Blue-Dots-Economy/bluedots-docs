@@ -14,9 +14,9 @@ changed_sections:
   - read-next
 ---
 
-A use case on the AI Diffusion DPG is a folder of YAML, one file per block. You do not change service code. This page explains how those files are loaded, what goes in each one, and how one phase of the jobs voice agent (Blue Dot network) turns into the turn shown on the [architecture page](/core-concepts/architecture/ai-diffusion-dpg/). All file paths are in the [ai-diffusion-dpg repository](https://github.com/Blue-Dots-Economy/ai-diffusion-dpg).
+A use case on the AI Diffusion DPG is a folder of YAML, one file per block. You do not change service code. This page explains how those files are loaded, what goes in each one, and how one phase of the Blue Dot (jobs) voice agent turns into the turn shown on the [architecture page](/core-concepts/architecture/ai-diffusion-dpg/). All file paths are in the [ai-diffusion-dpg repository](https://github.com/Blue-Dots-Economy/ai-diffusion-dpg).
 
-The examples are the live voice configuration for the jobs network (Blue Dot), in `dev-kit/configs/blue-dots/`. Other networks use the same structure: a use case for education or tourism would be its own folder under `dev-kit/configs/`, with the same block files.
+The examples are the live voice configuration for the jobs domain (Blue Dot), in `dev-kit/configs/blue-dots/`. Other domains use the same structure: a use case for education or tourism would be its own folder under `dev-kit/configs/`, with the same block files.
 
 ## Two layers
 

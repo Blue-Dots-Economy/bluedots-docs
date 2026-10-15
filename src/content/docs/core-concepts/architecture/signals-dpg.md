@@ -7,15 +7,16 @@ sidebar:
   order: 2
 changed_sections:
   - _top
+  - components
   - network-awareness
 ---
 
-The **Signals DPG** is the network-aware backend that every Blue Dots network runs on, from the Blue Dot (jobs) network to the Yellow Dot (education) network. It stores signals as schema-typed items and finds and matches them across instances.
+The **Signals DPG** is the network-aware backend that every Blue Dots domain runs on, from the Blue Dot (jobs) domain to the Yellow Dot (education) domain. It stores signals as schema-typed items and finds and matches them across instances.
 
 ## Components
 
 - **`apps/api`** — Fastify + Zod (`fastify-type-provider-zod`) + Drizzle ORM + Redis. The network-aware API: items, actions, events, instance-local reads and inter-instance discovery. Entry point `src/server.ts`.
-- **`apps/ui`** — React 19 + Vite. A schema-driven UI: forms and cards are rendered from the network and item schemas, so new domains need no UI code changes.
+- **`apps/ui`** — React 19 + Vite. A schema-driven UI: forms and cards are rendered from the domain and item schemas, so new domains need no UI code changes.
 - **`packages/config`** — Zod env schemas, allowed-origin lists, network-config loader. **All env vars are declared here**, never parsed ad hoc.
 - **`packages/database`** — Drizzle setup and partition-aware query helpers.
 - **`packages/schemas`** — shared Zod schemas for request bodies, admin and the schema registry.
@@ -25,7 +26,7 @@ It is a **pnpm + Turborepo** monorepo; the workspace alias `@dpg/*` maps to `pac
 
 ## Network awareness
 
-An instance serves one or more domains on a network. The two read layers are kept strictly separate:
+An instance serves one or more participant types in a domain. (The code calls a domain a *network* and a participant type a *domain*.) The two read layers are kept strictly separate:
 
 - **Instance-local** (`GET /api/v1/item/fetch`) — reads an instance's own items with a brief Redis cache.
 - **Inter-instance** (`GET /api/v1/network/item/fetch`) — *count-first* discovery: ask peers how many relevant items they hold, select only relevant peers, fetch slices, merge and cache. Schema fetching and caching live in this layer.

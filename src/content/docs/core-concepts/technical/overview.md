@@ -2,14 +2,18 @@
 title: Technical Documentation
 description: Implementation-level reference for engineers building on the Blue Dots DPGs.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 1
+changed_sections:
+  - whats-here
 ---
 
 This sub-section is the implementation-level reference for engineers. Where [Architecture](/core-concepts/architecture/high-level-architecture/) explains *what the system is*, these pages explain *how it behaves in code*.
 
 ## What's here
 
-- **[Schema-Driven Model](/core-concepts/technical/schema-driven-model/)** — how networks, domains and items are defined by schemas, and why nothing domain-specific is hardcoded.
+- **[Schema-Driven Model](/core-concepts/technical/schema-driven-model/)** — how domains, participant types and items are defined by schemas, and why nothing domain-specific is hardcoded.
 - **[Read & Write Paths](/core-concepts/technical/read-write-paths/)** — the two fetch layers (instance-local vs. inter-instance), discovery, caching, and how signals are written.
 - **[Tech Stack](/core-concepts/technical/tech-stack/)** — the full toolchain, runtimes and conventions across both DPGs.
 

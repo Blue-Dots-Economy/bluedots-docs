@@ -82,36 +82,39 @@ A headline figure is stated once and linked from everywhere else. Restating a nu
 | Pilot outcomes — jobs surfaced, discovery time, conversion, cost per interaction | `explore/pilots` |
 | ₹87,500 crore and its derivation | `explore/economics` |
 | Field observations — proximity, ratios, employer response, women's assurances | `explore/learnings` |
-| Time to create a dot (2–3 minutes) | `overview/the-blue-dots-approach` |
+| Time to create a blue dot (2–3 minutes) | `overview/the-blue-dots-approach` |
 | PwD campaign — Feb 2026, 1 lakh+ needs in 10 days, ₹10 per interaction | `explore/beyond-livelihoods` (Purple Dot section) |
-| Networks, their domains and their status | `core-concepts/networks-domains-instances` |
+| Domains, their participant types and their status | `core-concepts/networks-domains-instances` |
 
 Terminology: use **MSME**, not SMB, outside the Brown Dot sector naming.
 
-## Naming: platform, dot, colour
+## Naming: platform, blue dot, domain, colour
 
-- **Blue Dots** (plural, proper noun) is the platform and programme.
-- **a dot** is the generic thing a person or organisation publishes: a short listing that says what they need or offer. Never use "a Blue Dot" for this.
-- **Blue Dot** (singular, with a colour) is the jobs network `blue_dot`, the same pattern as Yellow Dot, Purple Dot and the rest. Lifecycle states are colour-neutral ("Verified", "Live").
-- Product UI strings are per network and are quoted as they appear.
+- **Blue Dots** (plural, capitalised) is the platform and programme.
+- **a blue dot** (lower case) is the generic thing a person, organisation or service publishes: a short listing that says what they need or offer, placed where they are. Explain the name once where it is introduced: on a map app, your own location is shown as a blue dot; a listing does the same for you, so people nearby can find you. Never shorten it to "a dot".
+- **domain** is a sector: jobs, education, disability, tourism and so on. Use "domain", not "network", in prose. The code calls a domain a *network* (`network.json`, `NETWORK_ID`, `network_id`, `/network/` API paths); keep those identifiers as they are and, on technical pages, say once that the code calls it a network.
+- **participant type** is a role inside a domain (seeker, provider, student, tutor). The code calls these *domains* (the `domains` array in `network.json`, `SERVED_DOMAINS`); keep the identifiers and say once what they mean. Never call a participant type a "domain" in prose.
+- **Colour names the domain.** Each domain gives its blue dots a colour: Yellow Dot (education), Purple Dot (disability) and the rest. Jobs keeps the original blue. Where jobs must be told apart from the generic term, write "the Blue Dot (jobs) domain" or "the jobs domain". Lifecycle states are colour-neutral ("Verified", "Live").
+- **Minimum standard:** the profile schemas in a domain's `network.json` are the *minimum standard* for a dot of that colour. Link it wherever a domain's fields are described: `https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/<folder>/network.json` (folders `blue_dot`, `yellow_dot`, `purple_dot`, `orange_dot`). Pink, Green and Brown have none yet; say so.
+- Product UI strings are per domain and are quoted as they appear.
 
-Blue Dots is not a jobs product. Jobs (Blue) is the first live network and the source of all pilot evidence; the pilot pages (`explore/pilots`, `explore/learnings`, `explore/economics`) stay as the factual record of it.
+Blue Dots is not a jobs product. Jobs (Blue) is the first live domain and the source of all pilot evidence; the pilot pages (`explore/pilots`, `explore/learnings`, `explore/economics`) stay as the factual record of it.
 
 | Colour | Sector | Status (use these labels) |
 |---|---|---|
 | Blue | Livelihoods for youth (jobs) | Live, piloted |
-| Yellow | Education avenues and services | Network defined |
-| Purple | Economic participation of persons with disabilities | Network defined |
-| Orange | Tourism | Network defined |
+| Yellow | Education avenues and services | Domain defined |
+| Purple | Economic participation of persons with disabilities | Domain defined |
+| Orange | Tourism | Domain defined |
 | Pink | Women's labour-force participation | Possible |
 | Green | Farming efficiency | Possible |
 | Brown | Growth for SMBs | Possible |
 
-"Network defined" means a schema exists in Signals-DPG `examples/schemas/`. Scenarios for "Possible" dots use "could" or "for example"; make no outcome claims for any dot except Blue. On the public site, name networks by colour and sector only — no partner brand ids, internal ids or unpublished district names.
+"Domain defined" means a minimum standard (`network.json`) exists in Signals-DPG `examples/schemas/`. Scenarios for "Possible" dots use "could" or "for example"; make no outcome claims for any dot except Blue. On the public site, name domains by colour and sector only — no partner brand ids, internal ids or unpublished district names.
 
 ### Scenario bank
 
-Generic pages (landing, Overview, top-level Core Concepts, Use Cases) name at least one non-Blue dot and draw examples from this table rather than inventing new ones. Pages that document the real `blue_dot` schema keep it and say other networks work the same way.
+Generic pages (landing, Overview, top-level Core Concepts, Use Cases) name at least one non-Blue dot and draw examples from this table rather than inventing new ones. Pages that document the real `blue_dot` schema keep it and say other domains work the same way.
 
 | Dot | Scenario | Who agrees before contact |
 |---|---|---|

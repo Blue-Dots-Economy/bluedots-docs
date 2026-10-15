@@ -1,6 +1,6 @@
 ---
 title: AI Voice Agent Prompts
-description: How a voice agent prompt set is structured so any network can reuse it, the published prompts for the jobs network, and how a voice DPG connects to Signals.
+description: How a voice agent prompt set is structured so any domain can reuse it, the published prompts for the jobs domain, and how a voice DPG connects to Signals.
 sidebar:
   attrs:
     class: bd-changed
@@ -16,13 +16,13 @@ changed_sections:
 
 The **AI Voice Agent** is the main self-service channel for [completing a profile](/core-concepts/blue-dot-lifecycle/#4-completing-the-profile). The prompts that drive it are **Digital Public Goods (DPGs) in their own right**: published, versioned and reusable, like the Signals and Aggregator codebases.
 
-The published agents are for the jobs network (Blue Dot). The prompt structure works for any network: another network writes its own agents with the same files. The prompts work on any voice platform, so an adaptor can run them on whichever Voice AI service it chooses.
+The published agents are for the Blue Dot (jobs) domain. The prompt structure works for any domain: agents for another domain use the same files. The prompts work on any voice platform, so an adaptor can run them on whichever Voice AI service it chooses.
 
 Repository: **[github.com/Blue-Dots-Economy/AI-Agent-Prompts](https://github.com/Blue-Dots-Economy/AI-Agent-Prompts)**
 
 ## What's published
 
-Prompt sets are organised per network, then per agent. The jobs agents sit in the `Blue Dots` folder:
+Prompt sets are organised per domain, then per agent. The jobs agents sit in the `Blue Dots` folder:
 
 | Agent | Who it talks to | What the call does |
 |---|---|---|
@@ -76,6 +76,6 @@ See [Identity & Auth](/core-concepts/architecture/identity-and-auth/), [Keycloak
 
 ## Related
 
-- [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/): where the voice channel sits in the seven steps.
+- [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/): where the voice channel sits in the seven steps.
 - [Participant Profiles](/core-concepts/participant-profiles/): the fields a call has to fill.
 - [Adaptor Onboarding](/guides/adaptor-onboarding/): adding capture channels to a deployment.
