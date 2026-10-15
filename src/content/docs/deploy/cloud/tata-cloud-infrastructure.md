@@ -66,14 +66,6 @@ If there's no managed S3-compatible object storage, Blue Dots Economy self-hosts
 
 A self-hosted object store needs two separate endpoints: an internal one for server-side calls, and a public one — with its own DNS name and TLS certificate — for anything that hands a client a pre-signed URL to fetch directly. The ingress in front of the public endpoint must preserve the `Host` header end to end; a pre-signed URL's signature covers the `Host` header, and a rewritten header produces a signature mismatch.
 
-## Access and credentials
-
-The deployment team needs:
-
-- Credentials to log in to the jump node
-- A kubeconfig for the Kubernetes API, usable from the jump node
-- Connection credentials for the managed PostgreSQL instance, usable from the jump node
-
 ## Optional: monitoring
 
 `bluedots-automation`'s own `monitoring` chart (Prometheus, Grafana, Loki, and the project's alert rules) can be deployed for this. If the platform already provides its own monitoring stack — Prometheus, Grafana, metrics-server — before handover, that can be used instead, and the `monitoring` chart skipped.
