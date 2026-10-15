@@ -289,6 +289,8 @@ export default defineConfig({
               items: [
                 { label: 'AWS Infrastructure', slug: 'deploy/cloud/aws-infrastructure' },
                 { label: 'AWS Deployment', slug: 'deploy/cloud/aws-deployment' },
+                { label: 'Tata Cloud Infrastructure Requirements', slug: 'deploy/cloud/tata-cloud-infrastructure' },
+                { label: 'Tata Cloud Deployment', slug: 'deploy/cloud/tata-cloud-deployment' },
               ],
             },
             {

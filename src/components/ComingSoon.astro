@@ -1,0 +1,14 @@
+---
+interface Props {
+  text?: string;
+}
+const { text = 'coming soon...' } = Astro.props;
+---
+
+<p class="coming-soon">{text}</p>
+
+<style>
+  .coming-soon {
+    font-size: 1.25rem;
+  }
+</style>
