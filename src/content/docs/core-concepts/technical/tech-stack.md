@@ -2,7 +2,11 @@
 title: Tech Stack
 description: Runtimes, frameworks, datastores and tooling across the Signals and Aggregator DPGs.
 sidebar:
+  attrs:
+    class: bd-changed
   order: 4
+changed_sections:
+  - at-a-glance
 ---
 
 Both DPGs are TypeScript-first **pnpm + Turborepo** monorepos that share a common technology base.
@@ -17,7 +21,7 @@ Both DPGs are TypeScript-first **pnpm + Turborepo** monorepos that share a commo
 | ORM / DB | Drizzle + PostgreSQL (partitioned items) | Drizzle + PostgreSQL |
 | Cache / sessions / queue | Redis | Redis |
 | Object storage | S3 | S3 |
-| Auth | Keycloak (OIDC) — one shared realm per network | Keycloak (OIDC) — same realm |
+| Auth | Keycloak (OIDC) — one shared realm per domain | Keycloak (OIDC) — same realm |
 | Notifications | SMTP, SMS | SMTP (Mailpit local), SMS |
 
 ## Runtime & package management

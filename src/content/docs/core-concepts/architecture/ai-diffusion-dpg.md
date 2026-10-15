@@ -16,9 +16,9 @@ changed_sections:
 
 The **AI Diffusion DPG** runs a conversational agent for a public-service use case. It is seven fixed services, one per building block, each a small FastAPI service in Python. You do not change their code to build an agent. You describe your use case in YAML instead: what the agent says in each phase of the conversation, which external systems it can call, what it must refuse, and which channels it answers on. The services load that configuration at startup.
 
-**The jobs voice agent** (Blue Dot network) is the reference use case. A job-seeker calls a phone number and talks in Hindi. The agent finds their profile, searches for jobs, and applies for one on their behalf through the Signals network.
+**The jobs voice agent** (Blue Dot domain) is the reference use case. A job-seeker calls a phone number and talks in Hindi. The agent finds their profile, searches for jobs, and applies for one on their behalf through the Signals DPG.
 
-The examples on this page are the live voice configuration for the jobs network (Blue Dot), named `blue-dots` in the repository. Other networks use the same structure: a use case for education or tourism would be its own folder of the same YAML files, with its own phases and tools.
+The examples on this page are the live voice configuration for the jobs domain (Blue Dot), named `blue-dots` in the repository. Other domains use the same structure: a use case for education or tourism would be its own folder of the same YAML files, with its own phases and tools.
 
 ## The seven blocks
 

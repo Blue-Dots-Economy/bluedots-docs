@@ -1,6 +1,6 @@
 ---
 title: Customisation & Branding
-description: What an adaptor can change for a deployment (branding and per-network UI themes, settings, dashboards and a landing page) without changing the Signals or Aggregator code.
+description: What an adaptor can change for a deployment (branding and per-domain UI themes, settings, dashboards and a landing page) without changing the Signals or Aggregator code.
 sidebar:
   attrs:
     class: bd-changed
@@ -11,6 +11,7 @@ changed_sections:
   - 2-configuration
   - 3-dashboards
   - 4-landing-page
+  - what-stays-shared
 ---
 
 Beyond the core [lifecycle](/core-concepts/blue-dot-lifecycle/), adaptors typically tailor four things to make a deployment their own.
@@ -23,7 +24,7 @@ Personalisation, configuration, dashboards and the landing page all sit **on top
 
 Branding covers the logo, colour scheme, fonts, wordmark and language, so the deployment carries the adaptor's own identity.
 
-Branding is declared per network in a `brand.json` alongside the network schema. The reference `blue_dot/brand.json` carries:
+Branding is declared per domain in a `brand.json` alongside the domain's `network.json` (the code calls a domain a *network*). The reference `blue_dot/brand.json` carries:
 
 | Key | What it holds |
 |---|---|
@@ -37,22 +38,22 @@ Branding is declared per network in a `brand.json` alongside the network schema.
 Two more things to personalise:
 
 - **UI theme.** `VITE_DEFAULT_NETWORK_THEME` selects the colours of the Signals web app. If it is unset, the app uses the first value of `VITE_NETWORK_ID`, and then `blue_dot`. A value that matches no theme also falls back to `blue_dot`.
-- **Login screen.** The per-network Keycloak login **theme** image is built alongside the realm. See [Keycloak Setup](/guides/keycloak-setup/).
+- **Login screen.** The per-domain Keycloak login **theme** image is built alongside the realm. See [Keycloak Setup](/guides/keycloak-setup/).
 
-The Signals web app ships six themes, one for each dot except Brown. Only some of them have a network schema in Signals-DPG `examples/schemas/`; the others are colours only, with no network behind them yet. See [Networks, Domains and Instances](/core-concepts/networks-domains-instances/) for each network and its status.
+The Signals web app ships six themes, one for each domain colour except Brown. Four of them have a published minimum standard: the list of fields every blue dot of that colour must have, so any organisation that uses it can share and find blue dots with others. The others are colours only, with no `network.json` yet. See [Domains, Participant Types and Instances](/core-concepts/networks-domains-instances/) for each domain and its status.
 
-| Theme value | Dot | Network schema in `examples/schemas/` |
+| Theme value | Domain | Minimum standard |
 |---|---|---|
-| `blue_dot` (default) | Blue (jobs) | Yes, with `brand.json` |
-| `yellow_dot` | Yellow (education) | Yes, no `brand.json` |
-| `purple_dot` | Purple (persons with disabilities) | Yes, with `brand.json` |
-| `orange_dot` | Orange (tourism) | Yes, with `brand.json` |
-| `pink_dot` | Pink (women's work) | No, theme only |
-| `green_dot` | Green (farming) | No, theme only |
+| `blue_dot` (default) | Blue (jobs) | [Yes](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/blue_dot/network.json), with `brand.json` |
+| `yellow_dot` | Yellow (education) | [Yes](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/yellow_dot/network.json), no `brand.json` |
+| `purple_dot` | Purple (persons with disabilities) | [Yes](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/purple_dot/network.json), with `brand.json` |
+| `orange_dot` | Orange (tourism) | [Yes](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/orange_dot/network.json), with `brand.json` |
+| `pink_dot` | Pink (women's work) | None published yet, theme only |
+| `green_dot` | Green (farming) | None published yet, theme only |
 
-There is no Brown theme. The Yellow theme value is the folder name `yellow_dot`, which differs from the network id set in its `network.json`, so set `VITE_DEFAULT_NETWORK_THEME` explicitly for a Yellow deployment.
+There is no Brown theme. The Yellow theme value is the folder name `yellow_dot`, which differs from the domain id set in its `network.json`, so set `VITE_DEFAULT_NETWORK_THEME` explicitly for a Yellow deployment.
 
-The aggregator portal has no theme list of its own. It reads the brand and the domain labels of the network it is configured for, so the same portal runs for Blue, Purple or Yellow without code changes.
+The aggregator portal has no theme list of its own. It reads the brand and the participant type labels of the domain it is configured for, so the same portal runs for Blue, Purple or Yellow without code changes.
 
 ## 2. Configuration
 
@@ -69,9 +70,9 @@ These follow the project's [configuration rules](/guides/configuration/): declar
 
 Metrics and trend views for the adaptor's own use: registration volumes, **active versus at-risk** participants, and discovery and connection rates over time.
 
-The participant states and the tiles are already declared in the network schema, so no new code is needed. The examples below are from `blue_dot`; other networks declare their own states and tiles the same way.
+The participant states and the tiles are already declared in the domain's `network.json`, so no new code is needed. The examples below are from `blue_dot`; other domains declare their own states and tiles the same way.
 
-**Participant state** comes from `status_rules` on each domain, evaluated against item age and recency of action:
+**Participant state** comes from `status_rules` on each participant type (an entry in the `domains` field), evaluated against item age and recency of action:
 
 | Status | Reference rule (blue_dot) |
 |---|---|
@@ -80,7 +81,7 @@ The participant states and the tiles are already declared in the network schema,
 | `at_risk` | No activity for 31–90 days |
 | `inactive` | No activity for 90+ days (default) |
 
-**Tiles** come from `dashboard_tiles` per domain (profile-level and user-level), and **roll-up buckets** from the network-level `dashboard_buckets`, which relabels raw action statuses into programme language. In `blue_dot`, actions a participant starts read `create → Applied` and `cancel → Withdrawn`, and actions they receive read `create → Applications` and `accept → Shortlisted`.
+**Tiles** come from `dashboard_tiles` per participant type (profile-level and user-level), and **roll-up buckets** from the domain-level `dashboard_buckets`, which relabels raw action statuses into programme language. In `blue_dot`, actions a participant starts read `create → Applied` and `cancel → Withdrawn`, and actions they receive read `create → Applications` and `accept → Shortlisted`.
 
 Tailoring a dashboard means editing those declarations, not writing new aggregation code.
 
@@ -97,7 +98,7 @@ The point of the split is that an adaptor's customisations do not accumulate int
 | Layer | Owned by | Changes per adaptor? |
 |---|---|---|
 | Signals DPG, Aggregator DPG | The commons | No |
-| Network, domain and item schemas | Adaptor, as config | Yes |
+| Domain, participant type and item schemas | Adaptor, as config | Yes |
 | Branding, theme, landing page | Adaptor | Yes |
 | Dashboards | Adaptor, as config | Yes |
 

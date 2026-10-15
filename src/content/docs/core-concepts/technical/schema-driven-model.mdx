@@ -1,6 +1,6 @@
 ---
 title: Schema-Driven Model
-description: How network.json and item schemas define each network's domains, items and forms, and how a deployment chooses which network it runs.
+description: How network.json and item schemas define each domain's participant types, items and forms, and how a deployment chooses which domain it runs.
 sidebar:
   attrs:
     class: bd-changed
@@ -15,23 +15,23 @@ changed_sections:
   - _top
   - three-kinds-of-schema
   - why-schema-first
-  - choosing-a-network
+  - choosing-a-domain
   - configuration-discipline
 ---
 
 import BeforeAfter from '../../../../components/BeforeAfter.astro';
 
-Blue Dots is **schema-driven** end to end. Schemas define what an instance stores, exchanges and renders. A new network, domain or form ships by adding or editing schema files.
+Blue Dots is **schema-driven** end to end. Schemas define what an instance stores, exchanges and renders. A new domain, participant type or form ships by adding or editing schema files.
 
 ## Three kinds of schema
 
-- **Network schema (`network.json`)** — defines a network (for example `blue_dot` for jobs, or the Yellow Dot education network): its domains, item types, actions and events.
+- **Domain schema (`network.json`)** — defines a domain (the code calls a domain a *network*), for example `blue_dot` for jobs or the Yellow Dot education domain. It lists the domain's participant types (the code's `domains` field), item types, actions and events.
 - **Item schemas (`item_type`)** — versioned types such as `profile_1.0`. An item's `item_type` always points at one of these; freeform records are not allowed.
 - **Form schemas** — JSON schemas that drive the UI. The Signals UI renders forms and cards from item schemas; the Aggregator portal uses **RJSF** (React JSON Schema Form) so non-engineers can evolve registration and profile forms.
 
 ## Why schema-first
 
-1. **Interoperability.** Two instances on the same network load the same `network.json`, so they agree on structure. That shared structure is what lets one instance search another.
+1. **Interoperability.** Two instances in the same domain load the same `network.json`, so they agree on structure. That shared structure is what lets one instance search another.
 2. **Evolvability.** Versioned `item_type`s (e.g. `profile_1.0` → `profile_1.1`) let the model change without breaking peers.
 3. **No-code domain changes.** Product and program teams can add fields or new forms by editing schemas/config, not code.
 
@@ -47,7 +47,7 @@ Blue Dots is **schema-driven** end to end. Schemas define what an instance store
     {
       dimension: 'Interoperability',
       before: 'Instances have no shared structure, so inter-instance discovery is not possible',
-      after: 'Instances on the same network load the same network.json, so they can search each other',
+      after: 'Instances in the same domain load the same network.json, so they can search each other',
     },
     {
       dimension: 'Evolvability',
@@ -62,20 +62,22 @@ Blue Dots is **schema-driven** end to end. Schemas define what an instance store
   ]}
 />
 
-## Choosing a network
+## Choosing a domain
 
-Each network is a folder under `examples/schemas/` in the Signals DPG repository. Today there are four: `blue_dot` (jobs), `yellow_dot` (education), `purple_dot` (persons with disabilities) and `orange_dot` (tourism). The list of networks, their domains and their status is on [Networks, Domains & Instances](/core-concepts/networks-domains-instances/).
+Each domain is a folder under `examples/schemas/` in the Signals DPG repository. Today there are four: `blue_dot` (jobs), `yellow_dot` (education), `purple_dot` (persons with disabilities) and `orange_dot` (tourism). The list of domains, their participant types and their status is on [Domains, Participant Types & Instances](/core-concepts/networks-domains-instances/).
 
-A network folder holds:
+The `network.json` in each folder is the **minimum standard** for a blue dot in that domain: the list of fields every one of them must have, so any organisation that uses it can share and find blue dots with others. The minimum standards are published for [Blue (jobs)](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/blue_dot/network.json), [Yellow (education)](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/yellow_dot/network.json), [Purple (disability)](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/purple_dot/network.json) and [Orange (tourism)](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/orange_dot/network.json). Pink, Green and Brown have no minimum standard yet.
 
-- `network.json`: the network id, its domains, item types and actions.
+A domain folder holds:
+
+- `network.json`: the domain's id, its participant types, item types and actions.
 - `consent.json`: the consent text participants accept (terms, privacy, profile and action consent).
 - `messages.properties`: optional overrides for the email copy.
-- Brand sub-folders: a brand is a UI and copy skin over the network. It does not change the schema.
+- Brand sub-folders: a brand is a UI and copy skin over the domain. It does not change the schema.
 
-A deployment runs one network. It chooses it with settings, not code: which `network.json` to load, which domains to serve, and which network id the UI shows. The setup guides list the exact variables: [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/#choose-a-network) for local runs and [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/#choose-the-network) for a cluster.
+A deployment runs one domain. It chooses it with settings, not code: which `network.json` to load, which participant types to serve, and which domain id the UI shows. The setup guides list the exact variables: [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/#choose-a-domain) for local runs and [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/#choose-the-domain) for a cluster.
 
-The same `profile_1.0` has different fields on each network. A Blue Dot (jobs) seeker profile and a Yellow Dot student profile are both `profile_1.0`, but each network's `network.json` defines its own fields.
+The same `profile_1.0` has different fields in each domain. A seeker profile in the Blue Dot (jobs) domain and a student profile in the Yellow Dot domain are both `profile_1.0`, but each domain's `network.json` defines its own fields.
 
 ## Backend-owned fields
 

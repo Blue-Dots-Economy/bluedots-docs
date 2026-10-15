@@ -1,6 +1,6 @@
 ---
 title: Signals DPG Setup
-description: Run the Signals backend and UI locally, standalone, and choose which network (jobs, education, disability or tourism) it serves.
+description: Run the Signals backend and UI locally, standalone, and choose which domain (jobs, education, disability or tourism) it serves.
 sidebar:
   attrs:
     class: bd-changed
@@ -14,11 +14,11 @@ next:
 changed_sections:
   - _top
   - track-b--hybrid-dev-hot-reload
-  - choose-a-network
+  - choose-a-domain
   - adding-search-relevance-ranking
 ---
 
-The Signals DPG is the network-aware backend (API + UI). It runs **standalone**, with
+The Signals DPG is the Blue Dots backend (API + UI). It runs **standalone**, with
 no other DPG required. Its `local-setup/` brings up everything it depends on:
 **Postgres, Redis, Keycloak and Mailpit**, and optionally
 **signals-search** for relevance ranking.
@@ -97,19 +97,20 @@ needed. Set `AUTH_PROVIDER=keycloak` and the `KEYCLOAK_*` values in `.env` — s
 [Keycloak Setup](/guides/keycloak-setup/).
 :::
 
-## Choose a network
+## Choose a domain
 
-The stack runs the jobs network `blue_dot` by default. Other networks work the
-same way: each is a folder under `examples/schemas/` with a `network.json`, a
+The stack runs the jobs domain `blue_dot` by default. Other domains work the
+same way: each is a folder under `examples/schemas/` with a `network.json` (the
+code calls a domain a *network*), a
 `consent.json` and an optional `messages.properties` (email copy). Pick one from
-[Networks, Domains & Instances](/core-concepts/networks-domains-instances/).
+[Domains, Participant Types & Instances](/core-concepts/networks-domains-instances/).
 
-Two values identify a network, and they are not always the same:
+Two values identify a domain, and they are not always the same:
 
 - the **folder name**, such as `purple_dot` or `yellow_dot`;
-- the **network id**, the `id` field inside that folder's `network.json`. For
+- the **domain id**, the `id` field inside that folder's `network.json`. For
   `blue_dot`, `purple_dot` and `orange_dot` it matches the folder name. The
-  Yellow Dot (education) network's id differs from its folder name, so read it
+  Yellow Dot (education) domain's id differs from its folder name, so read it
   from its `network.json`.
 
 **Track A (Docker).** Set these in `local-setup/.env`, then rerun
@@ -129,15 +130,18 @@ SERVED_DOMAINS=purple_dot/seeker,purple_dot/provider                       # <ne
 VITE_NETWORK_ID=purple_dot                                                 # network id
 ```
 
-| Network | Folder | `SERVED_DOMAINS` |
+| Domain | Folder | `SERVED_DOMAINS` |
 | --- | --- | --- |
 | Blue Dot (jobs, default) | `blue_dot` | `blue_dot/seeker,blue_dot/provider` |
 | Purple Dot (disability) | `purple_dot` | `purple_dot/seeker,purple_dot/provider` |
 | Orange Dot (tourism) | `orange_dot` | `orange_dot/practitioner` |
 | Yellow Dot (education) | `yellow_dot` | `<network-id>/student` |
 
+`SERVED_DOMAINS` lists participant types: the code calls a participant type a
+*domain*.
+
 Consent text comes from the `consent.json` beside the active `network.json`.
-A brand is a sub-folder of the network with its own copy and look; it does not
+A brand is a sub-folder of the domain with its own copy and look; it does not
 change the schema. Because the model is
 [schema-driven](/core-concepts/technical/schema-driven-model/), you add item
 types and forms by editing these files rather than code.

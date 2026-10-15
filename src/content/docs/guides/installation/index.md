@@ -8,6 +8,7 @@ sidebar:
 changed_sections:
   - _top
   - local-setup
+  - cloud-setup
 ---
 
 Installation splits into two tracks that should not be confused: running a DPG on your own machine for development, and deploying the whole stack to the cloud for real use.
@@ -18,14 +19,14 @@ Run Signals or the Aggregator on your own machine with Docker Compose — Postgr
 
 - [Prerequisites](/guides/installation/local-setup/prerequisites/) — tools and accounts you need.
 - [Local Stack (Docker)](/guides/installation/local-setup/local-stack/) — bring up the backing services.
-- [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/) — the network-aware backend + UI.
+- [Signals DPG Setup](/guides/installation/local-setup/signals-dpg/) — the Signals backend and UI.
 - [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/) — the onboarding app (API, web, worker).
 - [AI Diffusion DPG Setup](/guides/installation/local-setup/ai-diffusion-dpg/) — the voice and chat agent, run against the local Signals stack.
 - [AI Diffusion Optional Channels](/guides/installation/local-setup/ai-diffusion-channels/) — web chat, CLI, telephony voice and MCP.
 
 ## Cloud Setup
 
-Stand up a real, running instance for a district, network or adaptor. Currently AWS; the stack is adaptable to other clouds.
+Stand up a real, running instance for a district, domain or adaptor. Currently AWS; the stack is adaptable to other clouds.
 
 - [AWS Infrastructure Setup](/guides/installation/cloud-setup/aws/infrastructure/) — provision the EKS cluster, database and storage.
 - [AWS Deployment](/guides/installation/cloud-setup/aws/deployment/) — install the application charts onto it.

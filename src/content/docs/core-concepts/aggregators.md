@@ -17,15 +17,15 @@ changed_sections:
   - where-to-go-next
 ---
 
-An **aggregator** is a local organisation that signs participants up and **checks their details**, so people nearby can find and trust their dots. The **Aggregator DPG** (digital public good) is the application aggregators use.
+An **aggregator** is a local organisation that signs participants up and **checks their details**, so people nearby can find and trust their blue dots. The **Aggregator DPG** (digital public good) is the application aggregators use.
 
-Checking details is the main reason aggregators exist. A dot that a known local organisation has checked is easier for the other side to trust.
+Checking details is the main reason aggregators exist. A blue dot that a known local organisation has checked is easier for the other side to trust.
 
 ## Who can be an aggregator
 
-Any organisation that people in a group already know and trust. Pink, Green and Brown are possible future networks, so their rows are examples of who could take this role.
+Any organisation that people in a group already know and trust. Pink, Green and Brown are possible future domains, so their rows are examples of who could take this role.
 
-| Network | Organisations |
+| Domain | Organisations |
 |---|---|
 | Blue Dot (jobs) | Skilling centres and ITIs (Industrial Training Institutes) |
 | Yellow Dot (education) | Schools, colleges and education NGOs |
@@ -34,19 +34,19 @@ Any organisation that people in a group already know and trust. Pink, Green and 
 | Pink Dot (women's work, possible) | SHGs (self-help groups) |
 | Green Dot (farming, possible) | FPOs (farmer producer organisations) and KVKs (Krishi Vigyan Kendras, farm science centres) |
 | Brown Dot (small businesses, possible) | Trade associations |
-| Any network | Government departments |
+| Any domain | Government departments |
 
 Picking the right aggregator is [step 1 of the lifecycle](/core-concepts/blue-dot-lifecycle/#1-decide-who-to-bring-in): the adaptor decides who to bring in, then picks the organisation that can reach them.
 
 ## Why aggregators matter
 
-Asking every person to sign up on their own is slow. Aggregators already work with hundreds or thousands of people. When an aggregator registers and uploads its participants in bulk, a district quickly has enough dots for people to find useful matches. The Ghaziabad and Dharwad jobs pilots worked this way.
+Asking every person to sign up on their own is slow. Aggregators already work with hundreds or thousands of people. When an aggregator registers and uploads its participants in bulk, a district quickly has enough blue dots for people to find useful matches. The Ghaziabad and Dharwad jobs pilots worked this way.
 
 ## What the Aggregator DPG does
 
 The Aggregator DPG is aggregator-facing and provides:
 
-- **Registration & approval** — an organisation registers, is reviewed, and is approved onto the network.
+- **Registration & approval** — an organisation registers, is reviewed, and is approved onto Blue Dots.
 - **Organisation → coordinator hierarchy** — a parent organisation owns many coordinators, and coordinators join **by invitation only**. See [How coordinators join](#how-coordinators-join) below.
 - **Profile management** — schema-driven forms (RJSF) let non-engineers change registration and profile fields without code changes.
 - **Bulk upload** — CSV/file-based creation of many participant signals at once, processed asynchronously by a background worker.
@@ -55,7 +55,7 @@ The Aggregator DPG is aggregator-facing and provides:
 
 ## Intake methods
 
-An aggregator can sign people up in four built-in ways: offline camp, bulk upload, outbound campaign and inbound QR campaign. The route (assisted or self) and the intake method are chosen per campaign or area. The [Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#3-data-collection-assisted-route) describes each method.
+An aggregator can sign people up in four built-in ways: offline camp, bulk upload, outbound campaign and inbound QR campaign. The route (assisted or self) and the intake method are chosen per campaign or area. The [Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/#3-data-collection-assisted-route) describes each method.
 
 ## How coordinators join
 
@@ -71,12 +71,12 @@ Integrating DPGs (such as the Aggregator app, or a voice DPG) authenticate to Si
 
 <!-- Editable source: src/assets/diagrams/aggregators-relationship.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. -->
 
-![Participants flow into the Aggregator DPG (the on-ramp), which bulk-creates signals in the Signals DPG (the network), enabling network discovery and matching](../../../assets/diagrams/aggregators-relationship.png)
+![Participants flow into the Aggregator DPG (the on-ramp), which bulk-creates signals in the Signals DPG, where they can be found and matched](../../../assets/diagrams/aggregators-relationship.png)
 
-The Aggregator app brings participants in, and the Signals DPG stores and matches their dots. Adaptors usually stand up Signals first, then add the Aggregator app as partner organisations come on board.
+The Aggregator app brings participants in, and the Signals DPG stores and matches their blue dots. Adaptors usually stand up Signals first, then add the Aggregator app as partner organisations come on board.
 
 ## Where to go next
 
-- [The Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) — the seven steps an aggregator's participants go through.
+- [The Blue Dot Lifecycle](/core-concepts/blue-dot-lifecycle/) — the seven steps an aggregator's participants go through.
 - [Aggregator DPG Architecture](/core-concepts/architecture/aggregator-dpg/) — the API, portal and worker.
 - [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/) — install and run it.

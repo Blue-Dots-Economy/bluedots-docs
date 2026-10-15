@@ -12,6 +12,7 @@ changed_sections:
   - signals-dpg
   - aggregator-dpg
   - supporting-blocks-also-ready-to-use
+  - how-adaptors-start
   - a-model-that-can-travel
 ---
 
@@ -24,7 +25,7 @@ Like **UPI** lets any bank or app send money through one shared system, Blue Dot
 Instances talk to each other through an **open protocol**. Any organisation can join, add listings and build on it. So a new district or state can start without a custom build each time.
 
 :::note[Consent]
-Every dot exists because the person or organisation behind it chose to list it. On the jobs and disability networks, phone numbers are shared only after both sides agree. Orange Dot tourism listings are the exception: they are public on purpose.
+Every blue dot exists because the person or organisation behind it chose to list it. In the jobs and disability domains, phone numbers are shared only after both sides agree. Orange Dot tourism listings are the exception: they are public on purpose.
 :::
 
 ## What "DPG" means here
@@ -32,8 +33,8 @@ Every dot exists because the person or organisation behind it chose to list it. 
 A DPG in the Blue Dots sense is:
 
 - **Open** — source-available and free to deploy. Adaptors run their own instances.
-- **Network-aware** — instances interoperate on a shared contract (a *network*) instead of in silos.
-- **Schema-driven** — versioned schema files set what an instance stores and exchanges. This is what lets one set of software serve many sectors. The Blue Dot (jobs), Yellow Dot (education), Purple Dot (persons with disabilities) and Orange Dot (tourism) networks each have their own schema. See the [schema-driven model](/core-concepts/technical/schema-driven-model/).
+- **Shared rules per domain** — every instance in a domain uses the same list of fields, so their blue dots can be shared.
+- **Schema-driven** — versioned schema files set what an instance stores and exchanges. This is what lets one set of software serve many sectors. The Blue Dot (jobs), Yellow Dot (education), Purple Dot (persons with disabilities) and Orange Dot (tourism) domains each have their own schema. See the [schema-driven model](/core-concepts/technical/schema-driven-model/).
 - **Composable** — an adaptor can serve one domain or many, and integrate with other DPGs.
 
 ## The two DPGs
@@ -42,13 +43,13 @@ The Blue Dots stack is anchored by two DPGs that work together:
 
 ### Signals DPG
 
-The **network-aware backend** that stores dots and matches them across instances. Its core vocabulary (*network*, *domain*, *instance*, *item*, *action*, *event*) is used consistently in both the product and the code. Signals exposes the read/write APIs that everything else builds on. Most adaptors **start here**.
+The **backend** that stores blue dots and matches them across instances. Its terms (*domain*, *participant type*, *instance*, *item*, *action*, *event*) are in the [Glossary](/core-concepts/glossary/); the code calls a domain a *network* and a participant type a *domain*. Signals exposes the read/write APIs that everything else builds on. Most adaptors **start here**.
 
 See [Core Concepts → Signals](/core-concepts/signals/) and [Architecture → Signals DPG](/core-concepts/architecture/signals-dpg/).
 
 ### Aggregator DPG
 
-The **aggregator-facing application** that lets organisations sign up participants and bring their listings into the network in bulk. It does this through registration, approval, bulk upload and profile management. The Aggregator app reads from the upstream Signals stack and writes participant signals into it.
+The **aggregator-facing application** that lets organisations sign up participants and bring their listings into Blue Dots in bulk. It does this through registration, approval, bulk upload and profile management. The Aggregator app reads from the upstream Signals stack and writes participant signals into it.
 
 See [Core Concepts → Aggregators](/core-concepts/aggregators/) and [Architecture → Aggregator DPG](/core-concepts/architecture/aggregator-dpg/).
 
@@ -70,7 +71,7 @@ Alongside the two DPGs, an adaptor inherits a set of ready-made supporting piece
 - **A shared rulebook** — common rules applied consistently across deployments.
 - **Setup automation** — [infrastructure and deployment](/guides/installation/cloud-setup/aws/deployment/) stood up quickly, on AWS out of the box and adaptable to other clouds.
 - **Voice agent prompts** — [published as DPGs](/guides/voice-ai-prompts/), platform-independent.
-- **Participant profiles** — each network defines its own participant types. The jobs network has [three already defined](/core-concepts/participant-profiles/): job seeker, job provider and service provider.
+- **Participant profiles** — each domain defines its own participant types. The jobs domain has [three already defined](/core-concepts/participant-profiles/): job seeker, job provider and service provider.
 - **Full documentation** — this site.
 
 ## How adaptors start
@@ -78,7 +79,7 @@ Alongside the two DPGs, an adaptor inherits a set of ready-made supporting piece
 A typical adoption path:
 
 1. Stand up a **Signals DPG** instance for your district or domain.
-2. Define or adopt the **network** and **domain** schemas you need.
+2. Adopt the [minimum standard](/core-concepts/networks-domains-instances/#the-minimum-standard-for-a-blue-dot) for your domain, or define a new one with the participant types you need.
 3. Add the **Aggregator DPG** to onboard partner organisations and bulk-load participants.
 4. Layer in capture channels (web, voice) and integrations (SMS, email).
 

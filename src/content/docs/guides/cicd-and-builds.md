@@ -7,6 +7,8 @@ sidebar:
   order: 9
 changed_sections:
   - _top
+  - 1-application-ci-build--publish
+  - 4-environments--branch-strategy
 ---
 
 Blue Dots separates **building** application images from **deploying** them. The application repositories build and publish container images; the `bluedots-automation` repository pins specific image versions and deploys them to a cluster. The rest of this page follows from that split.
@@ -42,7 +44,7 @@ Representative images (Signals + Aggregator):
 | Aggregator web | `ghcr.io/blue-dots-economy/aggregator-dpg/web` |
 | Aggregator worker | `ghcr.io/blue-dots-economy/aggregator-dpg/worker` |
 | Keycloak server (custom) | `ghcr.io/blue-dots-economy/keycloak-server` — built in `bluedots-automation` (`dockerfiles/keycloak/`) |
-| Keycloak login theme (per network) | built in `aggregator-dpg` from `config/<network>/keycloak.env` |
+| Keycloak login theme (per domain) | built in `aggregator-dpg` from `config/<network>/keycloak.env` |
 
 Third-party platform images (Postgres, Redis, cert-manager, Kong) come from their own registries and are pinned the same way.
 
@@ -101,7 +103,7 @@ GHCR_PAT=ghp_xxx bash install.sh create_namespaces_and_secrets
 
 ## 4. Environments & branch strategy
 
-Each live deployment has its **own long-lived branch** carrying that deployment's config — network schema, image tags, public hostnames, and its own `opentofu/aws/<env>/` directory. Work flows up a trunk chain before landing in a deployment branch.
+Each live deployment has its **own long-lived branch** carrying that deployment's config — domain schema, image tags, public hostnames, and its own `opentofu/aws/<env>/` directory. Work flows up a trunk chain before landing in a deployment branch.
 
 **Trunk (promotion chain):** `<feature-branch>` → `feature` → `develop` → `main`.
 

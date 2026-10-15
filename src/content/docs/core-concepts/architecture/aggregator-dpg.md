@@ -16,7 +16,7 @@ changed_sections:
 
 The **Aggregator DPG** is the aggregator-facing application of Blue Dots. It is a **pnpm + Turbo** monorepo, TypeScript-only, with three deployable apps.
 
-The same portal signs up participants for any network the deployment serves.
+The same portal signs up participants for any domain the deployment serves.
 
 ## Three deployable apps
 
@@ -85,7 +85,7 @@ up and resend. Two recoveries exist:
 
 ### Why invitation-only
 
-The organisation owner is accountable for who represents it on the network. Open
+The organisation owner is accountable for who represents it on Blue Dots. Open
 self-registration against a known organisation name would let anyone claim
 affiliation. The aggregator's trust model depends on the platform setting
 `aggregator_id` from the authenticated session; the client never supplies it.

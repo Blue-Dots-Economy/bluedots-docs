@@ -1,6 +1,6 @@
 ---
 title: Participant Profiles
-description: Who can publish a dot on each network and the fields they fill in, shown in full for the Blue Dot (jobs) network, with the main fields for the Yellow, Purple and Orange networks.
+description: Who can publish a blue dot in each domain and the fields they fill in, shown in full for the Blue Dot (jobs) domain, with the main fields for the Yellow, Purple and Orange domains.
 sidebar:
   attrs:
     class: bd-changed
@@ -11,20 +11,21 @@ changed_sections:
   - job-seeker
   - job-provider
   - service-provider
-  - other-networks
+  - other-domains
+  - extending-a-profile
 ---
 
-Each network defines who can publish a dot, so that people and organisations nearby can find them, and which fields each type fills in. This page shows the Blue Dot (jobs) network in full, because it is the live network used in the pilots. The Yellow, Purple and Orange networks follow the same pattern with their own fields; see [Other networks](#other-networks) below.
+Each domain defines who can publish a blue dot, so that people and organisations nearby can find them, and which fields each participant type fills in. This page shows the Blue Dot (jobs) domain in full, because it is the live domain used in the pilots. The Yellow, Purple and Orange domains follow the same pattern with their own fields; see [Other domains](#other-domains) below.
 
-On the Blue Dot network, three participant types are already worked out. An adaptor does **not** need to design them from scratch.
+In the jobs domain, three participant types are already worked out. An adaptor does **not** need to design them from scratch.
 
-| Type | Who they are | Domain `id` | Item schema |
+| Type | Who they are | `domains` `id` | Item schema |
 |---|---|---|---|
 | **Job Seeker** | A person looking for work | `seeker` | `profile_1.0` |
 | **Job Provider** | An employer posting a vacancy | `provider` | `job_posting_1.0` |
 | **Service Provider** | An organisation offering support to job seekers: training, counselling, assessment or placement help | `service_provider` | `profile_1.0` |
 
-`seeker` and `provider` are declared in the example network schema at `examples/schemas/blue_dot/network.json` in the Signals DPG repository. `service_provider` comes from the deployed pilot schemas; the example file does not include it.
+`seeker` and `provider` are declared in the [jobs minimum standard](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/blue_dot/network.json), the list of fields every blue dot in that domain must have. The code lists participant types in the `domains` field of `network.json` (and calls a domain a *network*). `service_provider` comes from the deployed pilot schemas; the example file does not include it.
 
 ## One structure, three fillings
 
@@ -42,7 +43,7 @@ The shipped schemas are laid out in these three parts. Here is each part with it
 
 ### Job Seeker
 
-Domain `seeker`, item schema `profile_1.0`.
+Participant type `seeker`, item schema `profile_1.0`.
 
 | Part | Fields |
 |---|---|
@@ -58,7 +59,7 @@ This one field is where job seekers mention other needs, such as counselling, sk
 
 ### Job Provider
 
-Domain `provider`, item schema `job_posting_1.0`.
+Participant type `provider`, item schema `job_posting_1.0`.
 
 | Part | Fields |
 |---|---|
@@ -70,7 +71,7 @@ A job provider's *What I have* is the job itself: the role, how many openings, a
 
 ### Service Provider
 
-Domain `service_provider`, item schema `profile_1.0`. These fields are from the deployed pilot schemas.
+Participant type `service_provider`, item schema `profile_1.0`. These fields are from the deployed pilot schemas.
 
 | Part | Fields |
 |---|---|
@@ -78,11 +79,11 @@ Domain `service_provider`, item schema `profile_1.0`. These fields are from the 
 | **What I want** | `participantTypesServed`, `needsAddressed` |
 | **What I have** | `servicesOffered`, `serviceMode`, `coverageArea`, `capacityPerMonth`, `costModel`, `accreditation`, `languagesSupported` |
 
-## Other networks
+## Other domains
 
-The other defined networks use the same three parts. The fields below are shown by their form labels.
+The other defined domains use the same three parts. The fields below are shown by their form labels.
 
-| Network and role | Who I am | What I want | What I have |
+| Domain and participant type | Who I am | What I want | What I have |
 |---|---|---|---|
 | Yellow Dot (education): student | Full Name, Phone Number, Email Address, Location | Service Looking For (for example Subject Tutoring or Career Counseling), Grade, Academic Stream | None |
 | Yellow Dot (education): tutor or counsellor | Full Name, Phone Number, Email Address, Location | Grade Bands Served, Academic Streams Served | Service Offered, Coverage Radius (km) |
@@ -90,14 +91,14 @@ The other defined networks use the same three parts. The fields below are shown 
 | Purple Dot (persons with disabilities): `provider` | Contact Name, Phone, Organisation, Category, Organisation Address | Disabilities Served | Services Offered, Service Cities, Service Details |
 | Orange Dot (tourism): `practitioner` | Provider Name, Contact Phone, Area | None. Listings are public and have no actions. | Product Name, Category, Description, Services Provided, Languages, Pricing, Verified By |
 
-The schemas for these networks are in `examples/schemas/` in the Signals DPG repository.
+The minimum standards for these domains are in the Signals DPG repository: [Yellow](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/yellow_dot/network.json), [Purple](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/purple_dot/network.json) and [Orange](https://github.com/Blue-Dots-Economy/signals-dpg/blob/main/examples/schemas/orange_dot/network.json). Pink, Green and Brown have no minimum standard published yet.
 
 ## Extending a profile
 
 Because registration and profile forms are **schema-driven**, adding or changing a field is a schema edit — no application code change:
 
-1. Edit the item schema in the network config (`item_schemas` for the domain).
-2. Add the new field to the domain's `x-form-layout` sections so it renders in the right place.
+1. Edit the item schema in the domain config (`item_schemas` for the participant type).
+2. Add the new field to the participant type's `x-form-layout` sections so it renders in the right place.
 3. If it should show on the participant card, add it to `card.default_fields`.
 
 See [Schema-Driven Model](/core-concepts/technical/schema-driven-model/) for the mechanism and [Configuration](/guides/configuration/) for where each file lives.

@@ -1,6 +1,6 @@
 ---
 title: Local Stack (Docker)
-description: Choose a local setup (Signals alone, or Aggregator plus Signals), see which ports each uses, and pick the network it runs.
+description: Choose a local setup (Signals alone, or Aggregator plus Signals), see which ports each uses, and pick the domain it runs.
 sidebar:
   attrs:
     class: bd-changed
@@ -10,7 +10,7 @@ next:
   label: "Path 9 of 10: Signals DPG Setup"
 changed_sections:
   - _top
-  - which-network-it-runs
+  - which-domain-it-runs
   - search-and-relevance-ranking-opt-in
 ---
 
@@ -20,7 +20,7 @@ backing services** (Postgres, Redis, Keycloak, Mailpit, and - for the
 Aggregator - MinIO). You don't wire the infra by hand; you copy an env file and run one command.
 
 Keycloak is shared: both DPGs authenticate against the same realm (one per
-network, named by `KEYCLOAK_REALM`, `bluedots` by default locally), so it must be
+domain, named by `KEYCLOAK_REALM`, `bluedots` by default locally), so it must be
 running and the realm imported before either UI will let you sign in.
 
 Both offer the same two tracks:
@@ -49,24 +49,25 @@ The Aggregator's `local-setup/` builds **both** repos, so clone them as
         └── local-setup/
 ```
 
-## Which network it runs
+## Which domain it runs
 
-Both stacks run the jobs network `blue_dot` by default. Other networks, such as
-the Purple Dot (disability) or Yellow Dot (education) networks, work the same
-way. You switch with settings in `.env`, not code:
+Both stacks run the jobs domain `blue_dot` by default. Other domains, such as
+the Purple Dot (disability) or Yellow Dot (education) domains, work the same
+way. The code calls a domain a *network*, and `SERVED_DOMAINS` lists participant
+types. You switch with settings in `.env`, not code:
 
 | Setting | Stack | Value |
 | --- | --- | --- |
-| `SIGNALS_NETWORK` | Signals only | Network folder name under `examples/schemas/`, for example `purple_dot` |
+| `SIGNALS_NETWORK` | Signals only | Domain folder name under `examples/schemas/`, for example `purple_dot` |
 | `SERVED_DOMAINS` | Signals only | `<network-id>/<domain>` pairs, for example `purple_dot/seeker,purple_dot/provider` |
-| `VITE_NETWORK_ID` | Signals, Track B | The network id from that folder's `network.json` |
-| `AGGREGATOR_NETWORK` | Aggregator | Network folder name under the Aggregator's `config/` |
+| `VITE_NETWORK_ID` | Signals, Track B | The domain id from that folder's `network.json` |
+| `AGGREGATOR_NETWORK` | Aggregator | Domain folder name under the Aggregator's `config/` |
 
-The folder name and the network id match for every network except Yellow, whose
-id is set in its `network.json`. Each network folder also holds its consent text
+The folder name and the domain id match for every domain except Yellow, whose
+id is set in its `network.json`. Each domain folder also holds its consent text
 (`consent.json`) and optional email copy (`messages.properties`). Exact steps:
-[Signals DPG Setup](/guides/installation/local-setup/signals-dpg/#choose-a-network)
-and [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/#choose-a-network).
+[Signals DPG Setup](/guides/installation/local-setup/signals-dpg/#choose-a-domain)
+and [Aggregator DPG Setup](/guides/installation/local-setup/aggregator-dpg/#choose-a-domain).
 
 ## Ports at a glance
 
