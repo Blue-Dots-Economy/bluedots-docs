@@ -139,6 +139,42 @@ bash install.sh apply_default_sc
 
 Step 2 also provisions a managed **RDS PostgreSQL** instance, and once it exists every chart's database connection is pointed at it automatically. That is what makes `global-cloud-values.yaml`'s generated `postgres.host` values matter. An in-cluster Postgres pod is also deployed alongside it (`postgresql.enabled: true` in `global-images.yaml`), kept for reference/rollback, but with RDS present it sits unused — there is no supported `global-values.yaml` toggle today to skip RDS and run on the in-cluster pod only. RDS sizing (`rds_instance_class`, `rds_allocated_storage`, `rds_multi_az`, …) is in the [Configuration reference](#configuration-reference-sizing-zones-and-access) below.
 
+### Cluster backups (AWS Backup)
+
+Step 2 also applies the **`backup`** module, turning on AWS Backup for the cluster — Kubernetes objects plus every disk the pods use (via the EBS/EFS/S3 CSI driver), captured together on a schedule. It's on by default (`backup_enabled: true`) and the template ships these settings:
+
+| Setting | Template default |
+|---|---|
+| `backup_schedule` | daily, `cron(30 18 ? * * *)` (00:00 IST) |
+| `backup_retention_days` | 30 |
+| Vault lock | governance mode, bounded by `backup_min_retention_days` (7) / `backup_max_retention_days` (35) |
+
+To apply or re-apply just this module: `bash install.sh plan_tf_backup` → `bash install.sh apply_tf_backup`.
+
+:::note
+This does not cover the managed RDS database — RDS keeps its own backups (`rds_backup_retention_days`). Only disks through the EBS/EFS/S3 CSI driver are captured.
+:::
+
+**Restoring is always a manual step**, done with the scripts in `opentofu/aws/<env>/aws-backup-scripts/`. The basic flow:
+
+```bash
+cd opentofu/aws/<env>/aws-backup-scripts
+
+./trigger-backup.sh                  # on-demand backup, if you don't want to wait for the schedule
+./list-recovery-points.sh --latest   # find the recovery point to restore
+
+# EBS volumes are AZ-locked — get the target cluster's AZ first
+kubectl get nodes -o jsonpath='{.items[0].metadata.labels.topology\.kubernetes\.io/zone}'
+
+./trigger-restore.sh --target-cluster <name> --az <az>   # asks you to type `yes`; refuses to run non-interactively
+./restore-status.sh <RestoreJobId> --watch
+
+export KUBECONFIG=/path/to/target-cluster-kubeconfig.yaml
+./verify-restore.sh                  # pod/PVC health on whatever cluster KUBECONFIG points at
+```
+
+That's enough for a first restore, but **read [`aws-backup-scripts/README.md`](https://github.com/Blue-Dots-Economy/bluedots-automation/blob/main/opentofu/aws/template/aws-backup-scripts/README.md) before you run one for real** — it covers restoring specific namespaces, verifying the data (not just the pods) actually came back, the cleanup needed after a restore test, and a troubleshooting table for the common failure modes.
+
 ## 5. Connect and validate
 
 ```bash
@@ -171,6 +207,7 @@ If the plan says **destroy** or **replace** on a database, node group or bucket,
 | S3 buckets / CORS | `buckets`, `cors_*` | `plan_tf_storage` → `apply_tf_storage` → `apply_tf_output_file` → `deploy_aggregator` |
 | Database size | `rds_instance_class`, `rds_allocated_storage` | `plan_tf_rds` → `apply_tf_rds` |
 | Node count / size | `eks_node_*` | `plan_tf_eks` → `apply_tf_eks` |
+| Cluster backup schedule / retention / on-off | `backup_*` (e.g. `backup_enabled`, `backup_schedule`, `backup_retention_days`) | `plan_tf_backup` → `apply_tf_backup` |
 
 :::caution
 Changing the node instance type or disk size replaces the whole node group — pods reschedule onto new machines. Do it in a maintenance window.
