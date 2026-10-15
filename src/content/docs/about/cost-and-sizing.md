@@ -35,4 +35,4 @@ The network, Kubernetes control plane, egress gateways, VPN and bastion, object 
 
 ## Capacity
 
-The basic setup can handle a total of 1 lakh job posts with 1,000 active users per day.
+The basic setup can handle a total of 1 lakh signal profiles (example, job posts) with 1,000 active users per day.
