@@ -243,7 +243,7 @@ export default defineConfig({
               ],
             },
             { label: 'Activating Blue Dots in a District', slug: 'about/district-activation' },
-            { label: 'Cost & Sizing', slug: 'about/cost-and-sizing', badge: { text: 'Soon', variant: 'note' } },
+            { label: 'Cost & Sizing', slug: 'about/cost-and-sizing' },
             { label: 'Glossary', slug: 'about/glossary' },
           ],
         },
