@@ -33,7 +33,7 @@ Every blue dot exists because the person or organisation behind it chose to list
 A DPG in the Blue Dots sense is:
 
 - **Open** — source-available and free to deploy. Adaptors run their own instances.
-- **Domain-aware** — instances work together on a shared contract for each domain instead of in silos.
+- **Shared rules per domain** — every instance in a domain uses the same list of fields, so their blue dots can be shared.
 - **Schema-driven** — versioned schema files set what an instance stores and exchanges. This is what lets one set of software serve many sectors. The Blue Dot (jobs), Yellow Dot (education), Purple Dot (persons with disabilities) and Orange Dot (tourism) domains each have their own schema. See the [schema-driven model](/core-concepts/technical/schema-driven-model/).
 - **Composable** — an adaptor can serve one domain or many, and integrate with other DPGs.
 
@@ -43,7 +43,7 @@ The Blue Dots stack is anchored by two DPGs that work together:
 
 ### Signals DPG
 
-The **domain-aware backend** that stores blue dots and matches them across instances. Its core vocabulary (*domain*, *participant type*, *instance*, *item*, *action*, *event*) is defined in the [Glossary](/core-concepts/glossary/). The code calls a domain a *network* and a participant type a *domain*. Signals exposes the read/write APIs that everything else builds on. Most adaptors **start here**.
+The **backend** that stores blue dots and matches them across instances. Its terms (*domain*, *participant type*, *instance*, *item*, *action*, *event*) are in the [Glossary](/core-concepts/glossary/); the code calls a domain a *network* and a participant type a *domain*. Signals exposes the read/write APIs that everything else builds on. Most adaptors **start here**.
 
 See [Core Concepts → Signals](/core-concepts/signals/) and [Architecture → Signals DPG](/core-concepts/architecture/signals-dpg/).
 
@@ -79,7 +79,7 @@ Alongside the two DPGs, an adaptor inherits a set of ready-made supporting piece
 A typical adoption path:
 
 1. Stand up a **Signals DPG** instance for your district or domain.
-2. Adopt the **minimum standard** for your domain, or define a new one with the participant types you need.
+2. Adopt the [minimum standard](/core-concepts/networks-domains-instances/#the-minimum-standard-for-a-blue-dot) for your domain, or define a new one with the participant types you need.
 3. Add the **Aggregator DPG** to onboard partner organisations and bulk-load participants.
 4. Layer in capture channels (web, voice) and integrations (SMS, email).
 
