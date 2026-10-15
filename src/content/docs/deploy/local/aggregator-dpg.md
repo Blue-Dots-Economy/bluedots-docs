@@ -198,21 +198,12 @@ them with the network id `blue_dot`, then:
 1. Copy `network.json` to `signals-dpg/examples/schemas/blue_dot/`, the four
    form files to `aggregator-dpg/config/blue_dot/schemas/aggregator/`, and
    `aggregator.config.yaml` to `aggregator-dpg/config/blue_dot/`.
-2. Serve the schema folder, so the Aggregator reads the same `network.json`:
-
-   ```bash
-   cd signals-dpg/examples/schemas/blue_dot && python3 -m http.server 8765
-   ```
-
-   In `aggregator.config.yaml`, set `source: http://host.docker.internal:8765/network.json`.
-3. In `local-setup/.env`, set `SIGNALS_SERVED_DOMAINS` to the line in the
+2. In `local-setup/.env`, set `SIGNALS_SERVED_DOMAINS` to the line in the
    generated `deployments.env`.
-4. Rebuild and restart:
+3. Rebuild and restart: `docker compose up -d --build`.
 
-   ```bash
-   docker compose up -d --build signals-api
-   docker compose up -d --force-recreate aggregator-api aggregator-web aggregator-worker
-   ```
+Signals and the Aggregator both read the copied `network.json`; the stack's
+`schema-server` serves it to the Aggregator.
 
 ## Adding search (relevance ranking)
 
