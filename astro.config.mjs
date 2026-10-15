@@ -266,14 +266,7 @@ export default defineConfig({
                 { label: 'Tech Stack', slug: 'get-started/architecture/tech-stack' },
               ],
             },
-            {
-              label: 'Voice Bot',
-              items: [
-                { label: 'Seeker Agent', slug: 'get-started/voice-bot/seeker-agent', badge: { text: 'Soon', variant: 'note' } },
-                { label: 'Provider Agent', slug: 'get-started/voice-bot/provider-agent', badge: { text: 'Soon', variant: 'note' } },
-                { label: 'Agents Platform', slug: 'get-started/voice-bot/agents-platform', badge: { text: 'Soon', variant: 'note' } },
-              ],
-            },
+            { label: 'Voice Bots', slug: 'get-started/voice-bots' },
           ],
         },
         {

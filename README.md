@@ -55,7 +55,7 @@ bluedots-docs/
 | Section | For | Pages |
 | --- | --- | --- |
 | **Knowing about Blue Dots** | Implementation in-charge, network operator, PMU, SI, voice AI provider | Introduction · The Blue Dots Approach · Blue Dots as a DPG · Key Concepts · Activating Blue Dots in a District · Cost & Sizing · Glossary |
-| **Getting Started** | All of the above, plus the cloud or hosting provider | Block Diagram · Architecture · Voice Bot |
+| **Getting Started** | All of the above, plus the cloud or hosting provider | Block Diagram · Architecture · Voice Bots |
 | **Start your Deployment** | SI, voice AI provider, cloud or hosting provider | Steps of Deployment · Deploy the DPGs (local, cloud) · Deploy the Agents (seeker/provider, platform) · Configure & Customise · API Reference |
 
 Edit the sidebar in `astro.config.mjs`; add pages under `src/content/docs/`.
