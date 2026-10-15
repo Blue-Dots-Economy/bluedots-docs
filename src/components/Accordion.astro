@@ -1,0 +1,19 @@
+---
+/**
+ * Accordion styled after shadcn/ui's Accordion (single, collapsible).
+ * Wrap AccordionItem children. Built on native <details name="…">, so only
+ * one item is open at a time and it works without JavaScript. not-content
+ * keeps Starlight's own <details> styling (side border, marker) off it.
+ */
+---
+
+<div class="bd-accordion not-content">
+  <slot />
+</div>
+
+<style>
+  .bd-accordion {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--sl-color-gray-5);
+  }
+</style>
