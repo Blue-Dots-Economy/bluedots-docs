@@ -66,6 +66,21 @@ container-to-container URLs match the Signals-only stack.
 Full URL list, cross-DPG wiring and troubleshooting are in the
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) guide.
 
+## Start faster with prebuilt images
+
+If you are not changing the app code, leave out `--build`:
+
+```bash
+docker compose up -d
+```
+
+Docker then downloads the ready-made Signals and Aggregator images from GitHub
+(the `main` tag) instead of building them, which is much faster. Use `--build`
+when you change the code or a schema file, because the downloaded images contain
+the repositories' own files. To run a release instead of `main`, set
+`SIGNALS_API_IMAGE`, `SIGNALS_UI_IMAGE`, `AGGREGATOR_API_IMAGE`,
+`AGGREGATOR_WEB_IMAGE` or `AGGREGATOR_WORKER_IMAGE` in `.env`.
+
 ## Track A with search
 
 Track A runs without signals-search: discover returns results in
@@ -200,7 +215,8 @@ them with the network id `blue_dot`, then:
    `aggregator.config.yaml` to `aggregator-dpg/config/blue_dot/`.
 2. In `local-setup/.env`, set `SIGNALS_SERVED_DOMAINS` to the line in the
    generated `deployments.env`.
-3. Rebuild and restart: `docker compose up -d --build`.
+3. Rebuild and restart: `docker compose up -d --build`. Keep `--build`: without
+   it the stack runs the downloaded images, which do not contain your file.
 
 Signals and the Aggregator both read the copied `network.json`; the stack's
 `schema-server` serves it to the Aggregator.
