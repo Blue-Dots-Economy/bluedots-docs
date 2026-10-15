@@ -1,6 +1,6 @@
 ---
 title: Provider Agent
-description: A minimal voice bot that helps a provider list what they offer by phone call.
+description: A voice bot that helps a provider list what they offer by phone call.
 ---
 
 :::note[Coming soon]

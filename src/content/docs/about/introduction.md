@@ -83,5 +83,5 @@ The adaptor brings local knowledge and the local organisations that can reach pe
 | Section | What you'll find |
 | --- | --- |
 | [Knowing about Blue Dots](/about/) | What Blue Dots is, the key ideas, district activation, cost and the glossary. |
-| [Getting Started](/get-started/) | How the DPGs connect, their architecture, and a minimal voice bot. |
+| [Getting Started](/get-started/) | How the DPGs connect, their architecture, and the voice bot. |
 | [Start your Deployment](/deploy/) | Steps to deploy the DPGs locally or on the cloud, deploy the agents, configure, and the API reference. |

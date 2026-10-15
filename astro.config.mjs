@@ -267,7 +267,7 @@ export default defineConfig({
               ],
             },
             {
-              label: 'Voice Bot (Minimal)',
+              label: 'Voice Bot',
               items: [
                 { label: 'Seeker Agent', slug: 'get-started/voice-bot/seeker-agent', badge: { text: 'Soon', variant: 'note' } },
                 { label: 'Provider Agent', slug: 'get-started/voice-bot/provider-agent', badge: { text: 'Soon', variant: 'note' } },
