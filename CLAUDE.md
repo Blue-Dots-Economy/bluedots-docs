@@ -17,7 +17,7 @@ This is an [Astro](https://astro.build) + [Starlight](https://starlight.astro.bu
 site: 'https://docs.bluedotseconomy.org',
 ```
 
-No `base` — the site is served from the domain root, so internal links are root-relative (`/guides/...`, not `/bluedots-docs/guides/...`). `public/CNAME` pins the custom domain across Pages deploys.
+No `base` — the site is served from the domain root, so internal links are root-relative (`/deploy/...`, not `/bluedots-docs/deploy/...`). `public/CNAME` pins the custom domain across Pages deploys.
 
 ## Domains
 
@@ -47,9 +47,17 @@ Docker alternative (local dev only — Pages deploy is unaffected): `docker comp
 
 ## Information architecture
 
-The sidebar in `astro.config.mjs` is the authoritative list of sections and slugs.
+The sidebar in `astro.config.mjs` is the authoritative list of sections and slugs. Since the v1 restructure it has three persona-led sections, each with an `index.md` that names who it is for:
 
-Many sidebar slugs (especially in `overview/`, `core-concepts/architecture/`, `core-concepts/technical/`, `guides/installation/`) reference pages that do not yet exist as files — they need to be created before the site will build without 404s.
+| Section | Folder | For |
+|---|---|---|
+| Knowing about Blue Dots | `about/` | Implementation in-charge, network operator, PMU, SI, voice AI provider |
+| Getting Started | `get-started/` | All of the above, plus the cloud or hosting provider |
+| Start your Deployment | `deploy/` (+ `api/`) | SI, voice AI provider, cloud or hosting provider |
+
+- **Planned pages** exist as a stub with a `:::note[Coming soon]` aside and a `Soon` sidebar badge. Remove both when the page gets content.
+- **Moved pages keep their old URL** through `redirects` in `astro.config.mjs`. When you move a page, add a redirect.
+- **Pages kept out of the sidebar:** `explore/*` and `overview/paradox-of-proximity` (moving to bluedotseconomy.org), `guides/cicd-and-builds` and `community/contributing` (moving to the repos), `community/roadmap` and `community/release-notes` (placement not decided). They are still built so existing links work. Do not link to them from new pages.
 
 ## Implementation plans are temporary
 
@@ -71,7 +79,7 @@ Before opening a PR, check: does this PR complete a plan? If so, `git rm` it.
 
 ## Writing register
 
-Overview and Explore make the case for Blue Dots; Core Concepts, Guides and API Reference describe what exists. Keep advocacy out of pages a reader executes — a Guide should say what happens and what to do, not why the idea is good.
+Knowing about Blue Dots and Explore make the case for Blue Dots; Getting Started, Start your Deployment and API Reference describe what exists. Keep advocacy out of pages a reader executes — a Guide should say what happens and what to do, not why the idea is good.
 
 ## Figures have one owning page
 
@@ -82,9 +90,9 @@ A headline figure is stated once and linked from everywhere else. Restating a nu
 | Pilot outcomes — jobs surfaced, discovery time, conversion, cost per interaction | `explore/pilots` |
 | ₹87,500 crore and its derivation | `explore/economics` |
 | Field observations — proximity, ratios, employer response, women's assurances | `explore/learnings` |
-| Time to create a blue dot (2–3 minutes) | `overview/the-blue-dots-approach` |
+| Time to create a blue dot (2–3 minutes) | `about/the-blue-dots-approach` |
 | PwD campaign — Feb 2026, 1 lakh+ needs in 10 days, ₹10 per interaction | `explore/beyond-livelihoods` (Purple Dot section) |
-| Domains, their participant types and their status | `core-concepts/networks-domains-instances` |
+| Domains, their participant types and their status | `about/key-concepts/networks-domains-instances` |
 
 Terminology: use **MSME**, not SMB, outside the Brown Dot sector naming.
 
@@ -114,7 +122,7 @@ Blue Dots is not a jobs product. Jobs (Blue) is the first live domain and the so
 
 ### Scenario bank
 
-Generic pages (landing, Overview, top-level Core Concepts, Use Cases) name at least one non-Blue dot and draw examples from this table rather than inventing new ones. Pages that document the real `blue_dot` schema keep it and say other domains work the same way.
+Generic pages (landing, Knowing about Blue Dots, Use Cases) name at least one non-Blue dot and draw examples from this table rather than inventing new ones. Pages that document the real `blue_dot` schema keep it and say other domains work the same way.
 
 | Dot | Scenario | Who agrees before contact |
 |---|---|---|
@@ -130,7 +138,7 @@ Organisations that sign people up and check their details: skilling centres and 
 
 ## Plain language
 
-Write for a reader who is not technical: a block officer, an NGO worker, a Class 8 reader. Scope: R1–R8 everywhere; R9–R10 in Overview, Explore and Start Here. Exempt: fenced code, YAML, voice-prompt text, component names and imports, `api/` pages, attributed quotes, quoted UI strings, organisation names. Page titles and frontmatter `description` are in scope.
+Write for a reader who is not technical: a block officer, an NGO worker, a Class 8 reader. Scope: R1–R8 everywhere; R9–R10 in Knowing about Blue Dots and Explore. Exempt: fenced code, YAML, voice-prompt text, component names and imports, `api/` pages, attributed quotes, quoted UI strings, organisation names. Page titles and frontmatter `description` are in scope.
 
 1. **Say literally what happens.** "rails" → "the same open-source software and data rules"; "digitally dark" / "invisible" → "not listed anywhere online"; "surfaced" → "found"; "closes the gap" → "helps them find each other"; "signal of intent" → "a short listing that says what someone needs or offers". One literal UPI comparison on the DPG page is fine.
 2. **No rhetorical flips** ("not X, but Y", "isn't just X", "Not X. Not Y. Not Z."). State the positive claim.
@@ -151,14 +159,6 @@ Don't over-correct: "paradox of proximity" is the programme's named concept (def
 
 CI builds only on push to `main` — pull requests are not built. Run `pnpm build && pnpm check:links` locally before every merge; a broken build on `main` leaves the site silently on the old version.
 
-## Guided paths
+## PhaseTimeline links
 
-`Start Here` hubs list their steps as `PhaseTimeline` phases; member pages carry `Path N of M` labels in `prev`/`next` frontmatter.
-
-Two constraints:
-
-- **A page in two paths can only carry one chain.** `guides/installation/local-stack` is step 9 of Build and step 5 of Deploy; its frontmatter serves Build. Do not add a second chain — resolve it in the hub instead.
-- **Inserting a step renumbers every label after it.** Keep the hub list and the labels in sync in the same commit.
-
-`starlight-links-validator` cannot see `PhaseTimeline` hrefs (they sit in a JSX expression). Run `pnpm check:paths` after `pnpm build` when you change a hub.
-
+`starlight-links-validator` cannot see `PhaseTimeline` hrefs (they sit in a JSX expression). Run `pnpm check:paths` after `pnpm build` when you change a page that uses one.

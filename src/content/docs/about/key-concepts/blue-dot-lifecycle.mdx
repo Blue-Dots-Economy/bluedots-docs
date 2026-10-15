@@ -1,0 +1,186 @@
+---
+title: The Blue Dot Lifecycle
+description: The seven steps that take a person or organisation from being identified to a live, verified blue dot, and who does each step.
+sidebar:
+  attrs:
+    class: bd-changed
+  order: 2
+changed_sections:
+  - _top
+  - who-the-participants-are
+  - the-seven-steps
+  - who-does-what
+  - 1-decide-who-to-bring-in
+  - 2-choose-the-route-in
+  - 3-data-collection-assisted-route
+  - 4-completing-the-profile
+  - 5-verification-checks
+  - 6-verified
+  - 7-live
+  - the-lifecycle-in-practice
+---
+
+import PhaseTimeline from '../../../../components/PhaseTimeline.astro';
+
+Every participant goes through the **same seven steps** to become a blue dot: a live, verified listing that people and organisations nearby can find. A participant is anyone who lists something: someone who needs help, someone who offers it, or a support service.
+
+Each step is done either **by an organisation** (an adaptor or aggregator, acting on the participant's behalf) or **by the participant themselves**. Every step runs on software that already exists, so an adaptor configures it and builds nothing new.
+
+:::note[Two lifecycles, don't confuse them]
+This page describes how a person or organisation becomes a blue dot. How a stored item is then found, matched and acted on is a separate process, covered in [From listing to match](/about/the-blue-dots-approach/#from-listing-to-match) and [Read & Write Paths](/get-started/architecture/read-write-paths/).
+:::
+
+## Who the participants are
+
+Each domain defines its own participant types. The steps below are the same for all of them.
+
+| Domain | Someone who needs something | Someone who offers something |
+|---|---|---|
+| Blue Dot (jobs) | `seeker`: a young person looking for work | `provider`: an employer with a vacancy. The deployed pilot schemas also have `service_provider`: an organisation offering training, counselling or placement help. |
+| Yellow Dot (education) | `student`: a student looking for tutoring or career counselling | A tutor or counsellor |
+| Purple Dot (persons with disabilities) | `seeker`: a person with a disability looking for devices, services or work | `provider`: an organisation or individual offering them |
+| Orange Dot (tourism) | None. Visitors browse the listings. | `practitioner`: a homestay owner, artisan or guide. Listing only, with no requests to send or accept. |
+
+The full list of domains and their status is on [Domains, Participant Types & Instances](/about/key-concepts/networks-domains-instances/#the-domains-today).
+
+## The seven steps
+
+{/* Editable source: src/assets/diagrams/blue-dot-lifecycle.excalidraw — open at https://excalidraw.com to adjust, re-export PNG here. */}
+
+![The blue dot lifecycle, left to right in seven steps. 1, decide who to bring in. 2, choose the route in: assisted or self. 3, on the assisted route, one of four intake methods: offline camp, bulk upload of a CSV file or database, outbound campaign by email or voice bot, or inbound campaign by QR code. 4, the participant completes their profile with the AI Voice Agent or the web app. 5, three automatic checks: structured, completed, consented. 6, Verified: a person from the adaptor or aggregator confirms the profile. 7, Live. A legend marks which steps an organisation does, which the participant does, and which happen automatically. On the self route, the participant skips step 3 and goes straight to step 4.](../../../../assets/diagrams/blue-dot-lifecycle.png)
+
+:::note[Reading the diagram]
+The legend shows which steps an organisation does on the participant's behalf, which the participant does themselves, and which happen automatically (the checks in step 5 and going live in step 7). On the diagram, the adaptor is the organisation that runs the programme, and the [aggregator](/about/key-concepts/aggregators/) is the local organisation that signs people up. Both are defined in the [Glossary](/about/glossary/).
+:::
+
+<PhaseTimeline phases={[
+  {
+    number: 1,
+    title: "Decide who to bring in",
+    focus: "Choose the group of people to bring onto Blue Dots, and the aggregator with the reach and trust to sign them up."
+  },
+  {
+    number: 2,
+    title: "Choose the route in",
+    focus: "Assisted or self. A setting chosen per campaign or area."
+  },
+  {
+    number: 3,
+    title: "Data collection (assisted route)",
+    focus: "One of four built-in intake methods: offline camp, bulk upload, outbound campaign, inbound QR campaign."
+  },
+  {
+    number: 4,
+    title: "Completing the profile",
+    focus: "AI Voice Agent (primary) or web app (fallback). Both write into the same profile."
+  },
+  {
+    number: 5,
+    title: "Verification checks",
+    focus: "Structured, completed, consented. Applied automatically before a profile can go live."
+  },
+  {
+    number: 6,
+    title: "Verified",
+    focus: "A person from the adaptor or aggregator reviews the profile. This is the only step a person must do by hand."
+  },
+  {
+    number: 7,
+    title: "Live",
+    focus: "Others nearby can find the blue dot and it can be matched. Discover and Connect become available."
+  }
+]} />
+
+## Who does what
+
+| Step | Done by | Where it happens |
+|---|---|---|
+| 1. Decide who to bring in | Adaptor | Off the platform: a planning decision |
+| 2. Choose the route in | Adaptor or aggregator | A setting, per campaign or area |
+| 3. Data collection | Aggregator, on the participant's behalf | Aggregator DPG |
+| 4. Completing the profile | The participant | AI Voice Agent or web app → Signals DPG |
+| 5. Verification checks | The system | Signals DPG |
+| 6. Verified | Adaptor or aggregator: **a person** | Aggregator DPG |
+| 7. Live | The system | Signals DPG (and the voice bot) |
+
+---
+
+## 1. Decide who to bring in
+
+This step applies to every participant type, in every domain. Examples: a young person looking for work, a student looking for a tutor, a person with a disability who needs a wheelchair, or a homestay owner who wants visitors.
+
+The work here is choosing who to bring in, and on what criteria. The adaptor chooses the group, then picks the **aggregator**: the local organisation with reach and trust on the ground. Examples are a skilling centre, a school, a disability organisation or a tourism body.
+
+See [Aggregators](/about/key-concepts/aggregators/) for who can be one, and [Activating Blue Dots in a District](/about/district-activation/) for how a district picks its first use case.
+
+## 2. Choose the route in
+
+The adaptor or aggregator chooses how a group will be signed up:
+
+- **Assisted.** The adaptor or a field team brings the participant in on their behalf.
+- **Self.** The participant starts the process on their own.
+
+Both routes are built in. The choice is a setting, made per campaign or area.
+
+In the Aggregator DPG this is a per-link `registration_mode`, declared under `aggregator.registration_modes` in `aggregator.config.yaml`. Each mode maps to a submission shape: `account_only` (create the account now, complete the profile later) or `account_and_profile` (capture everything in one pass). The database column is only a key, and the config is the single source of truth.
+
+## 3. Data collection (assisted route)
+
+On the assisted route, the aggregator collects participant data with whichever method fits. All four are built into the Aggregator DPG.
+
+| Intake method | What it looks like | What it uses |
+|---|---|---|
+| **Offline camp** | Data collected in person, for example at a school, a camp or a community event | Aggregator portal, assisted entry |
+| **Bulk upload** | An existing list (CSV, database) imported in one go | CSV upload → background worker → bulk-create into Signals |
+| **Outbound campaign** | The aggregator contacts people by email or a voice bot | Notifications + voice DPG |
+| **Inbound campaign** | The participant scans a QR code shared by the aggregator and starts on their own | Shareable registration links, with roll-up metrics |
+
+## 4. Completing the profile
+
+Whether the participant came through an aggregator or on their own, they complete the profile through one of two channels:
+
+- **AI Voice Agent (primary).** A phone call, for participants who prefer speaking to typing. Its prompts are published openly. See [AI Voice Agent Prompts](/deploy/agents/voice-agent-prompts/).
+- **Web app (fallback).** A self-serve web app built on the Signals DPG. Each domain shows it with its own name and colours.
+
+Both channels write into the **same profile**, stored by the Signals DPG. The participant types for each domain are already defined in its schema. See [Participant Profiles](/about/key-concepts/participant-profiles/).
+
+## 5. Verification checks
+
+Before a profile can go live, three checks are applied:
+
+1. **Structured.** The data is in the shape the schema expects.
+2. **Completed.** All required fields are filled in.
+3. **Consented.** Consent has been recorded.
+
+The system runs these checks automatically. They run against the [item schema](/get-started/architecture/schema-driven-model/), so changing what "structured" and "completed" mean is a schema edit with no code change. Each participant type lists the checks it needs in `go_live_required`. Orange Dot listings are public, so the tourism domain does not require the consent check.
+
+## 6. Verified
+
+A person from the adaptor or the aggregator reviews the profile and confirms it is genuine and ready to go live.
+
+:::tip[The one step a person does by hand]
+Software runs the checks, and **a person confirms the result.** This is the only step that needs a person, on purpose: it is how the aggregator's local knowledge vouches for the blue dot.
+:::
+
+The review happens in the Aggregator DPG. A coordinator from the aggregator, or a person from the adaptor, checks the fields that can be verified and then marks the profile as verified.
+
+## 7. Live
+
+The blue dot is now live. Others can see it and it can be matched. For example, nearby employers can find a job seeker in the jobs domain, and tutors can find a student in the Yellow Dot domain.
+
+From here, two capabilities are available in the Signals DPG and the voice bot:
+
+- **Discover.** Finding, and being found by, relevant matches.
+- **Connect.** Contacting a match, or being contacted by one.
+
+Orange Dot (tourism) listings have Discover only. Visitors find a listing and call the number shown.
+
+:::caution[Contact details are not public]
+**In the jobs and disability domains, personal contact details are shared only once both parties agree to connect.** A match shows that a relevant blue dot exists. It does not show phone numbers. See [Consent and contact details](/about/key-concepts/signals/#consent-and-contact-details).
+:::
+
+---
+
+## The lifecycle in practice
+
+These seven steps were used in the jobs pilots in Ghaziabad and Dharwad, with one group of job seekers and one group of employers, each using a different intake method. See [The lifecycle in practice](/explore/pilots/#the-lifecycle-in-practice) on the Pilots page for both, step by step.

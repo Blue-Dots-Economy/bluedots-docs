@@ -90,7 +90,7 @@ bash install.sh deploy_all_services
 
 ![deploy_all_services runs in strict order: 1 preflight, 2 create_namespaces_and_secrets (3 namespaces + ghcr-pull secret), 3 deploy_monitoring, 4 deploy_common_services (Kong CRDs + platform), 5 deploy_keycloak, 6 deploy_signals, 7 deploy_aggregator](../../../assets/diagrams/cicd-deploy-chain.png)
 
-See the [Deployment guide](/guides/installation/cloud-setup/aws/deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) for what each layer is.
+See the [Deployment guide](/deploy/cloud/aws-deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/get-started/architecture/infrastructure/) for what each layer is.
 
 ### Scripted / non-interactive runs
 
@@ -121,6 +121,6 @@ Never deploy a customer environment from `main` — use that environment's branc
 2. When ready to ship, cut a sprint release-candidate tag (e.g. `202608-s1-rc1`) → that tag triggers the build, publishing `ghcr.io/blue-dots-economy/<service>:<tag>` to GHCR for every service at once.
 3. In `bluedots-automation`, on the target environment's branch, update the relevant tag(s) in `opentofu/aws/<env>/global-images.yaml` to the new release tag.
 4. Run `bash install.sh deploy_<service>` (or `deploy_all_services`) — Helm rolls out the new image with `--wait`.
-5. Validate (`helm list -A`, pod health, ingress, TLS) — see the [Deployment guide](/guides/installation/cloud-setup/aws/deployment/).
+5. Validate (`helm list -A`, pod health, ingress, TLS) — see the [Deployment guide](/deploy/cloud/aws-deployment/).
 
 Rollback is the inverse: set the tag back to the previous known-good release tag and re-run the deploy.

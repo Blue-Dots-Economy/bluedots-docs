@@ -14,11 +14,11 @@ Track notable changes here. Keep entries newest-first, grouped by component, fol
 ## Unreleased
 
 ### Docs
-- Documentation updated for the Keycloak migration: identity pages rewritten around the shared `bluedots` realm, added a [Keycloak Realm Reference](/core-concepts/architecture/keycloak-realm/) and a [Keycloak Setup](/guides/keycloak-setup/) guide, and corrected the architecture and infrastructure diagrams.
+- Documentation updated for the Keycloak migration: identity pages rewritten around the shared `bluedots` realm, added a [Keycloak Realm Reference](/deploy/configure/keycloak-realm/) and a [Keycloak Setup](/deploy/configure/keycloak-setup/) guide, and corrected the architecture and infrastructure diagrams.
 - Initial documentation site published with Astro + Starlight: Overview, Core Concepts (Architecture + Technical), Guides, Explore and Community sections.
 
 ### Signals DPG
-- **Version marker:** Keycloak is the recommended identity provider as of the `GA-2026-08-18` release of both DPGs. Instances provisioned earlier run the legacy better-auth path; `AUTH_PROVIDER` still defaults to `betterauth`, so a current-release instance also stays on the legacy path until explicitly switched. Migration is an operator-run cutover — see [Keycloak Setup](/guides/keycloak-setup/#migrating-an-existing-instance).
+- **Version marker:** Keycloak is the recommended identity provider as of the `GA-2026-08-18` release of both DPGs. Instances provisioned earlier run the legacy better-auth path; `AUTH_PROVIDER` still defaults to `betterauth`, so a current-release instance also stays on the legacy path until explicitly switched. Migration is an operator-run cutover — see [Keycloak Setup](/deploy/configure/keycloak-setup/#migrating-an-existing-instance).
 - **Changed:** identity moved to Keycloak. Browser logins use the OIDC authorization-code flow against a Keycloak-hosted login screen; integrating DPGs authenticate with client-credentials service tokens.
 - **Added:** audience and role gating on incoming tokens — `KEYCLOAK_ACCEPTED_CLIENT_IDS`, `KEYCLOAK_SERVICE_CLIENT_IDS` (empty by default) and `KEYCLOAK_REQUIRED_REALM_ROLES`.
 - **Added:** `ACTING_ORG_SOURCE` lets the `x-acting-org-id` header be checked against the token's `signals_acting_orgs` grant instead of being trusted outright.
