@@ -66,6 +66,65 @@ container-to-container URLs match the Signals-only stack.
 Full URL list, cross-DPG wiring and troubleshooting are in the
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) guide.
 
+## Track A with search
+
+Track A runs without signals-search: discover returns results in
+recency/distance order and match scores are unavailable. To add relevance
+ranking and match scores, start it with the search file instead — it includes
+the base stack and adds search:
+
+```bash
+cd aggregator-dpg/local-setup
+docker compose -f docker-compose.search.yml up -d --build
+```
+
+This adds the search API (http://localhost:3110), its ingestion worker and the
+embedding server. Give Docker **≥ 10 GB** of memory — the embedder alone wants
+3-4 GB.
+
+Use the same `-f docker-compose.search.yml` for later commands (`ps`, `logs`,
+`down`), or put `COMPOSE_FILE=docker-compose.search.yml` in `.env` so plain
+`docker compose` includes search.
+
+## After setup: try it
+
+All email (approvals, invites, login codes) lands in **Mailpit** at
+http://localhost:8025. Phone login codes print to `docker compose logs keycloak`.
+
+### 1. Onboard an organisation and a coordinator
+
+Org hierarchy is on locally, so an organisation registers first and then
+invites its coordinators. See [How coordinators join](/core-concepts/aggregators/#how-coordinators-join).
+
+1. Register the organisation at http://localhost:3100/register/owner.
+2. In Mailpit, open the approval request and click **Approve**. The owner gets a
+   mail with an invite link (`/register/invite?grant=…`).
+3. Open that link and invite a coordinator by email.
+4. In Mailpit, open the coordinator invite and register through it.
+5. Approve the coordinator's registration in Mailpit.
+6. Log in as the coordinator at http://localhost:3100/login.
+
+### 2. Onboard participants (as the coordinator)
+
+- **Bulk upload** — http://localhost:3100/onboarding/bulk-uploads: download the
+  CSV template, fill in seekers or providers, upload it.
+- **Registration links** — http://localhost:3100/onboarding/links: create a
+  shareable link or QR code that participants fill in themselves.
+
+Each participant gets a Signals account and a **draft** profile.
+
+### 3. Use Signals (as a participant)
+
+1. Open the Signals UI at http://localhost:5173 and log in with the participant's
+   email or phone.
+2. Accept the consent prompt — the profile can then go **live**. To add another
+   profile, use **Create profile**.
+3. Browse the home page (map and list) for the other side: jobs for a seeker,
+   candidates for a provider. With search running, results are relevance-ranked;
+   without it, they are in recency order with a _"Showing basic matches"_ note.
+4. **Apply** or connect on a match. The other party sees it and can **Accept**;
+   both sides follow it under **My Actions**.
+
 ## Track B — hybrid dev (hot-reload)
 
 Run the backing services in Docker and the apps from source:
