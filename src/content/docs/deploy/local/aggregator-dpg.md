@@ -191,81 +191,28 @@ domain end to end, change those lines in `local-setup/docker-compose.yml` and
 
 ## Run with a schema made from your workbook
 
-If your programme describes its fields in a schema workbook (Excel), you can
-turn it into the files this stack reads and run the stack with them. The
-`schema-from-sheet` skill in
-[bluedots-claude-plugins](https://github.com/AbhiGaddi/bluedots-claude-plugins)
-does the conversion. This section keeps the domain as `blue_dot` and replaces its
-files, so give the skill the network id `blue_dot`.
+The [`schema-from-sheet`](https://github.com/AbhiGaddi/bluedots-claude-plugins)
+skill turns a schema workbook (Excel) into the files this stack reads. Generate
+them with the network id `blue_dot`, then:
 
-The skill writes these files:
-
-| File | Goes to | Read by |
-| --- | --- | --- |
-| `network.json` | `signals-dpg/examples/schemas/blue_dot/network.json` | Signals, and the Aggregator through a small file server (step 3) |
-| `org-registration.v1.json`, `registration.v1.json` and their `.ui.json` | `aggregator-dpg/config/blue_dot/schemas/aggregator/` | Aggregator sign-up forms |
-| `aggregator.config.yaml` | `aggregator-dpg/config/blue_dot/aggregator.config.yaml` | Aggregator |
-| `deployments.env` | not copied; it lists the participant types and links for each deployment | You, for step 4 |
-
-Signals and the Aggregator must read the same `network.json`. Signals reads the
-file from disk. The Aggregator only fetches it from a URL, so you serve the same
-file over HTTP.
-
-1. **Generate the files.** Ask the skill, for example: "Convert `my-schema.xlsx`
-   into network.json, the aggregator forms and the aggregator config, network id
-   `blue_dot`." Read its `decisions.md` before you continue.
-2. **Copy them** to the places in the table above.
-3. **Serve the schema folder** in a terminal you keep open:
+1. Copy `network.json` to `signals-dpg/examples/schemas/blue_dot/`, the four
+   form files to `aggregator-dpg/config/blue_dot/schemas/aggregator/`, and
+   `aggregator.config.yaml` to `aggregator-dpg/config/blue_dot/`.
+2. Serve the schema folder, so the Aggregator reads the same `network.json`:
 
    ```bash
-   cd signals-dpg/examples/schemas/blue_dot
-   python3 -m http.server 8765
+   cd signals-dpg/examples/schemas/blue_dot && python3 -m http.server 8765
    ```
 
-   Then point the Aggregator at it. In `aggregator-dpg/config/blue_dot/aggregator.config.yaml`:
-
-   ```yaml
-   network:
-     source: http://host.docker.internal:8765/network.json
-   ```
-
-4. **List the participant types Signals serves.** In `local-setup/.env`, set
-   `SIGNALS_SERVED_DOMAINS` to every participant type in the new file, for example
-   `blue_dot/seeker,blue_dot/provider,blue_dot/service_provider`. The code calls
-   participant types *domains*; `deployments.env` has the line ready.
-5. **Rebuild Signals and restart the Aggregator.** The Signals image contains
-   `network.json`, so it needs a rebuild:
+   In `aggregator.config.yaml`, set `source: http://host.docker.internal:8765/network.json`.
+3. In `local-setup/.env`, set `SIGNALS_SERVED_DOMAINS` to the line in the
+   generated `deployments.env`.
+4. Rebuild and restart:
 
    ```bash
-   cd aggregator-dpg/local-setup
    docker compose up -d --build signals-api
    docker compose up -d --force-recreate aggregator-api aggregator-web aggregator-worker
    ```
-
-6. **Check both sides.** `curl localhost:2742/api/v1/network/schemas` lists the
-   participant types Signals serves. The organisation sign-up page at
-   `http://localhost:3100/register/owner` shows the fields from your workbook.
-
-:::caution[Run compose from the folder that started the stack]
-Every `local-setup` checkout uses the same compose project name. Running
-`docker compose up` from a second checkout replaces the running containers with
-that checkout's `.env`, and Keycloak then fails with
-`password authentication failed`. Check the folder with
-`docker inspect -f '{{index .Config.Labels "com.docker.compose.project.working_dir"}}' sd-postgres`.
-:::
-
-:::note
-`config/blue_dot/schemas/aggregator` is a link to the shared
-`config/schemas/aggregator` folder, so the copied forms also replace the default
-forms of the other domains in your checkout. On Linux, `host.docker.internal`
-needs `extra_hosts: ["host.docker.internal:host-gateway"]` on the Aggregator
-services.
-:::
-
-To go back to the files in the repositories, run
-`git restore examples/schemas/blue_dot/network.json` in `signals-dpg` and
-`git restore config/` in `aggregator-dpg`, then repeat step 5 and stop the file
-server.
 
 ## Adding search (relevance ranking)
 
