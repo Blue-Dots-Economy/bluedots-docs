@@ -172,7 +172,8 @@ export default defineConfig({
       components: {
         // Adds the "← <group>" back link on generated API operation pages,
         // which the sidebar deliberately doesn't list. Also draws the gold
-        // "updated" sparkle on changed pages and sections (changed_sections).
+        // "updated" sparkle on changed pages and sections (changed_sections),
+        // currently switched off by SHOW_CHANGED_MARKERS in that component.
         PageTitle: './src/components/ApiPageTitle.astro',
       },
       customCss: [
@@ -289,6 +290,8 @@ export default defineConfig({
               items: [
                 { label: 'AWS Infrastructure', slug: 'deploy/cloud/aws-infrastructure' },
                 { label: 'AWS Deployment', slug: 'deploy/cloud/aws-deployment' },
+                { label: 'Tata Cloud Infrastructure Requirements', slug: 'deploy/cloud/tata-cloud-infrastructure' },
+                { label: 'Tata Cloud Deployment', slug: 'deploy/cloud/tata-cloud-deployment' },
               ],
             },
             {
