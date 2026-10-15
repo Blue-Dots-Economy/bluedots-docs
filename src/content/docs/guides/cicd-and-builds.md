@@ -1,11 +1,17 @@
 ---
 title: CI/CD & Build Pipeline
-description: How code becomes a running deployment — image builds, GHCR, image pinning, and Helm-based delivery across environments.
+description: "How code becomes a running deployment: images built and published to GHCR, pinned per environment, then delivered with Helm."
 sidebar:
+  attrs:
+    class: bd-changed
   order: 9
+changed_sections:
+  - _top
+  - 1-application-ci-build--publish
+  - 4-environments--branch-strategy
 ---
 
-Blue Dots separates **building** application images from **deploying** them. The application repositories build and publish container images; the `bluedots-automation` repository pins specific image versions and deploys them to a cluster. Understanding this split is the key to the whole delivery pipeline.
+Blue Dots separates **building** application images from **deploying** them. The application repositories build and publish container images; the `bluedots-automation` repository pins specific image versions and deploys them to a cluster. The rest of this page follows from that split.
 
 ## The pipeline at a glance
 
@@ -38,7 +44,7 @@ Representative images (Signals + Aggregator):
 | Aggregator web | `ghcr.io/blue-dots-economy/aggregator-dpg/web` |
 | Aggregator worker | `ghcr.io/blue-dots-economy/aggregator-dpg/worker` |
 | Keycloak server (custom) | `ghcr.io/blue-dots-economy/keycloak-server` — built in `bluedots-automation` (`dockerfiles/keycloak/`) |
-| Keycloak login theme (per network) | built in `aggregator-dpg` from `config/<network>/keycloak.env` |
+| Keycloak login theme (per domain) | built in `aggregator-dpg` from `config/<network>/keycloak.env` |
 
 Third-party platform images (Postgres, Redis, cert-manager, Kong) come from their own registries and are pinned the same way.
 
@@ -84,7 +90,7 @@ bash install.sh deploy_all_services
 
 ![deploy_all_services runs in strict order: 1 preflight, 2 create_namespaces_and_secrets (3 namespaces + ghcr-pull secret), 3 deploy_monitoring, 4 deploy_common_services (Kong CRDs + platform), 5 deploy_keycloak, 6 deploy_signals, 7 deploy_aggregator](../../../assets/diagrams/cicd-deploy-chain.png)
 
-See the [Deployment guide](/guides/installation/cloud-setup/aws/deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/core-concepts/architecture/infrastructure/) for what each layer is.
+See the [Deployment guide](/deploy/cloud/aws-deployment/) for the full step-by-step and validation, and [Infrastructure & Deployment Architecture](/get-started/architecture/infrastructure/) for what each layer is.
 
 ### Scripted / non-interactive runs
 
@@ -97,7 +103,7 @@ GHCR_PAT=ghp_xxx bash install.sh create_namespaces_and_secrets
 
 ## 4. Environments & branch strategy
 
-Each live deployment has its **own long-lived branch** carrying that deployment's config — network schema, image tags, public hostnames, and its own `opentofu/aws/<env>/` directory. Work flows up a trunk chain before landing in a deployment branch.
+Each live deployment has its **own long-lived branch** carrying that deployment's config — domain schema, image tags, public hostnames, and its own `opentofu/aws/<env>/` directory. Work flows up a trunk chain before landing in a deployment branch.
 
 **Trunk (promotion chain):** `<feature-branch>` → `feature` → `develop` → `main`.
 
@@ -115,6 +121,6 @@ Never deploy a customer environment from `main` — use that environment's branc
 2. When ready to ship, cut a sprint release-candidate tag (e.g. `202608-s1-rc1`) → that tag triggers the build, publishing `ghcr.io/blue-dots-economy/<service>:<tag>` to GHCR for every service at once.
 3. In `bluedots-automation`, on the target environment's branch, update the relevant tag(s) in `opentofu/aws/<env>/global-images.yaml` to the new release tag.
 4. Run `bash install.sh deploy_<service>` (or `deploy_all_services`) — Helm rolls out the new image with `--wait`.
-5. Validate (`helm list -A`, pod health, ingress, TLS) — see the [Deployment guide](/guides/installation/cloud-setup/aws/deployment/).
+5. Validate (`helm list -A`, pod health, ingress, TLS) — see the [Deployment guide](/deploy/cloud/aws-deployment/).
 
 Rollback is the inverse: set the tag back to the previous known-good release tag and re-run the deploy.

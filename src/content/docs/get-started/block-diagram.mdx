@@ -1,0 +1,48 @@
+---
+title: "Block Diagram: How the DPGs Interconnect"
+description: The layers of the Blue Dots stack (apps, auth, APIs, datastores, integrations) and how the Aggregator and Signals sides fit together.
+sidebar:
+  attrs:
+    class: bd-changed
+  order: 1
+changed_sections:
+  - _top
+  - the-layered-view
+  - layer-by-layer
+  - two-verticals-one-network
+---
+
+The Blue Dots stack is organised into clear horizontal layers, with two parallel verticals, **Aggregator** and **Signals**, that run on the same datastore servers and integrations. The same layers serve every domain, whether jobs (Blue Dot) or education (Yellow Dot).
+
+## The layered view
+
+{/* Editable source: src/assets/diagrams/high-level-architecture.excalidraw — open at https://excalidraw.com to adjust, re-export to high-level-architecture.png. */}
+
+![The Blue Dots layered architecture: Apps (Aggregator App, Signals App); Auth — a single Keycloak spanning both verticals (OIDC, shared realm and service tokens); API (Aggregator API BFF, Signals API network-aware); shared datastore servers (Redis, PostgreSQL, Object Storage) and integrations (SMTP, SMS). Both verticals use the same servers and integrations; each has its own database.](../../../assets/diagrams/high-level-architecture.png)
+
+## Layer by layer
+
+**Apps.** Two web front-ends. The **Aggregator App** is the organisation-facing portal for onboarding and bulk upload. The **Signals App** is the schema-driven UI that renders forms and cards directly from domain and item schemas.
+
+**Auth.** Both verticals authenticate against **one shared Keycloak realm** (named per domain via `KEYCLOAK_REALM`). People sign in with the OIDC authorization-code flow on a Keycloak-hosted login screen; integrating DPGs use client-credentials service tokens. Because the realm is shared, the API checks a token's audience and realm role rather than trusting its signature alone. See [Identity & Auth](/get-started/architecture/identity-and-auth/).
+
+**API.** The **Aggregator API** is a Fastify backend-for-frontend that owns the aggregator database and the registration/approval/bulk-upload flows. The **Signals API** is the network-aware Fastify backend that owns items, actions, events and cross-instance discovery.
+
+**Datastores.** Both verticals use the same servers, but each owns its own database and they share no tables (see [Data Model](/get-started/architecture/data-model/)):
+- **PostgreSQL** — system of record (Drizzle ORM; item tables are partitioned in Signals).
+- **Redis** — sessions, caches and the background-job queue.
+- **Object Storage (S3)** — bulk-upload files and assets. S3 is a real cloud dependency, not part of the local Docker stack.
+
+**Integrations.** **SMTP** for email (Mailpit locally) and **SMS** for notifications and OTP delivery.
+
+**Ingress & platform (cloud).** In a cloud deployment, a shared `common-services` layer fronts both verticals with a **Kong** ingress controller and provisions cert-manager (TLS) and the shared Postgres + Redis. How this is provisioned and deployed is covered in [Infrastructure & Deployment Architecture](/get-started/architecture/infrastructure/).
+
+## Two verticals, one network
+
+The Aggregator vertical is an **on-ramp**: it feeds participant signals into the Signals vertical, which is the **network** of Blue Dots servers. In the MVP the Aggregator writes to Signals only through controlled bulk-create paths and otherwise reads from it.
+
+{/* Editable source: src/assets/diagrams/two-verticals-one-network.excalidraw — open at https://excalidraw.com to adjust, re-export to two-verticals-one-network.png. */}
+
+![One Keycloak (OIDC) authenticates both verticals: the Aggregator vertical (Aggregator App → Aggregator API) bulk-creates into and reads from the Signals vertical (Signals App → Signals API → Network discovery). Both share PostgreSQL, Redis and Object Storage (S3). Both verticals share one Keycloak realm.](../../../assets/diagrams/two-verticals-one-network.png)
+
+Dive deeper into each vertical in [Signals DPG](/get-started/architecture/signals-dpg/) and [Aggregator DPG](/get-started/architecture/aggregator-dpg/).
