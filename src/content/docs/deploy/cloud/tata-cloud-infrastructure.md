@@ -17,11 +17,11 @@ Kubernetes nodes and pods also need their own outbound internet access, separate
 
 - SMTP, over port 587 — outbound email (OTP, notifications)
 - An SMS gateway (MSG91 or Pinnacle) — SMS OTP, over HTTPS
-- Google Maps and Geocoding APIs — server-side geocoding calls, over HTTPS
+- Geocoding APIs — server-side geocoding calls, over HTTPS
 - `raw.githubusercontent.com` — the aggregator fetches its network configuration at boot, over HTTPS
 - Let's Encrypt ACME — if cert-manager issues certificates from inside the cluster, over HTTPS
 
-The Google Geocoding API key is restricted by IP address, so this outbound traffic needs a stable, static egress IP that can be allow-listed on the key.
+The Geocoding API key is restricted by IP address, so this outbound traffic needs a stable, static egress IP that can be allow-listed on the key.
 
 ## Managed PostgreSQL
 
@@ -37,7 +37,14 @@ Kubernetes nodes and pods need access to a container registry to pull applicatio
 
 Ubuntu. Needs network access to the Kubernetes API, the managed PostgreSQL instance, and the container registry above (HTTPS, port 443).
 
-The following tools need to be installed: `git`, `kubectl` (1.24 or later), `helm` (3.12 or later), and `docker` (for pulling and mirroring images into the container registry).
+The following tools need to be installed:
+
+| Tool | Minimum version | Used for |
+|---|---|---|
+| `git` | — | cloning and updating the deployment repository |
+| `kubectl` | 1.24 | talking to the Kubernetes API |
+| `helm` | 3.12 | installing the Helm charts |
+| `docker` | — | pulling and mirroring images into the container registry |
 
 The jump node needs outbound internet access, over HTTPS (port 443), to:
 
@@ -66,7 +73,6 @@ The deployment team needs:
 - Credentials to log in to the jump node
 - A kubeconfig for the Kubernetes API, usable from the jump node
 - Connection credentials for the managed PostgreSQL instance, usable from the jump node
-- Credentials for the container registry, usable from the jump node
 
 ## Optional: monitoring
 
