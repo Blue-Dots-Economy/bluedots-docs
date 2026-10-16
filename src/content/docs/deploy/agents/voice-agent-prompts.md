@@ -33,6 +33,8 @@ Prompt sets are organised per domain, then per agent. The jobs agents sit in the
 
 This covers the two roles the lifecycle expects, a seeker-side agent and a provider-side agent, plus agents for inbound calls and follow-up after an application.
 
+To set up an agent on a voice platform step by step, see [Set Up the Seeker Voice Agent](/deploy/agents/seeker-voice-agent/) (KKB). A matching guide for the provider agent (DKB) is [coming soon](/deploy/agents/provider-voice-agent/).
+
 ## How a prompt set is structured
 
 Each agent directory follows the same file convention:
@@ -78,4 +80,5 @@ See [Identity & Auth](/get-started/architecture/identity-and-auth/), [Keycloak R
 
 - [The Blue Dot Lifecycle](/about/key-concepts/blue-dot-lifecycle/): where the voice channel sits in the seven steps.
 - [Participant Profiles](/about/key-concepts/participant-profiles/): the fields a call has to fill.
+- [Set Up the Seeker Voice Agent](/deploy/agents/seeker-voice-agent/): create the KKB agent, paste the prompts and add its tools.
 - [Adaptor Onboarding](/deploy/steps/): adding capture channels to a deployment.

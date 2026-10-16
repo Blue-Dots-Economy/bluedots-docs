@@ -146,7 +146,6 @@ export default defineConfig({
       title: 'Documentation',
       description:
         'Documentation for Blue Dots, open-source software that helps people and organisations near each other find each other.',
-      tagline: 'Helping people nearby find each other',
       // Header uses the PNG wordmark; the square SVG dot-mark (logo-*.svg)
       // is the hero image on the landing page.
       logo: {
@@ -298,6 +297,8 @@ export default defineConfig({
               label: 'Deploy the Agents: Seeker / Provider',
               items: [
                 { label: 'Voice Agent Prompts', slug: 'deploy/agents/voice-agent-prompts' },
+                { label: 'Seeker Voice Agent', slug: 'deploy/agents/seeker-voice-agent' },
+                { label: 'Provider Voice Agent', slug: 'deploy/agents/provider-voice-agent' },
               ],
             },
             {

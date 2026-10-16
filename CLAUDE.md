@@ -159,6 +159,19 @@ Don't over-correct: "paradox of proximity" is the programme's named concept (def
 
 CI builds only on push to `main` — pull requests are not built. Run `pnpm build && pnpm check:links` locally before every merge; a broken build on `main` leaves the site silently on the old version.
 
+## Dependency overrides
+
+`overrides` in `pnpm-workspace.yaml` are floors for vulnerable transitive packages flagged by GitHub code scanning (Trivy). Each is scoped to the major already in use (`pkg@3: ^3.x.y`). Drop one when nothing in the tree resolves below its floor without it.
+
+- `fast-uri@3`, `form-data@4`, `js-yaml@4`, `nanoid@3`, `postcss@8`, `source-map-js@1`, `http-cache-semantics@4` — in-range patch floors. `form-data` is needed because `httpsnippet` (via `starlight-openapi`) pins it exactly to `4.0.4`.
+- `postcss-selector-parser@6: ^7.1.6` — the one cross-major override: no 6.x fix exists. `postcss-nested` 6 (via `@expressive-code/core`) gets v7; its selector API is unchanged. Remove once `@expressive-code/core` depends on `postcss-nested` 7. It also forces any future v6 user onto v7.
+
+After changing `overrides`, run `rm -rf node_modules && pnpm install`: installing over an existing `node_modules` can report "Already up to date" without applying them. CI installs with a frozen lockfile, so the lockfile must carry the `overrides:` block.
+
+Two build warnings are expected since Astro 7.3: `The collection "i18n" does not exist or is empty` and `Entry docs → 404 was not found`. Starlight looks up both and falls back to its built-in translations and 404 page.
+
+`starlight-openapi` stays on 0.26.x: 0.27 changes heading levels on API operation pages.
+
 ## PhaseTimeline links
 
 `starlight-links-validator` cannot see `PhaseTimeline` hrefs (they sit in a JSX expression). Run `pnpm check:paths` after `pnpm build` when you change a page that uses one.
