@@ -297,6 +297,8 @@ export default defineConfig({
               label: 'Deploy the Agents: Seeker / Provider',
               items: [
                 { label: 'Voice Agent Prompts', slug: 'deploy/agents/voice-agent-prompts' },
+                { label: 'Seeker Voice Agent', slug: 'deploy/agents/seeker-voice-agent' },
+                { label: 'Provider Voice Agent', slug: 'deploy/agents/provider-voice-agent' },
               ],
             },
             {
