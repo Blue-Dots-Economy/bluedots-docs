@@ -19,7 +19,7 @@
 
 - Sprint tag regex: `^20[0-9]{4}-s[0-9]+-rc[0-9]+$`. Sprint = `YYYYMM-sN` prefix, rc = `rcN`. Suffixed tags (`-alimco`, `-hotfix`, `-up-dhwd`) are never published and never used as `previous_tag`.
 - Sprint tags are cut from `main` only.
-- Section headings, verbatim and in this order: `## Summary`, `## Release Notes`, `## In Plain Terms`, `## Breaking changes / config`, `## What users will notice`, `## Deploy ordering`, `## Verification`, `## Checklist`. `cut-release` extracts only Release Notes, In Plain Terms, Breaking changes / config, What users will notice, and Deploy ordering. An empty section reads `None.`
+- Section headings, verbatim and in this order: `## Summary`, `## Release Notes`, `## In Plain Terms`, `## Breaking changes / config`, `## What users will notice`, `## Deploy ordering`, `## Verification`, `## Checklist`. `create-release` extracts only Release Notes, In Plain Terms, Breaking changes / config, What users will notice, and Deploy ordering. An empty section reads `None.`
 - Section extraction: heading match is case-insensitive and tolerates extra whitespace. A section ends at the next heading of the same or higher level. HTML comments are ignored. This is the same rule as `bluedots-automation/.github/actions/pr-gate/gate.mjs`.
 - File ownership: CI writes only `src/releases/<sprint>/<rc>/components/<repo>.md`. CI never writes or touches `src/releases/<sprint>/<rc>/notes.md`.
 - No upgrade verdict anywhere. No AI or API keys in CI.
