@@ -100,6 +100,10 @@ export function componentTable(fragments, tag) {
     .sort((a, b) => a.repo.localeCompare(b.repo));
 }
 
+/** True when any rc's notes.md has a `heading` section that is not None. */
+const anyRcHas = (rcs, heading) =>
+  rcs.some((r) => r.notes && !isNone(extractSection(r.notes.body ?? '', heading)));
+
 const maxDate = (dates) => dates.reduce((m, d) => (d > m ? d : m), '');
 
 /**
@@ -146,8 +150,8 @@ export function buildSprints(fragments, notes) {
       rcs,
       latestDate: maxDate(rcs.map((r) => r.date)),
       summary,
-      hasBreaking: !isNone(extractSection(body, 'Breaking changes / config')),
-      hasDeployOrdering: !isNone(extractSection(body, 'Deploy ordering')),
+      hasBreaking: anyRcHas(rcs, 'Breaking changes / config'),
+      hasDeployOrdering: anyRcHas(rcs, 'Deploy ordering'),
     };
   });
 }

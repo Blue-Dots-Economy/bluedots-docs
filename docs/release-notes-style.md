@@ -31,7 +31,7 @@ Only these five sections reach the docs site: Release Notes, In Plain Terms, Bre
 - **Every bullet ends with a PR link in the form `(#N)`**. Several PRs: `(#N, #M)`. A cross-repo PR is written `(owner/repo#N)`.
 - **Does not belong:** PR titles pasted unchanged, commit hashes, internal refactors with no effect (fold them into one Housekeeping bullet).
 - **Length:** one or two sentences per bullet. About 3 to 8 bullets per theme at most.
-- **None.:** if a source PR has no notes, add its title as one bullet. Never write `None.` for a release that merged PRs.
+- **None.:** if a source PR has no notes, add its title, rewritten in plain words, as one bullet. Never write `None.` for a release that merged PRs.
 
 Example:
 

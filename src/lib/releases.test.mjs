@@ -81,3 +81,14 @@ test('buildSprints: newest sprint first; non-sprint tags ignored', () => {
   const frags = [f('a', '202610-s2-rc1'), f('a', '202610-s10-rc1'), f('a', '202610-s1-rc1'), f('a', '202610-s1-rc1-hotfix')];
   assert.deepEqual(buildSprints(frags, []).map((s) => s.sprint), ['202610-s10', '202610-s2', '202610-s1']);
 });
+test('buildSprints: markers are true when any rc in the sprint has them', () => {
+  const n = (tag, body) => ({ id: tag, data: { tag }, body });
+  const notes = [
+    n('202610-s1-rc1', '## Summary\nFirst.\n## Breaking changes / config\n- New env var FOO.\n## Deploy ordering\nDeploy signals-dpg first.\n'),
+    n('202610-s1-rc2', '## Summary\nSecond.\n## Breaking changes / config\nNone.\n## Deploy ordering\nNone.\n'),
+  ];
+  const [s] = buildSprints([], notes);
+  assert.equal(s.summary, 'Second.');
+  assert.equal(s.hasBreaking, true);
+  assert.equal(s.hasDeployOrdering, true);
+});
