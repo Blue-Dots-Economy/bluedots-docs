@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-22
 **Status:** Draft, awaiting review
-**Repos touched:** bluedots-docs (hub + this spec), signals-dpg, aggregator-dpg, signals-search, notification-service (cut-release step), new org marketplace repo `Blue-Dots-Economy/bluedots-claude-plugins` (two skills)
+**Repos touched:** bluedots-docs (hub + this spec), bluedots-automation (reusable `create-release` workflow), signals-dpg, aggregator-dpg, signals-search, notification-service (thin `create-release` callers), new org marketplace repo `Blue-Dots-Economy/bluedots-claude-plugins` (two skills)
 
 ## Why
 
@@ -106,7 +106,9 @@ Taken from the house format (signals-dpg #717). The `release-pr-notes` skill and
 
 `cut-release` extracts Release Notes, In Plain Terms, Breaking changes / config, What users will notice and Deploy ordering. Extraction is by heading, and a section ends at the next same- or higher-level heading. This matches the parser rule already used by the develop-PR gate in bluedots-automation (`.github/actions/pr-gate/gate.mjs`), and the builder should reuse that logic rather than write a second parser.
 
-### 4. `cut-release` changes (4 repos, same diff)
+### 4. `cut-release` becomes `create-release`, a reusable workflow
+
+`cut-release` is renamed `create-release` ("Create release"). Its logic moves into one reusable workflow, `bluedots-automation/.github/workflows/create-release.yml` (`workflow_call`), following the gitleaks/`security-scan.yml` pattern. Each repo keeps a thin, SHA-pinned `create-release.yml` caller that passes its CI workflow name, its image-build workflow name, and any extra tag pattern (aggregator-dpg's `api-`/`web-`/`worker-` prefixes). The caller also passes `DOCS_SYNC_TOKEN` as a secret. The steps below describe the reusable workflow.
 
 After a successful **non-dry-run** cut:
 
@@ -167,6 +169,7 @@ The existing develop-PR gate keeps checking `## Release Notes`. Extending it to 
 - AI drafting happens locally via shared team skills, not in CI. The release-wide notes follow the release-PR structure.
 - Start from the next release. Backfill is a later manual trigger.
 - Sprint tags are cut from `main` only.
+- `cut-release` is renamed `create-release`, with its logic in one reusable workflow in bluedots-automation and thin callers in each repo.
 - Skills ship as a new `bluedots-release-tools` plugin in a new org-owned marketplace.
 - Suffixed / instance-specific cuts are not published.
 

@@ -8,10 +8,10 @@
 
 - **Part A (bluedots-docs):** adds a `releases` data collection, two custom Starlight pages, a style guide, and a pure helper library.
 - **Part B (new org repo):** ships the two skills as a Claude Code plugin.
-- **Part C (bluedots-automation):** adds a composite action `release-notes`. It assembles a repo's notes and pushes them to the docs PR.
-- **Part D (4 service repos):** wires that action into `cut-release` and adds the new PR-template headings.
+- **Part C (bluedots-automation):** adds a reusable `create-release.yml` workflow, following the gitleaks/`security-scan.yml` pattern. It holds the release logic once: validate, assemble curated notes, create the release, build images, and publish to the docs PR.
+- **Part D (4 service repos):** replaces each repo's `cut-release` with a thin, SHA-pinned `create-release.yml` caller, and adds the new PR-template headings.
 
-**Tech Stack:** Astro 7 + Starlight 0.42 (glob content loader, `StarlightPage`), Node 20 `node --test` (no new dependencies), GitHub Actions composite action + `gh` CLI, Claude Code plugin marketplace.
+**Tech Stack:** Astro 7 + Starlight 0.42 (glob content loader, `StarlightPage`), Node 20 `node --test` (no new dependencies), GitHub Actions reusable workflow + `gh` CLI, Claude Code plugin marketplace.
 
 **Spec:** `docs/superpowers/specs/2026-10-22-release-notes-hub-design.md` (bluedots-docs, branch `spec/release-notes-hub`)
 
@@ -273,14 +273,16 @@ test('buildSprints: rc without notes.md has notes null; markers read notes secti
 
 ---
 
-## Part C — bluedots-automation (branch `feat/release-notes-action` from `feature`)
+## Part C — bluedots-automation (branch `feat/create-release` from `feature`)
 
-### Task C1: `release-notes` pure module
+The release logic moves into one reusable workflow, following the `security-scan.yml` pattern. Each service repo keeps only a thin `create-release.yml` caller pinned to a SHA. This replaces the four copies of `cut-release`, which are identical apart from the CI workflow name, the image-build workflow name, and aggregator-dpg's per-app tag prefixes.
+
+### Task C1: Release-notes pure module
 
 **Files:**
-- Create: `.github/actions/release-notes/notes.mjs`
-- Create: `.github/actions/release-notes/notes.test.mjs`
-- Create: `.github/actions/release-notes/package.json` (copy `pr-gate/package.json`, name `release-notes`)
+- Create: `.github/scripts/release-notes/notes.mjs`
+- Create: `.github/scripts/release-notes/notes.test.mjs`
+- Create: `.github/scripts/release-notes/package.json` (copy `.github/actions/pr-gate/package.json`, name `release-notes`)
 
 **Interfaces:**
 - Produces:
@@ -298,6 +300,9 @@ test('buildSprints: rc without notes.md has notes null; markers read notes secti
   - `fragmentPath(tag, repo) -> 'src/releases/<sprint>/<rc>/components/<repo>.md'`
   - `docsBranch(tag) -> 'release-notes/<tag>'`
   - `publishAction({ branchExists: boolean, openPr: boolean }) -> 'append' | 'recreate'`: `append` iff an open PR exists.
+  - `validateTag(tag: string, extraPattern: string) -> { ok: boolean, sprint: boolean, error?: string }`:
+    - Accepts `v*.*.*`, the sprint regex, or a match of `extraPattern` (an anchored ERE string; empty means none).
+    - `sprint` is true only for the sprint regex.
 
 - [ ] **Step 1: Write failing tests:**
   - the A2 ordering and section cases;
@@ -305,90 +310,124 @@ test('buildSprints: rc without notes.md has notes null; markers read notes secti
   - `selectSourcePrs` drops a PR with base `develop` and a PR whose merge sha is outside the range;
   - `assembleNotes` with one PR that has sections and one PR with none: Release Notes contains `- Bump deps (#9)`, `missing` deep-equals `[9]`, and Deploy ordering is `None.` when both lack it;
   - `renderFragment` output parses back (split on `---`) and includes `notes_missing: true`;
-  - `publishAction({branchExists:true, openPr:false}) === 'recreate'`.
+  - `publishAction({branchExists:true, openPr:false}) === 'recreate'`;
+  - `validateTag`:
+    - `validateTag('api-v1.2.0', '^(api|web|worker)-v[0-9]+\\.[0-9]+\\.[0-9]+$').ok === true`
+    - `validateTag('api-v1.2.0', '').ok === false`
+    - `validateTag('202609-s2-rc1-hotfix', '').ok === false`
 - [ ] **Step 2: Run** `node --test` in that directory. Expected: FAIL.
 - [ ] **Step 3: Implement `notes.mjs`** (dependency-free; write the frontmatter with a hand-rolled serializer and quote every string).
 - [ ] **Step 4: Run** `node --test`. Expected: PASS.
-- [ ] **Step 5: Commit** with the message `feat(release-notes): pure notes assembly`.
+- [ ] **Step 5: Commit** with the message `feat(release): pure release-notes assembly`.
 
-### Task C2: `release-notes` action IO and CI
+### Task C2: Release-notes IO script
 
 **Files:**
-- Create: `.github/actions/release-notes/run.mjs`
-- Create: `.github/actions/release-notes/action.yml`
-- Create: `.github/workflows/release-notes-tests.yml` (a copy of `pr-gate-tests.yml` with paths and working-directory switched to `release-notes`)
+- Create: `.github/scripts/release-notes/run.mjs`
+- Create: `.github/workflows/release-notes-tests.yml` (a copy of `pr-gate-tests.yml` with paths and working-directory switched to `.github/scripts/release-notes`)
 
 **Interfaces:**
 - Consumes: C1 exports.
-- Produces the composite action `Blue-Dots-Economy/bluedots-automation/.github/actions/release-notes@<sha>`.
-  - **Inputs:** `mode` (`assemble` | `publish`), `tag`, `sha`, `repository` (owner/name), `github-token`, `docs-token` (publish only).
-  - **`assemble` mode:**
-    - Lists tags with `gh api repos/<r>/git/matching-refs/tags/20`, then gets the previous tag from `previousSprintTag`.
-    - Builds the range SHAs from `gh api --paginate repos/<r>/compare/<prev>...<sha> --jq '.commits[].sha'`. With no previous tag, the range is the single most recently merged PR into `main` at or before `sha`.
-    - Gets PRs from `gh api --paginate 'repos/<r>/pulls?state=closed&base=main&sort=updated&direction=desc&per_page=100'`, stopping once `merged_at` is older than the previous tag's commit date.
-    - Writes `$RUNNER_TEMP/release-body.md` (the assembled markdown) and `$RUNNER_TEMP/release-fragment.md`, then appends both to `$GITHUB_STEP_SUMMARY`.
-    - `release_url` is `https://github.com/<r>/releases/tag/<tag>`, and `cut_at` is today in UTC.
-  - **`publish` mode:**
-    - Clones `Blue-Dots-Economy/bluedots-docs` over HTTPS with `docs-token`.
-    - Checks for an open PR with `gh pr list --head <branch> --state open`, then calls `publishAction`.
-    - **append:** checks out the branch.
-    - **recreate:** `git checkout -B <branch> origin/main`, then pushes with `--force-with-lease`. This is safe because no open PR uses the branch.
-    - Writes only `fragmentPath(...)` and commits `release-notes: <repo> <tag>`.
-    - On push rejection, runs `git pull --rebase` and retries, up to 3 attempts.
-    - Creates the PR (`release-notes: <tag>`) if none is open. Then always rewrites the PR body with:
-      - the list of `components/*.md` currently on the branch;
-      - a checklist: run the `release-page` skill; `pnpm build && pnpm check:links && pnpm check:style`; merge to publish.
-    - Commit identity: `github-actions[bot]`.
+- Produces the CLI `node run.mjs`, configured by env vars:
+  - `MODE` (`assemble` | `publish`), `TAG`, `SHA`, `REPOSITORY` (owner/name);
+  - `GH_TOKEN` (the caller repo's token), and `DOCS_TOKEN` (publish only);
+  - `RUNNER_TEMP` and `GITHUB_STEP_SUMMARY`.
+- **`assemble` mode:**
+  - Lists tags with `gh api repos/<r>/git/matching-refs/tags/20`, then gets the previous tag from `previousSprintTag`.
+  - Builds the range SHAs from `gh api --paginate repos/<r>/compare/<prev>...<sha> --jq '.commits[].sha'`. With no previous tag, the range is the single most recently merged PR into `main` at or before `sha`.
+  - Gets PRs from `gh api --paginate 'repos/<r>/pulls?state=closed&base=main&sort=updated&direction=desc&per_page=100'`, stopping once `merged_at` is older than the previous tag's commit date.
+  - Writes `$RUNNER_TEMP/release-body.md` and `$RUNNER_TEMP/release-fragment.md`, then appends both to `$GITHUB_STEP_SUMMARY`.
+  - `release_url` is `https://github.com/<r>/releases/tag/<tag>`, and `cut_at` is today in UTC.
+  - For a non-sprint tag (`v*`, per-app), it writes the body only. It still uses curated notes, with `previous_tag` = the previous tag of the same family (sorted by semver). It writes no fragment.
+- **`publish` mode:**
+  - Clones `Blue-Dots-Economy/bluedots-docs` over HTTPS with `DOCS_TOKEN`.
+  - Checks for an open PR with `gh pr list --head <branch> --state open`, then calls `publishAction`.
+  - **append:** checks out the branch.
+  - **recreate:** `git checkout -B <branch> origin/main`, then pushes with `--force-with-lease`. This is safe because no open PR uses the branch.
+  - Writes only `fragmentPath(...)` and commits `release-notes: <repo> <tag>`.
+  - On push rejection, runs `git pull --rebase` and retries, up to 3 attempts.
+  - Creates the PR (`release-notes: <tag>`) if none is open. Then always rewrites the PR body with:
+    - the list of `components/*.md` currently on the branch;
+    - a checklist: run the `release-page` skill; `pnpm build && pnpm check:links && pnpm check:style`; merge to publish.
+  - Commit identity: `github-actions[bot]`.
 
-- [ ] **Step 1: Implement `run.mjs` and `action.yml`.** The composite steps run `node "$GITHUB_ACTION_PATH/run.mjs"`, with the inputs passed as env vars, never interpolated into the script (zizmor template-injection).
+- [ ] **Step 1: Implement `run.mjs`.**
 - [ ] **Step 2: Dry verification.**
-  - Run `node run.mjs` locally with `MODE=assemble TAG=202609-s1-rc2 SHA=$(gh api repos/Blue-Dots-Economy/signals-search/commits/202609-s1-rc2 --jq .sha) REPOSITORY=Blue-Dots-Economy/signals-search RUNNER_TEMP=$(mktemp -d) GITHUB_STEP_SUMMARY=/dev/null`.
+  - Run `MODE=assemble TAG=202609-s1-rc2 SHA=$(gh api repos/Blue-Dots-Economy/signals-search/commits/202609-s1-rc2 --jq .sha) REPOSITORY=Blue-Dots-Economy/signals-search RUNNER_TEMP=$(mktemp -d) GITHUB_STEP_SUMMARY=/dev/null node run.mjs`.
   - Expected: the previous tag is `202609-s1-rc1`, and the body lists that range's PRs into `main`.
   - Do not run `publish` locally.
-- [ ] **Step 3: Run `zizmor .github/`** if it's available locally (otherwise rely on CI). Expected: no new findings.
-- [ ] **Step 4: Commit** with the message `feat(release-notes): action IO and tests workflow`. Ask before pushing and opening the PR into `feature`. Record the merge SHA on `feature`; Part D pins it.
+- [ ] **Step 3: Commit** with the message `feat(release): release-notes IO and tests workflow`.
+
+### Task C3: Reusable `create-release.yml`
+
+**Files:**
+- Create: `.github/workflows/create-release.yml` (`on: workflow_call`)
+
+**Interfaces:**
+- Consumes: the C2 CLI.
+- Produces `Blue-Dots-Economy/bluedots-automation/.github/workflows/create-release.yml@<sha>`.
+  - **Inputs:** `tag` (string, required); `base` (string, default `main`); `dry_run`, `skip_ci_check`, `docs_only` (boolean, default false); `ci-workflow` (string, required, e.g. `ci.yaml`); `build-workflow` (string, required); `extra-tag-pattern` (string, default `''`); `automation-ref` (string, required: the same SHA the caller pins, so the scripts match the workflow).
+  - **Secrets:** `docs-token` (optional; publishing is skipped with a warning when absent).
+  - **Permissions** (caller must grant): `contents: write`, `actions: write`.
+
+- [ ] **Step 1: Port `cut-release` into one job.** Carry over its comments: why it exists, the one-call release creation, REST rather than `gh release create`, the `GITHUB_TOKEN` tag-push suppression, `generate_release_notes` vs `generate_notes`, and the byte-identical preview. Steps:
+  1. **checkout automation:** `actions/checkout` (pinned SHA as in `pr-gate-tests.yml`) of `Blue-Dots-Economy/bluedots-automation` at `inputs.automation-ref`, path `automation`, `persist-credentials: false`.
+  2. **validate:**
+     - Run `node -e` with `validateTag` (via a tiny `automation/.github/scripts/release-notes/validate.mjs` entry if cleaner), using `inputs.extra-tag-pattern`.
+     - A sprint tag with `BASE != main` fails with `::error title=Sprint tags come from main::`.
+     - Not `docs_only`: refuse an existing tag. `docs_only`: require that the tag exists and resolve `SHA` from it.
+     - Otherwise resolve `SHA` from `BASE`.
+     - The CI gate queries `repos/$REPO/actions/workflows/${CI_WORKFLOW}/runs` (skipped when `docs_only` or `skip_ci_check`).
+     - Output `sha` and `sprint`.
+  3. **assemble:** `node automation/.github/scripts/release-notes/run.mjs` with `MODE=assemble`.
+  4. **dry-run exit:** emits the same `::notice` as today.
+  5. **create release:** skipped when `docs_only`. Runs `gh api repos/$REPO/releases -f tag_name -f name -f target_commitish -F body=@"$RUNNER_TEMP/release-body.md"`.
+  6. **build images:** skipped when `docs_only`. Runs `gh workflow run "$BUILD_WORKFLOW" --repo "$REPO" --ref "$TAG"`.
+  7. **publish docs:** runs only if `sprint`. Uses `MODE=publish` and `DOCS_TOKEN: ${{ secrets.docs-token }}`, with `continue-on-error: true`.
+  8. **warn:** on publish failure or a missing secret, emits `::warning title=Docs publish failed::Re-run Create release with docs_only=true for ${TAG}.`
+  - Every input reaches scripts through `env:`, never `${{ }}` inside `run:` (zizmor template-injection).
+- [ ] **Step 2: Run `zizmor .github/`** if it's available locally (otherwise rely on the repo's CI). Expected: no new findings.
+- [ ] **Step 3: Commit** with the message `feat(release): reusable create-release workflow`. Ask before pushing and opening the PR into `feature`. Record the squash-merge SHA on `feature`; Part D pins it.
 
 ---
 
-## Part D — service repos (one branch `feat/release-notes-hub` from `feature` per repo, PR into `feature`)
+## Part D — service repos (one branch `feat/create-release` from `feature` per repo, PR into `feature`)
 
-Do D1 in signals-search first as the pilot, then signals-dpg, aggregator-dpg, and notification-service.
+Do signals-search first as the pilot, then signals-dpg, aggregator-dpg, and notification-service.
 
-### Task D1: `cut-release` wiring
+| Repo | `ci-workflow` | `build-workflow` | `extra-tag-pattern` | old file |
+|---|---|---|---|---|
+| signals-search | `ci.yml` | `build-image.yml` | `''` | `cut-release.yml` |
+| signals-dpg | `ci.yaml` | `build-images.yaml` | `''` | `cut-release.yaml` |
+| aggregator-dpg | `ci.yml` | `build-images.yml` | `^(api\|web\|worker)-v[0-9]+\.[0-9]+\.[0-9]+$` | `cut-release.yml` |
+| notification-service | `ci.yaml` | `notification-image-build.yaml` | `''` | `cut-release.yaml` |
+
+### Task D1: Thin `create-release.yml` caller
 
 **Files:**
-- Modify: `.github/workflows/cut-release.yml` (signals-search, aggregator-dpg) or `.github/workflows/cut-release.yaml` (signals-dpg, notification-service)
+- Create: `.github/workflows/create-release.yml`
+- Delete: the old `cut-release` file (see the table)
 
-**Interfaces:**
-- Consumes: the C2 action pinned at `@<C2 SHA> # feature`.
-
-- [ ] **Step 1: Inputs.**
-  - Change `base` to default `main`.
-  - Add `docs_only` (boolean, default false): "Only re-publish this existing tag's notes to the docs PR".
-- [ ] **Step 2: Split the single `run:` step into these steps:**
-  1. **validate.** Existing steps 1–4 stay as they are, plus two changes:
-     - If the tag matches the sprint regex and `BASE != main`, fail with `::error title=Sprint tags come from main::`.
-     - If `docs_only` is set, require that the tag **exists**, resolve `SHA` from the tag, and skip the CI gate.
-     - Output `sha`.
-  2. **assemble.** `uses:` the action with `mode: assemble`. This replaces `generate-notes`.
-  3. **dry-run exit.** Same notice as before.
-  4. **create release.** Skipped when `docs_only`. Runs `gh api repos/$REPO/releases ... -F body=@"$RUNNER_TEMP/release-body.md"`. Keep the existing comments about one-call creation and the byte-identical preview.
-  5. **build images.** Unchanged, and skipped when `docs_only`.
-  6. **publish docs.** Runs only for sprint tags. `uses:` the action with `mode: publish`, `docs-token: ${{ secrets.DOCS_SYNC_TOKEN }}`, and `continue-on-error: true`.
-  7. **warn.** `if: steps.publish.outcome == 'failure'` emits `::warning title=Docs publish failed::Re-run Cut release with docs_only=true for ${TAG}.`
+- [ ] **Step 1: Write the caller.**
+  - `name: Create release`, triggered by `on: workflow_dispatch` with inputs `tag`, `base` (choice `[main, develop]`, default `main`), `dry_run`, `skip_ci_check`, and `docs_only`.
+  - One job, `release`, with `permissions: { contents: write, actions: write }`, `uses: Blue-Dots-Economy/bluedots-automation/.github/workflows/create-release.yml@<C3 SHA>  # feature <date> -- repin to @main once promoted`, and `with:` the dispatch inputs plus this repo's table row and `automation-ref: <C3 SHA>`.
+  - `secrets: { docs-token: ${{ secrets.DOCS_SYNC_TOKEN }} }`.
+  - Add a header comment in the `security.yml` style: it's a thin caller, the logic lives in bluedots-automation, it replaced `cut-release`, and it notes the repin.
+- [ ] **Step 2: Delete the old `cut-release` file.**
 - [ ] **Step 3: Verify (pilot repo only).**
   - Push the branch (with approval).
-  - Run `gh workflow run cut-release.yml --ref feat/release-notes-hub -f tag=202609-s1-rc9 -f base=main -f dry_run=true -f skip_ci_check=true`. The dry run creates nothing.
+  - Run `gh workflow run create-release.yml --ref feat/create-release -f tag=202609-s1-rc9 -f base=main -f dry_run=true -f skip_ci_check=true`.
+    - A dispatch from a non-default ref needs the workflow file on the default branch. If GitHub refuses with "workflow not found", do this check after the file reaches `main`, or test the reusable workflow from a scratch repo.
   - Expected: the run summary shows the body and fragment with `previous_tag: "202609-s1-rc3"`.
   - Then run with `base=develop`. Expected: it fails with the "Sprint tags come from main" error.
-- [ ] **Step 4: Commit** with the message `feat(cut-release): curated notes and docs hub publish`.
+- [ ] **Step 4: Commit** with the message `feat(release): replace cut-release with create-release caller`.
 
 ### Task D2: PR template and CLAUDE.md pointer
 
 **Files:**
 - Modify: `.github/PULL_REQUEST_TEMPLATE.md` (signals-dpg, aggregator-dpg, signals-search)
 - Create: `.github/PULL_REQUEST_TEMPLATE.md` (notification-service; copy signals-search's after editing)
-- Modify: `CLAUDE.md`: the `In Plain Terms` paragraph in signals-dpg, aggregator-dpg, and signals-search. Add one to notification-service.
+- Modify: `CLAUDE.md`: the `In Plain Terms` paragraph in signals-dpg, aggregator-dpg, and signals-search. Add one to notification-service. Rename any `cut-release` / "Cut release" mention to `create-release` / "Create release" (`grep -rn "cut-release\|Cut release" --include=*.md .`).
 
 - [ ] **Step 1: Template.**
   - After `## Release Notes`, add `## Breaking changes / config` and `## What users will notice`, each with a comment: "Write `None.` if nothing applies."
@@ -400,11 +439,12 @@ Do D1 in signals-search first as the pilot, then signals-dpg, aggregator-dpg, an
 ### Task D3: Rollout checks (maintainer-assisted)
 
 - [ ] **Step 1:** Confirm `DOCS_SYNC_TOKEN` exists in each of the 4 repos with `gh secret list -R Blue-Dots-Economy/<repo>`. notification-service likely lacks it. Ask the maintainer to add it; the agent does not create secrets.
-- [ ] **Step 2:** After the Part D PRs reach `main` via the normal promotion, the first real sprint cut opens `release-notes/<tag>`. Run the `release-page` skill on it. The maintainer reviews and merges.
-- [ ] **Step 3:** Update the maintainer's local memory `feedback_pr_body_house_format.md` to point at the skill instead of restating the format.
+- [ ] **Step 2:** Tell devops: after the next promotion reaches `main`, "Cut release" is gone, and they run "Create release" instead (same inputs, plus `docs_only`, and `base` now defaults to `main`).
+- [ ] **Step 3:** After the Part D PRs reach `main`, the first real sprint cut opens `release-notes/<tag>`. Run the `release-page` skill on it. The maintainer reviews and merges.
+- [ ] **Step 4:** Update the maintainer's local memory `feedback_pr_body_house_format.md` to point at the skill instead of restating the format.
 
 ---
 
 ## Order and dependencies
 
-A1 → B1/B2 (the skills read the style guide) → A2–A4 → C1–C2 → D1–D2 (they pin the C2 SHA) → D3. Part A and Part B can be reviewed in parallel once A1 is merged.
+A1 → B1/B2 (the skills read the style guide) → A2–A4 → C1–C3 → D1–D2 (they pin the C3 SHA) → D3. Part A and Part B can be reviewed in parallel once A1 is merged.
