@@ -7,6 +7,7 @@ import starlightOpenAPI from 'starlight-openapi';
 import { unified } from '@astrojs/markdown-remark';
 import { slug } from 'github-slugger';
 import { readFileSync } from 'node:fs';
+import remarkReleaseHeadings from './src/lib/remark-release-headings.mjs';
 
 // Sidebar group for one API reference: Overview + one link per tag-overview
 // page (obsrv-style — individual operations are listed on the tag pages, not
@@ -89,7 +90,8 @@ export default defineConfig({
   // Astro 7 defaults to the new Sätteri Markdown processor, which
   // starlight-image-zoom doesn't support yet (HiDeoo/starlight-image-zoom#63).
   // Pin the classic unified/remark processor until it does.
-  markdown: { processor: unified() },
+  // remarkReleaseHeadings demotes headings in src/releases/** (see the plugin).
+  markdown: { processor: unified(), remarkPlugins: [remarkReleaseHeadings] },
 
   integrations: [
     starlight({
