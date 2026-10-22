@@ -54,10 +54,26 @@ The sidebar in `astro.config.mjs` is the authoritative list of sections and slug
 | Knowing about Blue Dots | `about/` | Implementation in-charge, network operator, PMU, SI, voice AI provider |
 | Getting Started | `get-started/` | All of the above, plus the cloud or hosting provider |
 | Start your Deployment | `deploy/` (+ `api/`) | SI, voice AI provider, cloud or hosting provider |
+| Releases | `src/releases/` (pages in `src/pages/releases/`) | Anyone deploying or upgrading; see "Releases" below |
 
 - **Planned pages** exist as a stub with a `:::note[Coming soon]` aside and a `Soon` sidebar badge. Remove both when the page gets content.
 - **Moved pages keep their old URL** through `redirects` in `astro.config.mjs`. When you move a page, add a redirect.
-- **Pages kept out of the sidebar:** `explore/*` and `overview/paradox-of-proximity` (moving to bluedotseconomy.org), `guides/cicd-and-builds` and `community/contributing` (moving to the repos), `community/roadmap` and `community/release-notes` (placement not decided). They are still built so existing links work. Do not link to them from new pages.
+- **Pages kept out of the sidebar:** `explore/*` and `overview/paradox-of-proximity` (moving to bluedotseconomy.org), `guides/cicd-and-builds` and `community/contributing` (moving to the repos), `community/roadmap` (placement not decided). They are still built so existing links work. Do not link to them from new pages.
+
+## Releases
+
+`/releases/` lists every sprint, newest first; `/releases/<sprint>/` has one entry per rc. Both are Astro pages (`src/pages/releases/`) built from the `releases` collection, so there is no sidebar slug and `starlight-links-validator` skips `/releases/` links. The old `community/release-notes` page redirects here.
+
+```
+src/releases/<sprint>/<rc>/notes.md               # release-wide notes, human-owned
+src/releases/<sprint>/<rc>/components/<repo>.md   # one per repo that cut the tag, CI-owned
+```
+
+- **Ownership:** the `create-release` workflow in each service repo writes only `components/<repo>.md`, on a `release-notes/<tag>` branch and PR into `main`. It never touches `notes.md`. People write `notes.md`, drafted by the `release-page` skill and edited by hand. Sections and tone: `docs/release-notes-style.md`.
+- **Merging the `release-notes/<tag>` PR publishes the rc.** An rc with no `notes.md` shows "Release-wide notes not written yet.", so run `release-page` before merging.
+- **Style:** `pnpm check:style` covers `notes.md`. Component files are exempt, like `api/`.
+- **Frontmatter:** quote `cut_at` (`'2026-10-14'`) and `commit`; unquoted YAML turns them into a date or a number and the build fails schema validation.
+- **Preview with fixtures:** `tests/fixtures/releases/` holds a sample sprint. Run `cp -R tests/fixtures/releases/* src/releases/ && pnpm build`, open `dist/releases/index.html` and `dist/releases/202610-s1/index.html`, then `rm -rf src/releases/2*`. Never commit anything under `src/releases/` except `.gitkeep` from a fixture run. With no releases, `/releases/` shows "No releases have been published yet." and the build warns that the `releases` collection is empty; that warning is expected.
 
 ## Implementation plans are temporary
 
