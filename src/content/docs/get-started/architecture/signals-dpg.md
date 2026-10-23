@@ -31,7 +31,7 @@ An instance serves one or more participant types in a domain. (The code calls a 
 - **Instance-local** (`GET /api/v1/item/fetch`) — reads an instance's own items with a brief Redis cache.
 - **Inter-instance** (`GET /api/v1/network/item/fetch`) — *count-first* discovery: ask peers how many relevant items they hold, select only relevant peers, fetch slices, merge and cache. Schema fetching and caching live in this layer.
 
-[Read & Write Paths](/get-started/architecture/read-write-paths/) explains why the two layers are kept apart.
+[Read & Write Paths](/get-started/architecture/read-write-paths/) explains why the two layers are kept apart. Ranked search by meaning, location and filters is a separate service, [Signals Search](/get-started/architecture/signals-search/).
 
 ## Data partitioning
 

@@ -29,6 +29,7 @@ The steps are in [Start your Deployment](/deploy/):
 - [Configuring an AI Diffusion Use Case](/deploy/agents-platform/use-case-configuration/): describe the conversation, the phases and the tools in YAML.
 - [AI Diffusion DPG Setup](/deploy/local/ai-diffusion-dpg/): run the AI Diffusion DPG next to a local Signals stack, ready for VoicERA to connect.
 - [Voice Agent Prompts](/deploy/agents/voice-agent-prompts/): ready-made prompt sets for seeker-side and provider-side agents.
+- [Building Search Requests](/api/search-requests/): set up the bot's search tool so what the caller says goes into filters, location and free text correctly.
 
 :::caution[Keep the AI Diffusion DPG bridge on a private network]
 VoicERA talks to the AI Diffusion DPG through an endpoint called the bridge, which does not check who is calling it. Make it reachable only from VoicERA, through a private network or firewall rules, and never expose it on the public internet.

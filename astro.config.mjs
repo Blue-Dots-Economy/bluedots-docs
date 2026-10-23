@@ -256,6 +256,7 @@ export default defineConfig({
               label: 'Architecture',
               items: [
                 { label: 'Signals DPG', slug: 'get-started/architecture/signals-dpg' },
+                { label: 'Signals Search', slug: 'get-started/architecture/signals-search' },
                 { label: 'Aggregator DPG', slug: 'get-started/architecture/aggregator-dpg' },
                 { label: 'AI Diffusion DPG', slug: 'get-started/architecture/ai-diffusion-dpg' },
                 { label: 'Data Model', slug: 'get-started/architecture/data-model' },
@@ -322,6 +323,7 @@ export default defineConfig({
               items: [
                 { label: 'Overview', slug: 'api' },
                 { label: 'API Conventions', slug: 'api/conventions' },
+                { label: 'Building Search Requests', slug: 'api/search-requests' },
                 apiReferenceSidebarGroup('Signals-DPG API', 'signals-dpg'),
                 apiReferenceSidebarGroup('Aggregator-DPG API', 'aggregator-dpg'),
                 apiReferenceSidebarGroup('Signals-Search API', 'signals-search'),
