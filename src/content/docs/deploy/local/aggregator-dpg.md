@@ -43,7 +43,7 @@ docker compose up -d --build
 | **Aggregator portal** | http://localhost:3100                        |
 | **Signals UI**        | http://localhost:5173                        |
 | **Mailpit inbox**     | http://localhost:8025 (catches all dev mail) |
-| Signals Search        | http://localhost:3110 (only with `--profile search`) |
+| Signals Search        | http://localhost:3110 (only with `docker-compose.search.yml`) |
 | MinIO console         | http://localhost:9001 (S3 API on `9000`)     |
 
 :::caution[Two steps that are easy to miss]
@@ -239,13 +239,19 @@ Signals and the Aggregator both read the copied `network.json`; the stack's
 ## Adding search (relevance ranking)
 
 The unified stack runs the Signals tier too, so without search its discover
-results come back in recency order and match scores are unavailable. To add it:
+results come back in recency order and match scores are unavailable. To add it,
+start the stack with the search file, as in
+[Track A with search](#track-a-with-search):
 
 ```bash
 cd aggregator-dpg/local-setup
-cp .env.search.example .env.search     # then mint an apikey — see §10.3 of the guide
-docker compose --profile search up -d
+docker compose -f docker-compose.search.yml up -d --build
 ```
+
+There is no separate search env file and no key to mint: `gen-secrets.sh`
+already generated `SIGNALS_SEARCH_API_KEY` in `.env`, and the stack seeds it on
+start. To add or remove search on a stack that is already running, see §10.3 of
+the guide.
 
 Unlike the two DPGs, which this stack builds from source, signals-search is
 pulled **prebuilt from public GHCR** — no third checkout and no registry login.
