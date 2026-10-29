@@ -1,0 +1,91 @@
+---
+import { ChevronDown } from '@lucide/astro';
+
+interface Props {
+  title: string;
+  /** Shared by every item in one Accordion, so opening one closes the others. */
+  group: string;
+  open?: boolean;
+}
+const { title, group, open = false } = Astro.props;
+---
+
+<details class="bd-accordion-item" name={group} open={open}>
+  <summary class="bd-accordion-trigger">
+    <span>{title}</span>
+    <ChevronDown class="bd-accordion-chevron" size={18} stroke-width={2} aria-hidden="true" />
+  </summary>
+  <div class="bd-accordion-content">
+    <slot />
+  </div>
+</details>
+
+<style>
+  .bd-accordion-item {
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    interpolate-size: allow-keywords;
+  }
+  .bd-accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 0;
+    font-size: var(--sl-text-lg);
+    font-weight: 600;
+    color: var(--sl-color-white);
+    cursor: pointer;
+    list-style: none;
+    border-radius: 0.375rem;
+  }
+  .bd-accordion-trigger::-webkit-details-marker {
+    display: none;
+  }
+  .bd-accordion-trigger:hover span {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .bd-accordion-trigger:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 2px;
+  }
+  .bd-accordion-trigger :global(.bd-accordion-chevron) {
+    flex-shrink: 0;
+    color: var(--sl-color-gray-3);
+    transition: transform 200ms ease;
+  }
+  .bd-accordion-item[open] .bd-accordion-trigger :global(.bd-accordion-chevron) {
+    transform: rotate(180deg);
+  }
+  /* Smooth open/close where ::details-content is supported; instant elsewhere. */
+  .bd-accordion-item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 200ms ease,
+      content-visibility 200ms allow-discrete;
+  }
+  .bd-accordion-item[open]::details-content {
+    block-size: auto;
+  }
+  .bd-accordion-content {
+    padding-bottom: 1.25rem;
+  }
+  .bd-accordion-content > :first-child {
+    margin-top: 0;
+  }
+  /* Small group label inside a panel (used instead of a heading so the TOC
+     doesn't link into collapsed content). */
+  .bd-accordion-content :global(.bd-accordion-label) {
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-size: var(--sl-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-3);
+  }
+  .bd-accordion-content :global(.bd-accordion-label:first-child) {
+    margin-top: 0;
+  }
+</style>

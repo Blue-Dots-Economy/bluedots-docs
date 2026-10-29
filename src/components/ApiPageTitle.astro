@@ -48,7 +48,10 @@ if (match) {
  * and their table-of-contents entries come from frontmatter changed_sections
  * ("_top" = the page title and the TOC "Overview" entry). Built here because
  * PageTitle renders on every page, before the sidebar and TOC exist in the DOM.
+ * Set SHOW_CHANGED_MARKERS to true to turn the sparkle back on.
  */
+const SHOW_CHANGED_MARKERS = false;
+
 const changed = Astro.locals.starlightRoute.entry.data.changed_sections ?? [];
 const markerSelectors = [
   '#starlight__sidebar a.bd-changed',
@@ -64,7 +67,7 @@ const SPARKLES =
 const markerCss = `${markerSelectors.join(',')}{content:'';display:inline-block;flex-shrink:0;width:0.9em;height:0.9em;margin-inline-start:0.35em;vertical-align:-0.05em;background-color:#d4a017;mask:${SPARKLES} center/contain no-repeat}`;
 ---
 
-<style set:html={markerCss}></style>
+{SHOW_CHANGED_MARKERS && <style set:html={markerCss}></style>}
 
 {
   backLink && (

@@ -66,6 +66,36 @@ container-to-container URLs match the Signals-only stack.
 Full URL list, cross-DPG wiring and troubleshooting are in the
 [`local-setup/LOCAL_SETUP.md`](https://github.com/Blue-Dots-Economy/aggregator-dpg/blob/HEAD/local-setup/LOCAL_SETUP.md) guide.
 
+## Start faster with prebuilt images
+
+If you are not changing the app code, leave out `--build`:
+
+```bash
+docker compose up -d
+```
+
+Docker then downloads the ready-made Signals and Aggregator images from GitHub
+(the `main` tag) instead of building them, which is much faster. Use `--build`
+when you change the code or a schema file, because the downloaded images contain
+the repositories' own files.
+
+To run a release instead of `main`, set these in `local-setup/.env`. Each
+package page lists the published tags; release tags are named
+`<year><month>-s<sprint>-rc<n>`, for example `202609-s1-rc3`.
+
+| Variable | Image (GHCR) | Default | Example: current stable |
+| --- | --- | --- | --- |
+| `SIGNALS_API_IMAGE` | [signals-dpg/api](https://github.com/Blue-Dots-Economy/signals-dpg/pkgs/container/signals-dpg%2Fapi) | `ghcr.io/blue-dots-economy/signals-dpg/api:main` | `ghcr.io/blue-dots-economy/signals-dpg/api:202609-s1-rc3` |
+| `SIGNALS_UI_IMAGE` | [signals-dpg/ui](https://github.com/Blue-Dots-Economy/signals-dpg/pkgs/container/signals-dpg%2Fui) | `ghcr.io/blue-dots-economy/signals-dpg/ui:main` | `ghcr.io/blue-dots-economy/signals-dpg/ui:202609-s1-rc3` |
+| `AGGREGATOR_API_IMAGE` | [aggregator-dpg/api](https://github.com/Blue-Dots-Economy/aggregator-dpg/pkgs/container/aggregator-dpg%2Fapi) | `ghcr.io/blue-dots-economy/aggregator-dpg/api:main` | `ghcr.io/blue-dots-economy/aggregator-dpg/api:202609-s1-rc3` |
+| `AGGREGATOR_WEB_IMAGE` | [aggregator-dpg/web](https://github.com/Blue-Dots-Economy/aggregator-dpg/pkgs/container/aggregator-dpg%2Fweb) | `ghcr.io/blue-dots-economy/aggregator-dpg/web:main` | `ghcr.io/blue-dots-economy/aggregator-dpg/web:202609-s1-rc3` |
+| `AGGREGATOR_WORKER_IMAGE` | [aggregator-dpg/worker](https://github.com/Blue-Dots-Economy/aggregator-dpg/pkgs/container/aggregator-dpg%2Fworker) | `ghcr.io/blue-dots-economy/aggregator-dpg/worker:main` | `ghcr.io/blue-dots-economy/aggregator-dpg/worker:202609-s1-rc3` |
+
+Use the same tag for all five, so Signals and the Aggregator come from the same
+release. The release notes for each tag are on the
+[aggregator-dpg](https://github.com/Blue-Dots-Economy/aggregator-dpg/releases) and
+[signals-dpg](https://github.com/Blue-Dots-Economy/signals-dpg/releases) release pages.
+
 ## Track A with search
 
 Track A runs without signals-search: discover returns results in
@@ -188,6 +218,23 @@ domain end to end, change those lines in `local-setup/docker-compose.yml` and
 `SIGNALS_SERVED_DOMAINS` in `.env` to match, as described in
 [Signals DPG Setup](/deploy/local/signals-dpg/#choose-a-domain).
 :::
+
+## Run with a schema made from your workbook
+
+The [`schema-from-sheet`](https://github.com/AbhiGaddi/bluedots-claude-plugins)
+skill turns a schema workbook (Excel) into the files this stack reads. Generate
+them with the network id `blue_dot`, then:
+
+1. Copy `network.json` to `signals-dpg/examples/schemas/blue_dot/`, the four
+   form files to `aggregator-dpg/config/blue_dot/schemas/aggregator/`, and
+   `aggregator.config.yaml` to `aggregator-dpg/config/blue_dot/`.
+2. In `local-setup/.env`, set `SIGNALS_SERVED_DOMAINS` to the line in the
+   generated `deployments.env`.
+3. Rebuild and restart: `docker compose up -d --build`. Keep `--build`: without
+   it the stack runs the downloaded images, which do not contain your file.
+
+Signals and the Aggregator both read the copied `network.json`; the stack's
+`schema-server` serves it to the Aggregator.
 
 ## Adding search (relevance ranking)
 

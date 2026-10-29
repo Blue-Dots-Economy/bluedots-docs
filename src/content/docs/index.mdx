@@ -38,6 +38,8 @@ import FeatureCard from '../../components/FeatureCard.astro';
 import NavCard from '../../components/NavCard.astro';
 import DotCard from '../../components/DotCard.astro';
 import DotGrid from '../../components/DotGrid.astro';
+import Accordion from '../../components/Accordion.astro';
+import AccordionItem from '../../components/AccordionItem.astro';
 
 ## What Blue Dots does
 
@@ -69,14 +71,17 @@ Each colour names a domain (one sector, such as jobs or education), and all of t
 
 Start where your role begins. Adopters own the deployment in their district or state. Enablers help adopters set up and run Blue Dots.
 
-### Adopters
+<Accordion>
+<AccordionItem title="Adopters & Enablers" group="find-your-path" open>
+
+<p class="bd-accordion-label">Adopters</p>
 
 <CardGrid>
   <NavCard title="Implementation in-charge" description="Owns rollout, enablers and reporting. Start with how to activate Blue Dots in a district." href="/about/district-activation/" icon="users" color="blue" />
   <NavCard title="Network operator" description="Runs its own network or a node in a shared one. Start with domains, participant types and instances." href="/about/key-concepts/networks-domains-instances/" icon="grid-2x2" color="purple" />
 </CardGrid>
 
-### Enablers
+<p class="bd-accordion-label">Enablers</p>
 
 <CardGrid>
   <NavCard title="Programme management unit (PMU)" description="Designs, governs and reports on the rollout. Start with how to activate Blue Dots in a district." href="/about/district-activation/" icon="compass" color="orange" />
@@ -85,13 +90,17 @@ Start where your role begins. Adopters own the deployment in their district or s
   <NavCard title="Cloud or hosting provider" description="Provides the infrastructure the DPGs run on. Start with the infrastructure architecture." href="/get-started/architecture/infrastructure/" icon="server" color="blue" />
 </CardGrid>
 
-### Browse by section
+</AccordionItem>
+<AccordionItem title="Browse by section" group="find-your-path">
 
 <CardGrid>
   <NavCard title="Knowing about Blue Dots" description="What Blue Dots is, the key ideas, district activation, cost and the glossary." href="/about/" icon="book-open" color="blue" />
   <NavCard title="Getting Started" description="How the DPGs connect, their architecture, and voice bots." href="/get-started/" icon="grid-2x2" color="purple" />
   <NavCard title="Start your Deployment" description="Deploy the DPGs and voice agents, locally or on the cloud, and configure them." href="/deploy/" icon="rocket" color="green" />
 </CardGrid>
+
+</AccordionItem>
+</Accordion>
 
 ## How it is built
 

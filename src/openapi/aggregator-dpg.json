@@ -918,7 +918,7 @@
                     "properties": {
                       "streetAddress": {
                         "type": "string",
-                        "maxLength": 300
+                        "maxLength": 500
                       },
                       "addressLocality": {
                         "type": "string",
@@ -942,6 +942,23 @@
                       }
                     },
                     "additionalProperties": false
+                  },
+                  "coordinates": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": [
+                      {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180
+                      },
+                      {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90
+                      }
+                    ]
                   }
                 },
                 "required": [
@@ -2099,94 +2116,6 @@
                     "status": {
                       "type": "string"
                     },
-                    "contact_name": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "personas": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "name": {
-                            "type": "string",
-                            "minLength": 1
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "services": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "name": {
-                            "type": "string",
-                            "minLength": 1
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "verified_certificate": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "key_id": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "public_key": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "algorithm": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "valid_till": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "revoked_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          }
-                        },
-                        "required": [
-                          "key_id",
-                          "public_key",
-                          "algorithm",
-                          "valid_till"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "profile_completed_at": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "is_complete": {
-                      "type": "boolean"
-                    },
                     "updated_at": {
                       "type": "string"
                     },
@@ -2247,12 +2176,6 @@
                     "locations",
                     "consent",
                     "status",
-                    "contact_name",
-                    "personas",
-                    "services",
-                    "verified_certificate",
-                    "profile_completed_at",
-                    "is_complete",
                     "updated_at",
                     "org_name",
                     "identity",
@@ -2474,7 +2397,7 @@
         "tags": [
           "aggregator-profile"
         ],
-        "description": "Partial update of profile fields (contact, locations, etc) for the caller aggregator. Validates the patch against profile.v1.json. Re-syncs to signalstack on success.",
+        "description": "Partial update of the caller aggregator (name / url / contact / locations). Contact phone + email are mirrored to Keycloak before the DB write. `consent` is read-only (recorded at registration) and is rejected here.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2605,122 +2528,14 @@
                           ],
                           "additionalProperties": false
                         }
-                      },
-                      "consent": {
-                        "type": "object",
-                        "properties": {
-                          "value": {
-                            "type": "boolean"
-                          },
-                          "given_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "valid_till": {
-                            "type": "string",
-                            "format": "date-time"
-                          }
-                        },
-                        "required": [
-                          "value",
-                          "given_at",
-                          "valid_till"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "additionalProperties": false
-                  },
-                  "profile": {
-                    "type": "object",
-                    "properties": {
-                      "contact_name": {
-                        "type": "string",
-                        "minLength": 1,
-                        "maxLength": 200,
-                        "nullable": true
-                      },
-                      "personas": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "name": {
-                              "type": "string",
-                              "minLength": 1
-                            }
-                          },
-                          "required": [
-                            "id",
-                            "name"
-                          ],
-                          "additionalProperties": false
-                        }
-                      },
-                      "services": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "name": {
-                              "type": "string",
-                              "minLength": 1
-                            }
-                          },
-                          "required": [
-                            "id",
-                            "name"
-                          ],
-                          "additionalProperties": false
-                        }
-                      },
-                      "verified_certificate": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "key_id": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "public_key": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "algorithm": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "valid_till": {
-                              "type": "string",
-                              "format": "date-time"
-                            },
-                            "revoked_at": {
-                              "type": "string",
-                              "format": "date-time"
-                            }
-                          },
-                          "required": [
-                            "key_id",
-                            "public_key",
-                            "algorithm",
-                            "valid_till"
-                          ],
-                          "additionalProperties": false
-                        }
                       }
                     },
                     "additionalProperties": false
                   }
                 },
+                "required": [
+                  "aggregator"
+                ],
                 "additionalProperties": false
               }
             }
@@ -2891,94 +2706,6 @@
                     "status": {
                       "type": "string"
                     },
-                    "contact_name": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "personas": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "name": {
-                            "type": "string",
-                            "minLength": 1
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "services": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "name": {
-                            "type": "string",
-                            "minLength": 1
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "verified_certificate": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "key_id": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "public_key": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "algorithm": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "valid_till": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "revoked_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          }
-                        },
-                        "required": [
-                          "key_id",
-                          "public_key",
-                          "algorithm",
-                          "valid_till"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "profile_completed_at": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "is_complete": {
-                      "type": "boolean"
-                    },
                     "updated_at": {
                       "type": "string"
                     },
@@ -2996,12 +2723,6 @@
                     "locations",
                     "consent",
                     "status",
-                    "contact_name",
-                    "personas",
-                    "services",
-                    "verified_certificate",
-                    "profile_completed_at",
-                    "is_complete",
                     "updated_at",
                     "name"
                   ],
@@ -3560,6 +3281,57 @@
               }
             }
           },
+          "429": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "detail": {
+                          "type": "string"
+                        },
+                        "docs": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "requestId": {
+                          "type": "string"
+                        },
+                        "timestamp": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "title",
+                        "detail",
+                        "requestId",
+                        "timestamp"
+                      ],
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
           "500": {
             "description": "Default Response",
             "content": {
@@ -3802,6 +3574,57 @@
             }
           },
           "403": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "detail": {
+                          "type": "string"
+                        },
+                        "docs": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "requestId": {
+                          "type": "string"
+                        },
+                        "timestamp": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "title",
+                        "detail",
+                        "requestId",
+                        "timestamp"
+                      ],
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "429": {
             "description": "Default Response",
             "content": {
               "application/json": {
@@ -7895,7 +7718,7 @@
         "tags": [
           "public-registration"
         ],
-        "description": "Public endpoint reached by the QR-link registration form. Validates the submission against the link's domain schema (runtime Ajv — the body shape is dynamic per network/domain), creates the participant + user, and pushes to signalstack. Returns 201 on success, 409 (outcome:'skipped') when the phone/email is already registered with this aggregator, and 429 when the per-link rate limit trips.",
+        "description": "Public endpoint reached by the QR-link registration form. Validates the submission against the link's domain schema (runtime Ajv — the body shape is dynamic per network/domain), then creates the user + profile in signalstack. Returns 201 on success, 409 (outcome:'skipped') when the identity is already owned by ANOTHER aggregator, and 429 when the per-link rate limit trips. There is no de-duplication within an aggregator: a repeat submission creates a new profile and returns 201.",
         "requestBody": {
           "required": true,
           "content": {
@@ -13815,7 +13638,7 @@
         "tags": [
           "campaign"
         ],
-        "description": "Returns a short-lived pre-signed URL for each of the three objects in the latest non-PII Signals snapshot (user, items, item_actions), so the caller needs no S3 credentials. Each URL expires after CAMPAIGN_DUMP_URL_TTL_SECONDS (default 600s); fetch promptly rather than caching it. Requires the campaign-manager SYSTEM token (client_credentials grant); a coordinator token is rejected. Whole-network and not org-scoped. The exporter overwrites the three objects in place with no cross-object atomicity, so each file carries its own last_modified: a caller that lands mid-run will see them disagree, meaning the snapshot is torn — treat it as such and re-fetch. Returns all three files or an error, never a partial list.",
+        "description": "Returns a short-lived pre-signed URL for each object in the latest non-PII Signals snapshot, one per file named in CAMPAIGN_DUMP_FILES (names without the .ndjson.gz extension; default: user, items, item_actions, aggregators), so the caller needs no S3 credentials. Each URL expires after CAMPAIGN_DUMP_URL_TTL_SECONDS (default 600s); fetch promptly rather than caching it. Requires the campaign-manager SYSTEM token (client_credentials grant); a coordinator token is rejected. Whole-network and not org-scoped. The exporter overwrites the objects in place with no cross-object atomicity, so each file carries its own last_modified: a caller that lands mid-run will see them disagree, meaning the snapshot is torn — treat it as such and re-fetch. Configured files absent from S3 are left out of files and listed in missing (their keys); only when none is present does it return 404 DUMP_NOT_AVAILABLE.",
         "security": [
           {
             "bearerAuth": []
@@ -13870,13 +13693,20 @@
                         ],
                         "additionalProperties": false
                       }
+                    },
+                    "missing": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     }
                   },
                   "required": [
                     "network",
                     "instance",
                     "expires_at",
-                    "files"
+                    "files",
+                    "missing"
                   ],
                   "additionalProperties": false
                 }
@@ -14117,14 +13947,6 @@
     {
       "name": "aggregator-approvals",
       "description": "Admin approve/reject for pending aggregators."
-    },
-    {
-      "name": "invites",
-      "description": "Coordinator invites minted by an approved org owner."
-    },
-    {
-      "name": "aggregator-orgs",
-      "description": "Parent-org registration, listing and network-admin approval."
     },
     {
       "name": "aggregator-profile",

@@ -1,0 +1,48 @@
+---
+title: Tata Cloud Deployment
+description: Deploy the Blue Dots Helm charts onto Tata Cloud.
+sidebar:
+  order: 4
+  badge:
+    text: Soon
+    variant: note
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Coming soon">
+This guide is being written. It will be the second of two steps to run Blue Dots on Tata Cloud, after the infrastructure is in place.
+</Aside>
+
+## What this guide will cover
+
+The steps will follow the same order as the [AWS Deployment](/deploy/cloud/aws-deployment/) guide, adapted for Tata Cloud.
+
+<Steps>
+
+1. **Deploy everything except the Aggregator.** Install monitoring, the common services (Kong, cert-manager, Postgres, Redis), Keycloak and Signals onto the Tata Cloud Kubernetes cluster, in that order.
+
+2. **Set `actingOrgId`, then deploy the Aggregator.** Read the organisation id from the running Signals, add it to the values file, then install the Aggregator.
+
+3. **Point DNS.** Point each public hostname at the Tata Cloud load balancer, so TLS certificates can be issued.
+
+4. **Validate.** Check that every release is deployed, every pod is ready and the Aggregator login works.
+
+</Steps>
+
+## Before you start
+
+Have the Tata Cloud infrastructure ready, so you can deploy as soon as the guide is published.
+
+<CardGrid>
+  <LinkCard
+    title="Tata Cloud Infrastructure Requirements"
+    description="The cluster, database, registry, jump node, ingress and storage that this deployment needs."
+    href="/deploy/cloud/tata-cloud-infrastructure/"
+  />
+  <LinkCard
+    title="AWS Deployment"
+    description="The full deployment flow on AWS. The Tata Cloud steps will follow the same order."
+    href="/deploy/cloud/aws-deployment/"
+  />
+</CardGrid>
