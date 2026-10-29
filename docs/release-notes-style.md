@@ -1,6 +1,6 @@
 # Release notes style guide
 
-This guide defines how Blue Dots release notes are written. It applies to release PR descriptions, per-repo fragments (`src/releases/<sprint>/<rc>/components/<repo>.md`) and the merged page (`src/releases/<sprint>/<rc>/notes.md`). The `release-pr-notes` and `release-page` skills read it. People can follow it directly.
+This guide defines how Blue Dots release notes are written. It applies to release PR descriptions, per-repo fragments (`src/releases/<sprint>/<entry>/components/<repo>.md`) and the merged page (`src/releases/<sprint>/<entry>/notes.md`). `<entry>` is `rcN` for a candidate, `release` for the release and `hotfixN` for a hotfix. The `release-pr-notes` and `release-page` skills read it. People can follow it directly.
 
 ## Rules for every section
 

@@ -184,3 +184,20 @@ The existing develop-PR gate keeps checking `## Release Notes`. Extending it to 
 - Docs push uses plain `git push` + `gh pr create`, not `create-pull-request` (it force-pushes and would drop fragments and human edits).
 - No expected-repos manifest: an rc is whatever repos cut it. Late cuts open a follow-up PR, and `release-page` amends.
 - The #717 example in the public skill is sanitised.
+
+## Revision 2026-10-29: UAT flow
+
+Each sprint is now signed off in UAT before it reaches `main`, and hotfixes no longer land directly on `main`. The sections above stay as the original record. Where they say "sprint tags are cut from `main` only" or "a hotfix becomes the next rc", this revision replaces them.
+
+**Flow.** At sprint close `feature` is promoted to `develop`, and a candidate tag cut from `develop` goes to the test/UAT cluster. UAT fixes are PRs into `develop`, each producing a new candidate. After sign-off, `develop` is promoted to `main` and the release tag is cut on `main`. Hotfixes go into a `release/<sprint>` branch, and automatically opened PRs carry them back to `develop` and `feature`. PM approval and the UAT email stay outside the tooling.
+
+| Kind | Tag | Cut from | Docs entry folder | Sprint-page label |
+|---|---|---|---|---|
+| Candidate | `YYYYMM-sN-rcN` | `develop` | `rcN` | Candidate |
+| Release | `YYYYMM-sN` | `main` | `release` | Released |
+| Hotfix | `YYYYMM-sN.N` | `release/YYYYMM-sN` | `hotfixN` | Hotfix |
+
+- **Ordering:** sprint, then kind (candidate < release < hotfix), then number: `202611-s1-rc1 < 202611-s1-rc10 < 202611-s1 < 202611-s1.1 < 202611-s2-rc1`. Suffixed tags are still never published.
+- **What each entry covers:** a candidate covers PRs merged into `develop` since the previous candidate or release; a release covers PRs merged into `main` since the previous release (normally the promotion PR); a hotfix covers PRs merged into `release/<sprint>` since that sprint's release or previous hotfix.
+- **Release branch:** creating a release tag also creates `release/<sprint>` at the same commit. A hotfix tag needs that branch. A new `sync-release-branch` workflow opens the carry-back PRs into `develop` and `feature`; merge them with a merge commit.
+- **Docs hub:** fragments live at `src/releases/<sprint>/<entry>/`. The index shows "Released as `<tag>`" once a sprint has a release, otherwise its newest candidate as still in testing. The sprint page lists every entry newest first with its kind label. A fragment's `base` is the branch its tag was cut from. The component table rule is unchanged: each repo shows its newest fragment at or before the entry.
