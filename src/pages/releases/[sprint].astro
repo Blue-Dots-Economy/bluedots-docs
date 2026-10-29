@@ -1,0 +1,120 @@
+---
+// One page per sprint, one entry per tag, newest first: hotfixes, then the
+// release, then candidates. Data comes from the
+// `releases` collection (src/releases/); see CLAUDE.md "Releases".
+// notes.md headings are demoted by 2 and component headings by 3
+// (src/lib/remark-release-headings.mjs) so they nest under the headings below.
+import { getCollection, render } from 'astro:content';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { Aside, Badge } from '@astrojs/starlight/components';
+import { buildSprints } from '../../lib/releases.mjs';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('releases');
+  const isComponent = (e) => e.id.includes('/components/');
+  const sprints = buildSprints(entries.filter(isComponent), entries.filter((e) => !isComponent(e)));
+  return sprints.map((sprint) => ({ params: { sprint: sprint.sprint }, props: { sprint } }));
+}
+
+const { sprint } = Astro.props;
+
+const KIND_LABEL = { candidate: 'Candidate', release: 'Released', hotfix: 'Hotfix' };
+const KIND_BADGE = { candidate: 'note', release: 'success', hotfix: 'caution' };
+
+// Render every notes.md and fragment up front; the template only places them.
+const entries = await Promise.all(
+  sprint.entries.map(async (entry) => ({
+    ...entry,
+    Notes: entry.notes ? (await render(entry.notes)).Content : null,
+    fragments: await Promise.all(
+      entry.fragments.map(async (fr) => ({ ...fr, Body: (await render(fr)).Content })),
+    ),
+  })),
+);
+
+const headings = entries.map((entry) => ({ depth: 2, slug: entry.tag, text: entry.tag }));
+---
+
+<StarlightPage
+  frontmatter={{
+    title: `Sprint ${sprint.sprint}`,
+    description: `Releases cut in sprint ${sprint.sprint}, newest first, with what changed for each component.`,
+    prev: false,
+    next: false,
+  }}
+  headings={headings}
+>
+  <p><a href="/releases/">All releases</a></p>
+  {
+    entries.map((entry) => (
+      <>
+        <h2 id={entry.tag}>
+          {entry.tag} <Badge text={KIND_LABEL[entry.kind]} variant={KIND_BADGE[entry.kind]} />
+        </h2>
+        {entry.date && <p>Published on {entry.date}.</p>}
+
+        <h3 id={`${entry.tag}-release-wide-notes`}>Release-wide notes</h3>
+        {entry.Notes ? <entry.Notes /> : <p>Release-wide notes not written yet.</p>}
+
+        <h3 id={`${entry.tag}-components`}>Components</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Version</th>
+              <th>Changed in this release</th>
+            </tr>
+          </thead>
+          <tbody>
+            {entry.components.map((c) => (
+              <tr>
+                <td>{c.repo}</td>
+                <td>
+                  <code>{c.tag}</code>
+                </td>
+                <td>
+                  {c.changed ? (
+                    'Yes'
+                  ) : (
+                    <>
+                      No, unchanged since <code>{c.tag}</code>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <h3 id={`${entry.tag}-component-details`}>Component details</h3>
+        {entry.fragments.map((fr) => (
+          <>
+            <h4 id={`${entry.tag}-${fr.data.repo}`}>{fr.data.repo}</h4>
+            <p>
+              <a href={fr.data.release_url}>GitHub release</a>
+              {fr.data.prs.length > 0 && (
+                <>
+                  {' · Source pull requests: '}
+                  {fr.data.prs.map((pr, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      <a href={pr.url} title={pr.title}>
+                        #{pr.number}
+                      </a>
+                    </>
+                  ))}
+                </>
+              )}
+            </p>
+            {fr.data.notes_missing && (
+              <Aside type="caution" title="Notes missing">
+                At least one source pull request had no release notes. Its title is listed instead.
+              </Aside>
+            )}
+            <fr.Body />
+          </>
+        ))}
+      </>
+    ))
+  }
+</StarlightPage>

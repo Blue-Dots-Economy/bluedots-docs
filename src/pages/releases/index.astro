@@ -1,0 +1,94 @@
+---
+// Releases index: one row per sprint, newest first. A sprint shows its release
+// tag once it has one, otherwise its newest candidate (still in testing).
+// Data comes from the `releases` collection (src/releases/); see CLAUDE.md "Releases".
+import { getCollection } from 'astro:content';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { Badge } from '@astrojs/starlight/components';
+import { buildSprints } from '../../lib/releases.mjs';
+
+const entries = await getCollection('releases');
+const isComponent = (e) => e.id.includes('/components/');
+const sprints = buildSprints(entries.filter(isComponent), entries.filter((e) => !isComponent(e)));
+
+const headings = [{ depth: 2, slug: 'before-these-releases', text: 'Before these releases' }];
+---
+
+<StarlightPage
+  frontmatter={{
+    title: 'Releases',
+    description: 'Every Blue Dots release, newest first, with what changed for each component.',
+    prev: false,
+    next: false,
+  }}
+  headings={headings}
+>
+  {
+    sprints.length === 0 ? (
+      <p>No releases have been published yet.</p>
+    ) : (
+      <table>
+        <thead>
+          <tr>
+            <th>Sprint</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Summary</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sprints.map((s) => (
+            <tr>
+              <td>
+                <a href={`/releases/${s.sprint}/`}>{s.sprint}</a>
+              </td>
+              <td>
+                {s.releasedTag ? (
+                  <>
+                    Released as <code>{s.releasedTag}</code>
+                    {s.latestEntry.kind === 'hotfix' && (
+                      <>
+                        , latest fix <code>{s.latestEntry.tag}</code>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    In testing, latest test version <code>{s.latestEntry.tag}</code>
+                  </>
+                )}
+              </td>
+              <td>{s.latestDate}</td>
+              <td>
+                {s.summary ?? 'Notes pending'}
+                {s.hasBreaking && (
+                  <>
+                    {' '}
+                    <Badge text="Breaking changes or config" variant="caution" />
+                  </>
+                )}
+                {s.hasDeployOrdering && (
+                  <>
+                    {' '}
+                    <Badge text="Deploy order" variant="note" />
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )
+  }
+
+  <h2 id="before-these-releases">Before these releases</h2>
+  <p>
+    Releases from before this page started are listed on the GitHub Releases page of each
+    repository in the <a href="https://github.com/Blue-Dots-Economy">Blue-Dots-Economy organisation</a>.
+  </p>
+  <p>
+    Keycloak is the recommended identity provider from the <code>GA-2026-08-18</code> release.
+    Instances set up before then use the older sign-in system until someone switches them. See{' '}
+    <a href="/deploy/configure/keycloak-setup/#migrating-an-existing-instance">Migrating an existing instance</a>.
+  </p>
+</StarlightPage>
