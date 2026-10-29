@@ -1,8 +1,9 @@
 // Remark plugin: demote headings in release files so a file's `##` lands under
-// the page's `## <rc>` heading. notes.md shifts by 2, components/<repo>.md by 3.
+// the page's `## <tag>` heading. notes.md shifts by 2, components/<repo>.md by 3.
 
-const NOTES = /\/src\/releases\/.+\/notes\.md$/;
-const COMPONENT = /\/src\/releases\/.+\/components\/[^/]+\.md$/;
+// <entry> is rcN (candidate), release or hotfixN, the same names as the collection glob.
+const NOTES = /\/src\/releases\/[^/]+\/(?:rc\d+|release|hotfix\d+)\/notes\.md$/;
+const COMPONENT = /\/src\/releases\/[^/]+\/(?:rc\d+|release|hotfix\d+)\/components\/[^/]+\.md$/;
 
 /**
  * @param {{ children?: any[], type?: string, depth?: number }} node

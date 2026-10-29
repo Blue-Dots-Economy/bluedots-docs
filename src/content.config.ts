@@ -4,7 +4,10 @@ import { glob } from 'astro/loaders';
 import { docsLoader } from '@astrojs/starlight/loaders';
 import { docsSchema } from '@astrojs/starlight/schema';
 
-const SPRINT_TAG = /^20[0-9]{4}-s[0-9]+-rc[0-9]+$/;
+// Candidate YYYYMM-sN-rcN, release YYYYMM-sN, hotfix YYYYMM-sN.N (see src/lib/releases.mjs).
+const SPRINT_TAG = /^20[0-9]{4}-s[0-9]+(-rc[0-9]+|\.[0-9]+)?$/;
+// The branch the tag was cut from: develop (candidate), main (release), release/<sprint> (hotfix).
+const BASE = /^(develop|main|release\/20[0-9]{4}-s[0-9]+)$/;
 
 // CI writes components/<repo>.md; people write notes.md (tag only).
 // cut_at stays a string: buildSprints compares it as a string.
@@ -12,7 +15,7 @@ const component = z.object({
   repo: z.string(),
   tag: z.string().regex(SPRINT_TAG),
   commit: z.string().regex(/^[0-9a-f]{40}$/),
-  base: z.literal('main'),
+  base: z.string().regex(BASE),
   previous_tag: z.string().nullable(),
   cut_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   release_url: z.string().url(),
@@ -23,7 +26,7 @@ const notes = z.object({ tag: z.string().regex(SPRINT_TAG) }).strict();
 
 export const collections = {
   releases: defineCollection({
-    loader: glob({ base: './src/releases', pattern: '*/rc*/{notes,components/*}.md' }),
+    loader: glob({ base: './src/releases', pattern: '*/{rc*,release,hotfix*}/{notes,components/*}.md' }),
     schema: z.union([component, notes]),
   }),
   docs: defineCollection({

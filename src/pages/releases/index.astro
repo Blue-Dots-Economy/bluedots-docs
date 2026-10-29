@@ -1,6 +1,7 @@
 ---
-// Releases index: one row per sprint, newest first. Data comes from the
-// `releases` collection (src/releases/); see CLAUDE.md "Releases".
+// Releases index: one row per sprint, newest first. A sprint shows its release
+// tag once it has one, otherwise its newest candidate (still in testing).
+// Data comes from the `releases` collection (src/releases/); see CLAUDE.md "Releases".
 import { getCollection } from 'astro:content';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import { Badge } from '@astrojs/starlight/components';
@@ -30,7 +31,7 @@ const headings = [{ depth: 2, slug: 'before-these-releases', text: 'Before these
         <thead>
           <tr>
             <th>Sprint</th>
-            <th>Latest release</th>
+            <th>Status</th>
             <th>Date</th>
             <th>Summary</th>
           </tr>
@@ -42,7 +43,20 @@ const headings = [{ depth: 2, slug: 'before-these-releases', text: 'Before these
                 <a href={`/releases/${s.sprint}/`}>{s.sprint}</a>
               </td>
               <td>
-                <code>{s.rcs[0].tag}</code>
+                {s.releasedTag ? (
+                  <>
+                    Released as <code>{s.releasedTag}</code>
+                    {s.latestEntry.kind === 'hotfix' && (
+                      <>
+                        , latest fix <code>{s.latestEntry.tag}</code>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    In testing, latest test version <code>{s.latestEntry.tag}</code>
+                  </>
+                )}
               </td>
               <td>{s.latestDate}</td>
               <td>

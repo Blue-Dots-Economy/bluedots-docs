@@ -3,30 +3,37 @@
 
 /**
  * @typedef {{ id: string, data: Record<string, any>, body?: string }} Entry
+ * @typedef {'candidate' | 'release' | 'hotfix'} Kind
  * @typedef {{ repo: string, tag: string, changed: boolean }} ComponentRow
- * @typedef {{ tag: string, rc: string, date: string, notes: Entry | null,
- *   components: ComponentRow[], fragments: Entry[] }} Rc
- * @typedef {{ sprint: string, rcs: Rc[], latestDate: string, summary: string | null,
+ * @typedef {{ tag: string, kind: Kind, entry: string, date: string, notes: Entry | null,
+ *   components: ComponentRow[], fragments: Entry[] }} SprintEntry
+ * @typedef {{ sprint: string, entries: SprintEntry[], latestEntry: SprintEntry,
+ *   releasedTag: string | null, latestDate: string, summary: string | null,
  *   hasBreaking: boolean, hasDeployOrdering: boolean }} Sprint
  */
 
-const SPRINT_TAG = /^(20\d{4}-s(\d+))-rc(\d+)$/;
+// Sprint tag kinds: candidate `YYYYMM-sN-rcN` (cut from develop), release
+// `YYYYMM-sN` (main) and hotfix `YYYYMM-sN.N` (release/YYYYMM-sN).
+// Suffixed tags (`-hotfix`, `-alimco`, ...) match none of them.
+const SPRINT_TAG = /^(20\d{4}-s(\d+))(?:-rc(\d+)|\.(\d+))?$/;
+const KIND_ORDER = { candidate: 0, release: 1, hotfix: 2 };
 const HTML_COMMENT = /<!--[\s\S]*?-->/g;
 const HEADING = /^\s{0,3}(#{1,6})\s+/;
 
 /**
+ * `entry` is the folder name under src/releases/<sprint>/: rcN, release or hotfixN.
  * @param {string} tag
- * @returns {{ sprint: string, rc: string, rcNum: number, sprintKey: [number, number] } | null}
+ * @returns {{ sprint: string, kind: Kind, num: number, entry: string,
+ *   sprintKey: [number, number] } | null}
  */
 export function parseSprintTag(tag) {
   const m = typeof tag === 'string' ? SPRINT_TAG.exec(tag) : null;
   if (!m) return null;
-  return {
-    sprint: m[1],
-    rc: `rc${m[3]}`,
-    rcNum: Number(m[3]),
-    sprintKey: [Number(m[1].slice(0, 6)), Number(m[2])],
-  };
+  const [, sprint, n, rc, fix] = m;
+  const sprintKey = /** @type {[number, number]} */ ([Number(sprint.slice(0, 6)), Number(n)]);
+  if (rc !== undefined) return { sprint, kind: 'candidate', num: Number(rc), entry: `rc${rc}`, sprintKey };
+  if (fix !== undefined) return { sprint, kind: 'hotfix', num: Number(fix), entry: `hotfix${fix}`, sprintKey };
+  return { sprint, kind: 'release', num: 0, entry: 'release', sprintKey };
 }
 
 function mustParse(tag) {
@@ -35,14 +42,18 @@ function mustParse(tag) {
   return p;
 }
 
-/** Ascending comparison of two sprint tags. Throws on a non-sprint tag. */
+/**
+ * Ascending comparison of two sprint tags: sprint (YYYYMM, N), then kind
+ * (candidate < release < hotfix), then number. Throws on a non-sprint tag.
+ */
 export function compareTags(a, b) {
   const pa = mustParse(a);
   const pb = mustParse(b);
   return (
     pa.sprintKey[0] - pb.sprintKey[0] ||
     pa.sprintKey[1] - pb.sprintKey[1] ||
-    pa.rcNum - pb.rcNum
+    KIND_ORDER[pa.kind] - KIND_ORDER[pb.kind] ||
+    pa.num - pb.num
   );
 }
 
@@ -100,15 +111,16 @@ export function componentTable(fragments, tag) {
     .sort((a, b) => a.repo.localeCompare(b.repo));
 }
 
-/** True when any rc's notes.md has a `heading` section that is not None. */
-const anyRcHas = (rcs, heading) =>
-  rcs.some((r) => r.notes && !isNone(extractSection(r.notes.body ?? '', heading)));
+/** True when any entry's notes.md has a `heading` section that is not None. */
+const anyHas = (entries, heading) =>
+  entries.some((e) => e.notes && !isNone(extractSection(e.notes.body ?? '', heading)));
 
 const maxDate = (dates) => dates.reduce((m, d) => (d > m ? d : m), '');
 
 /**
- * Group fragments and notes into sprints, newest sprint first, rcs newest first.
- * Entries whose tag is not a sprint tag are ignored.
+ * Group fragments and notes into sprints, newest sprint first, entries newest
+ * first (hotfixes, then the release, then candidates). Entries whose tag is not
+ * a sprint tag are ignored.
  * @param {Entry[]} fragments
  * @param {Entry[]} notes
  * @returns {Sprint[]}
@@ -118,27 +130,28 @@ export function buildSprints(fragments, notes) {
   const nts = notes.filter((e) => parseSprintTag(e.data.tag));
   const tags = [...new Set([...frags, ...nts].map((e) => e.data.tag))].sort(compareTags).reverse();
 
-  /** @type {Map<string, Rc[]>} */
+  /** @type {Map<string, SprintEntry[]>} */
   const bySprint = new Map();
   for (const tag of tags) {
-    const { sprint, rc } = parseSprintTag(tag);
+    const { sprint, kind, entry } = parseSprintTag(tag);
     const own = frags
       .filter((e) => e.data.tag === tag)
       .sort((a, b) => a.data.repo.localeCompare(b.data.repo));
-    const rcEntry = {
+    const item = {
       tag,
-      rc,
+      kind,
+      entry,
       date: maxDate(own.map((e) => e.data.cut_at)),
       notes: nts.find((e) => e.data.tag === tag) ?? null,
       components: componentTable(frags, tag),
       fragments: own,
     };
     if (!bySprint.has(sprint)) bySprint.set(sprint, []);
-    bySprint.get(sprint).push(rcEntry);
+    bySprint.get(sprint).push(item);
   }
 
-  return [...bySprint].map(([sprint, rcs]) => {
-    const withNotes = rcs.find((r) => r.notes);
+  return [...bySprint].map(([sprint, entries]) => {
+    const withNotes = entries.find((e) => e.notes);
     const body = withNotes?.notes?.body ?? '';
     const summary =
       (extractSection(body, 'Summary') ?? '')
@@ -147,11 +160,13 @@ export function buildSprints(fragments, notes) {
         .find(Boolean) ?? null;
     return {
       sprint,
-      rcs,
-      latestDate: maxDate(rcs.map((r) => r.date)),
+      entries,
+      latestEntry: entries[0],
+      releasedTag: entries.find((e) => e.kind === 'release')?.tag ?? null,
+      latestDate: maxDate(entries.map((e) => e.date)),
       summary,
-      hasBreaking: anyRcHas(rcs, 'Breaking changes / config'),
-      hasDeployOrdering: anyRcHas(rcs, 'Deploy ordering'),
+      hasBreaking: anyHas(entries, 'Breaking changes / config'),
+      hasDeployOrdering: anyHas(entries, 'Deploy ordering'),
     };
   });
 }

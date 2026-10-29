@@ -37,3 +37,20 @@ test('plugin tolerates a missing path', () => {
   remarkReleaseHeadings()(t, {});
   assert.deepEqual(depths(t), [2, 6]);
 });
+
+test('plugin shifts release and hotfix entries too', () => {
+  for (const entry of ['release', 'hotfix2', 'rc10']) {
+    let t = tree();
+    remarkReleaseHeadings()(t, { path: `/w/src/releases/202610-s5/${entry}/notes.md` });
+    assert.deepEqual(depths(t), [4, 6], entry);
+    t = tree();
+    remarkReleaseHeadings()(t, { path: `/w/src/releases/202610-s5/${entry}/components/a.md` });
+    assert.deepEqual(depths(t), [5, 6], entry);
+  }
+});
+
+test('plugin ignores unknown entry names', () => {
+  const t = tree();
+  remarkReleaseHeadings()(t, { path: '/w/src/releases/202610-s5/draft/notes.md' });
+  assert.deepEqual(depths(t), [2, 6]);
+});

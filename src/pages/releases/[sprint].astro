@@ -1,11 +1,12 @@
 ---
-// One page per sprint, one entry per rc (newest first). Data comes from the
+// One page per sprint, one entry per tag, newest first: hotfixes, then the
+// release, then candidates. Data comes from the
 // `releases` collection (src/releases/); see CLAUDE.md "Releases".
 // notes.md headings are demoted by 2 and component headings by 3
 // (src/lib/remark-release-headings.mjs) so they nest under the headings below.
 import { getCollection, render } from 'astro:content';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
-import { Aside } from '@astrojs/starlight/components';
+import { Aside, Badge } from '@astrojs/starlight/components';
 import { buildSprints } from '../../lib/releases.mjs';
 
 export async function getStaticPaths() {
@@ -17,18 +18,21 @@ export async function getStaticPaths() {
 
 const { sprint } = Astro.props;
 
+const KIND_LABEL = { candidate: 'Candidate', release: 'Released', hotfix: 'Hotfix' };
+const KIND_BADGE = { candidate: 'note', release: 'success', hotfix: 'caution' };
+
 // Render every notes.md and fragment up front; the template only places them.
-const rcs = await Promise.all(
-  sprint.rcs.map(async (rc) => ({
-    ...rc,
-    Notes: rc.notes ? (await render(rc.notes)).Content : null,
+const entries = await Promise.all(
+  sprint.entries.map(async (entry) => ({
+    ...entry,
+    Notes: entry.notes ? (await render(entry.notes)).Content : null,
     fragments: await Promise.all(
-      rc.fragments.map(async (fr) => ({ ...fr, Body: (await render(fr)).Content })),
+      entry.fragments.map(async (fr) => ({ ...fr, Body: (await render(fr)).Content })),
     ),
   })),
 );
 
-const headings = rcs.map((rc) => ({ depth: 2, slug: rc.tag, text: rc.tag }));
+const headings = entries.map((entry) => ({ depth: 2, slug: entry.tag, text: entry.tag }));
 ---
 
 <StarlightPage
@@ -42,15 +46,17 @@ const headings = rcs.map((rc) => ({ depth: 2, slug: rc.tag, text: rc.tag }));
 >
   <p><a href="/releases/">All releases</a></p>
   {
-    rcs.map((rc) => (
+    entries.map((entry) => (
       <>
-        <h2 id={rc.tag}>{rc.tag}</h2>
-        {rc.date && <p>Released on {rc.date}.</p>}
+        <h2 id={entry.tag}>
+          {entry.tag} <Badge text={KIND_LABEL[entry.kind]} variant={KIND_BADGE[entry.kind]} />
+        </h2>
+        {entry.date && <p>Published on {entry.date}.</p>}
 
-        <h3 id={`${rc.tag}-release-wide-notes`}>Release-wide notes</h3>
-        {rc.Notes ? <rc.Notes /> : <p>Release-wide notes not written yet.</p>}
+        <h3 id={`${entry.tag}-release-wide-notes`}>Release-wide notes</h3>
+        {entry.Notes ? <entry.Notes /> : <p>Release-wide notes not written yet.</p>}
 
-        <h3 id={`${rc.tag}-components`}>Components</h3>
+        <h3 id={`${entry.tag}-components`}>Components</h3>
         <table>
           <thead>
             <tr>
@@ -60,7 +66,7 @@ const headings = rcs.map((rc) => ({ depth: 2, slug: rc.tag, text: rc.tag }));
             </tr>
           </thead>
           <tbody>
-            {rc.components.map((c) => (
+            {entry.components.map((c) => (
               <tr>
                 <td>{c.repo}</td>
                 <td>
@@ -80,10 +86,10 @@ const headings = rcs.map((rc) => ({ depth: 2, slug: rc.tag, text: rc.tag }));
           </tbody>
         </table>
 
-        <h3 id={`${rc.tag}-component-details`}>Component details</h3>
-        {rc.fragments.map((fr) => (
+        <h3 id={`${entry.tag}-component-details`}>Component details</h3>
+        {entry.fragments.map((fr) => (
           <>
-            <h4 id={`${rc.tag}-${fr.data.repo}`}>{fr.data.repo}</h4>
+            <h4 id={`${entry.tag}-${fr.data.repo}`}>{fr.data.repo}</h4>
             <p>
               <a href={fr.data.release_url}>GitHub release</a>
               {fr.data.prs.length > 0 && (

@@ -2,7 +2,7 @@
 repo: signals-dpg
 tag: 202610-s1-rc1
 commit: 'a1b2c3d4e5f60718293a4b5c6d7e8f9011121314'
-base: main
+base: develop
 previous_tag: null
 cut_at: '2026-10-14'
 release_url: https://github.com/Blue-Dots-Economy/signals-dpg/releases/tag/202610-s1-rc1
