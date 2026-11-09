@@ -89,13 +89,41 @@ Pick the operator from the field's type in `network.json`, not from how many val
 
 ### Location
 
-There are three ways to use location. Coordinates are always **longitude first, then latitude** (GeoJSON order).
+There are four ways to use location. Coordinates are always **longitude first, then latitude** (GeoJSON order).
 
 - **Within a radius**: `{ "op": "s_dwithin", "geometry": { "type": "Point", "coordinates": [77.59, 12.97] }, "distanceMeters": 10000 }`. Items outside are removed.
 - **Around the caller's own profile**: send `item.id` and leave out `geometry`: `{ "op": "s_dwithin", "distanceMeters": 20000 }`. The profile's stored location is the centre.
 - **Inside a map rectangle**: `{ "op": "bbox", "minLat": …, "minLng": …, "maxLat": …, "maxLng": … }`. All four are required.
 
+- **Around a place the person named**: `{ "op": "s_dwithin", "address": "Dharwad" }`. Search turns the text into a map point and uses it as the centre. See [Searching by a place name](#searching-by-a-place-name).
+
 Send at most one of these. Without `distanceMeters` the radius is the deployment default (30 km unless the operator changed it). To sort by distance without removing anything, send `intent.orderingCenter: { "type": "Point", "coordinates": [lng, lat] }` with `sort: "nearest"`.
+
+### Searching by a place name
+
+When the caller has no profile, pass the place they said in `address` instead of `geometry`:
+
+```json
+"spatial": [{ "op": "s_dwithin", "address": "Dharwad" }]
+```
+
+- `address` is 1 to 200 characters after trimming. Send the place as the person said it; do not add other words.
+- Do not combine `address` with `geometry` in the same clause, or with `intent.item.id`. Either returns `400 VALIDATION_ERROR`. A caller with a profile should use the profile as the anchor.
+- `distanceMeters` is optional. When you leave it out, the radius depends on how precisely the place was found:
+
+| What the text resolved to | Radius |
+| --- | --- |
+| Postal code | 10 km |
+| Locality or neighbourhood | 10 km |
+| City | 25 km |
+| District | 50 km |
+
+An operator can change these radii for an instance. Text that names only a country or a state does not resolve (see the errors below), because the area would be too large to be a useful filter.
+
+- `sort: "nearest"` uses the resolved point as the centre, so you do not need `orderingCenter`.
+- The flat endpoint takes the same field as `message.intent.spatial.0.address`.
+
+The response tells you what search understood: see `resolvedLocation` under [Reading the response](#reading-the-response).
 
 ### Free text
 
@@ -154,9 +182,24 @@ There is no stored location yet. Use free text for the kind of work and filters 
 }
 ```
 
-:::note[Coming later: searching by a place name]
-A later release will accept the place a caller names in its own field and turn it into map points, so a first-time caller's search can be limited to an area. Until then this search has no location limit, and a place name in `textSearch` does not limit it either.
-:::
+If the caller named a place, pass it as `address`. Search finds the place and limits results to the area around it; nothing else about the request changes.
+
+```json
+{
+  "context": { "messageId": "call-457", "networkId": "blue_dot", "domain": "provider", "itemType": "job_posting_1.0" },
+  "message": {
+    "intent": {
+      "textSearch": "plumber",
+      "spatial": [{ "op": "s_dwithin", "address": "Dharwad" }],
+      "filters": [{ "op": "in", "target": "item_state.natureOfJob", "value": ["Full-time"] }],
+      "sort": "nearest"
+    },
+    "pagination": { "limit": 5 }
+  }
+}
+```
+
+With no `distanceMeters`, a city such as Dharwad searches within 25 km. If the caller gave no place, leave `spatial` out and the search has no location limit. A place name in `textSearch` does not limit it.
 
 ### A map or list view in an app
 
@@ -175,6 +218,23 @@ Limit to what the map shows, and sort nearest to the user.
   }
 }
 ```
+
+A user may also type a place instead of moving the map. Send the typed text as `address` and ask for nearest first:
+
+```json
+{
+  "context": { "messageId": "ui-790", "networkId": "blue_dot", "domain": "provider", "itemType": "job_posting_1.0" },
+  "message": {
+    "intent": {
+      "spatial": [{ "op": "s_dwithin", "address": "Koramangala, Bengaluru", "distanceMeters": 5000 }],
+      "sort": "nearest"
+    },
+    "pagination": { "limit": 20, "offset": 0 }
+  }
+}
+```
+
+Show `message.resolvedLocation.label` to the user (for example "Searching near Koramangala, Bengaluru") so they can see which place was used, and recentre the map on `resolvedLocation.point`.
 
 An app built on the Signals UI pattern can call the Signals DPG at `POST /api/v1/network/item/discover` instead. It takes the same choices with different names (`q`, `filters: [{ field, values }]`, `item_latitude` / `item_longitude` / `distance_meters`, `min_lat` … `max_lng`, `ordering_latitude` / `ordering_longitude`, `anchor_item_id`, `sort`). It picks `in` or `contains_any` for you and still answers, without meaning-based ranking, if Signals Search is down.
 
@@ -227,7 +287,14 @@ Each value is read as JSON when it can be, so `"5"` becomes the number 5 and `"[
         "distanceMeters": 4210
       }
     ],
-    "meta": { "total": 42, "limit": 5, "offset": 0, "sort_applied": "relevance" }
+    "meta": { "total": 42, "limit": 5, "offset": 0, "sort_applied": "relevance" },
+    "resolvedLocation": {
+      "input": "Dharwad",
+      "label": "Dharwad, Karnataka, India",
+      "point": { "type": "Point", "coordinates": [75.0078, 15.4589] },
+      "precision": "city",
+      "radiusMeters": 25000
+    }
   }
 }
 ```
@@ -237,17 +304,20 @@ Each value is read as JSON when it can be, so `"5"` becomes the number 5 and `"[
 - **`distanceMeters`** appears only when a centre was used.
 - **`meta.total`** is the number of items that passed the filters, across all pages.
 - **`meta.sort_applied`** is the order actually used. Check it before saying "nearest first" or "best match first" to a user.
+- **`resolvedLocation`** appears only when the request used `address`. `input` is the text you sent, `label` is the place found, `point` is its centre (longitude first), `precision` is what it resolved to (postal code, locality, city or district) and `radiusMeters` is the radius used.
 
 ## Errors
 
 | Status | `error` | What to do |
 | --- | --- | --- |
-| 400 | `VALIDATION_ERROR` | Fix the request; the message names the field. Common causes: `in` without an array, a number filter with a text value, two `spatial` clauses, or a wrongly ordered rectangle. |
+| 400 | `VALIDATION_ERROR` | Fix the request; the message names the field. Common causes: `in` without an array, a number filter with a text value, two `spatial` clauses, a wrongly ordered rectangle, or `address` combined with `geometry` or `item.id`. |
 | 401 | `UNAUTHORIZED` | Send a valid `x-api-key`. |
 | 403 | `INTERACTION_NOT_ALLOWED` | The anchor profile's participant type may not search this one. Check `actions` in `network.json`. |
 | 404 | `UNSERVED_DOMAIN` | This instance does not serve that `networkId` / `domain`. |
 | 404 | `ANCHOR_NOT_FOUND` | The anchor profile is not indexed yet. Search again without `item.id`. |
 | 422 | `ANCHOR_HAS_NO_LOCATION` | The anchor profile has no location. Send `geometry` or drop `spatial`. |
+| 422 | `LOCATION_NOT_RESOLVED` | The `address` could not be turned into a place ("Could not resolve location '<address>' to a place"), or it named only a country or state. Ask the person for a more specific place. |
+| 503 | `GEOCODER_UNAVAILABLE` | Place lookup is temporarily unavailable ("Geocoding is temporarily unavailable; retry later"). Retry, or search again without `spatial`. Also returned when the instance has not turned on place-name search. |
 
 ## Common mistakes
 
