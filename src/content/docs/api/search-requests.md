@@ -94,10 +94,9 @@ There are four ways to use location. Coordinates are always **longitude first, t
 - **Within a radius**: `{ "op": "s_dwithin", "geometry": { "type": "Point", "coordinates": [77.59, 12.97] }, "distanceMeters": 10000 }`. Items outside are removed.
 - **Around the caller's own profile**: send `item.id` and leave out `geometry`: `{ "op": "s_dwithin", "distanceMeters": 20000 }`. The profile's stored location is the centre.
 - **Inside a map rectangle**: `{ "op": "bbox", "minLat": …, "minLng": …, "maxLat": …, "maxLng": … }`. All four are required.
-
 - **Around a place the person named**: `{ "op": "s_dwithin", "address": "Dharwad" }`. Search turns the text into a map point and uses it as the centre. See [Searching by a place name](#searching-by-a-place-name).
 
-Send at most one of these. Without `distanceMeters` the radius is the deployment default (30 km unless the operator changed it). To sort by distance without removing anything, send `intent.orderingCenter: { "type": "Point", "coordinates": [lng, lat] }` with `sort: "nearest"`.
+Send at most one of these. Without `distanceMeters`, a radius around `geometry` or the caller's profile uses the deployment default (30 km unless the operator changed it). With `address`, the radius follows the precision table in [Searching by a place name](#searching-by-a-place-name). To sort by distance without removing anything, send `intent.orderingCenter: { "type": "Point", "coordinates": [lng, lat] }` with `sort: "nearest"`.
 
 ### Searching by a place name
 
@@ -111,17 +110,17 @@ When the caller has no profile, pass the place they said in `address` instead of
 - Do not combine `address` with `geometry` in the same clause, or with `intent.item.id`. Either returns `400 VALIDATION_ERROR`. A caller with a profile should use the profile as the anchor.
 - `distanceMeters` is optional. When you leave it out, the radius depends on how precisely the place was found:
 
-| What the text resolved to | Radius |
-| --- | --- |
-| Postal code | 10 km |
-| Locality or neighbourhood | 10 km |
-| City | 25 km |
-| District | 50 km |
+| `precision` value | What the text resolved to | Radius |
+| --- | --- | --- |
+| `postal_code` | Postal code | 10 km |
+| `locality` | Locality or neighbourhood | 10 km |
+| `city` | City | 25 km |
+| `district` | District | 50 km |
 
 An operator can change these radii for an instance. Text that names only a country or a state does not resolve (see the errors below), because the area would be too large to be a useful filter.
 
 - `sort: "nearest"` uses the resolved point as the centre, so you do not need `orderingCenter`.
-- The flat endpoint takes the same field as `message.intent.spatial.0.address`.
+- The flat endpoint takes the same field as `message.intent.spatial.0.address`. It reads each value as JSON when it can be ([see above](#tools-that-can-only-send-flat-keys)), so a numeric postcode must be sent as a JSON string: `"message.intent.spatial.0.address": "\"580001\""`. Non-numeric text such as `Dharwad` needs no extra quoting.
 
 The response tells you what search understood: see `resolvedLocation` under [Reading the response](#reading-the-response).
 
@@ -199,7 +198,7 @@ If the caller named a place, pass it as `address`. Search finds the place and li
 }
 ```
 
-With no `distanceMeters`, a city such as Dharwad searches within 25 km. If the caller gave no place, leave `spatial` out and the search has no location limit. A place name in `textSearch` does not limit it.
+With no `distanceMeters`, a place that resolves to precision `city`, such as Dharwad, searches within 25 km. If the caller gave no place, leave `spatial` out and the search has no location limit. A place name in `textSearch` does not limit it.
 
 ### A map or list view in an app
 
@@ -304,7 +303,7 @@ Each value is read as JSON when it can be, so `"5"` becomes the number 5 and `"[
 - **`distanceMeters`** appears only when a centre was used.
 - **`meta.total`** is the number of items that passed the filters, across all pages.
 - **`meta.sort_applied`** is the order actually used. Check it before saying "nearest first" or "best match first" to a user.
-- **`resolvedLocation`** appears only when the request used `address`. `input` is the text you sent, `label` is the place found, `point` is its centre (longitude first), `precision` is what it resolved to (postal code, locality, city or district) and `radiusMeters` is the radius used.
+- **`resolvedLocation`** appears only when the request used `address`. `input` is the text you sent, `label` is the place found, `point` is its centre (longitude first), `precision` is what it resolved to (`postal_code`, `locality`, `city` or `district`) and `radiusMeters` is the radius used.
 
 ## Errors
 
