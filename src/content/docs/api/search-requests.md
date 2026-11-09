@@ -120,7 +120,7 @@ When the caller has no profile, pass the place they said in `address` instead of
 An operator can change these radii for an instance. Text that names only a country or a state does not resolve (see the errors below), because the area would be too large to be a useful filter.
 
 - `sort: "nearest"` uses the resolved point as the centre, so you do not need `orderingCenter`.
-- The flat endpoint takes the same field as `message.intent.spatial.0.address`. It reads each value as JSON when it can be ([see above](#tools-that-can-only-send-flat-keys)), so a numeric postcode must be sent as a JSON string: `"message.intent.spatial.0.address": "\"580001\""`. Non-numeric text such as `Dharwad` needs no extra quoting.
+- The flat endpoint takes the same field as `message.intent.spatial.0.address`. A numeric postcode such as `"580001"` can be sent as is: the address is always treated as text, even though the flat endpoint reads `580001` as a number.
 
 The response tells you what search understood: see `resolvedLocation` under [Reading the response](#reading-the-response).
 
