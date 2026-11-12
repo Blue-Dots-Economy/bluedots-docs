@@ -219,6 +219,8 @@ Infrastructure changes have **no** one-command undo, unlike a Helm release — t
 
 Where the common day-1 sizing and access decisions live in `global-values.yaml`. Node/version settings are in the top anchor block (step 2); everything else here is set directly further down in the same file, under `global:` — search for the key name.
 
+For the monthly cost of these choices, and the database size the cost estimate assumes, see [Cost & Sizing](/about/cost-and-sizing/).
+
 **Compute (EKS nodes)**
 
 | Setting | Key | Default |

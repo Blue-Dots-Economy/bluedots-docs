@@ -1,0 +1,119 @@
+---
+title: Cost & Sizing
+description: What it costs to run Blue Dots each month, what servers and services a setup needs, and how to estimate the cost for your own setup with the cost calculator.
+---
+
+import { Aside, LinkCard } from '@astrojs/starlight/components';
+
+This page shows what it costs to run Blue Dots, what a setup is made of, and how many people one setup can serve. All figures come from the Blue Dots cost calculator. Use the calculator to work out the cost for your own number of blue dots and your chosen cloud.
+
+<LinkCard
+  title="Estimate the cost for your setup"
+  description="Open the Blue Dots cost calculator. Enter your number of blue dots and choose a cloud to see the monthly and annual cost."
+  href="https://cost-calculator.bluedotseconomy.org/"
+  target="_blank"
+  rel="noopener noreferrer"
+/>
+
+## Estimate with the cost calculator
+
+You tell the calculator:
+
+- how many blue dots you expect, from 10,000 to 5 lakh (500,000)
+- how many of them are active in a month, and how many are in use at the same moment
+- which cloud you will use: AWS, Azure, GCP, Tata Cloud or NIC National Cloud (MeghRaj)
+- whether you need a separate copy for testing
+- whether the service must keep running if a server fails (high availability), and whether you need a second copy in another region (a disaster recovery, or DR, site)
+
+The calculator then shows the monthly and annual cost and checks that the servers are big enough. It also lists everything to buy, with the size of each item. You can download this as a PDF, a Word file or a bill of quantities (BOQ) for procurement.
+
+The link to your result keeps all your settings. Copy it to share an estimate with a colleague or a cloud provider.
+
+## Example costs
+
+The table shows four common setups. Each link opens the calculator with the same settings, so you can change the numbers from there.
+
+| Setup | What you get | Cloud cost a month | Total a month |
+|---|---|---|---|
+| [Standard](https://cost-calculator.bluedotseconomy.org/) | One copy of Blue Dots, with no spare server | ₹47,973 | ₹85,973 |
+| [Standard with a test copy](https://cost-calculator.bluedotseconomy.org/?envs=all) | Adds a separate copy for development and testing | ₹95,134 | ₹1,33,134 |
+| [High availability](https://cost-calculator.bluedotseconomy.org/?ha=1) | Keeps running if one server fails | ₹1,33,273 | ₹1,71,273 |
+| [High availability with a DR site](https://cost-calculator.bluedotseconomy.org/?ha=1&dr=1) | Also keeps a full second copy in another region | ₹2,72,534 | ₹3,10,534 |
+
+Cloud cost is everything you pay the cloud provider. Total also adds SMS, Voice AI calls and maps, described in [running costs beyond the cloud](#running-costs-beyond-the-cloud). All four assume 1 lakh (100,000) blue dots, with 10% active in a month, on AWS. Prices are pay-as-you-go list prices without GST (Goods and Services Tax).
+
+<Aside type="caution">
+These are indicative list prices from the calculator. They are not a quote. Confirm prices with your cloud provider before you plan a budget.
+</Aside>
+
+## What a standard setup includes
+
+A standard setup has these parts. The last column gives the AWS name for each part, so a cloud provider or system integrator can match it.
+
+| Part | Size | AWS name |
+|---|---|---|
+| Servers that run the Blue Dots software | 2 servers, each with 4 processors, 16 GB memory and a 100 GB disk | EKS cluster with `m6a.xlarge` nodes |
+| Managed database | 2 processors, 4 GB memory, 100 GB storage, in one data centre | RDS PostgreSQL 17 (`db.t4g.medium`) with PostGIS and pgvector |
+| Secure access for administrators | 1 access server and 1 VPN server | EC2 |
+| Load balancer | 1, spreads visitors across the servers | Network Load Balancer |
+| Outbound internet gateways | 2, one in each data centre | NAT Gateway |
+| Fixed internet addresses | 5 | Elastic IP |
+| File storage | 100 GB, for photos and documents | S3 |
+| Encryption key | 1, changed automatically | KMS |
+| Backups | Daily, kept for 30 days | AWS Backup |
+| Monitoring | Server health and logs | CloudWatch |
+
+The AWS setup scripts create a smaller database by default. To match this estimate, set `rds_instance_class` and `rds_allocated_storage` as described in [AWS Infrastructure](/deploy/cloud/aws-infrastructure/#configuration-reference-sizing-zones-and-access).
+
+:::note[Scope]
+This scope covers only the infrastructure required to deploy Blue Dots. The configuration and implementation of firewalls, security controls, and other security layers are explicitly out of scope.
+:::
+
+## High availability and disaster recovery
+
+With high availability, Blue Dots keeps running if one server fails. The setup uses 3 larger servers, each with 8 processors and 32 GB memory, and keeps one of them spare. The database gets a standby copy in a second data centre and grows to 4 processors, 32 GB memory and 500 GB storage. This estimate also includes a basic firewall. See the [high availability example](https://cost-calculator.bluedotseconomy.org/?ha=1).
+
+A disaster recovery (DR) site is a full second copy of the high-availability setup in another region. If the main region stops working, Blue Dots can run from the second copy. The estimate adds a 20 Mbps link between the two data centres. See the [example with a DR site](https://cost-calculator.bluedotseconomy.org/?ha=1&dr=1).
+
+## How many people one setup can serve
+
+A standard setup with 2 servers can serve up to about 60,000 active blue dots a month. This assumes that no more than about 1% of all blue dots are in use at the same moment. A high-availability setup with 3 servers can serve up to about 1,20,000, with one server kept spare.
+
+As you enter larger numbers, the calculator adds servers and shows how much room is left.
+
+## Choosing a cloud
+
+The calculator can compare clouds for the same setup. For the standard setup, the cloud cost is about:
+
+- AWS: ₹47,973 a month
+- Azure: ₹48,842 a month
+- GCP: ₹53,248 a month
+- Tata Cloud: about ₹65,000 a month. The actual price depends on your contract with Tata Communications.
+
+NIC National Cloud (MeghRaj) is priced with NIC (National Informatics Centre) directly, so the calculator lists the items to buy but not their price. See the [comparison of all clouds](https://cost-calculator.bluedotseconomy.org/?compare=1).
+
+## Running costs beyond the cloud
+
+Some costs depend on how people use Blue Dots, not on the cloud setup. The calculator adds these separately.
+
+- SMS: the default assumes 4 messages a month for each active blue dot, at ₹0.20 each. For 10,000 active blue dots, that is ₹8,000 a month.
+- Voice AI calls: the default assumes one 3-minute call a month for each active blue dot, at ₹1 a minute. For 10,000 active blue dots, that is ₹30,000 a month. The Voice AI provider sets the price per minute; see [Voice Agent Prompts](/deploy/agents/voice-agent-prompts/) for how to choose one.
+- Maps and address search: with the default settings, map views and address searches stay within Google's free monthly allowance, so they cost nothing at this scale. The free map options, Leaflet and Photon, cost nothing at any scale.
+
+## What the estimate leaves out
+
+The calculator gives the monthly cost of running Blue Dots. It does not include:
+
+- one-time setup work
+- staff to run and support the system
+- firewalls and other security controls beyond the basic firewall in the high-availability estimate
+- discounts you agree with a cloud provider
+
+Committing to a cloud provider for one or more years lowers the price. Ask your provider for their commitment prices.
+
+## Related reading
+
+- [Infrastructure](/get-started/architecture/infrastructure/): how the servers, database and storage fit together.
+- [AWS Infrastructure](/deploy/cloud/aws-infrastructure/): set up the servers and database on AWS.
+- [Tata Cloud Infrastructure Requirements](/deploy/cloud/tata-cloud-infrastructure/): what to request from Tata Cloud.
+- [Activating Blue Dots in a District](/about/district-activation/): the steps a district takes to start Blue Dots.

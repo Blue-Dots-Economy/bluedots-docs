@@ -117,6 +117,7 @@ A headline figure is stated once and linked from everywhere else. Restating a nu
 | Time to create a blue dot (2–3 minutes) | `about/the-blue-dots-approach` |
 | PwD campaign — Feb 2026, 1 lakh+ needs in 10 days, ₹10 per interaction | `explore/beyond-livelihoods` (Purple Dot section) |
 | Domains, their participant types and their status | `about/key-concepts/networks-domains-instances` |
+| Running cost, setup sizing and capacity: example costs, cloud comparison, SMS / Voice AI / maps costs | `about/cost-and-sizing`. Figures come from the [cost calculator](https://cost-calculator.bluedotseconomy.org); refresh them when the calculator's rate card changes |
 
 Terminology: use **MSME**, not SMB, outside the Brown Dot sector naming.
 

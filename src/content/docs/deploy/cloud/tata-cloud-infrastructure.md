@@ -7,6 +7,8 @@ sidebar:
 
 This guide lists the infrastructure requirements for deploying Blue Dots Economy on Tata Cloud — Tata Communications' **IZO Cloud / VKS** managed Kubernetes platform, with **Vayu** as the underlying virtual-machine product for standalone compute.
 
+For the size of each part and an indicative monthly cost, see [Cost & Sizing](/about/cost-and-sizing/). The Tata Cloud price depends on your contract with Tata Communications.
+
 ## Kubernetes cluster
 
 A managed Kubernetes control plane running Kubernetes 1.35 or later, with master and worker nodes.
