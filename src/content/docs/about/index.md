@@ -19,3 +19,5 @@ Start here to learn what Blue Dots is and how it works, before any technical wor
 - [Activating Blue Dots in a District](/about/district-activation/)
 - [Cost & Sizing](/about/cost-and-sizing/)
 - [Glossary](/about/glossary/)
+
+To see how the software is checked for quality and security, go to [Security](/security/).

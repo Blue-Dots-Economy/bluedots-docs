@@ -1,0 +1,17 @@
+---
+title: Quality and scan status
+description: Code quality ratings for each part of Blue Dots, and how long ago each security check last ran on the main version of the code.
+---
+
+import SecurityStatus from '../../../components/SecurityStatus.astro';
+
+This page shows, for each part of Blue Dots, its code quality ratings and how long ago each security check last ran on the main version of the code. [Security](/security/) describes the checks.
+
+<SecurityStatus />
+
+## Reading the cards
+
+The key above the cards names each icon. Hover over a value to see its full name, or the date a check last ran.
+
+- **Ratings** come from SonarCloud and run from A (best) to E. The quality gate passes when new code meets the agreed standard. Select the ratings to open the SonarCloud page.
+- **Security checks** run on every change and once a month, so a check older than a month means its monthly run did not happen. The results go to a private list for the team.
