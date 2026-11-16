@@ -3,6 +3,11 @@ name: Deploy docs to GitHub Pages
 on:
   push:
     branches: [main]
+  # Daily rebuild so /security/status/ shows current scan dates. GitHub turns
+  # off schedules in public repos after 60 days with no activity; switch it
+  # back on in the Actions tab.
+  schedule:
+    - cron: "30 0 * * *"
   workflow_dispatch:
 
 # No default token scopes; each job asks only for what it needs.
@@ -24,6 +29,27 @@ jobs:
         with:
           # Nothing in the build pushes to git; don't leave the token in .git/config.
           persist-credentials: false
+
+      # Read-only token for the Security status page (code scanning dates).
+      # Skipped until the GitHub App is set up; the page then shows no dates.
+      - name: Create GitHub App token for security status
+        id: security-status-token
+        if: ${{ vars.SECURITY_STATUS_APP_CLIENT_ID != '' }}
+        continue-on-error: true
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.SECURITY_STATUS_APP_CLIENT_ID }}
+          private-key: ${{ secrets.SECURITY_STATUS_APP_KEY }}
+          owner: Blue-Dots-Economy
+          permission-security-events: read
+
+      # Writes src/data/security-status.json. Runs before the build because
+      # withastro/action has no pre-build hook. Always exits 0.
+      - name: Fetch security status
+        env:
+          SECURITY_STATUS_TOKEN: ${{ steps.security-status-token.outputs.token }}
+          SECURITY_STATUS_DISABLED: ${{ vars.SECURITY_STATUS_DISABLED }}
+        run: node scripts/fetch-security-status.mjs
 
       - name: Install, build, and upload site
         uses: withastro/action@56781b97402ce0487b7e61ce2cb960c0e2cc5289 # v3

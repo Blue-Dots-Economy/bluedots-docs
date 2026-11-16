@@ -54,6 +54,7 @@ The sidebar in `astro.config.mjs` is the authoritative list of sections and slug
 | Knowing about Blue Dots | `about/` | Implementation in-charge, network operator, PMU, SI, voice AI provider |
 | Getting Started | `get-started/` | All of the above, plus the cloud or hosting provider |
 | Start your Deployment | `deploy/` (+ `api/`) | SI, voice AI provider, cloud or hosting provider |
+| Security | `security/` | Evaluators, procurement, implementation in-charge; see "Security status" below |
 | Releases | `src/releases/` (pages in `src/pages/releases/`) | Anyone deploying or upgrading; see "Releases" below |
 
 - **Planned pages** exist as a stub with a `:::note[Coming soon]` aside and a `Soon` sidebar badge. Remove both when the page gets content.
@@ -82,6 +83,29 @@ src/releases/<sprint>/<entry>/components/<repo>.md   # one per repo that cut the
 - **Style:** `pnpm check:style` covers `notes.md`. Component files are exempt, like `api/`.
 - **Frontmatter:** quote `cut_at` (`'2026-10-14'`) and `commit`; unquoted YAML turns them into a date or a number and the build fails schema validation.
 - **Preview with fixtures:** `tests/fixtures/releases/` holds two sample sprints: `202610-s1` (candidates only) and `202610-s2` (candidate, release and hotfix). Run `cp -R tests/fixtures/releases/* src/releases/ && pnpm build`, open `dist/releases/index.html`, `dist/releases/202610-s1/index.html` and `dist/releases/202610-s2/index.html`, then `rm -rf src/releases/2*`. Never commit anything under `src/releases/` except `.gitkeep` from a fixture run. With no releases, `/releases/` shows "No releases have been published yet." and the build warns that the `releases` collection is empty; that warning is expected.
+
+## Security status
+
+`/security/status/` shows, for each component, its SonarCloud ratings and how long ago each security check last ran on `main`. The code scan and secret scan run in the same workflow run, so they share one row (`SCAN_GROUPS`).
+
+- **Never publish findings.** The site is public. Show no counts, CVE or advisory IDs, alert titles, file paths, package names, run links, run results, release tags or commits.
+  - Use only the ratings in `SONAR_METRICS`: quality gate, security, reliability, maintainability and coverage. Never add the `vulnerabilities`, `bugs`, `code_smells` or `security_hotspots` metrics.
+  - `src/lib/security-status.mjs` writes allowlisted fields and values only, and its tests check this.
+- **Data.** `scripts/fetch-security-status.mjs` runs in `deploy.yml` before the build and writes `src/data/security-status.json`, which is git-ignored.
+  - It reads code scanning analyses on `main` with a GitHub App token, and SonarCloud ratings from the public SonarCloud API with no token.
+  - It uses Node built-ins only, because it runs before `pnpm install`.
+  - It always exits 0, so a failed fetch never stops a deploy.
+  - `deploy.yml` also runs daily on a schedule. GitHub turns off schedules in public repos after 60 days with no activity; switch it back on in the Actions tab.
+- **GitHub App.** It has one repository permission, Code scanning alerts: read. It is installed only on the repos in `src/config/security-status.config.mjs`.
+  - The client ID is the Actions variable `SECURITY_STATUS_APP_CLIENT_ID`, and the private key is the secret `SECURITY_STATUS_APP_KEY`.
+  - Without them, the token step is skipped and the page shows no dates.
+  - Owner: the DevOps lead. Rotate the key once a year, or when someone with access leaves.
+- **Switching a report off.** Set `sonar` or `scans` to `false` in `src/config/security-status.config.mjs`, or set the Actions variable `SECURITY_STATUS_DISABLED` without changing code.
+  - The variable takes comma-separated `repo`, `repo:sonar` or `repo:scans` entries.
+  - After changing it, use "Run workflow" on the deploy workflow.
+  - The variable can only switch reports off. A repo must be in the config file to appear.
+- **Ages.** The page shows scan ages ("1 day ago"), worked out at build time and again in the browser. `SCAN_AGE_DAYS` sets the badge colours: green up to a week, blue up to a month, amber after that.
+- **Preview.** Run `mkdir -p src/data && cp tests/fixtures/security-status/security-status.json src/data/ && pnpm dev`. With no file, the page lists the components and says the ratings and scan ages are shown on the published site.
 
 ## Implementation plans are temporary
 

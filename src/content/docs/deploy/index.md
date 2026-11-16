@@ -18,3 +18,5 @@ This section is for the teams who install and run Blue Dots. Follow the steps of
 5. Deploy the agents platform: [Configuring an AI Diffusion Use Case](/deploy/agents-platform/use-case-configuration/), [Optional Channels](/deploy/agents-platform/optional-channels/)
 6. Configure and customise: [Keycloak Setup](/deploy/configure/keycloak-setup/), [Keycloak Realm Reference](/deploy/configure/keycloak-realm/), [Configuration](/deploy/configure/configuration/), [Customisation & Branding](/deploy/configure/customisation/), [Adding a New Domain](/deploy/configure/adding-a-domain/)
 7. [API Reference](/api/) and [API Conventions](/api/conventions/)
+
+To see how each part of Blue Dots is checked, and when each check last ran, go to [Security](/security/).

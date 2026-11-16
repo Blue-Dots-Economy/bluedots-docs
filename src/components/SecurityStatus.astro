@@ -1,0 +1,495 @@
+---
+// Security status page: a summary, one key for the icons, and one card per
+// component with its SonarCloud ratings and how long ago each security check
+// last ran on `main`. Cards carry no repeated labels: the key names each icon,
+// and every value has a tooltip and an accessible label.
+//
+// Data comes from src/data/security-status.json, written by
+// scripts/fetch-security-status.mjs in the deploy workflow. Local builds have
+// no data file and fall back to the committed component list. Ages are worked
+// out at build time and again in the browser, so they stay right between the
+// daily builds.
+import { Icon } from '@astrojs/starlight/components';
+import { Bug, Code, Container, FlaskConical, PackageSearch, ShieldCheck, Wrench } from '@lucide/astro';
+import { LOGO_PATHS } from './security-logos';
+import { GITHUB_ORG, SECURITY_STATUS_COMPONENTS } from '../config/security-status.config.mjs';
+import {
+  SCAN_GROUPS,
+  readStatusFile,
+  scanAge,
+  sonarOverviewUrl,
+  type Rating,
+  type StatusRow,
+} from '../lib/security-status.mjs';
+
+const files = import.meta.glob('../data/security-status.json', { eager: true, import: 'default' });
+const status = readStatusFile(Object.values(files)[0]);
+
+const rows: StatusRow[] = status
+  ? status.components
+  : SECURITY_STATUS_COMPONENTS.filter((c) => c.sonar || c.scans).map((c) => ({ ...c, scanResult: null, sonarResult: null }));
+
+const now = status ? new Date(status.generatedAt) : new Date();
+
+const RATINGS = [
+  { key: 'security', label: 'Security', icon: ShieldCheck },
+  { key: 'reliability', label: 'Reliability', icon: Bug },
+  { key: 'maintainability', label: 'Maintainability', icon: Wrench },
+] as const;
+const COVERAGE = { label: 'Test coverage', icon: FlaskConical };
+const SCAN_ICONS = { code: PackageSearch, image: Container, codeAnalysis: Code } as const;
+
+const dayFormat = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+const formatDay = (isoDay: string) => dayFormat.format(new Date(`${isoDay}T00:00:00Z`));
+
+const statusAsOf = status
+  ? new Intl.DateTimeFormat('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Asia/Kolkata',
+    }).format(now) + ' IST'
+  : null;
+
+const rated = rows.filter((r) => r.sonarResult?.state === 'ok' && r.sonarResult.qualityGate !== null);
+const passed = rated.filter((r) => r.sonarResult?.state === 'ok' && r.sonarResult.qualityGate === 'passed');
+const allDays = rows.flatMap((r) =>
+  r.scans && r.scanResult?.state === 'ok' ? Object.values(r.scanResult.dates).filter((d): d is string => d !== null) : [],
+);
+const latestDay = allDays.length ? allDays.reduce((a, b) => (a > b ? a : b)) : null;
+const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+let notice: string | null = null;
+if (!status) notice = 'Ratings and scan ages are shown on the published site.';
+else if (!status.scansFetched) notice = 'Scan ages are not available at the moment.';
+else if (rows.length === 0) notice = 'The status of the components is not published at the moment.';
+---
+
+<div class="ss not-content">
+  {notice && (
+    <p class="ss-notice">
+      <Icon name="information" size="1.25rem" />
+      <span>{notice}</span>
+    </p>
+  )}
+
+  {rows.length > 0 && (
+    <div class="ss-overview">
+      <dl class="ss-summary">
+        <div>
+          <dt>Components</dt>
+          <dd>{rows.length}</dd>
+        </div>
+        {rated.length > 0 && (
+          <div>
+            <dt>Quality gate passed</dt>
+            <dd>{passed.length} of {rated.length}</dd>
+          </div>
+        )}
+        {latestDay && (
+          <div>
+            <dt>Latest scan</dt>
+            <dd data-ss-latest={latestDay}>{capitalise(scanAge(latestDay, now).text)}</dd>
+          </div>
+        )}
+      </dl>
+
+      <div class="ss-key" aria-label="Key">
+        <div class="ss-key-row">
+          <span class="ss-key-title">
+            <svg class="ss-logo" viewBox="0 0 24 24" aria-hidden="true"><path d={LOGO_PATHS.sonarCloud} /></svg>
+            SonarCloud ratings
+          </span>
+          <ul>
+            {RATINGS.map(({ label, icon: RatingIcon }) => (
+              <li><RatingIcon size={15} stroke-width={2} aria-hidden="true" />{label}</li>
+            ))}
+            <li><COVERAGE.icon size={15} stroke-width={2} aria-hidden="true" />{COVERAGE.label}</li>
+          </ul>
+        </div>
+        <div class="ss-key-row">
+          <span class="ss-key-title">
+            <svg class="ss-logo" viewBox="0 0 24 24" aria-hidden="true"><path d={LOGO_PATHS.trivy} /></svg>
+            Last security check
+          </span>
+          <ul>
+            {SCAN_GROUPS.map(({ key, label }) => {
+              const ScanIcon = SCAN_ICONS[key];
+              return <li><ScanIcon size={15} stroke-width={2} aria-hidden="true" />{label}</li>;
+            })}
+          </ul>
+        </div>
+        <div class="ss-key-row">
+          <span class="ss-key-title">Age</span>
+          <ul>
+            <li><span class="ss-dot ss-dot--recent"></span>Within a week</li>
+            <li><span class="ss-dot ss-dot--monthly"></span>Within a month</li>
+            <li><span class="ss-dot ss-dot--stale"></span>Over a month</li>
+            <li><span class="ss-dot ss-dot--off"></span>Not set up</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  )}
+
+  <div class="ss-grid">
+    {rows.map((row) => {
+      const sonarConfigured = SECURITY_STATUS_COMPONENTS.find((c) => c.repo === row.repo)?.sonar ?? false;
+      const sonar = row.sonarResult?.state === 'ok' ? row.sonarResult : null;
+      const repoUrl = `https://github.com/${GITHUB_ORG}/${row.repo}`;
+      return (
+        <article class="ss-card" aria-labelledby={`ss-${row.repo}`}>
+          <header class="ss-head">
+            <h3 id={`ss-${row.repo}`}>
+              <a href={repoUrl} title={`${GITHUB_ORG}/${row.repo} on GitHub`}>
+                {row.name}
+                <Icon name="github" size="1rem" class="ss-gh" />
+              </a>
+            </h3>
+            {sonar?.qualityGate && (
+              <span
+                class:list={['ss-gate', `ss-gate--${sonar.qualityGate}`]}
+                title={`SonarCloud quality gate ${sonar.qualityGate}`}
+              >
+                <span class="ss-gate-dot" aria-hidden="true"></span>
+                {sonar.qualityGate === 'passed' ? 'Passed' : 'Failed'}
+                <span class="sr-only"> quality gate</span>
+              </span>
+            )}
+          </header>
+
+          {row.sonar && row.sonarResult?.state !== 'unavailable' ? (
+            <a class="ss-strip ss-strip--link" href={sonarOverviewUrl(row.repo)} aria-label={`SonarCloud ratings for ${row.name}`}>
+              {RATINGS.map(({ key, label, icon: RatingIcon }) => {
+                const letter: Rating | null = sonar ? sonar[key] : null;
+                return (
+                  <span class="ss-cell" title={`${label} rating: ${letter ?? 'not available'}`}>
+                    <RatingIcon size={15} stroke-width={2} aria-hidden="true" class="ss-cell-icon" />
+                    <span class:list={['ss-grade', letter && `ss-grade--${letter.toLowerCase()}`]}>
+                      <span class="sr-only">{label} </span>{letter ?? '—'}
+                    </span>
+                  </span>
+                );
+              })}
+              <span class="ss-cell" title={`${COVERAGE.label}: ${sonar?.coverage != null ? `${sonar.coverage}%` : 'not available'}`}>
+                <COVERAGE.icon size={15} stroke-width={2} aria-hidden="true" class="ss-cell-icon" />
+                <span class="ss-value">
+                  <span class="sr-only">{COVERAGE.label} </span>{sonar?.coverage != null ? `${sonar.coverage}%` : '—'}
+                </span>
+              </span>
+              <Icon name="external" size="0.875rem" class="ss-strip-arrow" />
+            </a>
+          ) : !row.sonar && !sonarConfigured ? (
+            <ul class="ss-strip" aria-label="SonarCloud ratings: not set up">
+              {[...RATINGS, COVERAGE].map(({ label, icon: RatingIcon }) => (
+                <li class="ss-cell ss-cell--off" title={`${label}: not set up`} aria-hidden="true">
+                  <RatingIcon size={15} stroke-width={2} class="ss-cell-icon" />
+                  <span class="ss-age ss-age--off"></span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="ss-strip ss-strip--empty">{row.sonar ? 'Ratings not available right now' : 'Ratings not shown'}</p>
+          )}
+
+          {!row.scans ? (
+            <p class="ss-strip ss-strip--empty">Scan ages not shown</p>
+          ) : row.scanResult?.state === 'unavailable' ? (
+            <p class="ss-strip ss-strip--empty">Scan ages not available right now</p>
+          ) : (
+            <ul class="ss-strip ss-strip--scans" aria-label="Last security check">
+              {SCAN_GROUPS.map(({ key, label }) => {
+                const ScanIcon = SCAN_ICONS[key];
+                const day = row.scanResult?.state === 'ok' ? row.scanResult.dates[key] : null;
+                const age = day ? scanAge(day, now) : null;
+                const notSetUp = row.scanResult?.state === 'ok' && day === null;
+                return (
+                  <li
+                    class:list={['ss-cell', notSetUp && 'ss-cell--off']}
+                    title={day ? `${label}: last ran ${formatDay(day)}` : `${label}: ${notSetUp ? 'not set up' : 'not available'}`}
+                  >
+                    <ScanIcon size={15} stroke-width={2} aria-hidden="true" class="ss-cell-icon" />
+                    <span class="sr-only">{label}: </span>
+                    {day && age ? (
+                      <time class:list={['ss-age', `ss-age--${age.level}`]} datetime={day} data-scan-day={day}>
+                        {age.text}
+                      </time>
+                    ) : (
+                      <span class:list={['ss-age', notSetUp && 'ss-age--off']}>
+                        {notSetUp && <span class="sr-only">Not set up</span>}
+                        {!notSetUp && <span aria-hidden="true">—</span>}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </article>
+      );
+    })}
+  </div>
+
+  {statusAsOf && <p class="ss-asof">Updated {statusAsOf}. Rebuilt every day.</p>}
+</div>
+
+<script>
+  import { scanAge } from '../lib/security-status.mjs';
+
+  const LEVELS = ['recent', 'monthly', 'stale'];
+  const now = new Date();
+
+  for (const el of document.querySelectorAll<HTMLElement>('[data-scan-day]')) {
+    const day = el.dataset.scanDay;
+    if (!day) continue;
+    const { text, level } = scanAge(day, now);
+    el.textContent = text;
+    el.classList.remove(...LEVELS.map((l) => `ss-age--${l}`));
+    el.classList.add(`ss-age--${level}`);
+  }
+
+  for (const el of document.querySelectorAll<HTMLElement>('[data-ss-latest]')) {
+    const day = el.dataset.ssLatest;
+    if (!day) continue;
+    const { text } = scanAge(day, now);
+    el.textContent = text.charAt(0).toUpperCase() + text.slice(1);
+  }
+</script>
+
+<style>
+  .ss {
+    --ss-radius: 1rem;
+    --ss-line: color-mix(in oklab, var(--sl-color-gray-5) 70%, transparent);
+    --ss-surface: var(--sl-color-bg);
+    --ss-soft: color-mix(in oklab, var(--sl-color-gray-6) 55%, transparent);
+    --ss-recent: #16a34a;
+    --ss-monthly: #2563eb;
+    --ss-stale: #d97706;
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .ss-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    background: var(--sl-color-accent-low);
+  }
+
+  /* Overview: summary and key */
+  .ss-overview {
+    display: grid;
+    border: 1px solid var(--ss-line);
+    border-radius: var(--ss-radius);
+    background: var(--ss-surface);
+    overflow: hidden;
+  }
+  .ss-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2.5rem;
+    margin: 0;
+    padding: 1rem 1.25rem;
+  }
+  .ss-summary div { margin: 0; }
+  .ss-summary dt { font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); }
+  .ss-summary dd {
+    margin: 0;
+    font-size: var(--sl-text-2xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--sl-color-white);
+  }
+  .ss-key {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.875rem 1.25rem;
+    border-block-start: 1px solid var(--ss-line);
+    background: var(--ss-soft);
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-2);
+  }
+  .ss-key-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem 1rem; }
+  .ss-key-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-inline-size: 9.5rem;
+    font-weight: 500;
+    color: var(--sl-color-white);
+  }
+  .ss-key ul { display: flex; flex-wrap: wrap; gap: 0.375rem 1rem; margin: 0; padding: 0; list-style: none; }
+  .ss-key li { display: inline-flex; align-items: center; gap: 0.3rem; margin: 0; }
+  .ss-logo { inline-size: 0.9375rem; block-size: 0.9375rem; fill: currentColor; flex-shrink: 0; }
+  .ss-dot { inline-size: 0.5rem; block-size: 0.5rem; border-radius: 50%; }
+  .ss-dot--recent { background: var(--ss-recent); }
+  .ss-dot--monthly { background: var(--ss-monthly); }
+  .ss-dot--stale { background: var(--ss-stale); }
+  .ss-dot--off { border: 1.5px dashed var(--sl-color-gray-3); }
+
+  /* Cards */
+  .ss-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: 1rem;
+  }
+  .ss-card {
+    display: grid;
+    align-content: start;
+    gap: 0.75rem;
+    padding: 1.125rem;
+    border: 1px solid var(--ss-line);
+    border-radius: var(--ss-radius);
+    background: var(--ss-surface);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .ss-card:hover {
+    border-color: var(--sl-color-gray-4);
+    box-shadow: 0 8px 24px -12px rgb(0 0 0 / 0.25);
+  }
+
+  .ss-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+  .ss-head h3 { margin: 0; font-size: var(--sl-text-base); font-weight: 700; line-height: 1.35; }
+  .ss-head h3 a { color: var(--sl-color-white); text-decoration: none; }
+  .ss-head h3 a:hover { color: var(--sl-color-accent-high); }
+  .ss-head :global(.ss-gh) { margin-inline-start: 0.375rem; vertical-align: -0.125em; color: var(--sl-color-gray-3); }
+
+  .ss-gate {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex-shrink: 0;
+    padding: 0.125rem 0.625rem 0.125rem 0.5rem;
+    border-radius: 999px;
+    font-size: var(--sl-text-xs);
+    font-weight: 500;
+  }
+  .ss-gate-dot { inline-size: 0.4375rem; block-size: 0.4375rem; border-radius: 50%; background: currentColor; }
+  .ss-gate--passed { color: var(--ss-recent); background: color-mix(in oklab, var(--ss-recent) 12%, transparent); }
+  .ss-gate--failed { color: #dc2626; background: color-mix(in oklab, #dc2626 12%, transparent); }
+
+  /* Strips */
+  .ss-strip {
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-radius: 0.75rem;
+    background: var(--ss-soft);
+    color: inherit;
+    text-decoration: none;
+  }
+  .ss-strip--link { transition: background 0.2s ease; }
+  .ss-strip--link:hover { background: color-mix(in oklab, var(--sl-color-gray-5) 60%, transparent); }
+  .ss-strip :global(.ss-strip-arrow) {
+    position: absolute;
+    inset-block-start: 0.375rem;
+    inset-inline-end: 0.375rem;
+    color: var(--sl-color-gray-3);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .ss-strip--link:hover :global(.ss-strip-arrow),
+  .ss-strip--link:focus-visible :global(.ss-strip-arrow) { opacity: 1; }
+  .ss-strip--empty {
+    display: block;
+    padding: 0.75rem;
+    text-align: center;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    background: transparent;
+    border: 1px dashed var(--ss-line);
+  }
+
+  .ss-cell {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 0.3rem;
+    margin: 0;
+    padding: 0.625rem 0.25rem;
+    min-inline-size: 0;
+  }
+  .ss-cell + .ss-cell { border-inline-start: 1px solid var(--ss-line); }
+  .ss-cell :global(.ss-cell-icon) { color: var(--sl-color-gray-3); }
+
+  .ss-grade {
+    display: grid;
+    place-items: center;
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-2);
+    background: var(--sl-color-gray-6);
+  }
+  /* SonarCloud rating colours, as soft tints. */
+  .ss-grade--a { --g: #16a34a; }
+  .ss-grade--b { --g: #65a30d; }
+  .ss-grade--c { --g: #ca8a04; }
+  .ss-grade--d { --g: #ea580c; }
+  .ss-grade--e { --g: #dc2626; }
+  .ss-grade[class*='ss-grade--'] {
+    color: var(--g);
+    background: color-mix(in oklab, var(--g) 16%, transparent);
+  }
+  .ss-value {
+    display: grid;
+    place-items: center;
+    block-size: 1.75rem;
+    font-weight: 700;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-white);
+  }
+
+  .ss-age {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: var(--sl-text-xs);
+    font-weight: 500;
+    white-space: nowrap;
+    color: var(--sl-color-white);
+  }
+  .ss-age::before {
+    content: '';
+    inline-size: 0.4375rem;
+    block-size: 0.4375rem;
+    border-radius: 50%;
+    background: var(--c, transparent);
+  }
+  .ss-age--recent { --c: var(--ss-recent); }
+  .ss-age--monthly { --c: var(--ss-monthly); }
+  .ss-age--stale { --c: var(--ss-stale); }
+  .ss-age--off { font-weight: 500; color: var(--sl-color-gray-3); }
+  .ss-age--off::before { inline-size: 0.625rem; block-size: 0.625rem; border: 1.5px dashed var(--sl-color-gray-3); }
+  .ss-cell--off :global(.ss-cell-icon) { opacity: 0.5; }
+  .ss-cell--off .ss-age { min-block-size: 1.75rem; }
+
+  .ss-asof { margin: 0; font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ss-card, .ss-strip--link, .ss-strip :global(.ss-strip-arrow) { transition: none; }
+  }
+</style>

@@ -337,6 +337,13 @@ export default defineConfig({
             },
           ],
         },
+        {
+          label: 'Security',
+          items: [
+            { label: 'Overview', slug: 'security' },
+            { label: 'Quality and Scan Status', slug: 'security/status' },
+          ],
+        },
         // Built from src/releases/ by src/pages/releases/ (not a docs page).
         { label: 'Releases', link: '/releases/' },
         // Not in the v1 sidebar, but still served so existing links keep

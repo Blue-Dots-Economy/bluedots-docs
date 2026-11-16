@@ -1,0 +1,90 @@
+{
+  "version": 2,
+  "generatedAt": "2026-11-15T01:00:00.000Z",
+  "scansFetched": true,
+  "components": [
+    {
+      "repo": "signals-dpg",
+      "name": "Signals DPG",
+      "sonar": true,
+      "scans": true,
+      "scanResult": {
+        "state": "ok",
+        "dates": {
+          "code": "2026-11-12",
+          "image": "2026-11-11",
+          "codeAnalysis": "2026-11-14"
+        }
+      },
+      "sonarResult": {
+        "state": "ok",
+        "qualityGate": "passed",
+        "security": "A",
+        "reliability": "E",
+        "maintainability": "A",
+        "coverage": 93
+      }
+    },
+    {
+      "repo": "aggregator-dpg",
+      "name": "Aggregator DPG",
+      "sonar": true,
+      "scans": true,
+      "scanResult": {
+        "state": "ok",
+        "dates": {
+          "code": "2026-11-01",
+          "image": "2026-11-11",
+          "codeAnalysis": "2026-11-02"
+        }
+      },
+      "sonarResult": {
+        "state": "ok",
+        "qualityGate": "passed",
+        "security": "A",
+        "reliability": "A",
+        "maintainability": "A",
+        "coverage": 91
+      }
+    },
+    {
+      "repo": "signals-search",
+      "name": "Signals Search",
+      "sonar": true,
+      "scans": true,
+      "scanResult": {
+        "state": "ok",
+        "dates": {
+          "code": "2026-11-01",
+          "image": "2026-11-11",
+          "codeAnalysis": "2026-10-29"
+        }
+      },
+      "sonarResult": {
+        "state": "unavailable"
+      }
+    },
+    {
+      "repo": "ai-diffusion-dpg",
+      "name": "AI Diffusion DPG",
+      "sonar": true,
+      "scans": true,
+      "scanResult": {
+        "state": "ok",
+        "dates": {
+          "code": "2026-11-09",
+          "image": null,
+          "codeAnalysis": null
+        }
+      },
+      "sonarResult": {
+        "state": "ok",
+        "qualityGate": "passed",
+        "security": "D",
+        "reliability": "C",
+        "maintainability": "A",
+        "coverage": 88
+      }
+    }
+  ]
+}
