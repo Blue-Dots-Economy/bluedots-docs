@@ -7,10 +7,10 @@
 //   SECURITY_STATUS_TOKEN     GitHub App installation token with code scanning
 //                             read access. Without it, the file is written with
 //                             the on/off flags and no scan dates.
-//
-// SonarCloud ratings come from its public API and need no token.
 //   SECURITY_STATUS_DISABLED  Optional. Comma-separated `repo`, `repo:sonar` or
 //                             `repo:scans` entries to switch reports off.
+//
+// SonarCloud ratings come from its public API and need no token.
 //
 // Never print or write the token. The script always exits 0: a failed fetch
 // must not stop the docs from deploying.

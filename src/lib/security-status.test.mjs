@@ -4,6 +4,7 @@ import { SECURITY_STATUS_COMPONENTS, SONAR_METRICS } from '../config/security-st
 import {
   parseDisabled,
   applyDisabled,
+  scanRepos,
   scanGroup,
   latestScanDates,
   allScanGroupsFound,
@@ -61,6 +62,12 @@ test('applyDisabled can only switch reports off', () => {
   // An unknown repo is never added.
   const r = applyDisabled(COMPONENTS, 'campaign-manager-pipeline');
   assert.deepEqual(r.components, COMPONENTS);
+});
+
+test('scanRepos lists repos with scans on, after the override', () => {
+  assert.deepEqual(scanRepos(applyDisabled(COMPONENTS, '').components), ['signals-dpg', 'aggregator-dpg', 'notification-service']);
+  assert.deepEqual(scanRepos(applyDisabled(COMPONENTS, 'signals-dpg:scans, notification-service').components), ['aggregator-dpg']);
+  assert.deepEqual(scanRepos(applyDisabled(COMPONENTS, 'signals-dpg,aggregator-dpg:scans,notification-service').components), []);
 });
 
 test('parseDisabled warns about unknown repos and entries and ignores them', () => {

@@ -30,17 +30,28 @@ jobs:
           # Nothing in the build pushes to git; don't leave the token in .git/config.
           persist-credentials: false
 
+      # Repos whose scan dates the Security status page shows. The token
+      # below is limited to these repos.
+      - name: List repos for security status token
+        id: security-status-repos
+        if: ${{ vars.SECURITY_STATUS_APP_CLIENT_ID != '' }}
+        env:
+          SECURITY_STATUS_DISABLED: ${{ vars.SECURITY_STATUS_DISABLED }}
+        run: node scripts/security-status-repos.mjs >> "$GITHUB_OUTPUT"
+
       # Read-only token for the Security status page (code scanning dates).
-      # Skipped until the GitHub App is set up; the page then shows no dates.
+      # Skipped until the GitHub App is set up, and when no repo needs scan
+      # dates: an empty repository list would grant every installed repo.
       - name: Create GitHub App token for security status
         id: security-status-token
-        if: ${{ vars.SECURITY_STATUS_APP_CLIENT_ID != '' }}
+        if: ${{ vars.SECURITY_STATUS_APP_CLIENT_ID != '' && steps.security-status-repos.outputs.repos != '' }}
         continue-on-error: true
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
           client-id: ${{ vars.SECURITY_STATUS_APP_CLIENT_ID }}
           private-key: ${{ secrets.SECURITY_STATUS_APP_KEY }}
           owner: Blue-Dots-Economy
+          repositories: ${{ steps.security-status-repos.outputs.repos }}
           permission-security-events: read
 
       # Writes src/data/security-status.json. Runs before the build because
