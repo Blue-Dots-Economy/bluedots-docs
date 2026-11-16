@@ -96,7 +96,7 @@ src/releases/<sprint>/<entry>/components/<repo>.md   # one per repo that cut the
   - It uses Node built-ins only, because it runs before `pnpm install`.
   - It always exits 0, so a failed fetch never stops a deploy.
   - `deploy.yml` also runs daily on a schedule. GitHub turns off schedules in public repos after 60 days with no activity; switch it back on in the Actions tab.
-- **GitHub App.** It has one repository permission, Code scanning alerts: read. It is installed only on the repos in `src/config/security-status.config.mjs`.
+- **GitHub App.** It has one repository permission, Code scanning alerts: read. It is installed only on the repos in `src/config/security-status.config.mjs`. The deploy workflow limits each token to the repos with `scans` on (`scripts/security-status-repos.mjs`), and skips the token when that list is empty.
   - The client ID is the Actions variable `SECURITY_STATUS_APP_CLIENT_ID`, and the private key is the secret `SECURITY_STATUS_APP_KEY`.
   - Without them, the token step is skipped and the page shows no dates.
   - Owner: the DevOps lead. Rotate the key once a year, or when someone with access leaves.

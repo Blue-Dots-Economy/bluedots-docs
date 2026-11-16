@@ -95,6 +95,16 @@ export function applyDisabled(components, disabledValue) {
 }
 
 /**
+ * Repos whose scan dates are fetched, in config order. The deploy workflow
+ * limits the GitHub App token to these repos.
+ * @param {readonly StatusComponent[]} components
+ * @returns {string[]}
+ */
+export function scanRepos(components) {
+  return components.filter((c) => c.scans).map((c) => c.repo);
+}
+
+/**
  * Maps one code scanning analysis to a page row, or null to skip it.
  * @param {{ tool?: { name?: string }, category?: string }} analysis
  * @returns {ScanGroup | null}
